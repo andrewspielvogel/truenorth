@@ -1,3 +1,13 @@
+/*
+ * serial_io.h
+ * node for publishing sensor data
+ *
+ * created July 2015
+ * Andrew Spielvogel
+ * andrewspielvogel@gmail.com
+ */
+
+
 #ifndef SERIAL_IO_H
 #define SERIAL_IO_H
 
@@ -15,6 +25,7 @@ typedef boost::shared_ptr<boost::asio::serial_port> serial_port_ptr;
 #define DATA_BUF_SIZE 38
 
 
+//class for storing a KVH 1775 data packet
 class KVHData
 {
 public:
@@ -31,7 +42,8 @@ public:
 
 
 
-
+// class for connecting to a serial port
+// and for getting data from a serial port
 class SerialPort
 {
 protected:
@@ -45,7 +57,6 @@ protected:
 
     int state_;
     int data_cnt_;
-    char data_[DATA_BUF_SIZE];
   
 private:
     SerialPort(const SerialPort &p);
@@ -59,8 +70,6 @@ public:
     virtual void stop();
 
     KVHData data;
-
-    
 
 protected:
     virtual void async_read_some_();
