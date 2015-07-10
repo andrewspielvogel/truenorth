@@ -18,11 +18,12 @@
 // set kvh 1775 data packet values
 void KVHData::set_values(std::vector<float> a, std::vector<float> w, float m_t, std::vector<bool> stat, unsigned int num)
 {
-    int skipped = seq_num-num;
-    if (skipped>1&&skipped!=127)
+    int skipped = abs(seq_num-num);
+
+    if (skipped>1&&skipped<127)
     {
 
-	ROS_INFO("Lost %u data packets",skipped);
+	ROS_WARN("Lost %u data packets",skipped);
 
     }
 
@@ -31,7 +32,7 @@ void KVHData::set_values(std::vector<float> a, std::vector<float> w, float m_t, 
     seq_num = num;
     status = stat;
 
-    if (seq_num>127)
+    if (num>127)
     {
 	std::vector<float> m;
 	m.push_back(m_t);
@@ -86,11 +87,6 @@ union FloatSignals
     float f;
 };
 
-union IntSignals
-{
-    char c[4];
-    unsigned int f;
-};
 
 // parse data packet into fields
 void parse_data(KVHData &data, char *data_raw)
@@ -170,7 +166,7 @@ bool SerialPort::start(const char *com_port_name, int baud_rate)
     // check if already opened
     if (port_)
     {
-	std::cout << "error : port is already opened..." << std::endl;
+	ROS_ERROR("error : port is already opened...");
 	return false;
     }
  
@@ -179,8 +175,8 @@ bool SerialPort::start(const char *com_port_name, int baud_rate)
     port_->open(com_port_name, ec);
     if (ec) 
     {
-	std::cout << "error : port_->open() failed...com_port_name="
-		  << com_port_name << ", e=" << ec.message().c_str() << std::endl; 
+	ROS_ERROR( "error : port_->open() failed...com_port_name= %s, e = %s",
+		   com_port_name , ec.message().c_str() ); 
 	return false;
     }
  
@@ -305,7 +301,7 @@ void SerialPort::on_receive_(const boost::system::error_code& ec, size_t bytes_t
 		else
 		{
 
-		    ROS_INFO("corrupted package");
+		    ROS_WARN("corrupted package");
 
 		}
 			
@@ -314,7 +310,7 @@ void SerialPort::on_receive_(const boost::system::error_code& ec, size_t bytes_t
 	}
 	else 
 	{
-	    ROS_INFO("lost byte: %02X",c);
+	    ROS_WARN("lost byte: %02X",c);
 
 	    data_cnt_=0;
 	    state_=0;

@@ -37,19 +37,19 @@ int main(int argc, char **argv)
     std::vector<float> init_sig(3,0);
     std::vector<bool> init_stat(6,false);
     SerialPort serial;
-    serial.data.set_values(init_sig, init_sig, 0.0, init_stat, 128);
+    serial.data.set_values(init_sig, init_sig, 0.0, init_stat, 500);
 
     // connect to serial port
     bool rv;
     rv = serial.start(name.c_str(),921600);
     if (rv==false)
     {
-	ROS_INFO("port not opened");
+	ROS_ERROR("port not opened");
 	return 0;
     }
     else 
     {
-	ROS_INFO("connected to port");
+	ROS_INFO("connected to port: %s",name.c_str());
     }
 
 
