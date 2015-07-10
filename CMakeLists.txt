@@ -170,6 +170,3 @@ target_link_libraries(kvh_1775 ${catkin_LIBRARIES})
 
 add_executable(gyro_publisher src/gyro_publisher.cpp src/serial_io.cpp)
 target_link_libraries(gyro_publisher ${catkin_LIBRARIES})
-
-add_executable(listener src/listener.cpp)
-target_link_libraries(listener ${catkin_LIBRARIES})
