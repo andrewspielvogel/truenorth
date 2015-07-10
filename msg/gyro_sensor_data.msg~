@@ -1,0 +1,6 @@
+float32[3] ang
+float32[3] acc
+float32[3] mag
+bool[6] status
+float32 temp
+uint8 seq_num
