@@ -9,6 +9,7 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   std_msgs
   message_generation
+  rosbag
 )
 
 ## System dependencies are found with CMake's conventions
@@ -82,7 +83,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES kvh_1775
-  CATKIN_DEPENDS message_runtime roscpp rospy std_msgs
+  CATKIN_DEPENDS message_runtime roscpp rospy std_msgs rosbag
 #  DEPENDS system_lib
 )
 
@@ -170,3 +171,6 @@ target_link_libraries(kvh_1775 ${catkin_LIBRARIES})
 
 add_executable(gyro_publisher src/gyro_publisher.cpp src/serial_io.cpp)
 target_link_libraries(gyro_publisher ${catkin_LIBRARIES})
+
+add_executable(data_2_csv src/data_2_csv.cpp)
+target_link_libraries(data_2_csv ${catkin_LIBRARIES})
