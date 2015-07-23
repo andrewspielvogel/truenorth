@@ -1,4 +1,11 @@
 function bias = get_bias( xy, xy_flip, z )
+%function for calculating the bias
+%
+% Andrew Spielvogel
+% andrewspielvogel@gmail.com
+%
+% July 2015
+%
 
 bias.acc(1:2) = (mean(xy.acc(:,1:2))+mean(xy_flip.acc(:,1:2)))/2;
 bias.acc(3)   = (mean(xy_flip.acc(:,3))+mean(z.acc(:,3)))/2;

@@ -1,5 +1,12 @@
 function data = parse_csv( filename )
 %parse csv for kvh_1775 gyro data
+%
+% Andrew Spielvogel
+% andrewspielvogel@gmail.com
+%
+% July 2015
+%
+
 
 % read file
 M = csvread(filename);
