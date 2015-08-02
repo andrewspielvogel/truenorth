@@ -1,4 +1,11 @@
 function [NED,w,deg] = indv_samp_ned(data,bias)
+%function to calculate NED, w for eash sample
+%
+% Andrew Spielvogel
+% andrewspielvogel@gmail.com
+%
+% July 2015
+%
 
 num_samples = size(data.ang);
 
@@ -76,6 +83,6 @@ subplot(1,3,3);
 hist(wn(:,3),500);
 title('w z');
 
-figure;
-hist(deg,500);
-title('deg');
+% figure;
+% hist(deg,500);
+% title('deg');

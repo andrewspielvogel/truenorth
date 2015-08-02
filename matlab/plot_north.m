@@ -1,4 +1,13 @@
 function [NED,w,deg] = plot_north(data,bias,N,num_samples_2_avg)
+% plot_north plots the NED frames and angular velocities 
+% that are calculated from a specified number of samples
+%
+% Andrew Spielvogel
+% andrewspielvogel@gmail.com
+%
+% July 2015
+%
+
 
 num_samples = size(data.ang);
 
