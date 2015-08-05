@@ -44,6 +44,7 @@ for j=1:num_runs(2)
         p = polyfit(factors,deg{j}.std,2);
         f=polyval(p,factors);
         plot(factors,f,'-k')
+        grid;
     end
 end
 
@@ -67,7 +68,7 @@ if(plot_fig>0&&plot_fig~=2)
         
     ylabel('std (^o)');
     xlabel('noise multiplier');
-    leg = cellstr(num2str(samples_per(:)/freq));
-    legend(leg);
+    leg = cellstr(strcat(num2str(samples_per(:)/freq),repmat(' Seconds Avg',num_runs,1)));
+    legend(leg,'Location','eastoutside');
     
 end
