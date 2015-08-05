@@ -28,6 +28,7 @@ end
 
 for i=1:samp
 
+    % find w, NED for each averaged set of samples
     w(i,:) = mean(data.ang(num_samples_2_avg*(i-1)+1:num_samples_2_avg*i,1:3))-bias.ang;
 
     NED.d(i,:) = -(mean(data.acc(num_samples_2_avg*(i-1)+1:num_samples_2_avg*i,1:3))-bias.acc);
@@ -38,7 +39,7 @@ for i=1:samp
     NED.n(i,:) = NED.n(i,:)/norm(NED.n(i,:));
     n          = NED.n(i,:);
     
-
+    % find the angle of the calculated north from true north
     true = atan2(N(2),N(1));
     calc = atan2(n(2),n(1));
     rad  = true-calc;
@@ -50,7 +51,9 @@ for i=1:samp
     end
 
     deg(i) = rad*180/pi;
-
+    
+    
+    % plot NED, w is turned on
     if (graph_type>1)
 
     plot3([0,n(1)],[0,n(2)],[0,n(3)],'-b');
@@ -68,13 +71,15 @@ for i=1:samp
 
 end
 
+% get mean and std of samples
 n_mean = mean(deg);
 n_std  = std(deg);
 
+% plot hists
 if (graph_type~=2&&graph_type>0)
 
-    plot_comp(NED.n,50);
-    plot_comp(w,50);
+    plot_comp(NED.n,50,'north');
+    plot_comp(w,50,'w');
     figure;
     hist(deg,50);
     grid;

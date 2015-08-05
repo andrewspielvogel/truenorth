@@ -1,6 +1,15 @@
 function deg = gyro_sensitivity(ang_vel,grav_vec,factors,samples_per,data_points,is_w,plot_fig)
+%function for doing sensitivity analysis
+%
+% Andrew Spielvogel
+% andrewspielvogel@gmail.com
+%
+% August 2015
+%
 
+% sampling freq
 freq = 1000;
+
 num_factors = size(factors);
 num_runs = size(samples_per);
 bias.ang = [0,0,0];
@@ -13,7 +22,7 @@ for j=1:num_runs(2)
         a_sig = .12*sqrt(3)/(1000*sqrt(1/freq));
         
         if (is_w)
-           w_sig = factors(i)*w_sig; 
+            w_sig = factors(i)*w_sig; 
         else
             a_sig = factors(i)*a_sig;
         end
@@ -49,6 +58,13 @@ if(plot_fig>0&&plot_fig~=2)
         
         
     end
+    
+    if (is_w)
+        title('w sensitivity'); 
+    else
+        title('a sensitivity'); 
+    end
+        
     ylabel('std (^o)');
     xlabel('noise multiplier');
     leg = cellstr(num2str(samples_per(:)/freq));

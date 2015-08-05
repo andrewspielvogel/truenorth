@@ -27,72 +27,10 @@ deg = rad*180/pi;
 
 
 %plot data
-figure;
-subplot(1,3,1);
-hist(d(:,1),500);
-grid;
-title('down x');
-
-subplot(1,3,2);
-hist(d(:,2),500);
-grid;
-title('down y');
-
-subplot(1,3,3);
-hist(d(:,3),500);
-grid;
-title('down z');
-
-figure;
-
-subplot(1,3,1);
-hist(e(:,1),500);
-grid;
-title('east x');
-
-subplot(1,3,2);
-hist(e(:,2),500);
-grid;
-title('east y');
-
-subplot(1,3,3);
-hist(e(:,3),500);
-grid;
-title('east z');
-
-figure;
-grid;
-subplot(1,3,1);
-hist(n(:,1),500);
-grid;
-title('north x');
-
-subplot(1,3,2);
-hist(n(:,2),500);
-grid;
-title('north y');
-
-subplot(1,3,3);
-hist(n(:,3),500);
-grid;
-title('north z');
-
-figure;
-grid;
-subplot(1,3,1);
-hist(wn(:,1),500);
-grid;
-title('w x');
-
-subplot(1,3,2);
-hist(wn(:,2),500);
-grid;
-title('w y');
-
-subplot(1,3,3);
-hist(wn(:,3),500);
-grid;
-title('w z');
+plot_comp(d,500,'down');
+plot_comp(e,500,'east');
+plot_comp(n,500,'north');
+plot_comp(wn,500,'w');
 
 % figure;
 % hist(deg,500);
