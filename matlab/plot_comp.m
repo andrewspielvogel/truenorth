@@ -14,18 +14,18 @@ end
 figure;
 subplot(3,1,1);
 hist(data(:,1),n_bins);
-str = sprintf('%s X',name);
+str = sprintf('%s X mean=%.3g std=%.3g',name,mean(data(:,1)),std(data(:,1)));
 xlabel(str);
 grid;
 
 subplot(3,1,2);
 hist(data(:,2),n_bins);
-str = sprintf('%s Y',name);
+str = sprintf('%s Y mean=%.3g std=%.3g',name,mean(data(:,2)),std(data(:,2)));
 xlabel(str);
 grid;
 
 subplot(3,1,3);
 hist(data(:,3),n_bins);
-str = sprintf('%s Y',name);
+str = sprintf('%s Z mean=%.3g std=%.3g',name,mean(data(:,3)),std(data(:,3)));
 xlabel(str);
 grid;
