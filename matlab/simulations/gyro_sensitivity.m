@@ -24,8 +24,8 @@ setup.freq = freq;
 num_factors = size(factors);
 num_runs    = size(samples_per);
 
-w_sig = 2/(10000*sqrt(1/freq));
-a_sig = .12*sqrt(3)/(1000*sqrt(1/freq));
+w_sig_ins = 2/(10000*sqrt(1/freq));
+a_sig_ins = .12*sqrt(3)/(1000*sqrt(1/freq));
 
 bias.ang = [0,0,0];
 bias.acc = [0,0,0];
@@ -36,16 +36,18 @@ for j=1:num_runs(2)
 
         % determine whether sensitivity analysis is for a or w
         if (is_w)
-            w_sig = factors(i)*w_sig; 
+            w_sig = factors(i)*w_sig_ins; 
+            a_sig = a_sig_ins;
         else
-            a_sig = factors(i)*a_sig;
+            a_sig = factors(i)*a_sig_ins;
+            w_sig = w_sig_ins;
         end
         
         % generate samples
         samples = gen_samp(ang_vel,grav_vec,samples_per(j)*data_points,w_sig,a_sig);
         
         % average over specified number of samps to get w, NED
-        [n,w,deg{j}.d(i,:)] = plot_north(samples,bias,ang_vel(1:2),samples_per(j),0);
+        [~,~,deg{j}.d(i,:)] = plot_north(samples,bias,ang_vel(1:2),samples_per(j),0);
         
         % store the mean and std
         deg{j}.mean(i) = mean(deg{j}.d(i,:));
