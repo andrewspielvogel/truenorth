@@ -34,7 +34,36 @@ else
 end
 
 % label graph
-ylabel('std (^o)');
+ylabel('std (degrees)');
+xlabel('noise multiplier');
+leg = cellstr(strcat(num2str(setup.samples_per(:)/setup.freq),' Second Avg'));
+legend(leg,'Location','best');
+grid;
+
+
+figure;
+hold on;
+
+% plot each run
+for i=1:num_runs(2)
+        
+    plot(setup.factors,deg{i}.mean,colors{i});        
+        
+end
+
+% write title
+if (setup.is_w)
+
+    title('w sensitivity'); 
+
+else
+    
+    title('a sensitivity');
+    
+end
+
+% label graph
+ylabel('mean (degrees)');
 xlabel('noise multiplier');
 leg = cellstr(strcat(num2str(setup.samples_per(:)/setup.freq),' Second Avg'));
 legend(leg,'Location','best');
