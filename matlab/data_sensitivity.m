@@ -26,13 +26,13 @@ end
 
 figure;
 hold on;
-plot(num_samples_2_avg/freq,data_std,'-b^');
-plot(num_samples_2_avg/freq,data_mean,'-r*');
-plot(num_samples_2_avg/freq,sim_std,'-k^');
-plot(num_samples_2_avg/freq,sim_mean,'-g*');
+errorbar(num_samples_2_avg/freq,data_mean,data_std,'b');
+errorbar(num_samples_2_avg/freq,sim_mean,sim_std,'r');
 ylabel('Degrees');
-xlabel('Time Averaged');
-legend('data std','data mean','sim std','sim mean');
+xlabel('Seconds Averaged');
+legend('KVH 1775 IMU','Simulation');
+title('KVH 1775 IMU vs Simulation');
+grid;
 
 out_data.mean = data_mean;
 out_data.std  = data_std;

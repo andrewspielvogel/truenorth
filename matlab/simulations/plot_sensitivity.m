@@ -12,7 +12,10 @@ colors = {'-xb','-*r','-^m','-sk','-dg','-ob','-+r','--xm','-.<k',':*g'};
 
 num_runs = size(setup.samples_per);
 
-figure;
+fig_width = 700;
+fig_height = 500;
+
+figure('position',[10,10,fig_width,fig_height]);
 hold on;
 
 % plot each run
@@ -25,49 +28,69 @@ end
 % write title
 if (setup.is_w)
 
-    title('w sensitivity'); 
+    title('Angular Velocity Sensitivity'); 
 
 else
     
-    title('a sensitivity');
+    title('Acceleration Sensitivity');
     
 end
 
 % label graph
 ylabel('std (degrees)');
 xlabel('noise multiplier');
-leg = cellstr(strcat(num2str(setup.samples_per(:)/setup.freq),' Second Avg'));
-legend(leg,'Location','best');
+legend_str = cellstr(strcat(num2str(setup.samples_per(:)/setup.freq),' Second Avg'));
+lhand = legend(legend_str,'Orientation','horizontal');
 grid;
 
+% reduce the lenght of the X-axis (by 10%)
+pos = get(gca,'Position');
+pos(2) = 1.25*pos(2);
+set(gca,'Position',pos);
 
-figure;
+pos = get(lhand,'Position');
+pos(1:2) = [(1-pos(3))/2,.01];
+set(lhand,'Position',pos);
+
+
+figure('position',[10,10,fig_width,fig_height]);
 hold on;
 
+skip = 20;
 % plot each run
 for i=1:num_runs(2)
         
-    plot(setup.factors,deg{i}.mean,colors{i});        
+    %plot(setup.factors,deg{i}.mean,colors{i});      
+    errorbar(setup.factors(1:skip:end),deg{i}.mean(1:skip:end),deg{i}.std(1:skip:end),colors{i});      
         
 end
 
 % write title
 if (setup.is_w)
 
-    title('w sensitivity'); 
+    title('Angular Velocity Sensitivity'); 
 
 else
     
-    title('a sensitivity');
+    title('Acceleration Sensitivity');
     
 end
 
 % label graph
 ylabel('mean (degrees)');
 xlabel('noise multiplier');
-leg = cellstr(strcat(num2str(setup.samples_per(:)/setup.freq),' Second Avg'));
-legend(leg,'Location','best');
+legend_str = cellstr(strcat(num2str(setup.samples_per(:)/setup.freq),' Second Avg'));
+lhand = legend(legend_str,'Orientation','horizontal');
 grid;
+
+% reduce the lenght of the X-axis (by 10%)
+pos = get(gca,'Position');
+pos(2) = 1.25*pos(2);
+set(gca,'Position',pos);
+
+pos = get(lhand,'Position');
+pos(1:2) = [(1-pos(3))/2,.01];
+set(lhand,'Position',pos);
     
 
 
