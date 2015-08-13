@@ -1,6 +1,7 @@
 /*
  * serial_io.cpp
- * node for publishing sensor data
+ * implementation of serial_io.h
+ * serial port i/o for KVH 1775 IMU
  *
  * created July 2015
  * Andrew Spielvogel
@@ -20,6 +21,7 @@ void KVHData::set_values(std::vector<float> a, std::vector<float> w, float m_t, 
 {
     int skipped = abs(seq_num-num);
 
+    // check for lost data packets
     if (skipped>1&&skipped<127)
     {
 
@@ -27,11 +29,13 @@ void KVHData::set_values(std::vector<float> a, std::vector<float> w, float m_t, 
 
     }
 
+    // set values
     ang = w;
     acc = a;
     seq_num = num;
     status = stat;
 
+    // on startup, initialize
     if (num>127)
     {
 	std::vector<float> m;
@@ -127,12 +131,11 @@ void parse_data(KVHData &data, char *data_raw)
     // store status data in a vec
     std::bitset<8> stat(((unsigned char *) data_raw)[32]);
     std::vector<bool> status;
-    status.push_back(stat[0]==1);
-    status.push_back(stat[1]==1);
-    status.push_back(stat[2]==1);
-    status.push_back(stat[4]==1);
-    status.push_back(stat[5]==1);
-    status.push_back(stat[6]==1);
+
+    for(int i=0;i<7;i++)
+    {
+	status.push_back(stat[i]==1);
+    }
 
     // store sequence number
     unsigned int seq_num = (unsigned int) (((unsigned char *) data_raw)[33]);
