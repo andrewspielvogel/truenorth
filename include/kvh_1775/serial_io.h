@@ -1,6 +1,6 @@
 /*
  * serial_io.h
- * node for publishing sensor data
+ * serial port i/o for KVH 1775 IMU
  *
  * created July 2015
  * Andrew Spielvogel

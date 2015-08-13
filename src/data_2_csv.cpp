@@ -1,3 +1,12 @@
+/*
+ * data_2_csv.cpp
+ * KVH 1775 rosbag parser to csv file
+ *
+ * created July 2015
+ * Andrew Spielvogel
+ * andrewspielvogel@gmail.com
+ */
+
 #include "ros/ros.h"
 
 #include "kvh_1775/gyro_sensor_data.h"
