@@ -10,6 +10,10 @@ function f = plot_sensitivity(deg,setup)
 % initialize line colots
 colors = {'-xb','-*r','-^m','-sk','-dg','-ob','-+r','--xm','-.<k',':*g'};
 
+axis_fontsize = 13;
+legend_fontsize = 12;
+plotscale = 1.2;
+
 num_runs = size(setup.samples_per);
 
 fig_width = 700;
@@ -28,24 +32,24 @@ end
 % write title
 if (setup.is_w)
 
-    title('Angular Velocity Sensitivity'); 
+    title('Angular Velocity Sensitivity','FontSize',axis_fontsize); 
 
 else
     
-    title('Acceleration Sensitivity');
+    title('Acceleration Sensitivity','FontSize',axis_fontsize);
     
 end
 
 % label graph
-ylabel('std (degrees)');
-xlabel('noise multiplier');
-legend_str = cellstr(strcat(num2str(setup.samples_per(:)/setup.freq),' Second Avg'));
-lhand = legend(legend_str,'Orientation','horizontal');
+ylabel('Std [degrees]','FontSize',axis_fontsize);
+xlabel('Noise Multiplier','FontSize',axis_fontsize);
+legend_str = cellstr(strcat(num2str(setup.samples_per(:)/setup.freq),' Sec Avg'));
+lhand = legend(legend_str,'Orientation','horizontal','FontSize',legend_fontsize);
 grid;
 
 % reduce the lenght of the X-axis (by 10%)
 pos = get(gca,'Position');
-pos(2) = 1.25*pos(2);
+pos(2) = plotscale*pos(2);
 set(gca,'Position',pos);
 
 pos = get(lhand,'Position');
@@ -68,24 +72,24 @@ end
 % write title
 if (setup.is_w)
 
-    title('Angular Velocity Sensitivity'); 
+    title('Angular Velocity Sensitivity','FontSize',axis_fontsize); 
 
 else
     
-    title('Acceleration Sensitivity');
+    title('Acceleration Sensitivity','FontSize',axis_fontsize);
     
 end
 
 % label graph
-ylabel('mean (degrees)');
-xlabel('noise multiplier');
-legend_str = cellstr(strcat(num2str(setup.samples_per(:)/setup.freq),' Second Avg'));
-lhand = legend(legend_str,'Orientation','horizontal');
+ylabel('Mean [degrees])','FontSize',axis_fontsize);
+xlabel('Noise Multiplier','FontSize',axis_fontsize);
+legend_str = cellstr(strcat(num2str(setup.samples_per(:)/setup.freq),' Sec Avg'));
+lhand = legend(legend_str,'Orientation','horizontal','FontSize',legend_fontsize);
 grid;
 
 % reduce the lenght of the X-axis (by 10%)
 pos = get(gca,'Position');
-pos(2) = 1.25*pos(2);
+pos(2) = plotscale*pos(2);
 set(gca,'Position',pos);
 
 pos = get(lhand,'Position');
