@@ -61,22 +61,19 @@ int main(int argc, char **argv)
 	kvh_1775::gyro_sensor_data data_msg;
 
 	// fill data_msg with sensor packet
-	data_msg.ang.at(0) = serial.data.ang.at(0);
-	data_msg.ang.at(1) = serial.data.ang.at(1);
-	data_msg.ang.at(2) = serial.data.ang.at(2);
-	data_msg.acc.at(0) = serial.data.acc.at(0);
-	data_msg.acc.at(1) = serial.data.acc.at(1);
-	data_msg.acc.at(2) = serial.data.acc.at(2);
-	data_msg.mag.at(0) = serial.data.mag.at(0);
-	data_msg.mag.at(1) = serial.data.mag.at(1);
-	data_msg.mag.at(2) = serial.data.mag.at(2);
+	for (int i=0;i<3;i++)
+	{
+	    data_msg.ang.at(i) = serial.data.ang.at(i);
+	    data_msg.acc.at(i) = serial.data.acc.at(i);
+	    data_msg.mag.at(i) = serial.data.mag.at(i);
+	}
+	
+	for (int i=0;i<6;i++)
+	{
+	    data_msg.status.at(i) = serial.data.status.at(i);
+	}
+	
 	data_msg.temp = serial.data.temp;
-	data_msg.status.at(0) = serial.data.status.at(0);
-	data_msg.status.at(1) = serial.data.status.at(1);
-	data_msg.status.at(2) = serial.data.status.at(2);
-	data_msg.status.at(3) = serial.data.status.at(3);
-	data_msg.status.at(4) = serial.data.status.at(4);
-	data_msg.status.at(5) = serial.data.status.at(5);
 	data_msg.stamp = ros::Time::now();
 	data_msg.t = (double)data_msg.stamp.sec+(double)data_msg.stamp.nsec/1000000000.0;
 	data_msg.seq_num = serial.data.seq_num;
