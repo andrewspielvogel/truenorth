@@ -18,7 +18,8 @@ data.mag = M(:,7:9);
 data.status = M(:,10:15);
 data.temp = M(:,16);
 data.stamp = M(:,17);
-data.seq_num = M(:,18);
+data.t = M(:,18);
+data.seq_num = M(:,19);
 
 end
 
