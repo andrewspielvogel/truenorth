@@ -134,7 +134,9 @@ void parse_data(KVHData &data, char *data_raw)
 
     for(int i=0;i<7;i++)
     {
-	status.push_back(stat[i]==1);
+	if (i!=3){
+	    status.push_back(stat[i]==1);
+	}
     }
 
     // store sequence number
