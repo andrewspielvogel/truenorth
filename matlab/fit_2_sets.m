@@ -11,7 +11,7 @@ ba = B - repmat(B_avg,1,samples);
 H = zeros(3,3);
 
 for i=1:samples
-    H = H+qa*ba';
+    H = H+qa(:,i)*ba(:,i)';
 end
 
 

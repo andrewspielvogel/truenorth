@@ -17,7 +17,8 @@ earth_rate = 15/3600;
 % bias sigs
 w_bias_sig = .1/3600;
 a_bias_sig = .05/1000;
-    
+
+
 % generate samples
 samp.ang = earth_rate*repmat(w_pure,num_samples,1) + normrnd(0,w_bias_sig,num_samples,3) + normrnd(0,w_sig,num_samples,3);
 samp.acc =            repmat(a_pure,num_samples,1) + normrnd(0,a_bias_sig,num_samples,3) + normrnd(0,a_sig,num_samples,3);
