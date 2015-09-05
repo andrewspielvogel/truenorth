@@ -1,11 +1,15 @@
-function Rs = get_R_delta(w_m,t)
-
+function R = get_R_delta(samp)
+w_m = samp.ang;
+t = samp.t;
 
 S.w=w_m;
 S.t=t;
 R0 = eye(3);
 
-[ts, Rs] = ode45(@R_delta_ode, t, R0, [], S);
+[~, Rs] = ode45(@R_delta_ode, t, R0, [], S);
+
+R = cellfun(@(A) reshape(A,3,3),num2cell(Rs,2),'UniformOutput',false);
+
 
 
 
