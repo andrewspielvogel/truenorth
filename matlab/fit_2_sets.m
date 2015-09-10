@@ -15,13 +15,8 @@ for i=1:samples
 end
 
 
-[U,S,V] = svd(H);
+[U,~,V] = svd(H);
 
-R = V*U';
-
-if (det(R)<0)
-    
-    V(:,3) = -V(:,3);
-    R=V*U';
-    
-end
+S = eye(3);
+S(3,3) = det(U*V');
+R = U*S*V';

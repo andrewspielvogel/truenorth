@@ -10,7 +10,6 @@ g_e  = g*r_e/norm(r_e);
 w_se = [0;0;15*pi/(3600*180)];
 
 
-
 w_ni = 0*[zeros(1,num_samples);zeros(1,num_samples);ones(1,num_samples)*(5*pi/180)];
 a_n  = 0*[zeros(1,num_samples);zeros(1,num_samples);-sin(t)];
 v_n  = 0*[zeros(1,num_samples);zeros(1,num_samples);cos(t)];
@@ -48,8 +47,8 @@ a_pure = cellfun(@(A,B) A'*B,R_si,a_tot,'UniformOutput',false);
 w_noise = w_bias_sig*randn(num_samples,3) + w_sig*randn(num_samples,3);
 a_noise = a_bias_sig*randn(num_samples,3) + a_sig*randn(num_samples,3);
 
-samp.w_noise  = w_noise;
-samp.a_noise  = a_noise;
+%samp.w_noise  = w_noise;
+%samp.a_noise  = a_noise;
 % samp.w_i_pure = w_i_pure;
 % samp.w_pure   = w_pure;
 % samp.g_s      = g_s;
@@ -66,5 +65,5 @@ samp.R_si     = R_si;
 samp.t        = t;
 
 % generate samples
-samp.ang = cell2mat(w_pure)'   ;%+ w_noise;
-samp.acc = cell2mat(a_pure)'/g ;%+ a_noise/3;
+samp.ang = cell2mat(w_pure)'   + w_noise;
+samp.acc = cell2mat(a_pure)'/g + a_noise/3;

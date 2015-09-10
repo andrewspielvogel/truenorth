@@ -37,6 +37,8 @@ for i=1:samp
 
     N          = N/norm(N);
     NED.n(i,:) = NED.n(i,:)/norm(NED.n(i,:));
+    NED.e(i,:) = NED.e(i,:)/norm(NED.e(i,:));
+    NED.d(i,:) = NED.d(i,:)/norm(NED.d(i,:));
     n          = NED.n(i,:);
     
     % find the angle of the calculated north from true north
@@ -87,5 +89,7 @@ if (graph_type~=2&&graph_type>0)
     xlabel(xlab);
 
 end
+
+NED.R = [NED.n(end,:);NED.e(end,:);NED.d(end,:)]';
 
 
