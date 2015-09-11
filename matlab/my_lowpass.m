@@ -1,4 +1,4 @@
-function ans = lowpass(x, sample_freq_hz, filter_order, cutoff_freq_hz)
+function foo = my_lowpass(x, sample_freq_hz, filter_order, cutoff_freq_hz)
 
 %
 % function ans = lowpass(x, sample_freq_hz, filter_order, cutoff_freq_hz)
@@ -33,8 +33,8 @@ fprintf(1,'LOWPASS.M: %d order butterworth filter. samples at %g HZ, cutoff freq
 fprintf(1,'LOWPASS.M: input data has %d samples in %d columns, wn=%g\n',num_rows, num_cols,wn);
  
 % pre-allocate output matrix
-ans = x * 0;
+foo = zeros(num_rows,num_cols);
 for(col = 1:num_cols)
-  ans(:,col) = filtfilt(B,A,x(:,col));
- % ans(:,col) = filter(B,A,x(:,col));
+  foo(:,col) = filtfilt(B,A,x(:,col));
+  %     foo(:,col) = filter(B,A,x(:,col));
 end
