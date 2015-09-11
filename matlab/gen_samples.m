@@ -104,4 +104,4 @@ samp.t        = t;
 
 % generate samples
 samp.ang = cell2mat(w_pure)'   + w_noise;
-samp.acc = cell2mat(a_pure)' *(1.0/g) + a_noise*(1.0/3.0);
+samp.acc = cell2mat(a_pure)' *(1.0/g) + a_noise;
