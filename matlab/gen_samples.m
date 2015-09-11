@@ -19,20 +19,20 @@ v_n  = 0*[zeros(1,num_samples);zeros(1,num_samples);cos(t)];
 x_n  = 0*[zeros(1,num_samples);zeros(1,num_samples);sin(t)];
 
 
-% generate R_se matrices for ts
+% generate R_se (space to Earth frame) matrices for ts
 R_se = cellfun(@(A) expm(skew(w_se)*A),num2cell(t),'UniformOutput',false);
 
-% generate R_en based on lat
+% generate R_en (earth to NED frame) based on lat
 R_en = [-sin(lat),0,-cos(lat);0,1,0;cos(lat),0,-sin(lat)];
 
-% generate R_ni matrices based on w_ni (right now w_ni is zero---NEED to update code
+% generate R_ni (NED to instrument) matrices based on w_ni (right now w_ni is zero---NEED to update code
 % for non-constant w_ni
 R_ni = cellfun(@(A,B) expm(skew(A)*B),num2cell(w_ni,1),num2cell(t),'UniformOutput',false);
 
-% generate R_sn matrices
+% generate R_sn (Space to NED frame) matrices
 R_sn = cellfun(@(A) A*R_en,R_se,'UniformOutput',false);
 
-% generate R_si matrices
+% generate R_si (Space to Instrument frame) matrices
 R_si = cellfun(@(A,B) A*B,R_sn,R_ni,'UniformOutput',false);
 
 % generate w pure signal in instrument frame --- w_pure = R_in*w_ni+R_is*w_se
@@ -72,7 +72,7 @@ a_noise = a_bias_sig*randn(num_samples,3) + a_sig*randn(num_samples,3);
 
 % store working variables in output structure
 samp.num_samples = num_samples;
-samp.g = g
+samp.g = g;
 samp.r_e = r_e;
 samp.g_e = g_e;
 samp.w_se = w_se;
@@ -93,6 +93,7 @@ samp.a_pure   = a_pure;
 samp.a_tot    = a_tot;
 samp.a_tot2   = a_tot2;
 samp.R_se     = R_se;
+samp.R_sn     = R_sn;
 samp.R_en     = R_en;
 samp.R_ni     = R_ni;
 samp.R_si     = R_si;
@@ -100,4 +101,4 @@ samp.t        = t;
 
 % generate samples
 samp.ang = cell2mat(w_pure)'   + w_noise;
-samp.acc = cell2mat(a_pure)' *(1.0/g) + a_noise/3;
+samp.acc = cell2mat(a_pure)' *(1.0/g) + a_noise*(1.0/3.0);
