@@ -1,7 +1,7 @@
 function R = get_R_d(samp,R0)
 
-num  = size(samp.ang,1);
-R = cell(1,num);
+num  = size(samp.ang,1); % number of samples
+R = cell(1,num); % pre allocate
 R{1} = R0;
 
 for i=2:num

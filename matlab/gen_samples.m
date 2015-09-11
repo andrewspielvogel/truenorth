@@ -2,6 +2,7 @@ function samp = gen_samples(hz,time,lat_deg)
 
 lat    = lat_deg*pi/180;
 t      = 0:1/hz:time;
+samp.hz = hz;
 
 % init variables
 num_samples = size(t,2);
