@@ -39,9 +39,12 @@ R_si = cellfun(@(A,B) A*B,R_sn,R_ni,'UniformOutput',false);
 w_i_pure = cellfun(@(A,B) A'*B,R_ni,num2cell(w_ni,1),'UniformOutput',false);
 w_pure   = cellfun(@(A,B) A+B'*w_se,w_i_pure,R_si,'UniformOutput',false);
 
-% noise sigmas
-w_sig = (2/(10000*sqrt(1/hz)))*pi/180;  % units are rad/sec
-a_sig = 0.12*sqrt(3)/(1000*sqrt(1/hz)); % units are g, not m/s^2
+% noise sigmas CHECK THIS
+w_sig_spec = (2/(10000*sqrt(1/hz)))*pi/180;  % units are rad/sec
+a_sig_spec = 0.12*sqrt(3)/(1000*sqrt(1/hz)); % units are g, not m/s^2
+
+w_sig = 8.4178 * 10^(-5);  % measured 1775, units are rad/sec
+a_sig = 0.0023;            % measured 1775, units are g, not m/s^2
 
 % bias sigmas 
 % w_bias_sig = (.1/3600)*pi/180;
