@@ -11,10 +11,11 @@ r_e  = 6371*1000*[cos(lat);0;sin(lat)];
 g_e  = g*r_e/norm(r_e);
 w_se = [0;0;15*pi/(3600*180)];
 
-% define instrument angular vel in ned frame and the x,v,a of the
+% define instrument angular pos, and derivative in ned frame and the x,v,a of the
 % instrument in ned frame
+w_veh_pos = 1*pi/180*[zeros(1,num_samples);zeros(1,num_samples);sin(t*pi/5)];
+w_veh_dot = 1*pi/180*pi/5*[zeros(1,num_samples);zeros(1,num_samples);cos(t*pi/5)];
 
-w_ni = 0*[zeros(1,num_samples);zeros(1,num_samples);ones(1,num_samples)*(5*pi/180)];
 a_n  = 0*[zeros(1,num_samples);zeros(1,num_samples);-sin(t)];
 v_n  = 0*[zeros(1,num_samples);zeros(1,num_samples);cos(t)];
 x_n  = 0*[zeros(1,num_samples);zeros(1,num_samples);sin(t)];
@@ -28,7 +29,11 @@ R_en = [-sin(lat),0,-cos(lat);0,1,0;cos(lat),0,-sin(lat)];
 
 % generate R_ni (NED to instrument) matrices based on w_ni (right now w_ni is zero---NEED to update code
 % for non-constant w_ni
-R_ni = cellfun(@(A,B) expm(skew(A)*B),num2cell(w_ni,1),num2cell(t),'UniformOutput',false);
+R_ni = cellfun(@(A) expm(skew(A)),num2cell(w_veh_pos,1),'UniformOutput',false);
+
+% generate w_ni (instrument ang vel w/respect to NED)
+w_in = cellfun(@(A,B) park_jacob(unskew(logm(A)))*B,R_ni,num2cell(w_veh_dot,1),'UniformOutput',false);
+w_ni = cellfun(@(A,b) A*b,R_ni,w_in,'UniformOutput',false);
 
 % generate R_sn (Space to NED frame) matrices
 R_sn = cellfun(@(A) A*R_en,R_se,'UniformOutput',false);
@@ -37,7 +42,7 @@ R_sn = cellfun(@(A) A*R_en,R_se,'UniformOutput',false);
 R_si = cellfun(@(A,B) A*B,R_sn,R_ni,'UniformOutput',false);
 
 % generate w pure signal in instrument frame --- w_pure = R_in*w_ni+R_is*w_se
-w_i_pure = cellfun(@(A,B) A'*B,R_ni,num2cell(w_ni,1),'UniformOutput',false);
+w_i_pure = cellfun(@(A,B) A'*B,R_ni,w_ni,'UniformOutput',false);
 w_pure   = cellfun(@(A,B) A+B'*w_se,w_i_pure,R_si,'UniformOutput',false);
 
 % noise sigmas CHECK THIS
@@ -84,6 +89,9 @@ samp.w_se = w_se;
 samp.w_sig = w_sig;
 samp.a_sig = a_sig;
 
+samp.w_veh_pos = w_veh_pos;
+samp.w_veh_dot = w_veh_dot;
+samp.w_ni = w_ni;
 samp.w_noise  = w_noise;
 samp.a_noise  = a_noise;
 samp.w_i_pure = w_i_pure;
@@ -101,7 +109,7 @@ samp.R_sn     = R_sn;
 samp.R_en     = R_en;
 samp.R_ni     = R_ni;
 samp.R_si     = R_si;
-samp.t        = t;
+samp.t        = t';
 
 % generate samples
 samp.ang = cell2mat(w_pure)'   + w_noise;
