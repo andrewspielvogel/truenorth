@@ -22,7 +22,7 @@ int main(int argc, char **argv)
     // initialize
     ros::init(argc, argv, "gyro_publisher");
 
-    ros::NodeHandle n;
+    ros::NodeHandle n("~");
 
     // initialize publisher
     ros::Publisher chatter = n.advertise<kvh_1775::gyro_sensor_data>("kvh_1775/gyro_data",1000);
@@ -32,6 +32,7 @@ int main(int argc, char **argv)
 
     // port name
     std::string name = "/dev/ttyUSB0";
+    n.getParam("port",name);
     
     // initialize serial port and data
     std::vector<float> init_sig(3,0);
