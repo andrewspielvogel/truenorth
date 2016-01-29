@@ -7,6 +7,6 @@ out = zeros(num,3);
 
 for i=1:num
     
-    out(i,:) = (rot2rph(Rin{i})-[pi;0;pi/4])';
+    out(i,:) = (rot2rph(Rin{i}))';%-[pi;0;pi/4])';
     
 end
