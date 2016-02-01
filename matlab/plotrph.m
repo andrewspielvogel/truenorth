@@ -33,7 +33,7 @@ grid on;
 
 subplot(3,1,3);
 hold on;
-%plot(ground.t,ground.gyro_attitude(:,1),'-r');
+%plot(ground.t,ground.gyro_attitude(:,1)-360,'-r');
 plot(data.t,data_rph(:,3),'-b');
 title('Heading');
 ylabel('Degrees');

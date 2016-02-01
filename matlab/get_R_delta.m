@@ -1,4 +1,5 @@
 function R = get_R_delta(samp,R0)
+R0 = reshape(R0,[9,1]);
 w_m = samp.ang;
 t = samp.t;
 

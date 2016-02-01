@@ -11,7 +11,7 @@ samp.acc = samp.acc - repmat(bias.acc,num_samples,1);
 
 samp.stamp = samp.stamp';
 reconstruct.t = samp.stamp;
-samp.acc = my_lowpass(samp.acc,samp.hz,1,cut_freq_hz);
+%samp.acc = my_lowpass(samp.acc,samp.hz,1,cut_freq_hz);
 samp.ang = my_lowpass(samp.ang,samp.hz,1,cut_freq_hz);
 
 earth_rad   = 6371*1000; % radius in meters
@@ -43,9 +43,6 @@ reconstruct.Rdelta = Rd;
 
 % find Rbar using svd method
 %reconstruct.Rbar = fit_2_sets(reconstruct.gs,reconstruct.gd);
-
-
-
 
 %%%%%
 
