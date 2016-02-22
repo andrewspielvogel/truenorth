@@ -3,7 +3,6 @@ function R = fit_2_sets(A,B)
 % from Arun
 
 samples = size(A,2);
-
 % find sample averages
 A_avg = sum(A,2)/samples;
 B_avg = sum(B,2)/samples;

@@ -1,4 +1,4 @@
-function reconstruct = get_R_bar(samp,bias,lat,cut_freq_hz,samp2avg)
+function out = get_R_bar(samp,bias,lat,cut_freq_hz_a,cut_freq_hz_w,samp2avg)
 
 
 num_samples = size(samp.ang,1);
@@ -11,12 +11,13 @@ samp.acc = samp.acc - repmat(bias.acc,num_samples,1);
 
 samp.stamp = samp.stamp';
 reconstruct.t = samp.stamp;
-%samp.acc = my_lowpass(samp.acc,samp.hz,1,cut_freq_hz);
-samp.ang = my_lowpass(samp.ang,samp.hz,1,cut_freq_hz);
+samp.acc = my_lowpass(samp.acc,samp.hz,1,cut_freq_hz_a);
+samp.ang = my_lowpass(samp.ang,samp.hz,1,cut_freq_hz_w);
 
 earth_rad   = 6371*1000; % radius in meters
 lat  = lat*pi/180; % convert to radians
 w_se = [0;0;15*pi/(3600*180)]; % earth rate in rad/sec in space frame
+
 
 % get R_delta (pass in samples and the initial condition)
 Rd   = get_R_d(samp,eye(3));
@@ -72,6 +73,7 @@ reconstruct.a_s = [cell2mat(n_a),cell2mat(e_a),cell2mat(d_a)];
 
 reconstruct.m_s = [cell2mat(n),cell2mat(e),(-1)*reconstruct.gd(:,1:samp2avg)./repmat(sqrt(sum(reconstruct.gd(:,1:samp2avg).^2,1)),3,1)];
 
+
 % find Rbar with svd method
 reconstruct.rb = fit_2_sets(reconstruct.a_s,reconstruct.m_s);
 reconstruct.acc = samp.acc;
@@ -84,9 +86,16 @@ R_en = [-sin(lat),0,-cos(lat);0,1,0;cos(lat),0,-sin(lat)];
 R_sn = cellfun(@(A) A*R_en,R_se,'UniformOutput',false);
 
 % R_si (space to instrument frame) matrices recovered from data
+
 reconstruct.R_si = cellfun(@(A) reconstruct.rb*A,Rd,'UniformOutput',false);
 
 % recovered (instrument to ned frame) matrices from data
 reconstruct.R_in = cellfun(@(A,B) A'*B,reconstruct.R_si,R_sn,'UniformOutput',false);
+
+out.att = rph(reconstruct.R_in);
+out.t = reconstruct.t;
+out.rb = reconstruct.rb;
+out.Rdelta = reconstruct.Rdelta;
+out.Rsn = R_sn;
 
 end

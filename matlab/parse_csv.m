@@ -20,6 +20,7 @@ data.temp = M(:,16);
 data.stamp = M(:,17);
 data.t = M(:,18);
 data.seq_num = M(:,19);
+data.hz = round(1/(((data.stamp(end)-data.stamp(1)))/size(data.stamp,1)));
 
 end
 
