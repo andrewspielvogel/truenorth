@@ -55,15 +55,16 @@ legend('Phins','KVH');
 [~, nd] = min(abs(ground.t-data.t(end)));
 
 
-gnd(:,1) = resample2(ground.t(st:nd)',ground.gyro_attitude(st:nd,1),data.t');
-gnd(:,2) = resample2(ground.t(st:nd)',ground.gyro_attitude(st:nd,2),data.t');
-gnd(:,3) = resample2(ground.t(st:nd)',ground.gyro_attitude(st:nd,3),data.t');
+
+gnd(:,1) = resample2(ground.t(st:nd),ground.gyro_attitude(st:nd,1),data.t');
+gnd(:,2) = resample2(ground.t(st:nd),ground.gyro_attitude(st:nd,2),data.t');
+gnd(:,3) = resample2(ground.t(st:nd),ground.gyro_attitude(st:nd,3),data.t');
 
 tmp_roll = gnd(:,3);
 gnd(:,3) = gnd(:,1);
 gnd(:,1) = tmp_roll;
 
-diff = abs(gnd - samp);
+diff = samp-gnd;
 
 figure;
 hold on;
