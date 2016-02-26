@@ -5,7 +5,7 @@ samp.stamp = samp.stamp';
 w = mean(samp.ang,1)'-bias.ang';
 a = mean(samp.acc,1)'-bias.acc';
 
-scale = norm(w)/(15*pi/(180*60*60));
+scale = norm(w)/(15.04*pi/(180*60*60));
 
 fac = [1;1;1];%/scale;
 
@@ -37,7 +37,7 @@ e = cellfun(@(A) A*e, Rd,'UniformOut',false);
 n = cellfun(@(A) A*n, Rd,'UniformOut',false);
 
 lat  = lat*pi/180; % convert to radians
-w_se = [0;0;15*pi/(3600*180)]; % earth rate in rad/sec in space frame
+w_se = [0;0;15.04*pi/(3600*180)]; % earth rate in rad/sec in space frame
 
 % generate R_se (space to Earth frame) matrices for ts
 R_se = cellfun(@(A) expm(skew(w_se)*(A-samp.stamp(1))),num2cell(samp.stamp),'UniformOutput',false);
