@@ -20,12 +20,12 @@ int main(int argc, char **argv)
 {
 
     // initialize
-    ros::init(argc, argv, "gyro_publisher");
+    ros::init(argc, argv, "kvh_1775");
 
     ros::NodeHandle n("~");
 
     // initialize publisher
-    ros::Publisher chatter = n.advertise<kvh_1775::gyro_sensor_data>("kvh_1775/gyro_data",1000);
+    ros::Publisher chatter = n.advertise<kvh_1775::gyro_sensor_data>("gyro_data",1000);
 
     // rate in Hz
     ros::Rate loop_rate(1000);
