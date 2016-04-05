@@ -4,10 +4,10 @@ function out = adap_filt(hz,t_end,bias)
 t = 0:1/hz:t_end;
 
 % Define parameters
-S.k1 = 70;
-S.k2 = 1;
-S.k3 = 1;
-S.k4 = .001;
+S.k1 = 1000;
+S.k2 = 10;
+S.k3 = 10;
+S.k4 = .01;
 S.bias = bias;
 
 % initial conditions
@@ -32,13 +32,14 @@ for i=1:size(ts,1)
     out.true.acc(:,i) = reshape(xs(i,13:21),3,3)'*[0;0;1];
     
 end
+% plot bias output
 plot_adap(out);
 
 
 % define w at time t
 function w = get_w(t)
 
-w = [sin(t/70);cos(t/40);sin(t/20)];
+w = [sin(t/17);cos(t/14);sin(t/12)];
 
 
 function dx = filt_ode(t,x,S)
