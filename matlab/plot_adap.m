@@ -1,41 +1,89 @@
-function f = plot_adap(out)
+function f = plot_adap(out,name)
+
+num = size(out,2);
+
+comp = ['x','y','z'];
 
 figure
-subplot(3,1,1);
-plot(out.t,out.bias.acc(1,:),out.t,repmat(out.true.bias.acc(1),1,size(out.t,1)));
-xlabel('time [s]');
-ylabel('acc_x [g]');
-grid on;
+for i=1:3
+   
+    subplot(3,1,i);
+    hold on;
+    
+    for j=1:num
 
-subplot(3,1,2);
-plot(out.t,out.bias.acc(2,:),out.t,repmat(out.true.bias.acc(2),1,size(out.t,1)));
-xlabel('time [s]');
-ylabel('acc_y [g]');
-grid on;
+        plot(out(j).t,out(j).bias.acc(i,:)-repmat(out(j).true.bias.acc(i),1,size(out(j).t,2)));
+        
+    end
+    xlabel('time [s]');
+    str = sprintf('bacc_%s error [g]',comp(i));
+    ylabel(str);
+    grid on;
+end
 
-subplot(3,1,3);
-plot(out.t,out.bias.acc(:,3),out.t,repmat(out.true.bias.acc(3),1,size(out.t,1)));
-xlabel('time [s]');
-ylabel('acc_z [g]');
-grid on;
+if nargin>1
+    legend(name);
+end
+
 
 figure
-subplot(3,1,1);
-plot(out.t,out.bias.ang(:,1),out.t,repmat(out.true.bias.ang(1),1,size(out.t,1)));
-xlabel('time [s]');
-ylabel('ang_x [rad/s]');
-grid on;
+for i=1:3
+   
+    subplot(3,1,i);
+    hold on;
+    
+    for j=1:num
 
-subplot(3,1,2);
-plot(out.t,out.bias.ang(:,2),out.t,repmat(out.true.bias.ang(2),1,size(out.t,1)));
-xlabel('time [s]');
-ylabel('ang_y [rad/s]');
-grid on;
+        plot(out(j).t,out(j).bias.ang(i,:)-repmat(out(j).true.bias.ang(i),1,size(out(j).t,2)));
+        
+    end
+    xlabel('time [s]');
+    str = sprintf('bang_%s error [rad/s]',comp(i));
+    ylabel(str);
+    grid on;
+end
+if nargin>1
+    legend(name);
+end
 
-subplot(3,1,3);
-plot(out.t,out.bias.ang(:,3),out.t,repmat(out.true.bias.ang(3),1,size(out.t,1)));
-xlabel('time [s]');
-ylabel('ang_z [rad/s]');
-grid on;
+figure
+for i=1:3
+   
+    subplot(3,1,i);
+    hold on;
+    
+    for j=1:num
+        
+        z = cross(out(j).true.bias.ang,out(j).true.bias.acc);
+        plot(out(j).t,out(j).bias.z(i,:)-repmat(z(i),1,size(out(j).t,2)));
+        
+    end
+    xlabel('time [s]');
+    str = sprintf('bz_%s error',comp(i));
+    ylabel(str);
+    grid on;
+end
+if nargin>1
+    legend(name);
+end
 
-legend('est','true');
+figure;
+for i=1:3
+   
+    subplot(3,1,i);
+    hold on;
+    
+    for j=1:num
+        
+        plot(out(j).t,out(j).acc(i,:)-out(j).true.acc(i,:))
+        
+    end
+    xlabel('time [s]');
+    str = sprintf('acc_%s error [g]',comp(i));
+    ylabel(str);
+    grid on;
+end
+if nargin>1
+    legend(name);
+end
+

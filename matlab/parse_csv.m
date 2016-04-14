@@ -12,15 +12,15 @@ function data = parse_csv( filename )
 M = csvread(filename);
 
 % create structure
-data.ang = M(:,1:3);
-data.acc = M(:,4:6);
-data.mag = M(:,7:9);
+data.ang = M(:,1:3)';
+data.acc = M(:,4:6)';
+data.mag = M(:,7:9)';
 data.status = M(:,10:15);
 data.temp = M(:,16);
-data.stamp = M(:,17);
-data.t = M(:,18);
+data.stamp = M(:,17)';
+data.t = M(:,18)';
 data.seq_num = M(:,19);
-data.hz = round(1/(((data.stamp(end)-data.stamp(1)))/size(data.stamp,1)));
+data.hz = round(1/(((data.stamp(end)-data.stamp(1)))/size(data.stamp,2)));
 
 end
 
