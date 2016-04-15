@@ -174,3 +174,12 @@ target_link_libraries(gyro_publisher ${catkin_LIBRARIES})
 
 add_executable(data_2_csv src/data_2_csv.cpp)
 target_link_libraries(data_2_csv ${catkin_LIBRARIES})
+
+## For Eigen library support
+find_package(cmake_modules REQUIRED)
+find_package(Eigen REQUIRED)
+
+include_directories( include
+  ${Eigen_INCLUDE_DIRS}
+  ${catkin_INCLUDE_DIRS}
+  )

@@ -35,7 +35,7 @@ int main(int argc, char **argv)
     n.getParam("port",name);
     
     // initialize serial port and data
-    std::vector<float> init_sig(3,0);
+    Eigen::Vector3d init_sig(0,0,0);
     std::vector<bool> init_stat(6,false);
     SerialPort serial;
     serial.data.set_values(init_sig, init_sig, 0.0, init_stat, 500);
@@ -64,9 +64,13 @@ int main(int argc, char **argv)
 	// fill data_msg with sensor packet
 	for (int i=0;i<3;i++)
 	{
-	    data_msg.ang.at(i) = serial.data.ang.at(i);
-	    data_msg.acc.at(i) = serial.data.acc.at(i);
-	    data_msg.mag.at(i) = serial.data.mag.at(i);
+	    data_msg.ang.at(i) = serial.data.ang(i);
+	    data_msg.acc.at(i) = serial.data.acc(i);
+	    data_msg.mag.at(i) = serial.data.mag(i);
+	    data_msg.acc_est.at(i) = serial.data.acc_est(i);
+	    data_msg.bias_acc.at(i) = serial.data.bias_acc(i);
+	    data_msg.bias_ang.at(i) = serial.data.bias_ang(i);
+	    data_msg.bias_z.at(i) = serial.data.bias_z(i);
 	}
 	
 	for (int i=0;i<6;i++)

@@ -8,16 +8,18 @@
  * andrewspielvogel@gmail.com
  */
 
-
+#include <iostream>
 #include <kvh_1775/serial_io.h>
 #include "ros/ros.h"
 #include <boost/crc.hpp>
 #include <bitset>
+#include <eigen/Eigen/Core>
+#include <eigen/Eigen/Geometry>
 
 
 
 // set kvh 1775 data packet values
-void KVHData::set_values(std::vector<float> a, std::vector<float> w, float m_t, std::vector<bool> stat, unsigned int num)
+void GyroData::set_values(Eigen::Vector3d a, Eigen::Vector3d w, float m_t, std::vector<bool> stat, unsigned int num)
 {
     int skipped = abs(seq_num-num);
 
@@ -34,16 +36,19 @@ void KVHData::set_values(std::vector<float> a, std::vector<float> w, float m_t, 
     acc = a;
     seq_num = num;
     status = stat;
+    prev_time = ros::Time::now().toSec();
 
     // on startup, initialize
     if (num>127)
     {
-	std::vector<float> m;
-	m.push_back(m_t);
-	m.push_back(m_t);
-	m.push_back(m_t);
-	mag = m;
+        Eigen::Vector3d m(m_t,m_t,m_t);
+      	mag = m;
 	temp = m_t;
+	k1 = 1;
+	k2 = 0.005;
+	k3 = 0.005;
+	k4 = 0.005;
+
     }
     else
     {
@@ -63,25 +68,58 @@ void KVHData::set_values(std::vector<float> a, std::vector<float> w, float m_t, 
 	else if (mod == 1)
 	{
 
-	    mag.at(0) = m_t;
+	    mag(0) = m_t;
 
 	}
 	else if (mod == 2)
 	{
 
-	    mag.at(1) = m_t;
+	    mag(1) = m_t;
 
 	}
 	else if (mod == 3)
 	{
 
-	    mag.at(2) = m_t;
+	    mag(2) = m_t;
 
 	}
 
     }
     
     
+}
+
+void GyroData::est_bias()
+{
+  
+  if(seq_num>200)
+  {
+
+    Eigen::Vector3d zero(0,0,0);
+    acc_est = acc;
+    bias_acc = zero;
+    bias_ang = zero;
+    bias_z = zero;
+
+  }
+  else
+  {
+
+    double dt =  ros::Time::now().toSec() - prev_time;
+    Eigen::Vector3d da = acc_est - acc;
+
+    Eigen::Vector3d da_est = -ang.cross(acc_est) + ang.cross(bias_acc) - acc.cross(bias_ang) - bias_z - k1*da;
+    Eigen::Vector3d dab = k2*ang.cross(da);
+    Eigen::Vector3d dwb = -k3*acc.cross(da);
+    Eigen::Vector3d dzb = k4*da;
+ 
+    acc_est = acc_est + dt*da_est;
+    bias_acc = bias_acc + dt*dab;
+    bias_ang = bias_ang + dt*dwb;
+    bias_z = bias_z + dt*dzb;
+
+    }
+
 }
 
 
@@ -93,7 +131,7 @@ union FloatSignals
 
 
 // parse data packet into fields
-void parse_data(KVHData &data, char *data_raw)
+void parse_data(GyroData &data, char *data_raw)
 {
 
    
@@ -117,16 +155,10 @@ void parse_data(KVHData &data, char *data_raw)
     }
 
     // store ang data in a vec
-    std::vector<float> w;
-    w.push_back(wx.f);
-    w.push_back(wy.f);
-    w.push_back(wz.f);
+    Eigen::Vector3d w(wx.f,wy.f,wz.f);
 
     // store acc data in a vec
-    std::vector<float> a;
-    a.push_back(ax.f);
-    a.push_back(ay.f);
-    a.push_back(az.f);
+    Eigen::Vector3d a(ax.f,ay.f,az.f);
 
     // store status data in a vec
     std::bitset<8> stat(((unsigned char *) data_raw)[32]);
@@ -142,8 +174,12 @@ void parse_data(KVHData &data, char *data_raw)
     // store sequence number
     unsigned int seq_num = (unsigned int) (((unsigned char *) data_raw)[33]);
  
+    //run integration, will need to add storage of previous estimate in GyroData class
+    data.est_bias();
+
     // set data struct with new values
     data.set_values(a, w, m_t.f, status, seq_num);
+
 
 
 }

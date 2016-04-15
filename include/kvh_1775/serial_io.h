@@ -18,6 +18,7 @@
 #include <boost/bind.hpp>
 #include <boost/thread.hpp>
 #include <boost/asio/read.hpp>
+#include <eigen/Eigen/Core>
 
 typedef boost::shared_ptr<boost::asio::serial_port> serial_port_ptr;
 
@@ -26,17 +27,27 @@ typedef boost::shared_ptr<boost::asio::serial_port> serial_port_ptr;
 
 
 //class for storing a KVH 1775 data packet
-class KVHData
+class GyroData
 {
 public:
-    std::vector<float> ang;
-    std::vector<float> acc;
-    std::vector<float> mag;
+    Eigen::Vector3d ang;
+    Eigen::Vector3d acc;
+    Eigen::Vector3d mag;
     std::vector<bool> status;
     float temp;
     unsigned int seq_num;
 
-    void set_values (std::vector<float>, std::vector<float>, float, std::vector<bool>, unsigned int);
+    double prev_time;
+    Eigen::Vector3d bias_acc;
+    Eigen::Vector3d bias_ang;
+    Eigen::Vector3d bias_z;
+    Eigen::Vector3d acc_est;
+
+    void est_bias();
+    double k1,k2,k3,k4;
+
+
+    void set_values (Eigen::Vector3d, Eigen::Vector3d, float, std::vector<bool>, unsigned int);
 
 };
 
@@ -69,7 +80,7 @@ public:
     virtual bool start(const char *com_port_name, int baud_rate=9600);
     virtual void stop();
 
-    KVHData data;
+    GyroData data;
 
 protected:
     virtual void async_read_some_();

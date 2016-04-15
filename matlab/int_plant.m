@@ -25,7 +25,7 @@ acc(:,1) = samp.acc(:,1);
 
 k1 = 1; % acc gain
 k2 = .005; % b_acc gain
-k3 = .001; % b_ang gain
+k3 = .05; % b_ang gain
 k4 = .005; % b_z gain
 
 for i=2:num_samp
