@@ -44,9 +44,10 @@ public:
     Eigen::Vector3d acc_est;
 
     void est_bias();
-    double k1,k2,k3,k4;
+    float k1,k2,k3,k4;
 
-
+    GyroData(float k1_,float k2_,float k3_,float k4_);
+    virtual ~GyroData(void);
     void set_values (Eigen::Vector3d, Eigen::Vector3d, float, std::vector<bool>, unsigned int);
 
 };
@@ -74,13 +75,12 @@ private:
     SerialPort &operator=(const SerialPort &p); 
  
 public:
-    SerialPort(void);
+    GyroData data;
+    SerialPort(float k1_,float k2_,float k3_,float k4_): data(k1_,k2_,k3_,k4_){};
     virtual ~SerialPort(void);
 
     virtual bool start(const char *com_port_name, int baud_rate=9600);
     virtual void stop();
-
-    GyroData data;
 
 protected:
     virtual void async_read_some_();

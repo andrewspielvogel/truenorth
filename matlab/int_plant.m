@@ -1,5 +1,11 @@
-function out = int_plant(samp,DVL)
+function out = int_plant(samp,DVL,bias)
 
+if nargin < 3
+   
+    bias.ang = [0,0,0];
+    bias.acc = [0,0,0];
+    
+end
 
 if (any(strcmp('vel',fieldnames(samp)))&&DVL)
     disp('Using DVL corrections');
@@ -21,17 +27,20 @@ b_z   = zeros(3,num_samp);
 
 % initial measurement
 acc(:,1) = samp.acc(:,1);
+b_ang(:,1) = bias.ang';
+b_acc(:,1) = bias.acc';
+b_z(:,1) = cross(bias.ang,bias.acc);
 
 
 k1 = 1; % acc gain
 k2 = .005; % b_acc gain
-k3 = .05; % b_ang gain
+k3 = .005; % b_ang gain
 k4 = .005; % b_z gain
 
 for i=2:num_samp
     
     % define da and dt
-    dt = t(i)-t(i-1);
+    dt = 1/samp.hz;%t(i)-t(i-1);
     
     if (any(strcmp('vel',fieldnames(samp)))&&DVL)
     

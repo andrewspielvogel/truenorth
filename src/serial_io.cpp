@@ -16,7 +16,39 @@
 #include <eigen/Eigen/Core>
 #include <eigen/Eigen/Geometry>
 
+GyroData::GyroData(float k1_,float k2_,float k3_, float k4_)
+{
+  // define inialization values
+  Eigen::Vector3d zero_init(0.0,0.0,0.0);
+  std::vector<bool> init_stat(6,false);
 
+  // initialize imu data to zero
+  mag = zero_init;
+  ang = zero_init;
+  acc = zero_init;
+
+  // initialize other fields
+  temp = 0.0;
+  seq_num = 500;
+  status = init_stat;
+  prev_time = ros::Time::now().toSec();
+
+  // assign gains for bias estimation
+  k1 = k1_;
+  k2 = k2_;
+  k3 = k3_;
+  k4 = k4_;
+
+  // initialize initial bias fields
+  bias_acc = zero_init;
+  bias_ang = zero_init;
+  bias_z = zero_init;
+
+}
+
+GyroData::~GyroData(void)
+{
+}
 
 // set kvh 1775 data packet values
 void GyroData::set_values(Eigen::Vector3d a, Eigen::Vector3d w, float m_t, std::vector<bool> stat, unsigned int num)
@@ -38,54 +70,38 @@ void GyroData::set_values(Eigen::Vector3d a, Eigen::Vector3d w, float m_t, std::
     status = stat;
     prev_time = ros::Time::now().toSec();
 
-    // on startup, initialize
-    if (num>127)
-    {
-        Eigen::Vector3d m(m_t,m_t,m_t);
-      	mag = m;
+
+    // choose which data was sent
+    // mod == 0 -- temp
+    // mod == 1 -- magx
+    // mod == 2 -- magy
+    // mod == 3 -- magz
+    int mod = num % 4;
+    
+    if (mod == 0)
+      {
+
 	temp = m_t;
-	k1 = 1;
-	k2 = 0.005;
-	k3 = 0.005;
-	k4 = 0.005;
 
-    }
-    else
-    {
-	// choose which data was sent
-	// mod == 0 -- temp
-	// mod == 1 -- magx
-	// mod == 2 -- magy
-	// mod == 3 -- magz
-	int mod = num % 4;
-    
-	if (mod == 0)
-	{
+      }
+    else if (mod == 1)
+      {
 
-	    temp = m_t;
+	mag(0) = m_t;
 
-	}
-	else if (mod == 1)
-	{
+      }
+    else if (mod == 2)
+      {
 
-	    mag(0) = m_t;
+	mag(1) = m_t;
 
-	}
-	else if (mod == 2)
-	{
+      }
+    else if (mod == 3)
+      {
 
-	    mag(1) = m_t;
+	mag(2) = m_t;
 
-	}
-	else if (mod == 3)
-	{
-
-	    mag(2) = m_t;
-
-	}
-
-    }
-    
+      }   
     
 }
 
@@ -95,24 +111,22 @@ void GyroData::est_bias()
   if(seq_num>200)
   {
 
-    Eigen::Vector3d zero(0,0,0);
     acc_est = acc;
-    bias_acc = zero;
-    bias_ang = zero;
-    bias_z = zero;
 
   }
   else
   {
-
-    double dt =  ros::Time::now().toSec() - prev_time;
+    // get dt and da
+    double dt = 1.0/1000.0; //ros::Time::now().toSec() - prev_time;
     Eigen::Vector3d da = acc_est - acc;
 
+    // calculate dx
     Eigen::Vector3d da_est = -ang.cross(acc_est) + ang.cross(bias_acc) - acc.cross(bias_ang) - bias_z - k1*da;
     Eigen::Vector3d dab = k2*ang.cross(da);
     Eigen::Vector3d dwb = -k3*acc.cross(da);
     Eigen::Vector3d dzb = k4*da;
  
+    // calculate next bias estimate 
     acc_est = acc_est + dt*da_est;
     bias_acc = bias_acc + dt*dab;
     bias_ang = bias_ang + dt*dwb;
@@ -173,20 +187,12 @@ void parse_data(GyroData &data, char *data_raw)
 
     // store sequence number
     unsigned int seq_num = (unsigned int) (((unsigned char *) data_raw)[33]);
- 
-    //run integration, will need to add storage of previous estimate in GyroData class
-    data.est_bias();
 
     // set data struct with new values
     data.set_values(a, w, m_t.f, status, seq_num);
 
-
-
-}
-
-
-SerialPort::SerialPort(void)
-{
+    //run integration, will need to add storage of previous estimate in GyroData class
+    data.est_bias();
 }
 
 

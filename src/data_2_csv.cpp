@@ -42,7 +42,11 @@ int main(int argc, char **argv)
 	    	   << s->mag[0] << "," << s->mag[1] << "," << s->mag[2] << ","
 	    	   << (int) s->status[0] << "," << (int) s->status[1] << "," << (int) s->status[2] << ","
 	    	   << (int) s->status[3] << "," << (int) s->status[4] << "," << (int) s->status[5] << ","
-	    	   << s->temp << "," << s->stamp << "," << s->t << "," << (int) s->seq_num << "\n";
+	    	   << s->temp << "," << s->stamp << "," << (int) s->seq_num << ","
+		   << s->acc_est[0] << "," << s->acc_est[1] << "," << s->acc_est[2] << ","
+		   << s->bias_ang[0] << "," << s->bias_ang[1] << "," << s->bias_ang[2] << ","
+		   << s->bias_acc[0] << "," << s->bias_acc[1] << "," << s->bias_acc[2] << ","
+		   << s->bias_z[0] << "," << s->bias_z[1] << "," << s->bias_z[2] << "\n";
 	}
 
     }

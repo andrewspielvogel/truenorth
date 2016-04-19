@@ -9,4 +9,3 @@ bool[6] status
 float32 temp
 uint8 seq_num
 time stamp
-float64 t
