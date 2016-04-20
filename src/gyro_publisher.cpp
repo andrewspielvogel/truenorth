@@ -39,7 +39,7 @@ int main(int argc, char **argv)
     n.getParam("baud",baud);
     
     // initialize serial port
-    SerialPort serial(1.0,0.001,0.001,0.005);
+    SerialPort serial(1.0,0.005,0.005,0.005);
 
     // connect to serial port
     bool connected =  serial.start(name.c_str(),baud);
