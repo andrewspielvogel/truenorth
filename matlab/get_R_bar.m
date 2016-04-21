@@ -1,13 +1,15 @@
 function out = get_R_bar(samp,bias,lat,cut_freq_hz_a,cut_freq_hz_w,samp2avg)
 
+samp.ang = samp.ang';
+samp.acc = samp.acc';
 
 num_samples = size(samp.ang,1);
  if ~exist('samp2avg','var')
      % third parameter does not exist, so default it to something
       samp2avg = num_samples;
  end
-samp.ang = samp.ang - repmat(bias.ang,num_samples,1);
-samp.acc = samp.acc - repmat(bias.acc,num_samples,1);
+samp.ang = samp.ang - repmat(bias.ang',num_samples,1);
+samp.acc = samp.acc - repmat(bias.acc',num_samples,1);
 
 samp.stamp = samp.stamp';
 reconstruct.t = samp.stamp;
@@ -67,9 +69,12 @@ e_a = cellfun(@(A) A*[0;1;0],R_se(1:samp2avg),'UniformOutput',false);
 n_a = cellfun(@(A,B) cross(A,B),e_a,d_a,'UniformOutput',false);
 
 
+n_a_mat = cell2mat(n_a);
+e_a_mat = cell2mat(e_a);
+d_a_mat = cell2mat(d_a);
 
 % normalize and create nde matrices for measured and analytical
-reconstruct.a_s = [cell2mat(n_a),cell2mat(e_a),cell2mat(d_a)];
+reconstruct.a_s = [reshape(n_a_mat,3,size(n_a_mat,1)/3),reshape(e_a_mat,3,size(e_a_mat,1)/3),reshape(d_a_mat,3,size(d_a_mat,1)/3)];
 
 reconstruct.m_s = [cell2mat(n),cell2mat(e),(-1)*reconstruct.gd(:,1:samp2avg)./repmat(sqrt(sum(reconstruct.gd(:,1:samp2avg).^2,1)),3,1)];
 
@@ -90,8 +95,9 @@ R_sn = cellfun(@(A) A*R_en,R_se,'UniformOutput',false);
 reconstruct.R_si = cellfun(@(A) reconstruct.rb*A,Rd,'UniformOutput',false);
 
 % recovered (instrument to ned frame) matrices from data
-reconstruct.R_in = cellfun(@(A,B) A'*B,reconstruct.R_si,R_sn,'UniformOutput',false);
+reconstruct.R_in = cellfun(@(A,B) A'*B,reconstruct.R_si,R_sn','UniformOutput',false);
 
+out.Rin = reconstruct.R_in;
 out.att = rph(reconstruct.R_in);
 out.t = reconstruct.t;
 out.rb = reconstruct.rb;

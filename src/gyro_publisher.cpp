@@ -36,6 +36,7 @@ int main(int argc, char **argv)
 
     // baud rate
     int baud = 921600;
+
     n.getParam("baud",baud);
     
     // initialize serial port

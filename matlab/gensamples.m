@@ -42,7 +42,7 @@ for i=1:num
         samp.vel(:,floor(t(i))+1) = [0;sin(t(i)/20);cos(t(i)/15)-1]/10 + v_sig*randn(3,1);
     end
     
-    samp.acc(:,i) = R{i}'*[0;0;1] + a_sig*randn(3,1) + bias.acc + [0;cos(t(i))/20;-sin(t(i))/15]/10;
+    samp.acc(:,i) = R{i}'*[0;0;1] + a_sig*randn(3,1) + bias.acc ;%+ [0;cos(t(i))/20;-sin(t(i))/15]/10;
     
     % print progress
     if ~mod(t(i),30)
