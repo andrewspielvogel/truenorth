@@ -4,8 +4,8 @@ tic
 t = 0:1/hz:t_end;
 
 % noise
-w_sig = 8.4178 * 10^(-5);  % measured 1775, units are rad/sec
-a_sig = 0.0023;            % measured 1775, units are g, not m/s^2
+w_sig = 2.1 * 10^(-4);  % measured 1775, units are rad/sec
+a_sig = 0.0037;            % measured 1775, units are g, not m/s^2
 v_sig = 0.002/9.81;
 
 % initialize R at t0
