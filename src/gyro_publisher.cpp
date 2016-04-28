@@ -15,6 +15,7 @@
 #include <sstream>
 
 
+
 int main(int argc, char **argv)
 {
 
@@ -55,7 +56,7 @@ int main(int argc, char **argv)
 	ROS_INFO("connected to port: %s",name.c_str());
     }
 
-
+    int cur_time_since_data = 0;
 
     while (ros::ok())
     {
@@ -87,16 +88,20 @@ int main(int argc, char **argv)
       // publish packet
       chatter.publish(data_msg);
 
-      double to_from_last_msg = abs(ros::Time::now().toSec()-serial.data.prev_time);
+      int time_from_last_msg = (int)abs(ros::Time::now().toSec()-serial.data.prev_time);
 
-      if (to_from_last_msg>1.0)
+      if (time_from_last_msg>=1)
       {
 
-	ROS_ERROR("Lost Connection. No data for %f seconds",to_from_last_msg);
-	if (to_from_last_msg>10)
+	if(cur_time_since_data != time_from_last_msg)
+	{
+	  ROS_ERROR("Lost Connection. No data for %d seconds",time_from_last_msg);
+	  cur_time_since_data = time_from_last_msg;
+	}
+	if (time_from_last_msg>9)
 	{
 	
-	  ROS_ERROR("No data for over %f seconds. Closing node...",to_from_last_msg);
+	  ROS_ERROR("No data for over %d seconds. Closing node...",time_from_last_msg);
 	  serial.stop();
 	  return 1;
 
