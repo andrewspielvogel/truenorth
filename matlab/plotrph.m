@@ -1,9 +1,7 @@
-function f = plotrph(data,ground,align)
+function f = plotrph(data,ground)
 
 
-samp(:,1) = data.att(:,1)-align(1);
-samp(:,2) = data.att(:,2)-align(2);
-samp(:,3) = data.att(:,3)-align(3);
+samp = data.att;
 
 figure;
 hold on;

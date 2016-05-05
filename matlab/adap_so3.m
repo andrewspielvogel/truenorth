@@ -5,7 +5,7 @@ R{num_samp} = eye(3);
 R{1} = eye(3);
 err = zeros(3,num_samp);
 
-k=0.5;
+k=1;
 
 for i=2:num_samp
     
