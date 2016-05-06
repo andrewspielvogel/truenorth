@@ -66,6 +66,7 @@ GyroData::GyroData(float k1_,float k2_,float k3_, float k4_)
   bias_z = zero_init;
 
 
+  // get current time to name log file
   time_t now = time(0);
   tm *time = localtime(&now);
 
@@ -78,6 +79,7 @@ GyroData::GyroData(float k1_,float k2_,float k3_, float k4_)
   char file_name [50];
   sprintf(file_name,"/var/log/KVH/%d_%d_%d_%d_%d.KVH",year,month,day,hour,minute);
   
+  // open log file
   fp_ = fopen(file_name,"w");
 
 }

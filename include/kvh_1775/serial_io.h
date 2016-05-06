@@ -52,7 +52,7 @@ public:
     void set_values (Eigen::Vector3d, Eigen::Vector3d, float, std::vector<bool>, unsigned int);
 
  private:
-    FILE *fp_;
+    FILE *fp_; //log file
 
 };
 
