@@ -16,6 +16,26 @@
 #include <eigen/Eigen/Core>
 #include <eigen/Eigen/Geometry>
 
+
+
+typedef unsigned char	cc_t;
+typedef unsigned int	speed_t;
+typedef unsigned int	tcflag_t;
+
+#define NCCS 19
+#define BOTHER 0010000
+struct termios2 {
+	tcflag_t c_iflag;		/* input mode flags */
+	tcflag_t c_oflag;		/* output mode flags */
+	tcflag_t c_cflag;		/* control mode flags */
+	tcflag_t c_lflag;		/* local mode flags */
+	cc_t c_line;			/* line discipline */
+	cc_t c_cc[NCCS];		/* control characters */
+	speed_t c_ispeed;		/* input speed */
+	speed_t c_ospeed;		/* output speed */
+};
+
+
 GyroData::GyroData(float k1_,float k2_,float k3_, float k4_)
 {
   // define inialization values
@@ -227,8 +247,21 @@ bool SerialPort::start(const char *com_port_name, int baud_rate)
 	return false;
     }
  
+    int fd;
+
+    fd = port_->native_handle();
+
+    struct termios2 tio;
+    ioctl(fd, TCGETS2, &tio);
+    tio.c_cflag &= ~CBAUD;
+    tio.c_cflag |= BOTHER;
+    tio.c_ispeed = baud_rate;
+    tio.c_ospeed = baud_rate;
+    /* do other miscellaneous setup options with the flags here */
+    ioctl(fd, TCSETS2, &tio);
+
     // option settings...
-    port_->set_option(boost::asio::serial_port_base::baud_rate(baud_rate));
+    //port_->set_option(boost::asio::serial_port_base::baud_rate(baud_rate));
     port_->set_option(boost::asio::serial_port_base::character_size(8));
     port_->set_option(boost::asio::serial_port_base::stop_bits(boost::asio::serial_port_base::stop_bits::one));
     port_->set_option(boost::asio::serial_port_base::parity(boost::asio::serial_port_base::parity::none));
