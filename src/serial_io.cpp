@@ -18,7 +18,7 @@
 #include <ctime>
 
 
-
+// struct for doing custom baud rate 
 typedef unsigned char	cc_t;
 typedef unsigned int	speed_t;
 typedef unsigned int	tcflag_t;
@@ -273,17 +273,17 @@ bool SerialPort::start(const char *com_port_name, int baud_rate)
 	return false;
     }
  
+    // get fd of serial port native handle
     int fd;
-
     fd = port_->native_handle();
 
+    // assign custom baud rate
     struct termios2 tio;
     ioctl(fd, TCGETS2, &tio);
     tio.c_cflag &= ~CBAUD;
     tio.c_cflag |= BOTHER;
     tio.c_ispeed = baud_rate;
     tio.c_ospeed = baud_rate;
-    /* do other miscellaneous setup options with the flags here */
     ioctl(fd, TCSETS2, &tio);
 
     // option settings...
