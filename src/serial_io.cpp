@@ -146,7 +146,7 @@ void GyroData::set_values(Eigen::Vector3d a, Eigen::Vector3d w, float m_t, std::
     
 
     //log data
-    fprintf(fp_,"RAW, %f,%f,%f, %f,%f,%f, %f,%f,%f, %f, %d \n",ang(0),ang(1),ang(2),acc(0),acc(1),acc(2),mag(0),mag(1),mag(2),temp,seq_num);
+    fprintf(fp_,"RAW, %f,%f,%f, %f,%f,%f, %f,%f,%f, %f, %d, %f \n",ang(0),ang(1),ang(2),acc(0),acc(1),acc(2),mag(0),mag(1),mag(2),temp,seq_num,prev_time);
 
 }
 
