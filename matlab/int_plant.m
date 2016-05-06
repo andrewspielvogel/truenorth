@@ -32,10 +32,10 @@ b_acc(:,1) = bias.acc';
 b_z(:,1) = cross(bias.ang,bias.acc);
 
 
-k1 = .1; % acc gain
-k2 = 0; % b_acc gain
-k3 = .0001; % b_ang gain
-k4 = 0; % b_z gain
+k1 = 1; % acc gain
+k2 = 0.001; % b_acc gain
+k3 = 0.001; % b_ang gain
+k4 = 0.00001; % b_z gain
 
 for i=2:num_samp
     

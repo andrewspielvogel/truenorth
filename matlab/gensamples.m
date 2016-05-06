@@ -1,12 +1,20 @@
 function samp = gensamples(hz,t_end,bias)
+
 tic
+
+if nargin<3
+   
+    bias.acc = zeros(3,1);
+    bias.ang = zeros(3,1);
+    
+end
+
 % Define t
 t = 0:1/hz:t_end;
 
 % noise
 w_sig = 2.1 * 10^(-4);  % measured 1775, units are rad/sec
 a_sig = 0.0037;            % measured 1775, units are g, not m/s^2
-v_sig = 0.002/9.81;
 
 % initialize R at t0
 R{1} = eye(3);
@@ -19,7 +27,6 @@ samp.ang = zeros(3,num);
 samp.acc = zeros(3,num);
 samp.true.ang = zeros(3,num);
 samp.true.acc = zeros(3,num);
-samp.vel = zeros(3,t_end);
 
 for i=1:num
 
@@ -33,16 +40,12 @@ for i=1:num
     
     % save true signal
     samp.true.ang(:,i) = w;
-    samp.true.acc(:,i) = R{i}'*[0;0;1];
+    samp.true.acc(:,i) = R{i}*[0;0;1];
     
     % generate ang and acc samples at t
-    samp.ang(:,i) = w + w_sig*randn(3,1) + bias.ang;
+    samp.ang(:,i) = R{i}*[1/sqrt(2);0;1/sqrt(2)]*15*pi/180/3600 + w + w_sig*randn(3,1) + bias.ang;
     
-    if ~mod(i-1,hz)
-        samp.vel(:,floor(t(i))+1) = [0;sin(t(i)/20);cos(t(i)/15)-1]/10 + v_sig*randn(3,1);
-    end
-    
-    samp.acc(:,i) = R{i}'*[0;0;1] + a_sig*randn(3,1) + bias.acc ;%+ [0;cos(t(i))/20;-sin(t(i))/15]/10;
+    samp.acc(:,i) = R{i}*[0;0;1]  + a_sig*randn(3,1) + bias.acc;% + [sin(t(i)/7);cos(t(i)/10)/5;-sin(t(i)/15)/3]/10;
     
     % print progress
     if ~mod(t(i),30)
