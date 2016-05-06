@@ -15,6 +15,7 @@
 #include <bitset>
 #include <eigen/Eigen/Core>
 #include <eigen/Eigen/Geometry>
+#include <ctime>
 
 
 
@@ -64,10 +65,28 @@ GyroData::GyroData(float k1_,float k2_,float k3_, float k4_)
   bias_ang = zero_init;
   bias_z = zero_init;
 
+
+  time_t now = time(0);
+  tm *time = localtime(&now);
+
+  int year = 1900 +time->tm_year;
+  int month = 1 + time->tm_mon;
+  int day = time->tm_mday;
+  int hour = time->tm_hour;
+  int minute = 1 + time->tm_min;
+
+  char file_name [50];
+  sprintf(file_name,"/var/log/KVH/%d_%d_%d_%d_%d.KVH",year,month,day,hour,minute);
+  
+  fp_ = fopen(file_name,"w");
+
 }
 
 GyroData::~GyroData(void)
 {
+
+  fclose(fp_);
+
 }
 
 // set kvh 1775 data packet values
@@ -123,6 +142,10 @@ void GyroData::set_values(Eigen::Vector3d a, Eigen::Vector3d w, float m_t, std::
 
       }   
     
+
+    //log data
+    fprintf(fp_,"RAW, %f,%f,%f, %f,%f,%f, %f,%f,%f, %f, %d \n",ang(0),ang(1),ang(2),acc(0),acc(1),acc(2),mag(0),mag(1),mag(2),temp,seq_num);
+
 }
 
 void GyroData::est_bias()
@@ -213,6 +236,7 @@ void parse_data(GyroData &data, char *data_raw)
 
     //run integration, will need to add storage of previous estimate in GyroData class
     data.est_bias();
+ 
 }
 
 

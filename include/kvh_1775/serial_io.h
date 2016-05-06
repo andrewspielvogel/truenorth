@@ -37,6 +37,7 @@ public:
     float temp;
     unsigned int seq_num;
 
+
     double prev_time;
     Eigen::Vector3d bias_acc;
     Eigen::Vector3d bias_ang;
@@ -49,6 +50,9 @@ public:
     GyroData(float k1_,float k2_,float k3_,float k4_);
     virtual ~GyroData(void);
     void set_values (Eigen::Vector3d, Eigen::Vector3d, float, std::vector<bool>, unsigned int);
+
+ private:
+    FILE *fp_;
 
 };
 
