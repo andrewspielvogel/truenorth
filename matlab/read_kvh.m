@@ -1,4 +1,12 @@
 function out = read_kvh(file)
+% read kvh log files
+%
+% created May 2016
+%
+% Andrew Spielvogel
+% andrewspielvogel@gmail.com
+%
+
 
 csv_input = csvread(file,0,1);
 out.ang = csv_input(:,1:3)';
