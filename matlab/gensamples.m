@@ -45,7 +45,7 @@ for i=1:num
     % generate ang and acc samples at t
     samp.ang(:,i) = R{i}*[1/sqrt(2);0;1/sqrt(2)]*15*pi/180/3600 + w + w_sig*randn(3,1) + bias.ang;
     
-    samp.acc(:,i) = R{i}*[0;0;1]  + a_sig*randn(3,1) + bias.acc;% + [sin(t(i)/7);cos(t(i)/10)/5;-sin(t(i)/15)/3]/10;
+    samp.acc(:,i) = R{i}*[0;0;1]  + a_sig*randn(3,1) + bias.acc;
     
     % print progress
     if ~mod(t(i),30)
