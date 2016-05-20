@@ -12,7 +12,12 @@
 #include "std_msgs/String.h"
 #include <kvh_1775/serial_io.h>
 #include "kvh_1775/gyro_sensor_data.h"
+#include <eigen/Eigen/Core>
+#include <boost/tokenizer.hpp>
+#include <boost/foreach.hpp>
 #include <sstream>
+#include <string>
+#include <stdlib.h>
 
 
 
@@ -29,7 +34,9 @@ int main(int argc, char **argv)
     ros::Publisher chatter = n.advertise<kvh_1775::gyro_sensor_data>("gyro_data",1000);
 
     // rate in Hz
-    ros::Rate loop_rate(1000);
+    int rate = 1000;
+    n.getParam("rate",rate);
+    ros::Rate loop_rate(rate);
 
     // port name
     std::string name = "/dev/ttyUSB0";
@@ -37,11 +44,28 @@ int main(int argc, char **argv)
 
     // baud rate
     int baud = 921600;
-
     n.getParam("baud",baud);
     
+    // instrument alignment matrix
+    std::string instr_align = "1,0,0,0,-1,0,0,0,-1"; 
+    n.getParam("instr_align",instr_align);
+    
+    boost::char_separator<char> sep(",");
+    boost::tokenizer<boost::char_separator<char> > tokens(instr_align,sep);    
+
+    Eigen::MatrixXd R_align(9,1);
+    int i = 0;
+    BOOST_FOREACH (const std::string& t, tokens)
+    {
+
+      R_align(i) = strtod(t.c_str(),NULL);  
+      i++;
+
+    }
+    R_align.resize(3,3);
+
     // initialize serial port
-    SerialPort serial(1.0,0.005,0.005,0.005,.3);
+    SerialPort serial(1.0,0.005,0.005,0.005,.3, R_align);
 
     // connect to serial port
     bool connected =  serial.start(name.c_str(),baud);
