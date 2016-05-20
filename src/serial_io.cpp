@@ -103,6 +103,7 @@ void SerialPort::parse_data(GyroData &data, char *data_raw)
 
       }   
 
+    // define time and diff
     double prev_time_ = ros::Time::now().toSec();
     data.diff = data.prev_time - prev_time_;
     data.prev_time = prev_time_;
