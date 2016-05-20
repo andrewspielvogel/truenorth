@@ -19,7 +19,7 @@
 #include <boost/thread.hpp>
 #include <boost/asio/read.hpp>
 #include <eigen/Eigen/Core>
-#include <kvh_1775/kvh_gyro_data.h>
+#include <kvh_1775/gyro_data.h>
 
 typedef boost::shared_ptr<boost::asio::serial_port> serial_port_ptr;
 
@@ -68,7 +68,9 @@ private:
  
 public:
     GyroData data;
- SerialPort(float k1_,float k2_,float k3_,float k4_,float k5_): data(k1_,k2_,k3_,k4_,k5_){};
+    Eigen::Vector3d mag;
+    float temp;
+    SerialPort(float k1_,float k2_,float k3_,float k4_,float k5_, Eigen::Matrix3d align_): data(k1_,k2_,k3_,k4_,k5_,align_){};
     virtual ~SerialPort(void);
 
     virtual bool start(const char *com_port_name, int baud_rate=9600);
@@ -77,6 +79,7 @@ public:
 protected:
     virtual void async_read_some_();
     virtual void on_receive_(const boost::system::error_code& ec, size_t bytes_transferred);
+    void parse_data(GyroData &data, char *data_raw);
 
 
 

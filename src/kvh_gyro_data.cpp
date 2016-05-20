@@ -1,7 +1,7 @@
 /*
- * kvh_gyro_data.cpp
- * implementation of kvh_gyro_data.h
- * class for gyro data for KVH 1775 IMU
+ * gyro_data.cpp
+ * implementation of gyro_data.h
+ * class for gyro data
  *
  * created May 2016
  * Andrew Spielvogel
@@ -9,17 +9,17 @@
  */
 
 #include <iostream>
-#include <math.h>  
 #include "ros/ros.h"
 #include <eigen/Eigen/Core>
 #include <eigen/Eigen/Geometry>
 #include <eigen/Eigen/Dense>
 #include <eigen/unsupported/Eigen/MatrixFunctions>
 #include <kvh_1775/kvh_gyro_data.h>
+#include <kvh_1775/andrews_func.h>
 #include <ctime>
 
 
-GyroData::GyroData(float k1_,float k2_,float k3_, float k4_,float k5_)
+GyroData::GyroData(float k1_,float k2_,float k3_, float k4_,float k5_, Eigen::Matrix3d align_)
 {
   // define inialization values
   Eigen::Vector3d zero_init(0.0,0.0,0.0);
@@ -28,11 +28,11 @@ GyroData::GyroData(float k1_,float k2_,float k3_, float k4_,float k5_)
   init_mat << 1,0,0,0,1,0,0,0,1;
 
   //initialize est_att
-  Rbar = init_mat;
-  Rd = init_mat;
+  Rbar_ = init_mat;
+  Rd_ = init_mat;
   att = zero_init;
 
-  R_align << 1,0,0,0,-1,0,0,0,-1;
+  R_align_ = align_;
 
   // initialize imu data to zero
   mag = zero_init;
@@ -85,7 +85,7 @@ GyroData::~GyroData(void)
 }
 
 // set kvh 1775 data packet values
-void GyroData::set_values(Eigen::Vector3d a, Eigen::Vector3d w, float m_t, std::vector<bool> stat, unsigned int num)
+void GyroData::set_values(Eigen::Vector3d a, Eigen::Vector3d w, Eigen::Vector3d m, float temp_, std::vector<bool> stat, unsigned int num)
 {
     int skipped = abs(seq_num-num);
 
@@ -102,42 +102,8 @@ void GyroData::set_values(Eigen::Vector3d a, Eigen::Vector3d w, float m_t, std::
     acc = a;
     seq_num = num;
     status = stat;
-    double prev_time_ = ros::Time::now().toSec();
-    diff = ros::Time::now().toSec() - prev_time_;
-    prev_time = prev_time_;
-
-
-    // choose which data was sent
-    // mod == 0 -- temp
-    // mod == 1 -- magx
-    // mod == 2 -- magy
-    // mod == 3 -- magz
-    int mod = num % 4;
-    
-    if (mod == 0)
-      {
-
-	temp = m_t;
-
-      }
-    else if (mod == 1)
-      {
-
-	mag(0) = m_t;
-
-      }
-    else if (mod == 2)
-      {
-
-	mag(1) = m_t;
-
-      }
-    else if (mod == 3)
-      {
-
-	mag(2) = m_t;
-
-      }   
+    temp = temp_;
+    mag = m;
     
 
     //log data
@@ -176,46 +142,19 @@ void GyroData::est_bias()
 
 }
 
-// helper skew function
-Eigen::Matrix3d skew(Eigen::Vector3d w)
-{
-
-  Eigen::Matrix3d w_hat;
-
-  w_hat << 0.0,-w(2),w(1),w(2),0.0,-w(0),-w(1),w(0),0,0;
-  
-  return w_hat;
-
-}
-
-// helper function for roll, pitch, heading
-Eigen::Vector3d rot2rph(Eigen::Matrix3d R)
-{
-
-  double h = atan2(R(1,0),R(0,0));
-  double ch = cos(h);
-  double sh = sin(h);
-  double p = atan2(-R(2,0), R(0,0)*ch + R(1,0)*sh);
-  double r = atan2(R(0,2)*sh - R(1,2)*ch, -R(0,1)*sh + R(1,1)*ch);
-
-  Eigen::Vector3d rph(r,p,h);
-
-  return rph;
-
-}
 
 // estimate attitude
 void GyroData::est_att()
 {
 
-  Eigen::Vector3d u = Rd*acc_est;
+  Eigen::Vector3d u = Rd_*acc_est;
   Eigen::Vector3d y(0.0,0.0,1.0);
 
-  Eigen::Vector3d y_est = Rbar*u;
-  Eigen::Vector3d err = k5*Rbar.transpose()*y_est.cross(y);
+  Eigen::Vector3d y_est = Rbar_*u;
+  Eigen::Vector3d err = k5*Rbar_.transpose()*y_est.cross(y);
   Eigen::Matrix3d dt_err = diff*skew(err);
-  Rbar = Rbar*dt_err.exp();
+  Rbar_ = Rbar_*dt_err.exp();
   
-  att = rot2rph(R_align*Rd.transpose()*Rbar.transpose());
+  att = rot2rph(R_align_*Rd_.transpose()*Rbar_.transpose());
 
 }

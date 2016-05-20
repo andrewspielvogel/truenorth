@@ -10,7 +10,7 @@
 
 #include <iostream>
 #include <kvh_1775/serial_io.h>
-#include <kvh_1775/kvh_gyro_data.h>
+#include <kvh_1775/gyro_data.h>
 #include "ros/ros.h"
 #include <boost/crc.hpp>
 #include <bitset>
@@ -27,7 +27,7 @@ union FloatSignals
 
 
 // parse data packet into fields
-void parse_data(GyroData &data, char *data_raw)
+void SerialPort::parse_data(GyroData &data, char *data_raw)
 {
 
    
@@ -70,11 +70,49 @@ void parse_data(GyroData &data, char *data_raw)
     // store sequence number
     unsigned int seq_num = (unsigned int) (((unsigned char *) data_raw)[33]);
 
+
+    // choose which data was sent
+    // mod == 0 -- temp
+    // mod == 1 -- magx
+    // mod == 2 -- magy
+    // mod == 3 -- magz
+    int mod = seq_num % 4;
+    
+    if (mod == 0)
+      {
+
+	temp = m_t.f;
+
+      }
+    else if (mod == 1)
+      {
+
+	mag(0) = m_t.f;
+
+      }
+    else if (mod == 2)
+      {
+
+	mag(1) = m_t.f;
+
+      }
+    else if (mod == 3)
+      {
+
+	mag(2) = m_t.f;
+
+      }   
+
+    double prev_time_ = ros::Time::now().toSec();
+    data.diff = data.prev_time - prev_time_;
+    data.prev_time = prev_time_;
+
     // set data struct with new values
-    data.set_values(a, w, m_t.f, status, seq_num);
+    data.set_values(a, w, mag, temp, status, seq_num);
 
     //run integration, will need to add storage of previous estimate in GyroData class
     data.est_bias();
+    data.est_att();
  
 }
 
