@@ -68,7 +68,7 @@ private:
  
 public:
     GyroData data;
-    SerialPort(float k1_,float k2_,float k3_,float k4_): data(k1_,k2_,k3_,k4_){};
+ SerialPort(float k1_,float k2_,float k3_,float k4_,float k5_): data(k1_,k2_,k3_,k4_,k5_){};
     virtual ~SerialPort(void);
 
     virtual bool start(const char *com_port_name, int baud_rate=9600);

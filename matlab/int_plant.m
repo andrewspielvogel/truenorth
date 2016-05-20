@@ -33,9 +33,11 @@ b_z(:,1) = cross(bias.ang,bias.acc);
 
 
 k1 = 1; % acc gain
-k2 = 0.001; % b_acc gain
-k3 = 0.001; % b_ang gain
-k4 = 0.00001; % b_z gain
+k2 = .02;%.5; % b_acc gain
+k2b = .02;
+k3 = .0001;%.0005; % b_ang gain
+k3b = 0.0001;
+k4 = .000001; % b_z gain
 
 for i=2:num_samp
     
@@ -67,10 +69,18 @@ for i=2:num_samp
         
         % define dx terms
         da_est = skew(-samp.ang(:,i-1))*acc(:,i-1) + skew(samp.ang(:,i-1))*b_acc(:,i-1) + skew(-samp.acc(:,i-1))*b_ang(:,i-1) - b_z(:,i-1) - k1*da;
+
         dab    =  k2*skew(samp.ang(:,i-1))*da;
         dwb    = -k3*skew(samp.acc(:,i-1))*da;
         dzb    =  k4*da;
-    
+        if i>60*samp.hz*5
+            
+            dab = k2b*skew(samp.ang(:,i-1))*da;
+            dwb = -k3b*skew(samp.acc(:,i-1))*da;
+            
+        end
+        
+        
     end
     
     % integrate

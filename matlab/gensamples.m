@@ -1,8 +1,10 @@
-function samp = gensamples(hz,t_end,bias)
+function samp = gensamples(lat,hz,t_end,bias)
 
 tic
 
-if nargin<3
+lat = lat*pi/180;
+
+if nargin<4
    
     bias.acc = zeros(3,1);
     bias.ang = zeros(3,1);
@@ -39,13 +41,14 @@ for i=1:num
     end
     
     % save true signal
-    samp.true.ang(:,i) = w;
-    samp.true.acc(:,i) = R{i}*[0;0;1];
+    samp.true.t = t;
+    samp.true.ang(:,i) = R{i}'*[cos(lat);0;sin(lat)]*15*pi/180/3600 + w;
+    samp.true.acc(:,i) = R{i}'*[0;0;1];
     
     % generate ang and acc samples at t
-    samp.ang(:,i) = R{i}*[1/sqrt(2);0;1/sqrt(2)]*15*pi/180/3600 + w + w_sig*randn(3,1) + bias.ang;
+    samp.ang(:,i) =  R{i}'*[cos(lat);0;sin(lat)]*15*pi/180/3600 + w + w_sig*randn(3,1) + bias.ang;
     
-    samp.acc(:,i) = R{i}*[0;0;1]  + a_sig*randn(3,1) + bias.acc;
+    samp.acc(:,i) = R{i}'*[0;0;1]  + a_sig*randn(3,1) + bias.acc;
     
     % print progress
     if ~mod(t(i),30)

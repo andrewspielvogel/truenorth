@@ -12,15 +12,24 @@
 #include "ros/ros.h"
 #include <eigen/Eigen/Core>
 #include <eigen/Eigen/Geometry>
+#include <eigen/Eigen/Dense>
+#include <eigen/unsupported/Eigen/MatrixFunctions>
 #include <kvh_1775/kvh_gyro_data.h>
 #include <ctime>
 
 
-GyroData::GyroData(float k1_,float k2_,float k3_, float k4_)
+GyroData::GyroData(float k1_,float k2_,float k3_, float k4_,float k5_)
 {
   // define inialization values
   Eigen::Vector3d zero_init(0.0,0.0,0.0);
   std::vector<bool> init_stat(6,false);
+  Eigen::Matrix3d init_mat;
+  init_mat << 1,0,0,0,1,0,0,0,1;
+
+  //initialize est_att
+  Rbar = init_mat;
+  Rd = init_mat;
+  att = zero_init;
 
   // initialize imu data to zero
   mag = zero_init;
@@ -32,12 +41,14 @@ GyroData::GyroData(float k1_,float k2_,float k3_, float k4_)
   seq_num = 500;
   status = init_stat;
   prev_time = ros::Time::now().toSec();
-
+  diff = 0.0;
+  
   // assign gains for bias estimation
   k1 = k1_;
   k2 = k2_;
   k3 = k3_;
   k4 = k4_;
+  k5 = k5_;
 
   // initialize initial bias fields
   bias_acc = zero_init;
@@ -88,7 +99,9 @@ void GyroData::set_values(Eigen::Vector3d a, Eigen::Vector3d w, float m_t, std::
     acc = a;
     seq_num = num;
     status = stat;
-    prev_time = ros::Time::now().toSec();
+    double prev_time_ = ros::Time::now().toSec();
+    diff = ros::Time::now().toSec() - prev_time_;
+    prev_time = prev_time_;
 
 
     // choose which data was sent
@@ -141,7 +154,7 @@ void GyroData::est_bias()
   else
   {
     // get dt and da
-    double dt = 1.0/1000.0; //ros::Time::now().toSec() - prev_time;
+    double dt = diff;
     Eigen::Vector3d da = acc_est - acc;
 
     // calculate dx
@@ -157,5 +170,30 @@ void GyroData::est_bias()
     bias_z = bias_z + dt*dzb;
 
     }
+
+}
+
+Eigen::Matrix3d skew(Eigen::Vector3d w)
+{
+
+  Eigen::Matrix3d w_hat;
+
+  w_hat << 0.0,-w(2),w(1),w(2),0.0,-w(0),-w(1),w(0),0,0;
+  
+  return w_hat;
+
+}
+
+
+void GyroData::est_att()
+{
+
+  Eigen::Vector3d u = Rd*acc_est;
+  Eigen::Vector3d y(0.0,0.0,1.0);
+
+  Eigen::Vector3d y_est = Rbar*u;
+  Eigen::Vector3d err = k5*Rbar.transpose()*y_est.cross(y);
+  Eigen::Matrix3d dt_err = diff*skew(err);
+  Rbar = Rbar*dt_err.exp();
 
 }
