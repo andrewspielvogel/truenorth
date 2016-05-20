@@ -98,6 +98,7 @@ int main(int argc, char **argv)
 	data_msg.bias_acc.at(i) = serial.data.bias_acc(i);
 	data_msg.bias_ang.at(i) = serial.data.bias_ang(i);
 	data_msg.bias_z.at(i) = serial.data.bias_z(i);
+	data_msg.att.at(i) = serial.data.att(i);
       }
 	
       for (int i=0;i<6;i++)

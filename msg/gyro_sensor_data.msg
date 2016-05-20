@@ -5,6 +5,7 @@ float64[3] acc_est
 float64[3] bias_acc
 float64[3] bias_ang
 float64[3] bias_z
+float64[3] att
 bool[6] status
 float32 temp
 uint8 seq_num

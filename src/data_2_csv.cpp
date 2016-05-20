@@ -46,7 +46,8 @@ int main(int argc, char **argv)
 		   << s->acc_est[0] << "," << s->acc_est[1] << "," << s->acc_est[2] << ","
 		   << s->bias_ang[0] << "," << s->bias_ang[1] << "," << s->bias_ang[2] << ","
 		   << s->bias_acc[0] << "," << s->bias_acc[1] << "," << s->bias_acc[2] << ","
-		   << s->bias_z[0] << "," << s->bias_z[1] << "," << s->bias_z[2] << "\n";
+		   << s->bias_z[0] << "," << s->bias_z[1] << "," << s->bias_z[2] << ","
+	           << s->att[0] << "," << s->att[1] << "," << s->att[2] << "\n";
 	}
 
     }

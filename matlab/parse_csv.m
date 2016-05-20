@@ -24,6 +24,7 @@ data.acc_est = M(:,19:21)';
 data.bias.ang = M(:,22:24)';
 data.bias.acc = M(:,25:27)';
 data.bias.z = M(:,28:30)';
+data.att = M(:,31:33)';
 
 end
 
