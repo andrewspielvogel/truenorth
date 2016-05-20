@@ -34,6 +34,7 @@ public:
     Eigen::Vector3d acc_est;
     Eigen::Matrix3d Rbar;
     Eigen::Matrix3d Rd;
+    Eigen::Matrix3d R_align;
     Eigen::Vector3d att;
 
     void est_bias();

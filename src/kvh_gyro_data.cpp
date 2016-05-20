@@ -9,6 +9,7 @@
  */
 
 #include <iostream>
+#include <math.h>  
 #include "ros/ros.h"
 #include <eigen/Eigen/Core>
 #include <eigen/Eigen/Geometry>
@@ -30,6 +31,8 @@ GyroData::GyroData(float k1_,float k2_,float k3_, float k4_,float k5_)
   Rbar = init_mat;
   Rd = init_mat;
   att = zero_init;
+
+  R_align << 1,0,0,0,-1,0,0,0,-1;
 
   // initialize imu data to zero
   mag = zero_init;
@@ -173,6 +176,7 @@ void GyroData::est_bias()
 
 }
 
+// helper skew function
 Eigen::Matrix3d skew(Eigen::Vector3d w)
 {
 
@@ -184,7 +188,23 @@ Eigen::Matrix3d skew(Eigen::Vector3d w)
 
 }
 
+// helper function for roll, pitch, heading
+Eigen::Vector3d rot2rph(Eigen::Matrix3d R)
+{
 
+  double h = atan2(R(1,0),R(0,0));
+  double ch = cos(h);
+  double sh = sin(h);
+  double p = atan2(-R(2,0), R(0,0)*ch + R(1,0)*sh);
+  double r = atan2(R(0,2)*sh - R(1,2)*ch, -R(0,1)*sh + R(1,1)*ch);
+
+  Eigen::Vector3d rph(r,p,h);
+
+  return rph;
+
+}
+
+// estimate attitude
 void GyroData::est_att()
 {
 
@@ -195,5 +215,7 @@ void GyroData::est_att()
   Eigen::Vector3d err = k5*Rbar.transpose()*y_est.cross(y);
   Eigen::Matrix3d dt_err = diff*skew(err);
   Rbar = Rbar*dt_err.exp();
+  
+  att = rot2rph(R_align*Rd.transpose()*Rbar.transpose());
 
 }
