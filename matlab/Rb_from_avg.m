@@ -7,7 +7,7 @@ a = mean(samp.acc,1)'-bias.acc';
 
 scale = norm(w)/(15.04*pi/(180*60*60));
 
-fac = [1;1;1];%/scale;
+fac = [1;1;1];
 
 
 w = w.*fac;
@@ -21,7 +21,7 @@ samp.acc = repmat(fac',num_samples,1).*my_lowpass(samp.acc,samp.hz,1,5);
 samp.ang = repmat(fac',num_samples,1).*my_lowpass(samp.ang,samp.hz,1,5);
 
 
-%samp.ang = repmat(w',num_samples,1);
+samp.ang = repmat(w',num_samples,1);
 
 Rd   = get_R_d(samp,eye(3));
 

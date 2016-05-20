@@ -1,4 +1,4 @@
-function out = adap_Rbar(samp)
+function out = adap_Rbar(samp,R_align)
 
 data = samp;
 data.acc = samp.acc';
@@ -18,4 +18,8 @@ for i=1:num_samp
     
 end
 
-out = adap_so3(y,u,samp.stamp);
+out.t = samp.stamp;
+out.R = adap_so3(y,u,samp.stamp);
+out.Rd = Rd;
+out.Rin = cellfun(@(A,B) R_align*B'*A',out.R,Rd,'UniformOutput',false);
+out.att = rph(out.Rin);
