@@ -14,7 +14,7 @@
 #include <eigen/Eigen/Geometry>
 #include <eigen/Eigen/Dense>
 #include <eigen/unsupported/Eigen/MatrixFunctions>
-#include <kvh_1775/kvh_gyro_data.h>
+#include <kvh_1775/gyro_data.h>
 #include <kvh_1775/andrews_func.h>
 #include <ctime>
 

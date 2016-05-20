@@ -166,10 +166,10 @@ include_directories(
 
 
 ## Declare a cpp library
-add_library(kvh_1775 src/serial_io.cpp src/kvh_gyro_data.cpp)
+add_library(kvh_1775 src/serial_io.cpp src/gyro_data.cpp)
 target_link_libraries(kvh_1775 ${catkin_LIBRARIES})
 
-add_executable(gyro_publisher src/gyro_publisher.cpp src/serial_io.cpp src/kvh_gyro_data.cpp)
+add_executable(gyro_publisher src/gyro_publisher.cpp src/serial_io.cpp src/gyro_data.cpp)
 target_link_libraries(gyro_publisher ${catkin_LIBRARIES})
 
 add_executable(data_2_csv src/data_2_csv.cpp)
