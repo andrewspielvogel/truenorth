@@ -6,6 +6,7 @@
 	       <param name="port" value="/dev/ttyUSB0" type="str" />
 	       <param name="baud" value="4147200" type="int" />
 	       <param name="instr_align" value="1,0,0,0,-1,0,0,0,-1" type="string" />
+	       <param name="gains" value="1.0,0.005,0.005,0.005,0.3" type="string" />
 
         </node>
 

@@ -51,11 +51,11 @@ int main(int argc, char **argv)
     n.getParam("instr_align",instr_align);
     
     boost::char_separator<char> sep(",");
-    boost::tokenizer<boost::char_separator<char> > tokens(instr_align,sep);    
+    boost::tokenizer<boost::char_separator<char> > align_tokens(instr_align,sep);    
 
     Eigen::MatrixXd R_align(9,1);
     int i = 0;
-    BOOST_FOREACH (const std::string& t, tokens)
+    BOOST_FOREACH (const std::string& t, align_tokens)
     {
 
       R_align(i) = strtod(t.c_str(),NULL);  
@@ -64,8 +64,24 @@ int main(int argc, char **argv)
     }
     R_align.resize(3,3);
 
+    // estimation gains
+    std::string gains = "1.0,0.005,0.005,0.005,0.3"; 
+    n.getParam("gains",gains);
+
+    boost::tokenizer<boost::char_separator<char> > gains_tokens(gains,sep);    
+
+    Eigen::VectorXd k(5);
+    i = 0;
+    BOOST_FOREACH (const std::string& t, gains_tokens)
+    {
+
+      k(i) = strtod(t.c_str(),NULL);  
+      i++;
+
+    }
+
     // initialize serial port
-    SerialPort serial(1.0,0.005,0.005,0.005,.3, R_align);
+    SerialPort serial(k(0),k(1),k(2),k(3),k(4), R_align);
 
     // connect to serial port
     bool connected =  serial.start(name.c_str(),baud);
