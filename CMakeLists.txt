@@ -6,7 +6,6 @@ project(kvh_1775)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   roscpp
-  rospy
   std_msgs
   message_generation
   rosbag
@@ -37,7 +36,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES kvh_1775
-  CATKIN_DEPENDS message_runtime roscpp rospy std_msgs rosbag
+  CATKIN_DEPENDS message_runtime roscpp std_msgs rosbag
 #  DEPENDS system_lib
 )
 
