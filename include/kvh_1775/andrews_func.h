@@ -12,7 +12,10 @@
 #define ANDREWS_FUNC_H
 
 #include <math.h>  
+#include "ros/ros.h"
 #include <eigen/Eigen/Core>
+#include <eigen/Eigen/Geometry>
+#include <eigen/Eigen/Dense>
 
 
 
@@ -21,8 +24,7 @@ Eigen::Matrix3d skew(Eigen::Vector3d w)
 {
 
   Eigen::Matrix3d w_hat;
-
-  w_hat << 0.0,-w(2),w(1),w(2),0.0,-w(0),-w(1),w(0),0,0;
+  w_hat << 0.0,-w(2),w(1),w(2),0.0,-w(0),-w(1),w(0),0.0;
   
   return w_hat;
 
