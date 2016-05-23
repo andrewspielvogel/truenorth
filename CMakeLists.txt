@@ -62,7 +62,6 @@ include_directories( include
   ${catkin_INCLUDE_DIRS}
   )
 
-add_dependencies(kvh_1775 kvh_1775_generate_messages_cpp)
 
 ## Declare a cpp library
 add_library(kvh_1775 src/serial_io.cpp src/gyro_data.cpp)
@@ -70,7 +69,9 @@ target_link_libraries(kvh_1775 ${catkin_LIBRARIES})
 
 add_executable(gyro_publisher src/gyro_publisher.cpp src/serial_io.cpp src/gyro_data.cpp)
 target_link_libraries(gyro_publisher ${catkin_LIBRARIES})
+add_dependencies(gyro_publisher kvh_1775_generate_messages_cpp)
 
 add_executable(data_2_csv src/data_2_csv.cpp)
 target_link_libraries(data_2_csv ${catkin_LIBRARIES})
+add_dependencies(data_2_csv kvh_1775_generate_messages_cpp)
 
