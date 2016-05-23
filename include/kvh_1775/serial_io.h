@@ -18,7 +18,7 @@
 #include <boost/bind.hpp>
 #include <boost/thread.hpp>
 #include <boost/asio/read.hpp>
-#include <eigen/Eigen/Core>
+#include <Eigen/Core>
 #include <kvh_1775/gyro_data.h>
 
 typedef boost::shared_ptr<boost::asio::serial_port> serial_port_ptr;

@@ -14,8 +14,8 @@
 #include "ros/ros.h"
 #include <boost/crc.hpp>
 #include <bitset>
-#include <eigen/Eigen/Core>
-#include <eigen/Eigen/Geometry>
+#include <Eigen/Core>
+#include <Eigen/Geometry>
 
 
 

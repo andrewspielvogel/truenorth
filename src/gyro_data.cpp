@@ -10,10 +10,10 @@
 
 #include <iostream>
 #include "ros/ros.h"
-#include <eigen/Eigen/Core>
-#include <eigen/Eigen/Geometry>
-#include <eigen/Eigen/Dense>
-#include <eigen/unsupported/Eigen/MatrixFunctions>
+#include <Eigen/Core>
+#include <Eigen/Geometry>
+#include <Eigen/Dense>
+#include <unsupported/Eigen/MatrixFunctions>
 #include <kvh_1775/gyro_data.h>
 #include <kvh_1775/andrews_func.h>
 #include <ctime>
@@ -107,9 +107,10 @@ void GyroData::set_values(Eigen::Vector3d a, Eigen::Vector3d w, Eigen::Vector3d 
     
 
     //log data
-    fprintf(fp_,"IMU_RAW, %f,%f,%f, %f,%f,%f, %f,%f,%f, %f, %d, %f, %d, %d, %d, %d, %d, %d \n",
+    fprintf(fp_,"IMU_RAW, %f,%f,%f, %f,%f,%f, %f,%f,%f, %f, %d, %f, %d, %d, %d, %d, %d, %d, %f, %f,%f \n",
 	    ang(0),ang(1),ang(2),acc(0),acc(1),acc(2),mag(0),mag(1),mag(2),temp,seq_num,prev_time,(int) status.at(0),
-	    (int) status.at(1),(int) status.at(2),(int) status.at(3),(int) status.at(4),(int) status.at(5));
+	    (int) status.at(1),(int) status.at(2),(int) status.at(3),(int) status.at(4),(int) status.at(5),att(0),
+	    att(1),att(2));
 
 }
 
@@ -149,7 +150,7 @@ void GyroData::est_bias()
 void GyroData::est_att()
 {
 
-  Eigen::Vector3d u = Rd_*acc_est;
+  Eigen::Vector3d u = Rd_*acc;
   Eigen::Vector3d y(0.0,0.0,1.0);
 
   Eigen::Vector3d y_est = Rbar_*u;

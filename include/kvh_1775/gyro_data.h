@@ -11,7 +11,7 @@
 #ifndef GYRO_DATA_H
 #define GYRO_DATA_H
 
-#include <eigen/Eigen/Core>
+#include <Eigen/Core>
 
 
 //class for storing a gyro data packet

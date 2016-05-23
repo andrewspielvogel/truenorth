@@ -12,7 +12,7 @@
 #include "std_msgs/String.h"
 #include <kvh_1775/serial_io.h>
 #include "kvh_1775/gyro_sensor_data.h"
-#include <eigen/Eigen/Core>
+#include <Eigen/Core>
 #include <boost/tokenizer.hpp>
 #include <boost/foreach.hpp>
 #include <sstream>

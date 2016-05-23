@@ -13,9 +13,9 @@
 
 #include <math.h>  
 #include "ros/ros.h"
-#include <eigen/Eigen/Core>
-#include <eigen/Eigen/Geometry>
-#include <eigen/Eigen/Dense>
+#include <Eigen/Core>
+#include <Eigen/Geometry>
+#include <Eigen/Dense>
 
 
 
