@@ -62,6 +62,7 @@ include_directories( include
   ${catkin_INCLUDE_DIRS}
   )
 
+add_dependencies(kvh_1775 kvh_1775_generate_messages_cpp)
 
 ## Declare a cpp library
 add_library(kvh_1775 src/serial_io.cpp src/gyro_data.cpp)
