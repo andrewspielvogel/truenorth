@@ -19,7 +19,7 @@
 #include <string>
 #include <stdlib.h>
 
-#define NODE_RESTART_TIME 2
+#define NODE_RESTART_TIME 1
 
 
 int main(int argc, char **argv)
@@ -130,6 +130,7 @@ int main(int argc, char **argv)
       // publish packet
       chatter.publish(data_msg);
 
+      // check if still getting data
       int time_from_last_msg = (int)abs(ros::Time::now().toSec()-serial.data.prev_time);
 
       if (time_from_last_msg>=1)
@@ -147,7 +148,6 @@ int main(int argc, char **argv)
 	  serial.stop();
           // connect to serial port
 	  serial.start(name.c_str(),baud);
-	  //return 1;
 
 	}
 
