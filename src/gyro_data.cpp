@@ -107,7 +107,7 @@ void GyroData::set_values(Eigen::Vector3d a, Eigen::Vector3d w, Eigen::Vector3d 
     
 
     //log data
-    fprintf(fp_,"IMU_RAW, %.20f,%.20f,%.20f, %.20f,%.20f,%.20f, %.20f,%.20f,%.20f, %.20f, %d, %.20f, %d, %d, %d, %d, %d, %d, %.20f, %.20f,%.20f \n",
+    fprintf(fp_,"IMU_RAW, %.25f,%.25f,%.25f, %.25f,%.25f,%.25f, %.25f,%.25f,%.25f, %.25f, %d, %.25f, %d, %d, %d, %d, %d, %d, %.25f, %.25f,%.25f \n",
 	    ang(0),ang(1),ang(2),acc(0),acc(1),acc(2),mag(0),mag(1),mag(2),temp,seq_num,prev_time,(int) status.at(0),
 	    (int) status.at(1),(int) status.at(2),(int) status.at(3),(int) status.at(4),(int) status.at(5),att(0),
 	    att(1),att(2));
