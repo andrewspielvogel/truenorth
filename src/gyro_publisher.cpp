@@ -19,13 +19,13 @@
 #include <string>
 #include <stdlib.h>
 
-#define NODE_RESTART_TIME 1
+#define NODE_RESTART_TIME 1 // time to wait while no data before restarting (in seconds)
 
 
 int main(int argc, char **argv)
 {
 
-    // initialize
+    // initialize node
     ros::init(argc, argv, "kvh_1775");
 
     // must initialize if "~" for param passing
@@ -34,21 +34,30 @@ int main(int argc, char **argv)
     // initialize publisher
     ros::Publisher chatter = n.advertise<kvh_1775::gyro_sensor_data>("gyro_data",1000);
 
+
+    /*
+     * Load in params
+     */
+
     // rate in Hz
     int rate = 1000;
     n.getParam("rate",rate);
     ros::Rate loop_rate(rate);
 
     // port name
-    std::string name = "/dev/ttyUSB0";
-    n.getParam("port",name);
+    std::string port = "/dev/ttyUSB0";
+    n.getParam("port",port);
+
+    // log file location
+    std::string log_location = "/var/log/KVH/";
+    n.getParam("log_loc",log_location);
 
     // baud rate
     int baud = 921600;
     n.getParam("baud",baud);
     
     // instrument alignment matrix
-    std::string instr_align = "1,0,0,0,-1,0,0,0,-1"; 
+    std::string instr_align = "1,0,0,0,1,0,0,0,1"; 
     n.getParam("instr_align",instr_align);
     
     boost::char_separator<char> sep(",");
@@ -81,11 +90,16 @@ int main(int argc, char **argv)
 
     }
 
-    // initialize serial port
-    SerialPort serial(k(0),k(1),k(2),k(3),k(4), R_align);
+
+
+    /*
+     * INITIALIZE SERIAL PORT
+     */
+
+    SerialPort serial(k(0),k(1),k(2),k(3),k(4), R_align,log_location.c_str());
 
     // connect to serial port
-    bool connected =  serial.start(name.c_str(),baud);
+    bool connected =  serial.start(port.c_str(),baud);
 
     if (connected==false)
     {
@@ -94,9 +108,16 @@ int main(int argc, char **argv)
     }
     else 
     {
-	ROS_INFO("connected to port: %s",name.c_str());
+	ROS_INFO("connected to port: %s",port.c_str());
     }
 
+
+
+    /*      
+     * MAIN LOOP
+     */
+
+    // initialize time since data var
     int cur_time_since_data = 0;
 
     while (ros::ok())
@@ -105,7 +126,7 @@ int main(int argc, char **argv)
       // initialize data_msg
       kvh_1775::gyro_sensor_data data_msg;
 
-      // fill data_msg with sensor packet
+      // fill data_msg with data packet
       for (int i=0;i<3;i++)
       {
 	data_msg.ang.at(i) = serial.data.ang(i);
@@ -147,7 +168,7 @@ int main(int argc, char **argv)
 	  ROS_ERROR("No data for over %d seconds. Restarting node...",time_from_last_msg);
 	  serial.stop();
           // connect to serial port
-	  serial.start(name.c_str(),baud);
+	  serial.start(port.c_str(),baud);
 
 	}
 

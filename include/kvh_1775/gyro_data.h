@@ -12,6 +12,7 @@
 #define GYRO_DATA_H
 
 #include <Eigen/Core>
+#include <string>
 
 
 //class for storing a gyro data packet
@@ -38,7 +39,7 @@ public:
     void est_att();
     float k1,k2,k3,k4,k5;
 
-    GyroData(float k1_,float k2_,float k3_,float k4_, float k5_, Eigen::Matrix3d align_);
+    GyroData(float k1_,float k2_,float k3_,float k4_, float k5_, Eigen::Matrix3d align_, std::string log_location_);
     virtual ~GyroData(void);
     void set_values (Eigen::Vector3d, Eigen::Vector3d, Eigen::Vector3d, float, std::vector<bool>, unsigned int);
 

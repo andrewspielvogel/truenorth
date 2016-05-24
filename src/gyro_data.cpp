@@ -17,9 +17,10 @@
 #include <kvh_1775/gyro_data.h>
 #include <kvh_1775/andrews_func.h>
 #include <ctime>
+#include <string>
 
 
-GyroData::GyroData(float k1_,float k2_,float k3_, float k4_,float k5_, Eigen::Matrix3d align_)
+GyroData::GyroData(float k1_,float k2_,float k3_, float k4_,float k5_, Eigen::Matrix3d align_, std::string log_location_)
 {
   // define inialization values
   Eigen::Vector3d zero_init(0.0,0.0,0.0);
@@ -70,7 +71,7 @@ GyroData::GyroData(float k1_,float k2_,float k3_, float k4_,float k5_, Eigen::Ma
   int minute = 1 + time->tm_min;
 
   char file_name [50];
-  sprintf(file_name,"/var/log/KVH/%d_%d_%d_%d_%d.KVH",year,month,day,hour,minute);
+  sprintf(file_name,"%s%d_%d_%d_%d_%d.KVH",log_location_.c_str(),year,month,day,hour,minute);
   
   // open log file
   fp_ = fopen(file_name,"w");
