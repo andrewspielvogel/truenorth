@@ -9,13 +9,13 @@
  */
 
 #include <iostream>
-#include "ros/ros.h"
+#include <ros/ros.h>
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 #include <Eigen/Dense>
 #include <unsupported/Eigen/MatrixFunctions>
 #include <kvh_1775/gyro_data.h>
-#include <kvh_1775/andrews_func.h>
+#include <kvh_1775/helper_funcs.h>
 #include <ctime>
 #include <string>
 

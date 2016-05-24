@@ -8,16 +8,16 @@
  */
 
 
-#include "ros/ros.h"
-#include "std_msgs/String.h"
+#include <ros/ros.h>
 #include <kvh_1775/serial_io.h>
-#include "kvh_1775/gyro_sensor_data.h"
+#include <kvh_1775/gyro_sensor_data.h>
+#include <kvh_1775/helper_funcs.h>
 #include <Eigen/Core>
-#include <boost/tokenizer.hpp>
-#include <boost/foreach.hpp>
 #include <sstream>
 #include <string>
 #include <stdlib.h>
+#include <boost/tokenizer.hpp>
+#include <boost/foreach.hpp>
 
 #define NODE_RESTART_TIME 1 // time to wait while no data before restarting (in seconds)
 
@@ -59,36 +59,13 @@ int main(int argc, char **argv)
     // instrument alignment matrix
     std::string instr_align = "1,0,0,0,1,0,0,0,1"; 
     n.getParam("instr_align",instr_align);
-    
-    boost::char_separator<char> sep(",");
-    boost::tokenizer<boost::char_separator<char> > align_tokens(instr_align,sep);    
-
-    Eigen::MatrixXd R_align(9,1);
-    int i = 0;
-    BOOST_FOREACH (const std::string& t, align_tokens)
-    {
-
-      R_align(i) = strtod(t.c_str(),NULL);  
-      i++;
-
-    }
+    Eigen::MatrixXd R_align = parse_string(instr_align);
     R_align.resize(3,3);
 
     // estimation gains
     std::string gains = "1.0,0.005,0.005,0.005,0.3"; 
     n.getParam("gains",gains);
-
-    boost::tokenizer<boost::char_separator<char> > gains_tokens(gains,sep);    
-
-    Eigen::VectorXd k(5);
-    i = 0;
-    BOOST_FOREACH (const std::string& t, gains_tokens)
-    {
-
-      k(i) = strtod(t.c_str(),NULL);  
-      i++;
-
-    }
+    Eigen::Vector3d k = parse_string(gains);
 
 
 

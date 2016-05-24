@@ -9,7 +9,7 @@
 
 #include "ros/ros.h"
 
-#include "kvh_1775/gyro_sensor_data.h"
+#include <kvh_1775/gyro_sensor_data.h>
 #include <rosbag/bag.h>
 #include <rosbag/view.h>
 #include <iostream>
