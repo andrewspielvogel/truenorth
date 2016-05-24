@@ -1,6 +1,6 @@
 <launch>
 
-        <node pkg="kvh_1775" type="gyro_publisher" name="kvh_1775">
+        <node pkg="kvh_1775" type="gyro_publisher" name="kvh_1775" output="screen">
 
                <param name="rate" value="100" type="int" />
 	       <param name="port" value="/dev/ttyUSB0" type="str" />
