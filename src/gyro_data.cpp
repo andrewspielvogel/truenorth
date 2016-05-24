@@ -70,7 +70,7 @@ GyroData::GyroData(float k1_,float k2_,float k3_, float k4_,float k5_, Eigen::Ma
   int hour = time->tm_hour;
   int minute = 1 + time->tm_min;
 
-  char file_name [50];
+  char file_name [128];
   sprintf(file_name,"%s%d_%d_%d_%d_%d.KVH",log_location_.c_str(),year,month,day,hour,minute);
   
   // open log file
