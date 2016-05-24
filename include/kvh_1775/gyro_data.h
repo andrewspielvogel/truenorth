@@ -39,7 +39,7 @@ public:
     void est_att();
     float k1,k2,k3,k4,k5;
 
-    GyroData(float k1_,float k2_,float k3_,float k4_, float k5_, Eigen::Matrix3d align_, std::string log_location_);
+    GyroData(float,float,float ,float, float, Eigen::Matrix3d, std::string);
     virtual ~GyroData(void);
     void set_values (Eigen::Vector3d, Eigen::Vector3d, Eigen::Vector3d, float, std::vector<bool>, unsigned int);
 

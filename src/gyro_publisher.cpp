@@ -15,9 +15,6 @@
 #include <Eigen/Core>
 #include <sstream>
 #include <string>
-#include <stdlib.h>
-#include <boost/tokenizer.hpp>
-#include <boost/foreach.hpp>
 
 #define NODE_RESTART_TIME 1 // time to wait while no data before restarting (in seconds)
 
@@ -28,7 +25,7 @@ int main(int argc, char **argv)
     // initialize node
     ros::init(argc, argv, "kvh_1775");
 
-    // must initialize if "~" for param passing
+    // must initialize with "~" for param passing
     ros::NodeHandle n("~");
 
     // initialize publisher

@@ -22,12 +22,6 @@
 #include <kvh_1775/gyro_data.h>
 #include <string>
 
-typedef boost::shared_ptr<boost::asio::serial_port> serial_port_ptr;
-
-#define SERIAL_PORT_READ_BUF_SIZE 1
-#define DATA_BUF_SIZE 38
-
-
 // struct for doing custom baud rate 
 typedef unsigned char	cc_t;
 typedef unsigned int	speed_t;
@@ -46,6 +40,10 @@ struct termios2 {
 	speed_t c_ospeed;		/* output speed */
 };
 
+typedef boost::shared_ptr<boost::asio::serial_port> serial_port_ptr;
+
+#define SERIAL_PORT_READ_BUF_SIZE 1
+#define DATA_BUF_SIZE 38
 
 // class for connecting to a serial port
 // and for getting data from a serial port
