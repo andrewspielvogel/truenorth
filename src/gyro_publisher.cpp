@@ -19,6 +19,7 @@
 #include <string>
 #include <stdlib.h>
 
+#define NODE_RESTART_TIME 2
 
 
 int main(int argc, char **argv)
@@ -139,12 +140,14 @@ int main(int argc, char **argv)
 	  ROS_ERROR("Lost Connection. No data for %d seconds",time_from_last_msg);
 	  cur_time_since_data = time_from_last_msg;
 	}
-	if (time_from_last_msg>9)
+	if (time_from_last_msg>NODE_RESTART_TIME)
 	{
 	
-	  ROS_ERROR("No data for over %d seconds. Closing node...",time_from_last_msg);
+	  ROS_ERROR("No data for over %d seconds. Restarting node...",time_from_last_msg);
 	  serial.stop();
-	  return 1;
+          // connect to serial port
+	  serial.start(name.c_str(),baud);
+	  //return 1;
 
 	}
 
