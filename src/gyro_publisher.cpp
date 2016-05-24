@@ -65,7 +65,7 @@ int main(int argc, char **argv)
     // estimation gains
     std::string gains = "1.0,0.005,0.005,0.005,0.3"; 
     n.getParam("gains",gains);
-    Eigen::Vector3d k = parse_string(gains);
+    Eigen::VectorXd k = parse_string(gains);
 
 
 
