@@ -2,11 +2,12 @@
 
         <node pkg="kvh_1775" type="gyro_publisher" name="kvh_1775">
 
-               <param name="rate" value="1000" type="int" />
+               <param name="rate" value="100" type="int" />
 	       <param name="port" value="/dev/ttyUSB0" type="str" />
 	       <param name="baud" value="4147200" type="int" />
 	       <param name="instr_align" value="1,0,0,0,1,0,0,0,1" type="string" />
 	       <param name="gains" value="1.0,0.005,0.005,0.005,.3" type="string" />
+	       <param name="log_loc" value="~/log/KVH/" type="string" />
 
         </node>
 
