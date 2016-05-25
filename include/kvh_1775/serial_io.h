@@ -22,7 +22,12 @@
 #include <kvh_1775/gyro_data.h>
 #include <string>
 
-// struct for doing custom baud rate 
+/* struct for doing custom baud rate 
+ * this seems like a hack, copied from termios2 header file because
+ * I can't also include that head since it redefines structs from
+ * termios header file that is used by boost
+ */
+
 typedef unsigned char	cc_t;
 typedef unsigned int	speed_t;
 typedef unsigned int	tcflag_t;
@@ -39,6 +44,12 @@ struct termios2 {
 	speed_t c_ispeed;		/* input speed */
 	speed_t c_ospeed;		/* output speed */
 };
+
+
+
+/*
+ * serial port class for 1775
+ */
 
 typedef boost::shared_ptr<boost::asio::serial_port> serial_port_ptr;
 
@@ -78,7 +89,7 @@ public:
 protected:
     virtual void async_read_some_();
     virtual void on_receive_(const boost::system::error_code& ec, size_t bytes_transferred);
-    void parse_data(GyroData &data, char *data_raw);
+    void parse_data_(GyroData &data, char *data_raw);
 
 
 

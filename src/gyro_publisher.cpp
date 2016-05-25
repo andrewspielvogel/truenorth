@@ -36,17 +36,17 @@ int main(int argc, char **argv)
      * Load in params
      */
 
-    // rate in Hz
-    int rate = 1000;
+    // topic publish rate in Hz
+    int rate = 10; // default
     n.getParam("rate",rate);
     ros::Rate loop_rate(rate);
 
     // port name
-    std::string port = "/dev/ttyUSB0";
+    std::string port = "/dev/ttyUSB0"; // default
     n.getParam("port",port);
 
     // log file location
-    std::string log_location = "/var/log/KVH/";
+    std::string log_location = "/var/log/KVH/"; // default
     n.getParam("log_loc",log_location);
 
     // baud rate
@@ -54,13 +54,13 @@ int main(int argc, char **argv)
     n.getParam("baud",baud);
     
     // instrument alignment matrix
-    std::string instr_align = "1,0,0,0,1,0,0,0,1"; 
+    std::string instr_align = "1,0,0,0,1,0,0,0,1";  // default
     n.getParam("instr_align",instr_align);
     Eigen::MatrixXd R_align = parse_string(instr_align);
     R_align.resize(3,3);
 
     // estimation gains
-    std::string gains = "1.0,0.005,0.005,0.005,0.3"; 
+    std::string gains = "1.0,0.005,0.005,0.005,0.3";  // default
     n.getParam("gains",gains);
     Eigen::VectorXd k = parse_string(gains);
 
@@ -91,9 +91,10 @@ int main(int argc, char **argv)
      * MAIN LOOP
      */
 
-    // initialize time since data var
+    // initialize time since data variable
     int cur_time_since_data = 0;
-
+    
+    // main loop
     while (ros::ok())
     {
 
