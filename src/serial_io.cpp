@@ -81,27 +81,32 @@ void SerialPort::parse_data_(GyroData &data, char *data_raw)
   if (mod == 0)
     {
 
-      temp = m_t.f;
+      data.temp = m_t.f;
 
     }
   else if (mod == 1)
     {
 
-      mag(0) = m_t.f;
+      data.mag(0) = m_t.f;
 
     }
   else if (mod == 2)
     {
 
-      mag(1) = m_t.f;
+      data.mag(1) = m_t.f;
 
     }
   else if (mod == 3)
     {
 
-      mag(2) = m_t.f;
+      data.mag(2) = m_t.f;
 
     }   
+
+  data.ang = w;
+  data.acc = a;
+  int skipped = abs(data.seq_num-seq_num);
+  data.seq_num = seq_num;
 
   // define time and diff
   double prev_time_ = ros::Time::now().toSec();
@@ -109,7 +114,7 @@ void SerialPort::parse_data_(GyroData &data, char *data_raw)
   data.prev_time = prev_time_;
 
   // set data struct with new values
-  data.set_values(a, w, mag, temp, status, seq_num);
+  data.log(skipped);
 
   //run integration, will need to add storage of previous estimate in GyroData class
   //data.est_bias();

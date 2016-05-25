@@ -86,9 +86,8 @@ GyroData::~GyroData(void)
 }
 
 // set kvh 1775 data packet values
-void GyroData::set_values(Eigen::Vector3d a, Eigen::Vector3d w, Eigen::Vector3d m, float temp_, std::vector<bool> stat, unsigned int num)
+void GyroData::log(int skipped)
 {
-    int skipped = abs(seq_num-num);
 
     // check for lost data packets
     if (skipped>1&&skipped<127)
@@ -97,15 +96,6 @@ void GyroData::set_values(Eigen::Vector3d a, Eigen::Vector3d w, Eigen::Vector3d 
 	ROS_WARN("Lost %u data packets",skipped);
 
     }
-
-    // set values
-    ang = w;
-    acc = a;
-    seq_num = num;
-    status = stat;
-    temp = temp_;
-    mag = m;
-    
 
     //log data
     fprintf(fp_,"IMU_RAW, %.40f,%.40f,%.40f, %.35f,%.35f,%.35f, %.30f,%.30f,%.30f, %f, %d, %.30f, %d, %d, %d, %d, %d, %d, %.30f, %.30f,%.30f \n",

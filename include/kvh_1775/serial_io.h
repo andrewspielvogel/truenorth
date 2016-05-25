@@ -78,8 +78,6 @@ private:
  
 public:
     GyroData data;
-    Eigen::Vector3d mag;
-    float temp;
     SerialPort(float k1_,float k2_,float k3_,float k4_,float k5_, Eigen::Matrix3d align_, std::string log_location_): data(k1_,k2_,k3_,k4_,k5_,align_, log_location_){};
     virtual ~SerialPort(void);
 
