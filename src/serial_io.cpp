@@ -71,7 +71,7 @@ void SerialPort::parse_data_(GyroData &data, char *data_raw)
   unsigned int seq_num = (unsigned int) (((unsigned char *) data_raw)[33]);
 
 
-  // choose which data was sent
+  // choose which data was sent and store
   // mod == 0 -- temp
   // mod == 1 -- magx
   // mod == 2 -- magy
@@ -103,6 +103,7 @@ void SerialPort::parse_data_(GyroData &data, char *data_raw)
 
     }   
 
+  // store data
   data.ang = w;
   data.acc = a;
   int skipped = abs(data.seq_num-seq_num);
@@ -113,8 +114,16 @@ void SerialPort::parse_data_(GyroData &data, char *data_raw)
   data.diff = prev_time_ - data.prev_time;
   data.prev_time = prev_time_;
 
-  // set data struct with new values
-  data.log(skipped);
+  // check for lost data packets
+  if (skipped>1&&skipped<127)
+  {
+
+    ROS_WARN("Lost %u data packets",skipped);
+
+  }
+
+  // log data
+  data.log();
 
   //run integration, will need to add storage of previous estimate in GyroData class
   //data.est_bias();
@@ -223,6 +232,7 @@ void SerialPort::on_receive_(const boost::system::error_code& ec, size_t bytes_t
       return;
     }
 
+  // receive data packet
   for (unsigned int i = 0; i < bytes_transferred; ++i) 
     {
 

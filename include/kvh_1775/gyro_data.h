@@ -41,7 +41,7 @@ public:
 
     GyroData(float,float,float ,float, float, Eigen::Matrix3d, std::string);
     virtual ~GyroData(void);
-    void log(int);
+    void log();
 
  private:
     FILE *fp_; //log file

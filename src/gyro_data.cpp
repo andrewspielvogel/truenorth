@@ -86,16 +86,8 @@ GyroData::~GyroData(void)
 }
 
 // set kvh 1775 data packet values
-void GyroData::log(int skipped)
+void GyroData::log()
 {
-
-    // check for lost data packets
-    if (skipped>1&&skipped<127)
-    {
-
-	ROS_WARN("Lost %u data packets",skipped);
-
-    }
 
     //log data
     fprintf(fp_,"IMU_RAW, %.40f,%.40f,%.40f, %.35f,%.35f,%.35f, %.30f,%.30f,%.30f, %f, %d, %.30f, %d, %d, %d, %d, %d, %d, %.30f, %.30f,%.30f \n",
