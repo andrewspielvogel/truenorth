@@ -13,7 +13,6 @@
 #include <kvh_1775/gyro_sensor_data.h>
 #include <kvh_1775/helper_funcs.h>
 #include <Eigen/Core>
-#include <sstream>
 #include <string>
 
 #define NODE_RESTART_TIME 1 // time to wait while no data before restarting (in seconds)

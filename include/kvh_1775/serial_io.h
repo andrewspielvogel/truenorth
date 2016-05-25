@@ -23,9 +23,9 @@
 #include <string>
 
 /* struct for doing custom baud rate 
- * this seems like a hack, copied from termios2 header file because
- * I can't also include that head since it redefines structs from
- * termios header file that is used by boost
+ * this seems like a hack, copied from asm/termios.h because
+ * I can't also include that header since it redefines structs from
+ * the normal termios header file that is used by boost
  */
 
 typedef unsigned char	cc_t;
