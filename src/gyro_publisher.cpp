@@ -14,6 +14,7 @@
 #include <kvh_1775/helper_funcs.h>
 #include <Eigen/Core>
 #include <string>
+#include <math.h>
 
 #define NODE_RESTART_TIME 1 // time to wait while no data before restarting (in seconds)
 
@@ -110,7 +111,7 @@ int main(int argc, char **argv)
 	data_msg.bias_acc.at(i) = serial.data.bias_acc(i);
 	data_msg.bias_ang.at(i) = serial.data.bias_ang(i);
 	data_msg.bias_z.at(i) = serial.data.bias_z(i);
-	data_msg.att.at(i) = serial.data.att(i);
+	data_msg.att.at(i) = serial.data.att(i)*(180.0/M_PI);
       }
 	
       for (int i=0;i<6;i++)
