@@ -135,7 +135,7 @@ void GyroData::est_bias()
 void GyroData::est_att()
 {
 
-  Eigen::Vector3d u = Rd_*acc;
+  Eigen::Vector3d u = Rd_*(acc_est-bias_acc);
   Eigen::Vector3d y(0.0,0.0,1.0);
 
   Eigen::Vector3d y_est = Rbar_*u;
@@ -144,5 +144,7 @@ void GyroData::est_att()
   Rbar_ = Rbar_*dt_err.exp();
   
   att = rot2rph(R_align_*Rd_.transpose()*Rbar_.transpose());
+  Eigen::Matrix3d dRd = skew((ang-bias_ang)*diff);
+  Rd_ = Rd_*dRd.exp();
 
 }

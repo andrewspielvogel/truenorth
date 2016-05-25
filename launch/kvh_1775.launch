@@ -2,7 +2,7 @@
 
         <node pkg="kvh_1775" type="gyro_publisher" name="kvh_1775" output="screen">
 
-               <param name="rate" value="100" type="int" />
+               <param name="rate" value="10" type="int" />
 	       <param name="port" value="/dev/ttyUSB0" type="str" />
 	       <param name="baud" value="4147200" type="int" />
 	       <param name="instr_align" value="1,0,0,0,1,0,0,0,1" type="string" />

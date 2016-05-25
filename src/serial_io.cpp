@@ -128,7 +128,7 @@ void SerialPort::parse_data_(GyroData &data, char *data_raw)
 
   //run integration, will need to add storage of previous estimate in GyroData class
   //data.est_bias();
-  //data.est_att();
+  data.est_att();
  
 }
 
