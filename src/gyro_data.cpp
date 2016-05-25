@@ -58,6 +58,7 @@ GyroData::GyroData(float k1_,float k2_,float k3_, float k4_,float k5_, Eigen::Ma
   bias_acc = zero_init;
   bias_ang = zero_init;
   bias_z = zero_init;
+  acc_est = zero_init;
 
 
   // get current time to name log file

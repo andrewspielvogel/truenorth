@@ -108,6 +108,7 @@ void SerialPort::parse_data_(GyroData &data, char *data_raw)
   data.acc = a;
   int skipped = abs(data.seq_num-seq_num);
   data.seq_num = seq_num;
+  data.status = status;
 
   // define time and diff
   double prev_time_ = ros::Time::now().toSec();
