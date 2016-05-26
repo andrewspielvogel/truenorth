@@ -39,6 +39,7 @@ inline Eigen::Vector3d rot2rph(Eigen::Matrix3d R)
 {
 
   double h = atan2(R(1,0),R(0,0));
+  
   double ch = cos(h);
   double sh = sin(h);
   double p = atan2(-R(2,0), R(0,0)*ch + R(1,0)*sh);
@@ -68,6 +69,17 @@ inline Eigen::MatrixXd parse_string(std::string param_str)
   }
   
   return parsed_mat;
+
+}
+
+
+// returns earth to NED rotation
+inline Eigen::Matrix3d rot_earth2ned(float lat)
+{
+
+  Eigen::Matrix3d R;
+  R << -sin(lat),0,-cos(lat),0,1,0,cos(lat),0,-sin(lat);
+  return R;
 
 }
 

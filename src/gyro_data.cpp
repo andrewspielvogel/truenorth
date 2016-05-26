@@ -134,17 +134,40 @@ void GyroData::est_bias()
 // estimate attitude
 void GyroData::est_att()
 {
+  /* TODO
+   *Break Adap Identification on SO(3) into own header
+   *with own class. 
+   *
+   *Algorithm from James C. Kinsey's and 
+   *Louis L. Whitcomb's paper: Adaptive Identification on the
+   *Group of Rigid-Body Rotations and its Application to Underwater
+   *Vehicle Navigation
+   */
 
+  // Define inputs and outputs
   Eigen::Vector3d u = Rd_*(acc_est-bias_acc);
-  Eigen::Vector3d y(0.0,0.0,1.0);
+  Eigen::Vector3d y(0.0,0.0,-1.0);
 
+  // Calculate error correction
   Eigen::Vector3d y_est = Rbar_*u;
   Eigen::Vector3d err = k5*Rbar_.transpose()*y_est.cross(y);
   Eigen::Matrix3d dt_err = diff*skew(err);
-  Rbar_ = Rbar_*dt_err.exp();
-  
-  att = rot2rph(R_align_*Rd_.transpose()*Rbar_.transpose());
+  Eigen::MatrixExponential<Eigen::Matrix3d> expm(dt_err);
+  Eigen::Matrix3d dt_err_expm;
+  expm.compute(dt_err_expm);
+
+  // feedback error correction
+  Rbar_ = Rbar_*dt_err_expm;
+
+  // get attitude estimation
+  att = rot2rph(Rbar_*Rd_*R_align_);
+
+  // cycle Rd matrix
   Eigen::Matrix3d dRd = skew((ang-bias_ang)*diff);
-  Rd_ = Rd_*dRd.exp();
+  Eigen::MatrixExponential<Eigen::Matrix3d> exp_inst(dRd);
+  Eigen::Matrix3d dRd_expm;
+  exp_inst.compute(dRd_expm);
+  Rd_ = Rd_*dRd_expm;
+
 
 }
