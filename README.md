@@ -48,3 +48,16 @@ roscore
 ```
 roslaunch kvh_1775 kvh_1775.launch
 ```
+
+## Generate Documentation
+
+To generate documentation, use doxygen.
+
+-Install doxygen with from [here](http://www.stack.nl/~dimitri/doxygen/download.html).
+
+- Then `cd` into the kvh_1775 directory and run:
+```
+doxygen Doxyfile
+```
+
+- To view the documentation, open `index.html` located in the `html/` directory.

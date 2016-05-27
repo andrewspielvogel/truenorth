@@ -139,7 +139,7 @@ void SerialPort::parse_data_( char *data_raw)
  
 }
 
-
+// destructor
 SerialPort::~SerialPort(void)
 {
   stop();

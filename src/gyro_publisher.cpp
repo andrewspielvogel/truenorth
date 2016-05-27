@@ -14,7 +14,7 @@
 #include <string>
 #include <math.h>
 
-#define NODE_RESTART_TIME 1 
+#define NODE_RESTART_TIME 1 /**< Seconds without data before restart serial port. */
 
 
 int main(int argc, char **argv)

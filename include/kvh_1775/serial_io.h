@@ -32,7 +32,7 @@ typedef unsigned int	tcflag_t;
 /** 
  * @brief Struct for doing custom baud rate. 
  *
- * This seems like a hack, copied from asm/termios.h because
+ * This is a hack, copied from asm/termios.h because
  * I can't also include that header since it redefines structs from
  * the normal termios header file that is used by boost
  */
@@ -95,7 +95,7 @@ public:
     virtual ~SerialPort(void); /**< Destructor */
 
     /**
-     * Open serial port.
+     * Start serial port communication and attitude estimation.
      *
      * Open serial port and start attitude estimation.
      * @param com_port_name Serial port to open.
@@ -111,7 +111,7 @@ public:
     virtual void stop();
 
 protected:
-    virtual void async_read_some_(); /**< wait to asynchronously read in data */
+    virtual void async_read_some_(); /**< Asynchronously read in data */
 
     /**
      * Function called when data is received.
