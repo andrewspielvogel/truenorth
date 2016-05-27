@@ -50,10 +50,10 @@ struct termios2 {
 
 
 
-typedef boost::shared_ptr<boost::asio::serial_port> serial_port_ptr;
+typedef boost::shared_ptr<boost::asio::serial_port> serial_port_ptr; /**< Serial port pointer. */
 
-#define SERIAL_PORT_READ_BUF_SIZE 1 
-#define DATA_BUF_SIZE 38 
+#define SERIAL_PORT_READ_BUF_SIZE 1 /**< Size of read in buffer. */
+#define DATA_BUF_SIZE 38 /**< Size of data packet (in bytes). */
 
 /** 
  * @brief Class for connecting to a serial port
@@ -82,7 +82,11 @@ public:
 
     /**
      * Constructor.
-     * @param k Estimation gains.
+     * @param k Estimation gains. 
+     * @parblock The elements in order are: linear accleration estimation gain, linear 
+     * acceleration bias estimation gain, angular velocity bias estimation gain,
+     * z bias constant estimation gain, and attitude estimation gain.
+     * @endparblock
      * @param align_ Alignment rotation from instrument to vehicle coordinates.
      * @param log_location_ Location of IMU data log file.
      */

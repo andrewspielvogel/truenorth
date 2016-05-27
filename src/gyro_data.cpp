@@ -1,11 +1,12 @@
-/*
- * gyro_data.cpp
- * implementation of gyro_data.h
- * class for gyro data
+/**
+ * @file
+ * @date May 2016
+ * @author Andrew Spielvogel (andrewspielvogel@gmail.com)
+ * 
+ * @brief Implementation of gyro_data.h.
  *
- * created May 2016
- * Andrew Spielvogel
- * andrewspielvogel@gmail.com
+ * Class for gyro data.
+ *
  */
 
 #include <iostream>
@@ -48,11 +49,11 @@ GyroData::GyroData(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_loc
   diff = 0.0;
   
   // assign gains for bias estimation
-  k1 = k(0);
-  k2 = k(1);
-  k3 = k(2);
-  k4 = k(3);
-  k5 = k(4);
+  k1_ = k(0);
+  k2_ = k(1);
+  k3_ = k(2);
+  k4_ = k(3);
+  k5_ = k(4);
 
   // initialize initial bias fields
   bias_acc = zero_init;
@@ -115,10 +116,10 @@ void GyroData::est_bias()
     Eigen::Vector3d da = acc_est - acc;
 
     // calculate dx
-    Eigen::Vector3d da_est = -ang.cross(acc_est) + ang.cross(bias_acc) - acc.cross(bias_ang) - bias_z - k1*da;
-    Eigen::Vector3d dab = k2*ang.cross(da);
-    Eigen::Vector3d dwb = -k3*acc.cross(da);
-    Eigen::Vector3d dzb = k4*da;
+    Eigen::Vector3d da_est = -ang.cross(acc_est) + ang.cross(bias_acc) - acc.cross(bias_ang) - bias_z - k1_*da;
+    Eigen::Vector3d dab = k2_*ang.cross(da);
+    Eigen::Vector3d dwb = -k3_*acc.cross(da);
+    Eigen::Vector3d dzb = k4_*da;
  
     // calculate next bias estimate 
     acc_est = acc_est + dt*da_est;
@@ -150,7 +151,7 @@ void GyroData::est_att()
 
   // Calculate error correction
   Eigen::Vector3d y_est = Rbar_*u;
-  Eigen::Vector3d err = k5*Rbar_.transpose()*y_est.cross(y);
+  Eigen::Vector3d err = k5_*Rbar_.transpose()*y_est.cross(y);
   Eigen::Matrix3d dt_err = diff*skew(err);
   Eigen::MatrixExponential<Eigen::Matrix3d> expm(dt_err);
   Eigen::Matrix3d dt_err_expm;

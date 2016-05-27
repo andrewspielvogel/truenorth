@@ -1,10 +1,9 @@
-/*
- * data_2_csv.cpp
- * KVH 1775 rosbag parser to csv file
+/**
+ * @file
+ * @date July 2015
+ * @author Andrew Spielvogel (andrewspielvogel@gmail.com)
+ * @brief Rosbag parser to csv file
  *
- * created July 2015
- * Andrew Spielvogel
- * andrewspielvogel@gmail.com
  */
 
 #include "ros/ros.h"

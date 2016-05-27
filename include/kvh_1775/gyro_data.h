@@ -42,12 +42,6 @@ public:
     void est_bias(); /**< Cycle bias estimation. */
     void est_att(); /**< Cycle attitude estimation. */
 
-    float k1; /**< Linear acceleration estimation gain. */
-    float k2; /**< Linear acceleration bias estimation gain. */
-    float k3; /**< Angular velocity bias estimation gain. */
-    float k4; /**< z bias constant estimation gain. */
-    float k5; /**< Attitude estimation gain. */
-
     /**
      * @brief Constructor.
      *
@@ -65,6 +59,11 @@ public:
     Eigen::Matrix3d Rbar_; /**< Estimated Rbar matrix. */
     Eigen::Matrix3d Rd_; /**< Rdelta matrix. */
     Eigen::Matrix3d R_align_; /**< Instrument coordinate frame to vehicle coordinate frame rotation */
+    float k1_; /**< Linear acceleration estimation gain. */
+    float k2_; /**< Linear acceleration bias estimation gain. */
+    float k3_; /**< Angular velocity bias estimation gain. */
+    float k4_; /**< z bias constant estimation gain. */
+    float k5_; /**< Attitude estimation gain. */
 
 };
 

@@ -1,10 +1,9 @@
-/*
- * helper_funcs.h
- * helper functions
+/**
+ * @file
+ * @date May 2016
+ * @author Andrew Spielvogel (andrewspielvogel@gmail.com)
+ * @brief Helper functions
  *
- * created May 2016
- * Andrew Spielvogel
- * andrewspielvogel@gmail.com
  */
 
 

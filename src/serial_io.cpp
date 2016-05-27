@@ -19,7 +19,6 @@
 #include <Eigen/Geometry>
 
 
-
 union FloatSignals
 {
   char c[4];
