@@ -1,6 +1,6 @@
 /**
  * @file
- * @date created July 2015
+ * @date July 2015
  * @author Andrew Spielvogel (andrewspielvogel@gmail.com)
  * @brief Node for publishing sensor data.
  */
