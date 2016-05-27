@@ -12,6 +12,7 @@
 #ifndef GYRO_DATA_H
 #define GYRO_DATA_H
 
+#include <kvh_1775/so3_adap_id.h>
 #include <Eigen/Core>
 #include <string>
 
@@ -56,7 +57,7 @@ public:
 
  private:
     FILE *fp_; /**< Log file. */
-    Eigen::Matrix3d Rbar_; /**< Estimated Rbar matrix. */
+    SO3AdapId Rbar_; /**< Rbar matrix estimation. */
     Eigen::Matrix3d Rd_; /**< Rdelta matrix. */
     Eigen::Matrix3d R_align_; /**< Instrument coordinate frame to vehicle coordinate frame rotation */
     float k1_; /**< Linear acceleration estimation gain. */

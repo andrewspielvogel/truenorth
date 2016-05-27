@@ -19,6 +19,13 @@
 #include <Eigen/Geometry>
 
 
+/*
+ *
+ * SEE HEADER FILE FOR DOCUMENTATION
+ *
+ */
+
+
 union FloatSignals
 {
   char c[4];

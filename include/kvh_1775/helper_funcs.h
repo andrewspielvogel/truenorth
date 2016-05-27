@@ -15,6 +15,7 @@
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 #include <Eigen/Dense>
+#include <unsupported/Eigen/MatrixFunctions>
 #include <stdlib.h>
 #include <boost/tokenizer.hpp>
 #include <boost/foreach.hpp>
@@ -22,7 +23,12 @@
 
 
 
-// helper skew function
+/**
+ * @brief Skew function.
+ * 
+ * Skew operator on \f${\rm I\!R}^3\f$.
+ * @param w Input vector.
+ */
 inline Eigen::Matrix3d skew(Eigen::Vector3d w)
 {
 
@@ -33,7 +39,10 @@ inline Eigen::Matrix3d skew(Eigen::Vector3d w)
 
 }
 
-// helper function to convert a rotation matrix to roll, pitch, heading
+/**
+ * @brief Rotation to roll, pitch, heading euler angles.
+ * @param R Input rotation.
+ */
 inline Eigen::Vector3d rot2rph(Eigen::Matrix3d R)
 {
 
@@ -50,7 +59,10 @@ inline Eigen::Vector3d rot2rph(Eigen::Matrix3d R)
 
 }
 
-// helper function for parsing param strings
+/**
+ * @brief Parse param strings.
+ * @param param_str parameter string parsed.
+ */
 inline Eigen::MatrixXd parse_string(std::string param_str)
 {
 
@@ -72,13 +84,31 @@ inline Eigen::MatrixXd parse_string(std::string param_str)
 }
 
 
-// returns earth to NED rotation
+/**
+ * @brief Earth to NED rotation.
+ * @param lat Latitude of instrument.
+ */
 inline Eigen::Matrix3d rot_earth2ned(float lat)
 {
 
   Eigen::Matrix3d R;
   R << -sin(lat),0,-cos(lat),0,1,0,cos(lat),0,-sin(lat);
   return R;
+
+}
+
+/**
+ * @brief Matrix exponential.
+ * @param R Input matrix.
+ */
+inline Eigen::Matrix3d mat_exp(Eigen::Matrix3d R)
+{
+
+  Eigen::MatrixExponential<Eigen::Matrix3d> exp_inst(R);
+  Eigen::Matrix3d R_exp;
+  exp_inst.compute(R_exp);
+
+  return R_exp;
 
 }
 
