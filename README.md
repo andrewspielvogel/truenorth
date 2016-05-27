@@ -53,7 +53,7 @@ roslaunch kvh_1775 kvh_1775.launch
 
 To generate documentation, use doxygen.
 
-- Install doxygen with from [here](http://www.stack.nl/~dimitri/doxygen/download.html).
+- Install doxygen from [here](http://www.stack.nl/~dimitri/doxygen/download.html).
 
 - Then `cd` into the kvh_1775 directory and run:
 ```
