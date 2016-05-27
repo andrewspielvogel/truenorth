@@ -1,10 +1,11 @@
-/*
- * gyro_data.h
- * gyro data class
- *
- * created May 2016
- * Andrew Spielvogel
- * andrewspielvogel@gmail.com
+/**
+ * @file
+ * @date May 2016
+ * @author Andrew Spielvogel (andrewspielvogel@gmail.com)
+ * 
+ * @brief Gyro data class.
+ * 
+ * Class for storing a gyro data packet.
  */
 
 
@@ -14,40 +15,56 @@
 #include <Eigen/Core>
 #include <string>
 
-
-//class for storing a gyro data packet
+/**
+ * @brief Gyro data class.
+ * 
+ * Class for storing a gyro data packet.
+ */
 class GyroData
 {
 public:
-    Eigen::Vector3d ang;
-    Eigen::Vector3d acc;
-    Eigen::Vector3d mag;
-    std::vector<bool> status;
-    float temp;
-    unsigned int seq_num;
+    Eigen::Vector3d ang; /**<  Angular velocity. */
+    Eigen::Vector3d acc; /**< Linear acceleration. */
+    Eigen::Vector3d mag; /**< Magnetometer. */
+    std::vector<bool> status; /**< sensor status. */
+    float temp; /**< Sensor temperature. */
+    unsigned int seq_num; /**< Sequence number. */
 
 
-    double prev_time;
-    double diff;
-    Eigen::Vector3d bias_acc;
-    Eigen::Vector3d bias_ang;
-    Eigen::Vector3d bias_z;
-    Eigen::Vector3d acc_est;
-    Eigen::Vector3d att;
+    double timestamp; /**< Timestamp. */
+    double diff; /**< Time difference between last two data packets. */
+    Eigen::Vector3d bias_acc; /**< Linear acceleration bias estimation. */
+    Eigen::Vector3d bias_ang; /**< Angular velocity bias estimation. */
+    Eigen::Vector3d bias_z; /**< z bias constant estimation. */
+    Eigen::Vector3d acc_est; /**< Linear acceleration estimation. */
+    Eigen::Vector3d att; /**< Attitude estimation. */
 
-    void est_bias();
-    void est_att();
-    float k1,k2,k3,k4,k5;
+    void est_bias(); /**< Cycle bias estimation. */
+    void est_att(); /**< Cycle attitude estimation. */
 
-    GyroData(float,float,float ,float, float, Eigen::Matrix3d, std::string);
-    virtual ~GyroData(void);
-    void log();
+    float k1; /**< Linear acceleration estimation gain. */
+    float k2; /**< Linear acceleration bias estimation gain. */
+    float k3; /**< Angular velocity bias estimation gain. */
+    float k4; /**< z bias constant estimation gain. */
+    float k5; /**< Attitude estimation gain. */
+
+    /**
+     * @brief Constructor.
+     *
+     * GyroData class constructor.
+     * @param k Estimation gains.
+     * @param align Alignment rotation between instrument and vehicle.
+     * @param log_location Location of log file.
+     */
+    GyroData(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_location);
+    virtual ~GyroData(void); /**< Destructor. */
+    void log(); /**< Log data. */
 
  private:
-    FILE *fp_; //log file
-    Eigen::Matrix3d Rbar_;
-    Eigen::Matrix3d Rd_;
-    Eigen::Matrix3d R_align_;
+    FILE *fp_; /**< Log file. */
+    Eigen::Matrix3d Rbar_; /**< Estimated Rbar matrix. */
+    Eigen::Matrix3d Rd_; /**< Rdelta matrix. */
+    Eigen::Matrix3d R_align_; /**< Instrument coordinate frame to vehicle coordinate frame rotation */
 
 };
 

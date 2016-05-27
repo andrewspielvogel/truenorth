@@ -1,10 +1,8 @@
-/*
- * gyro_publisher.cpp
- * node for publishing sensor data
- *
- * created July 2015
- * Andrew Spielvogel
- * andrewspielvogel@gmail.com
+/**
+ * @file
+ * @date created July 2015
+ * @author Andrew Spielvogel (andrewspielvogel@gmail.com)
+ * @brief Node for publishing sensor data.
  */
 
 
@@ -16,7 +14,7 @@
 #include <string>
 #include <math.h>
 
-#define NODE_RESTART_TIME 1 // time to wait while no data before restarting (in seconds)
+#define NODE_RESTART_TIME 1 
 
 
 int main(int argc, char **argv)
@@ -62,7 +60,7 @@ int main(int argc, char **argv)
     // estimation gains
     std::string gains = "1.0,0.005,0.005,0.005,0.3";  // default
     n.getParam("gains",gains);
-    Eigen::VectorXd k = parse_string(gains);
+    Eigen::MatrixXd k = parse_string(gains);
 
 
 
@@ -70,7 +68,7 @@ int main(int argc, char **argv)
      * INITIALIZE SERIAL PORT
      */
 
-    SerialPort serial(k(0),k(1),k(2),k(3),k(4), R_align,log_location.c_str());
+    SerialPort serial(k, R_align,log_location.c_str());
 
     // connect to serial port
     bool connected =  serial.start(port.c_str(),baud);
@@ -127,7 +125,7 @@ int main(int argc, char **argv)
       chatter.publish(data_msg);
 
       // check if still getting data
-      int time_from_last_msg = (int)abs(ros::Time::now().toSec()-serial.data.prev_time);
+      int time_from_last_msg = (int)abs(ros::Time::now().toSec()-serial.data.timestamp);
 
       if (time_from_last_msg>=1)
       {

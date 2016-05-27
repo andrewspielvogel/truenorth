@@ -1,10 +1,8 @@
-/*
- * serial_io.h
- * serial port i/o for KVH 1775 IMU
- *
- * created July 2015
- * Andrew Spielvogel
- * andrewspielvogel@gmail.com
+/**
+ * @file
+ * @author Andrew Spielvogel (andrewspielvogel@gmail.com)
+ * @date July 2015
+ * @brief Serial port i/o for KVH 1775 IMU.
  */
 
 
@@ -22,11 +20,7 @@
 #include <kvh_1775/gyro_data.h>
 #include <string>
 
-/* struct for doing custom baud rate 
- * this seems like a hack, copied from asm/termios.h because
- * I can't also include that header since it redefines structs from
- * the normal termios header file that is used by boost
- */
+
 
 typedef unsigned char	cc_t;
 typedef unsigned int	speed_t;
@@ -34,60 +28,103 @@ typedef unsigned int	tcflag_t;
 
 #define NCCS 19
 #define BOTHER 0010000
+
+/** 
+ * @brief Struct for doing custom baud rate. 
+ *
+ * This seems like a hack, copied from asm/termios.h because
+ * I can't also include that header since it redefines structs from
+ * the normal termios header file that is used by boost
+ */
 struct termios2 {
-	tcflag_t c_iflag;		/* input mode flags */
-	tcflag_t c_oflag;		/* output mode flags */
-	tcflag_t c_cflag;		/* control mode flags */
-	tcflag_t c_lflag;		/* local mode flags */
-	cc_t c_line;			/* line discipline */
-	cc_t c_cc[NCCS];		/* control characters */
-	speed_t c_ispeed;		/* input speed */
-	speed_t c_ospeed;		/* output speed */
+	tcflag_t c_iflag;		/**< Input mode flags. */
+	tcflag_t c_oflag;		/**< Output mode flags. */
+	tcflag_t c_cflag;		/**< Control mode flags. */
+	tcflag_t c_lflag;		/**< Local mode flags. */
+	cc_t c_line;			/**< Line discipline. */
+	cc_t c_cc[NCCS];		/**< Control characters. */
+	speed_t c_ispeed;		/**< Input speed. */
+	speed_t c_ospeed;		/**< Output speed. */
 };
 
 
 
-/*
- * serial port class for 1775
- */
 
 typedef boost::shared_ptr<boost::asio::serial_port> serial_port_ptr;
 
-#define SERIAL_PORT_READ_BUF_SIZE 1
-#define DATA_BUF_SIZE 38
+#define SERIAL_PORT_READ_BUF_SIZE 1 
+#define DATA_BUF_SIZE 38 
 
-// class for connecting to a serial port
-// and for getting data from a serial port
+/** 
+ * @brief Class for connecting to a serial port
+ * and for getting data from a serial port.
+ */
 class SerialPort
 {
 protected:
-    boost::asio::io_service io_service_;
-    serial_port_ptr port_;
+    boost::asio::io_service io_service_; /*< Boost io service. */
+    serial_port_ptr port_; /**< Boost serial port class. */
     boost::mutex mutex_;
 
-    char read_buf_raw_[SERIAL_PORT_READ_BUF_SIZE];
-    char data_buf_raw_[DATA_BUF_SIZE];
+    char read_buf_raw_[SERIAL_PORT_READ_BUF_SIZE] /**< Read in buffer. */;
+    char data_buf_raw_[DATA_BUF_SIZE]; /**< Data packet buffer. */
 
 
-    int state_;
-    int data_cnt_;
+    int state_; /**< State of data read in. */
+    int data_cnt_; /**< Track number of bytes read in. */
   
 private:
     SerialPort(const SerialPort &p);
     SerialPort &operator=(const SerialPort &p); 
  
 public:
-    GyroData data;
-    SerialPort(float k1_,float k2_,float k3_,float k4_,float k5_, Eigen::Matrix3d align_, std::string log_location_): data(k1_,k2_,k3_,k4_,k5_,align_, log_location_){};
-    virtual ~SerialPort(void);
+    GyroData data; /**< Class for storing IMU data. */
 
+    /**
+     * Constructor.
+     * @param k Estimation gains.
+     * @param align_ Alignment rotation from instrument to vehicle coordinates.
+     * @param log_location_ Location of IMU data log file.
+     */
+ SerialPort(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_location): data(k,align, log_location){};
+
+    virtual ~SerialPort(void); /**< Destructor */
+
+    /**
+     * Open serial port.
+     *
+     * Open serial port and start attitude estimation.
+     * @param com_port_name Serial port to open.
+     * @param baud_rate Baud rate of serial port.
+     */
     virtual bool start(const char *com_port_name, int baud_rate=9600);
+
+    /**
+     * Close serial port.
+     *
+     * Close serial port and stop attitude estimation.
+     */
     virtual void stop();
 
 protected:
-    virtual void async_read_some_();
+    virtual void async_read_some_(); /**< wait to asynchronously read in data */
+
+    /**
+     * Function called when data is received.
+     *
+     * Function looks for data packet start sequence, reads in data packets, and does crc checking.
+     * @param err_code Boost system error code.
+     * @param bytes_transferred Number of bytes received in asynchronous read.
+     */
     virtual void on_receive_(const boost::system::error_code& ec, size_t bytes_transferred);
-    void parse_data_(GyroData &data, char *data_raw);
+
+    /**
+     * Parses IMU data packet.
+     *
+     * Parses IMU data packet into GyroData struct.
+     * @param data_raw IMU data packet to be parsed.
+     */
+    void parse_data_(char *data_raw);
 
 
 

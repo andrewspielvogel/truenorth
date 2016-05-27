@@ -1,11 +1,12 @@
-/*
- * serial_io.cpp
- * implementation of serial_io.h
- * serial port i/o for KVH 1775 IMU
+/**
+ * @file
+ * @date July 2015
+ * @author Andrew Spielvogel (andrewspielvogel@gmail.com)
+ * 
+ * @brief Implementation of serial_io.h.
  *
- * created July 2015
- * Andrew Spielvogel
- * andrewspielvogel@gmail.com
+ * Serial port i/o for KVH 1775 IMU.
+ *
  */
 
 #include <iostream>
@@ -27,7 +28,7 @@ union FloatSignals
 
 
 // parse data packet into fields
-void SerialPort::parse_data_(GyroData &data, char *data_raw)
+void SerialPort::parse_data_( char *data_raw)
 {
 
    
@@ -111,9 +112,9 @@ void SerialPort::parse_data_(GyroData &data, char *data_raw)
   data.status = status;
 
   // define time and diff
-  double prev_time_ = ros::Time::now().toSec();
-  data.diff = prev_time_ - data.prev_time;
-  data.prev_time = prev_time_;
+  double time = ros::Time::now().toSec();
+  data.diff = time - data.timestamp;
+  data.timestamp = time;
 
   // check for lost data packets
   if (skipped>1&&skipped<127)
@@ -293,7 +294,7 @@ void SerialPort::on_receive_(const boost::system::error_code& ec, size_t bytes_t
 		{	
 		    
 		  // parse data
-		  parse_data_(data,data_buf_raw_);
+		  parse_data_(data_buf_raw_);
 			    
 		}
 	      else
