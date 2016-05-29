@@ -19,7 +19,12 @@
 
 
 /**
- * Class for adaptive identificaiton on SO(3).
+ * @brief Class for adaptive identificaiton on SO(3).
+ *
+ * Algorithm from James C. Kinsey's and 
+ * Louis L. Whitcomb's paper: Adaptive Identification on the
+ * Group of Rigid-Body Rotations and its Application to Underwater
+ * Vehicle Navigation.
  */
 class SO3AdapId
 {

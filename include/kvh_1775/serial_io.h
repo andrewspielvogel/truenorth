@@ -62,11 +62,11 @@ typedef boost::shared_ptr<boost::asio::serial_port> serial_port_ptr; /**< Serial
 class SerialPort
 {
 protected:
-    boost::asio::io_service io_service_; /*< Boost io service. */
+    boost::asio::io_service io_service_; /**< Boost io service. */
     serial_port_ptr port_; /**< Boost serial port class. */
     boost::mutex mutex_;
 
-    char read_buf_raw_[SERIAL_PORT_READ_BUF_SIZE] /**< Read in buffer. */;
+    char read_buf_raw_[SERIAL_PORT_READ_BUF_SIZE]; /**< Read in buffer. */
     char data_buf_raw_[DATA_BUF_SIZE]; /**< Data packet buffer. */
 
 

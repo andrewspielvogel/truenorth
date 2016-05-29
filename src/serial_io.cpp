@@ -25,7 +25,9 @@
  *
  */
 
-
+/**
+ * @brief Union for storing gyro data
+ */
 union FloatSignals
 {
   char c[4];
@@ -43,19 +45,19 @@ void SerialPort::parse_data_( char *data_raw)
 
   // get ang, acc, and mag/temp data
   for (int i=0;i<4;i++)
-    {
+  {
 
-      wx.c[3-i] = ((unsigned char *) data_raw)[4+i];
-      wy.c[3-i] = ((unsigned char *) data_raw)[8+i];
-      wz.c[3-i] = ((unsigned char *) data_raw)[12+i];
+    wx.c[3-i] = ((unsigned char *) data_raw)[4+i];
+    wy.c[3-i] = ((unsigned char *) data_raw)[8+i];
+    wz.c[3-i] = ((unsigned char *) data_raw)[12+i];
+    
+    ax.c[3-i] = ((unsigned char *) data_raw)[16+i];
+    ay.c[3-i] = ((unsigned char *) data_raw)[20+i];
+    az.c[3-i] = ((unsigned char *) data_raw)[24+i];
 
-      ax.c[3-i] = ((unsigned char *) data_raw)[16+i];
-      ay.c[3-i] = ((unsigned char *) data_raw)[20+i];
-      az.c[3-i] = ((unsigned char *) data_raw)[24+i];
+    m_t.c[3-i]= ((unsigned char *) data_raw)[28+i];
 
-      m_t.c[3-i]= ((unsigned char *) data_raw)[28+i];
-
-    }
+  }
 
   // store ang data in a vec
   Eigen::Vector3d w(wx.f,wy.f,wz.f);
