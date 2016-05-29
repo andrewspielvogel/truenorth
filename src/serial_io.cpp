@@ -237,93 +237,93 @@ void SerialPort::on_receive_(const boost::system::error_code& ec, size_t bytes_t
  
   if (port_.get() == NULL || !port_->is_open()) return;
   if (ec) 
-    {
-      async_read_some_();
-      return;
-    }
+  {
+    async_read_some_();
+    return;
+  }
 
   // receive data packet
   for (unsigned int i = 0; i < bytes_transferred; ++i) 
+  {
+
+    unsigned int c = ((unsigned char *) read_buf_raw_)[i];
+
+    // look for start sequence
+    if (state_==0&&c==START_SEQ_1)
     {
+      state_=1;
+      data_buf_raw_[0] = read_buf_raw_[i];
+    }
+    else if (state_==1&&c==START_SEQ_2)
+    {
+      state_=2;
+      data_buf_raw_[1] = read_buf_raw_[i];
+    }
+    else if (state_==2&&c==START_SEQ_3)
+    {
+      state_=3;
+      data_buf_raw_[2] = read_buf_raw_[i];
+    }
+    else if (state_==3&&c==START_SEQ_4)
+    {
+      state_=4;
+      data_buf_raw_[3] = read_buf_raw_[i];
+    }
+    else if (state_==4&&data_cnt_<DATA_BUF_SIZE)
+    {
+      // start sequence found
+      
+      // add data
+      data_buf_raw_[data_cnt_+4] = read_buf_raw_[i];
+      data_cnt_ +=1;
+      
+      // check for when correct number of data bytes read in
+      if (data_cnt_>DATA_BUF_SIZE-5)
+      {
 
-      unsigned int c = ((unsigned char *) read_buf_raw_)[i];
-
-      // look for start sequence
-      if (state_==0&&c==254)
-	{
-	  state_=1;
-	  data_buf_raw_[0] = read_buf_raw_[i];
-	}
-      else if (state_==1&&c==129)
-	{
-	  state_=2;
-	  data_buf_raw_[1] = read_buf_raw_[i];
-	}
-      else if (state_==2&&c==255)
-	{
-	  state_=3;
-	  data_buf_raw_[2] = read_buf_raw_[i];
-	}
-      else if (state_==3&&c==87)
-	{
-	  state_=4;
-	  data_buf_raw_[3] = read_buf_raw_[i];
-	}
-      else if (state_==4&&data_cnt_<DATA_BUF_SIZE)
-	{
-	  // start sequence found
-
-	  // add data
-	  data_buf_raw_[data_cnt_+4] = read_buf_raw_[i];
-	  data_cnt_ +=1;
-
-	  // check for when correct number of data bytes read in
-	  if (data_cnt_>DATA_BUF_SIZE-5)
-	    {
-
-	      // do crc checksum on data
-	      boost::crc_optimal<32, 0x04C11DB7, 0xFFFFFFFF,0,false,false> checksum_agent;
-	      checksum_agent.process_bytes(data_buf_raw_,DATA_BUF_SIZE-4);
-	      unsigned int crc_calc_sum = checksum_agent.checksum();
+	// do crc checksum on data
+	boost::crc_optimal<32, 0x04C11DB7, 0xFFFFFFFF,0,false,false> checksum_agent;
+	checksum_agent.process_bytes(data_buf_raw_,DATA_BUF_SIZE-4);
+	unsigned int crc_calc_sum = checksum_agent.checksum();
 		
-	      data_cnt_=0;
-	      state_=0;
+	data_cnt_=0;
+	state_=0;
+	
+	// get sent sent crc checksum
+	std::bitset<8> crc_1(((unsigned char *) data_buf_raw_)[DATA_BUF_SIZE-4]);
+	std::bitset<8> crc_2(((unsigned char *) data_buf_raw_)[DATA_BUF_SIZE-3]);
+	std::bitset<8> crc_3(((unsigned char *) data_buf_raw_)[DATA_BUF_SIZE-2]);
+	std::bitset<8> crc_4(((unsigned char *) data_buf_raw_)[DATA_BUF_SIZE-1]);
+	std::bitset<32> crc_sent(crc_1.to_string() + crc_2.to_string() + crc_3.to_string() + crc_4.to_string());
+	unsigned int crc_sent_sum = (unsigned int) crc_sent.to_ulong();
 
-	      // get sent sent crc checksum
-	      std::bitset<8> crc_1(((unsigned char *) data_buf_raw_)[DATA_BUF_SIZE-4]);
-	      std::bitset<8> crc_2(((unsigned char *) data_buf_raw_)[DATA_BUF_SIZE-3]);
-	      std::bitset<8> crc_3(((unsigned char *) data_buf_raw_)[DATA_BUF_SIZE-2]);
-	      std::bitset<8> crc_4(((unsigned char *) data_buf_raw_)[DATA_BUF_SIZE-1]);
-	      std::bitset<32> crc_sent(crc_1.to_string() + crc_2.to_string() + crc_3.to_string() + crc_4.to_string());
-	      unsigned int crc_sent_sum = (unsigned int) crc_sent.to_ulong();
-
-	      // check that calculated and sent checksums are the same     
-	      if (crc_sent_sum == crc_calc_sum) 
-		{	
+	// check that calculated and sent checksums are the same     
+	if (crc_sent_sum == crc_calc_sum) 
+	{	
 		    
-		  // parse data
-		  parse_data_(data_buf_raw_);
+	  // parse data
+	  parse_data_(data_buf_raw_);
 			    
-		}
-	      else
-		{
+	}
+	else
+	{
 
-		  ROS_WARN("corrupted package");
+	  ROS_WARN("corrupted package");
 
-		}
+	}
 			
 
-	    }
-	}
-      else 
-	{
-	  ROS_WARN("lost byte: %02X",c);
-
-	  data_cnt_=0;
-	  state_=0;
-	}
-
+      }
     }
+    else 
+    {
+      ROS_WARN("lost byte: %02X",c);
+
+      data_cnt_=0;
+      state_=0;
+    }
+
+  }
 
   async_read_some_();
 }
