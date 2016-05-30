@@ -53,12 +53,20 @@ struct termios2 {
 typedef boost::shared_ptr<boost::asio::serial_port> serial_port_ptr; /**< Serial port pointer. */
 
 #define SERIAL_PORT_READ_BUF_SIZE 1 /**< Size of read in buffer. */
+
+
+/*
+ * DATA PACKET INFO
+ */
 #define DATA_BUF_SIZE 38 /**< Size of data packet (in bytes). */
 
-#define START_SEQ_1 254 /**< Start sequence, first byte */
-#define START_SEQ_2 129 /**< Start sequence, second byte */
-#define START_SEQ_3 255 /**< Start sequence, third byte */
-#define START_SEQ_4 97 /**< Start sequence, fourth byte */
+// Start Sequence
+#define START_SEQ_1 0xFE /**< Start sequence, first byte */
+#define START_SEQ_2 0x81 /**< Start sequence, second byte */
+#define START_SEQ_3 0xFF /**< Start sequence, third byte */
+#define START_SEQ_4 0x57 /**< Start sequence, fourth byte */
+
+
 
 /** 
  * @brief Class for connecting to a serial port
