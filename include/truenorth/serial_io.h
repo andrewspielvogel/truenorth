@@ -58,7 +58,6 @@ typedef boost::shared_ptr<boost::asio::serial_port> serial_port_ptr; /**< Serial
 /*
  * DATA PACKET INFO
  */
-#define DATA_BUF_SIZE 38 /**< Size of data packet (in bytes). */
 
 // Start Sequence
 #define START_SEQ_1 0xFE /**< Start sequence, first byte */
@@ -67,9 +66,14 @@ typedef boost::shared_ptr<boost::asio::serial_port> serial_port_ptr; /**< Serial
 
 // Data type
 #define MESSAGE_TYPE 2 /**< 1 - message type B, 2 - message type C */
-#define START_SEQ_B 0x56 /**< Start sequence, fourth byte - message type B */
-#define START_SEQ_C 0x57 /**< Start sequence, fourth byte - message type C */
 
+#if MESSAGE_TYPE == 1
+  #define START_SEQ_4 0x56 /**< Start sequence, fourth byte - message type B */
+  #define DATA_BUF_SIZE 40 /**< Size of data packet (in bytes). */
+#else
+  #define START_SEQ_4 0x57 /**< Start sequence, fourth byte - message type C */
+  #define DATA_BUF_SIZE 38 /**< Size of data packet (in bytes). */
+#endif
 
 
 /** 

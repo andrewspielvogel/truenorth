@@ -35,10 +35,91 @@ union FloatSignals
 };
 
 #if MESSAGE_TYPE == 1
-  #define START_SEQ_4 START_SEQ_B
+
+// parse data packet into fields
+void SerialPort::parse_data_( char *data_raw)
+{
+
+   
+  FloatSignals wx, wy, wz, ax, ay, az, timestamp, temp; //ang, acc components and timestamp
+    
+
+  // get ang, acc, and mag/temp data
+  for (int i=0;i<4;i++)
+    {
+
+      wx.c[3-i] = ((unsigned char *) data_raw)[4+i];
+      wy.c[3-i] = ((unsigned char *) data_raw)[8+i];
+      wz.c[3-i] = ((unsigned char *) data_raw)[12+i];
+    
+      ax.c[3-i] = ((unsigned char *) data_raw)[16+i];
+      ay.c[3-i] = ((unsigned char *) data_raw)[20+i];
+      az.c[3-i] = ((unsigned char *) data_raw)[24+i];
+
+      timestamp.c[3-i]= ((unsigned char *) data_raw)[28+i];
+
+    }
+
+  for (int i=0:i<2:i++)
+    {
+
+      temp.c[1-i] = ((unsigned char *) data_raw)[34+i];
+
+    }
+
+  // store ang data in a vec
+  Eigen::Vector3d w(wx.f,wy.f,wz.f);
+
+  // store acc data in a vec
+  Eigen::Vector3d a(ax.f,ay.f,az.f);
+
+  // store status data in a vec
+  std::bitset<8> stat(((unsigned char *) data_raw)[32]);
+  std::vector<bool> status;
+
+  for(int i=0;i<7;i++)
+    {
+      if (i!=3){
+	status.push_back(stat[i]==1);
+      }
+    }
+
+  // store sequence number
+  unsigned int seq_num = (unsigned int) (((unsigned char *) data_raw)[33]);
+
+
+  // store data
+  data.ang = w;
+  data.acc = a;
+  int skipped = abs(data.seq_num-seq_num);
+  data.seq_num = seq_num;
+  data.status = status;
+
+  data.temp = temp.f;
+
+  // define time and diff
+  data.diff = timestamp.f - data.timestamp;
+  data.timestamp = timestamp.f;
+
+  // check for lost data packets
+  if (skipped>1&&skipped<127)
+    {
+
+      ROS_WARN("Lost %u data packets",skipped);
+
+    }
+
+  // log data
+  data.log();
+
+  //run integration, will need to add storage of previous estimate in GyroData class
+  data.est_bias();
+  data.est_att();
+ 
+}
+
+
 #else
-  #define START_SEQ_4 START_SEQ_C
-#endif
 
 // parse data packet into fields
 void SerialPort::parse_data_( char *data_raw)
@@ -50,19 +131,19 @@ void SerialPort::parse_data_( char *data_raw)
 
   // get ang, acc, and mag/temp data
   for (int i=0;i<4;i++)
-  {
+    {
 
-    wx.c[3-i] = ((unsigned char *) data_raw)[4+i];
-    wy.c[3-i] = ((unsigned char *) data_raw)[8+i];
-    wz.c[3-i] = ((unsigned char *) data_raw)[12+i];
+      wx.c[3-i] = ((unsigned char *) data_raw)[4+i];
+      wy.c[3-i] = ((unsigned char *) data_raw)[8+i];
+      wz.c[3-i] = ((unsigned char *) data_raw)[12+i];
     
-    ax.c[3-i] = ((unsigned char *) data_raw)[16+i];
-    ay.c[3-i] = ((unsigned char *) data_raw)[20+i];
-    az.c[3-i] = ((unsigned char *) data_raw)[24+i];
+      ax.c[3-i] = ((unsigned char *) data_raw)[16+i];
+      ay.c[3-i] = ((unsigned char *) data_raw)[20+i];
+      az.c[3-i] = ((unsigned char *) data_raw)[24+i];
 
-    m_t.c[3-i]= ((unsigned char *) data_raw)[28+i];
+      m_t.c[3-i]= ((unsigned char *) data_raw)[28+i];
 
-  }
+    }
 
   // store ang data in a vec
   Eigen::Vector3d w(wx.f,wy.f,wz.f);
@@ -131,11 +212,11 @@ void SerialPort::parse_data_( char *data_raw)
 
   // check for lost data packets
   if (skipped>1&&skipped<127)
-  {
+    {
 
-    ROS_WARN("Lost %u data packets",skipped);
+      ROS_WARN("Lost %u data packets",skipped);
 
-  }
+    }
 
   // log data
   data.log();
@@ -145,6 +226,8 @@ void SerialPort::parse_data_( char *data_raw)
   data.est_att();
  
 }
+
+#endif
 
 // destructor
 SerialPort::~SerialPort(void)
