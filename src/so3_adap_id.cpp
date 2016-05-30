@@ -11,8 +11,8 @@
 #include <Eigen/Geometry>
 #include <Eigen/Dense>
 #include <unsupported/Eigen/MatrixFunctions>
-#include <kvh_1775/helper_funcs.h>
-#include <kvh_1775/so3_adap_id.h>
+#include <truenorth/helper_funcs.h>
+#include <truenorth/so3_adap_id.h>
 
 
 /*

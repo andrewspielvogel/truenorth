@@ -14,9 +14,9 @@
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 #include <Eigen/Dense>
-#include <kvh_1775/gyro_data.h>
-#include <kvh_1775/helper_funcs.h>
-#include <kvh_1775/so3_adap_id.h>
+#include <truenorth/gyro_data.h>
+#include <truenorth/helper_funcs.h>
+#include <truenorth/so3_adap_id.h>
 #include <ctime>
 #include <string>
 

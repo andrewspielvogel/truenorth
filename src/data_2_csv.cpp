@@ -8,7 +8,7 @@
 
 #include "ros/ros.h"
 
-#include <kvh_1775/gyro_sensor_data.h>
+#include <truenorth/gyro_sensor_data.h>
 #include <rosbag/bag.h>
 #include <rosbag/view.h>
 #include <iostream>
@@ -34,7 +34,7 @@ int main(int argc, char **argv)
     rosbag::View view(bag);
     foreach(rosbag::MessageInstance const m, view)
     {
-	kvh_1775::gyro_sensor_data::ConstPtr s = m.instantiate<kvh_1775::gyro_sensor_data>();
+	truenorth::gyro_sensor_data::ConstPtr s = m.instantiate<truenorth::gyro_sensor_data>();
 	if (s != NULL){
 	    myfile << s->ang[0] << "," << s->ang[1] << "," << s->ang[2] << ","
 	    	   << s->acc[0] << "," << s->acc[1] << "," << s->acc[2] << ","

@@ -10,8 +10,8 @@
  */
 
 #include <iostream>
-#include <kvh_1775/serial_io.h>
-#include <kvh_1775/gyro_data.h>
+#include <truenorth/serial_io.h>
+#include <truenorth/gyro_data.h>
 #include "ros/ros.h"
 #include <boost/crc.hpp>
 #include <bitset>

@@ -7,9 +7,9 @@
 
 
 #include <ros/ros.h>
-#include <kvh_1775/serial_io.h>
-#include <kvh_1775/gyro_sensor_data.h>
-#include <kvh_1775/helper_funcs.h>
+#include <truenorth/serial_io.h>
+#include <truenorth/gyro_sensor_data.h>
+#include <truenorth/helper_funcs.h>
 #include <Eigen/Core>
 #include <string>
 #include <math.h>
@@ -21,13 +21,13 @@ int main(int argc, char **argv)
 {
 
     // initialize node
-    ros::init(argc, argv, "kvh_1775");
+    ros::init(argc, argv, "truenorth");
 
     // must initialize with "~" for param passing
     ros::NodeHandle n("~");
 
     // initialize publisher
-    ros::Publisher chatter = n.advertise<kvh_1775::gyro_sensor_data>("gyro_data",1000);
+    ros::Publisher chatter = n.advertise<truenorth::gyro_sensor_data>("gyro_data",1000);
 
 
     /*
@@ -97,7 +97,7 @@ int main(int argc, char **argv)
     {
 
       // initialize data_msg
-      kvh_1775::gyro_sensor_data data_msg;
+      truenorth::gyro_sensor_data data_msg;
 
       // fill data_msg with data packet
       for (int i=0;i<3;i++)
