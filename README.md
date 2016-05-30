@@ -10,7 +10,7 @@ sudo apt-get install libeigen3-dev
 ```
 - Clone node into src folder of ROS workspace.
 ```
-git clone https://github.com/andrewspielvogel/kvh_1775.git
+git clone https://github.com/andrewspielvogel/truenorth.git
 ```
 - Make you workspace. `cd` into the top level of your ROS workspace and run:
 ```
@@ -46,7 +46,7 @@ roscore
 ```
 - Start node
 ```
-roslaunch kvh_1775 kvh_1775.launch
+roslaunch truenorth truenorth.launch
 ```
 
 ## Generate Documentation
@@ -55,7 +55,7 @@ To generate documentation, use doxygen.
 
 - Install doxygen from [here](http://www.stack.nl/~dimitri/doxygen/download.html).
 
-- Then `cd` into the kvh_1775 directory and run:
+- Then `cd` into the truenorth directory and run:
 ```
 doxygen Doxyfile
 ```
