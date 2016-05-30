@@ -34,6 +34,11 @@ union FloatSignals
   float f;
 };
 
+#if MESSAGE_TYPE == 1
+  #define START_SEQ_4 START_SEQ_B
+#else
+  #define START_SEQ_4 START_SEQ_C
+#endif
 
 // parse data packet into fields
 void SerialPort::parse_data_( char *data_raw)

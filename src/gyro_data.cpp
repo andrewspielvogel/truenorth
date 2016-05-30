@@ -26,7 +26,7 @@
  *
  */
 
-GyroData::GyroData(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_location):Rbar_(k(5))
+GyroData::GyroData(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_location):Rbar_(k(4))
 {
   // define inialization values
   Eigen::Vector3d zero_init(0.0,0.0,0.0);

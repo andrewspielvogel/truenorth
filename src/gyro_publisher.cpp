@@ -60,9 +60,8 @@ int main(int argc, char **argv)
     // estimation gains
     std::string gains = "1.0,0.005,0.005,0.005,0.3";  // default
     n.getParam("gains",gains);
+    
     Eigen::MatrixXd k = parse_string(gains);
-
-
 
     /*
      * INITIALIZE SERIAL PORT

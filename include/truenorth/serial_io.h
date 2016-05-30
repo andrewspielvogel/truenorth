@@ -64,7 +64,11 @@ typedef boost::shared_ptr<boost::asio::serial_port> serial_port_ptr; /**< Serial
 #define START_SEQ_1 0xFE /**< Start sequence, first byte */
 #define START_SEQ_2 0x81 /**< Start sequence, second byte */
 #define START_SEQ_3 0xFF /**< Start sequence, third byte */
-#define START_SEQ_4 0x57 /**< Start sequence, fourth byte */
+
+// Data type
+#define MESSAGE_TYPE 2 /**< 1 - message type B, 2 - message type C */
+#define START_SEQ_B 0x56 /**< Start sequence, fourth byte - message type B */
+#define START_SEQ_C 0x57 /**< Start sequence, fourth byte - message type C */
 
 
 
