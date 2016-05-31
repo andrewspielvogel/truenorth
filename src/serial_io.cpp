@@ -9,7 +9,6 @@
  *
  */
 
-#include <iostream>
 #include <truenorth/serial_io.h>
 #include <truenorth/gyro_data.h>
 #include "ros/ros.h"
