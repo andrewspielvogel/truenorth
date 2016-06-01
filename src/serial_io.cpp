@@ -414,6 +414,3 @@ void SerialPort::on_receive_(const boost::system::error_code& ec, size_t bytes_t
 
   async_read_some_();
 }
-
-
-

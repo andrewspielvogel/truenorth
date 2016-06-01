@@ -4,10 +4,10 @@ function out = adap_filt(hz,t_end,bias)
 t = 0:1/hz:t_end;
 
 % Define parameters
-S.k1 = 5;
-S.k2 = .05;
-S.k3 = .1;
-S.k4 = .07;
+S.k1 = 1;
+S.k2 = .005;
+S.k3 = .001;
+S.k4 = .00005;
 S.bias = bias;
 % noise
 S.w_sig = 8.4178 * 10^(-5);  % measured 1775, units are rad/sec

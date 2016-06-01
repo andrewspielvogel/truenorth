@@ -101,6 +101,7 @@ private:
 public:
     GyroData data; /**< Class for storing IMU data. */
 
+
     /**
      * Constructor.
      * @param k Estimation gains. 
@@ -150,7 +151,6 @@ protected:
      * @param data_raw IMU data packet to be parsed.
      */
     void parse_data_(char *data_raw);
-
 
 
 
