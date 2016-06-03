@@ -1,8 +1,8 @@
 function out = adap_Rbar(samp,R_align,bias)
 
 data = samp;
-data.acc = samp.acc' - bias.bias.acc';
-data.ang = samp.ang' - bias.bias.ang';
+data.acc = samp.acc' - bias.acc';
+data.ang = samp.ang' - bias.ang';
 
 Rd   = get_R_d(data,eye(3));
 
