@@ -1,25 +1,55 @@
-function out = adap_Rbar(samp,R_align,bias)
+function out = adap_Rbar(samp,R_align,lat)
+
+lat = pi/180*lat;
+
+num_samp  = size(samp.stamp,2);
 
 data = samp;
-data.acc = samp.acc' - bias.acc';
-data.ang = samp.ang' - bias.ang';
+data.acc = samp.acc';
+data.ang = samp.ang';
 
 Rd   = get_R_d(data,eye(3));
 
-num_samp  = size(samp.stamp,2);
 u = zeros(3,num_samp);
-y1 = zeros(2,num_samp);
-y2 = ones(1,num_samp);
-y = [y1;-y2];
+y = zeros(3,num_samp);
 
 for i=1:num_samp
     
+    
+    Rsn{i} = get_Rsn(lat,samp.stamp(i));
+    y(:,i) = Rsn{i}*[0;0;-1];
     u(:,i) = Rd{i}*samp.acc(:,i);
+    
     
 end
 
-out.t = samp.stamp;
-out.R = adap_so3(y,u,samp.stamp);
+Rb = adap_so3(y,u,samp.stamp);
+
+out.u = u;
+out.y = y;
+out.Rb = Rb;
+out.Rsn = Rsn;
 out.Rd = Rd;
-out.Rin = cellfun(@(A,B) R_align*B'*A',out.R,Rd,'UniformOutput',false);
+out.Rsi = cellfun(@(A,B) A*B,Rb,Rd,'UniformOutput',false);
+out.Rin = cellfun(@(A,B) R_align*B'*A,Rsn,out.Rsi,'UniformOutput',false);
 out.att = rph(out.Rin);
+out.t = samp.stamp;
+
+
+
+function R = get_Rse(t)
+
+rate = 15*pi/180/3600;
+
+Rse = expm(skew([0,0,1])*rate*t);
+
+R = Rse;
+
+function R = get_Rsn(lat,t)
+
+Ren = [-sin(lat),0,-cos(lat);0,1,0;cos(lat),0,-sin(lat)];
+Rse = get_Rse(t);
+
+R = Rse*Ren;
+
+

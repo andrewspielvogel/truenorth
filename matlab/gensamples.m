@@ -15,7 +15,7 @@ end
 t = 0:1/hz:t_end;
 
 % noise
-w_sig = 2.1 * 10^(-4);  % measured 1775, units are rad/sec
+w_sig = 6.32 * 10^(-3)*pi/180;  % measured 1775, units are rad/sec
 a_sig = 0.0037;            % measured 1775, units are g, not m/s^2
 
 % initialize R at t0
@@ -46,9 +46,10 @@ for i=1:num
     samp.true.acc(:,i) = R{i}'*[0;0;1];
     
     % generate ang and acc samples at t
-    samp.ang(:,i) =  R{i}'*[cos(lat);0;sin(lat)]*15*pi/180/3600 + w + w_sig*randn(3,1) + bias.ang;
-    
-    samp.acc(:,i) = R{i}'*[0;0;1]  + a_sig*randn(3,1) + bias.acc;
+    %samp.ang(:,i) =  R{i}'*[cos(lat);0;sin(lat)]*15*pi/180/3600 + w + w_sig*randn(3,1) + bias.ang;
+    samp.ang(:,i) =  [cos(lat);0;sin(lat)]*15*pi/180/3600 + w_sig*randn(3,1) + bias.ang;
+    %samp.acc(:,i) = R{i}'*[0;0;1]  + a_sig*randn(3,1) + bias.acc;
+    samp.acc(:,i) = [0;0;1]  + a_sig*randn(3,1) + bias.acc;
     
     % print progress
     if ~mod(t(i),30)

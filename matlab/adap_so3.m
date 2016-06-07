@@ -1,6 +1,6 @@
 function R = adap_so3(y,u,t)
 
-num_samp = size(t,2);
+num_samp = size(u,2);
 R{num_samp} = eye(3);
 R{1} = eye(3);
 err = zeros(3,num_samp);
