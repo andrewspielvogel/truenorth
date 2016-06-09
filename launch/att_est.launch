@@ -6,7 +6,7 @@
 	       <param name="port" value="/dev/ttyUSB0" type="str" />
 	       <param name="baud" value="4147200" type="int" />
 	       <param name="instr_align" value="1,0,0,0,-1,0,0,0,-1" type="string" />
-	       <param name="gains" value="1.0,0.00,0.0001,0.00000,1.0" type="string" />
+	       <param name="gains" value="1.0,0.00,0.001,0.00000,1.0" type="string" />
 	       <param name="log_loc" value="/home/spiels/log/KVH/" type="string" />
 
         </node>

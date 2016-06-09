@@ -6,6 +6,7 @@ R{1} = R0;
 
 for i=2:num
     
-    R{i} = R{i-1}*expm(skew(samp.ang(i-1,:))*(samp.stamp(i)-samp.stamp(i-1))); 
+    dR = expm(skew(samp.ang(i-1,:))*(samp.stamp(i)-samp.stamp(i-1)));
+    R{i} = R{i-1}*dR; 
     
 end
