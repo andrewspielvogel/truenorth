@@ -30,20 +30,20 @@ class SO3AdapId
 {
 public:
 
-    SO3AdapId(float); /**< Constructor. */
-    virtual ~SO3AdapId(void); /**< Destructor. */
+  SO3AdapId(float,Eigen::Matrix3d); /**< Constructor. */
+  virtual ~SO3AdapId(void); /**< Destructor. */
     
-    /**
-     * @brief Cycle estimation once.
-     *
-     * Assume input output relation is \f$y = Ru\f$ where \f$R\in SO(3)\f$ is constant
-     * @param u Input measurement.
-     * @param y Output measurement.
-     * @param dt Time between samples.
-     */
-    void step(Eigen::Vector3d u,Eigen::Vector3d y,float dt);
-    Eigen::Matrix3d R; /**< Estimatation of static rotation. */
-    float k;    /**< Estimation gain. */
+  /**
+   * @brief Cycle estimation once.
+   *
+   * Assume input output relation is \f$y = Ru\f$ where \f$R\in SO(3)\f$ is constant
+   * @param u Input measurement.
+   * @param y Output measurement.
+   * @param dt Time between samples.
+   */
+  void step(Eigen::Vector3d u,Eigen::Vector3d y,float dt);
+  Eigen::Matrix3d R; /**< Estimatation of static rotation. */
+  float k;    /**< Estimation gain. */
     
 
 };

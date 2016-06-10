@@ -26,7 +26,7 @@
  *
  */
 
-GyroData::GyroData(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_location):Rbar_(k(4))
+GyroData::GyroData(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_location, Eigen::Matrix3d R0):Rbar_(k(4),R0)
 {
   // define inialization values
   Eigen::Vector3d zero_init(0.0,0.0,0.0);
@@ -50,6 +50,7 @@ GyroData::GyroData(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_loc
   seq_num = 500;
   status = init_stat;
   timestamp = ros::Time::now().toSec();
+  t_start_ = timestamp;
   diff = 0.0;
   
   // assign gains for bias estimation
@@ -141,15 +142,23 @@ void GyroData::est_bias()
 void GyroData::est_att()
 {
 
+  float lat = 39.32*M_PI/180;
+
+  Eigen::Matrix3d R_sn = get_R_sn(lat,timestamp-t_start_);
+  
   // Define inputs and outputs
   Eigen::Vector3d u = Rd_*(acc_est-bias_acc);
-  Eigen::Vector3d y(0.0,0.0,-1.0);
+  Eigen::Vector3d acc_n(0.0,0.0,-1.0);
+  Eigen::Vector3d y = R_sn*acc_n;
 
   // cycle Rbar estimation
   Rbar_.step(u,y,diff);
 
+  Eigen::Matrix3d R_si = Rbar_.R*Rd_;
+  Eigen::Matrix3d R_ni = R_sn.transpose()*R_si;
+
   // get attitude estimation
-  att = rot2rph(Rbar_.R*Rd_*R_align_);
+  att = rot2rph(R_ni*R_align_);
 
   // cycle Rd matrix
   Eigen::Matrix3d dRd = skew((ang-bias_ang)*diff);

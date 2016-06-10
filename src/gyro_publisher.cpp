@@ -67,7 +67,13 @@ int main(int argc, char **argv)
      * INITIALIZE SERIAL PORT
      */
 
-    SerialPort serial(k, R_align,log_location.c_str());
+    float lat = 39.32*M_PI/180;
+
+    Eigen::Matrix3d R0;
+    R0 << -sin(lat),0,-cos(lat),0,1,0,cos(lat),0,-sin(lat);
+    R0 = R0*R_align;
+
+    SerialPort serial(k, R_align,log_location.c_str(),R0);
 
     // connect to serial port
     bool connected =  serial.start(port.c_str(),baud);

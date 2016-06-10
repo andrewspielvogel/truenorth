@@ -7,6 +7,7 @@
  * class for adaptive id on so3
  */
 
+#include <math.h>
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 #include <Eigen/Dense>
@@ -22,13 +23,15 @@
  */
 
 /**
- * Constructor.
+ * @brief Constructor.
+ * @param gain Estimation gain.
+ * @param R0 Initial rotation estimate.
  */
-SO3AdapId::SO3AdapId(float gain)
+SO3AdapId::SO3AdapId(float gain,Eigen::Matrix3d R0)
 {
-
+  
   k = gain;
-  R << 1,0,0,0,1,0,0,0,1;
+  R << R0;
 
 }
 

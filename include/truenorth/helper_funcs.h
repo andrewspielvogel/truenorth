@@ -112,4 +112,43 @@ inline Eigen::Matrix3d mat_exp(Eigen::Matrix3d R)
 
 }
 
+
+/**
+ * @brief Returns Star to Earth rotation
+ * @param t Time (seconds)
+ */
+inline Eigen::Matrix3d get_R_se(float t)
+{
+
+  float rate = 15*M_PI/180/3600;
+
+  Eigen::Vector3d w(0,0,1.0);
+
+  Eigen::Matrix3d R_se = mat_exp(skew(w)*rate*t);
+
+  return R_se;
+}
+
+
+/**
+ * @brief Returns Star to NED rotation
+ * @param lat Latitude (radians)
+ * @param t Time (seconds)
+ */
+inline Eigen::Matrix3d get_R_sn(float lat, float t)
+{
+
+  Eigen::Matrix3d R_en;
+
+  R_en << -sin(lat),0,-cos(lat),0,1,0,cos(lat),0,-sin(lat);
+  
+  Eigen::Matrix3d R_se = get_R_se(t);
+
+  Eigen::Matrix3d R_sn = R_se*R_en;
+
+  return R_sn;
+
+
+}
+
 #endif

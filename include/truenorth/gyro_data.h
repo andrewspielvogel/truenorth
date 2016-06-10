@@ -51,7 +51,7 @@ public:
      * @param align Alignment rotation between instrument and vehicle.
      * @param log_location Location of log file.
      */
-    GyroData(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_location);
+    GyroData(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_location, Eigen::Matrix3d R0);
     virtual ~GyroData(void); /**< Destructor. */
     void log(); /**< Log data. */
 
@@ -65,6 +65,8 @@ public:
     float k3_; /**< Angular velocity bias estimation gain. */
     float k4_; /**< z bias constant estimation gain. */
     float k5_; /**< Attitude estimation gain. */
+
+    float t_start_; /**< Start time. */
 
 };
 
