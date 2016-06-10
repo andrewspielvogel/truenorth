@@ -50,6 +50,7 @@ public:
      * @param k Estimation gains.
      * @param align Alignment rotation between instrument and vehicle.
      * @param log_location Location of log file.
+     * @param R0 Initial estimate of Rbar matrix.
      */
     GyroData(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_location, Eigen::Matrix3d R0);
     virtual ~GyroData(void); /**< Destructor. */
