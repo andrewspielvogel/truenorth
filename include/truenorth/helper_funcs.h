@@ -129,6 +129,20 @@ inline Eigen::Matrix3d get_R_se(float t)
   return R_se;
 }
 
+/**
+ * @brief Returns Earth to NED rotation
+ * @param lat Latitude (radians)
+ */
+inline Eigen::Matrix3d get_R_en(float lat)
+{
+
+  Eigen::Matrix3d R_en;
+
+  R_en << -sin(lat),0,-cos(lat),0,1,0,cos(lat),0,-sin(lat);
+
+  return R_en;
+
+}
 
 /**
  * @brief Returns Star to NED rotation
@@ -138,9 +152,7 @@ inline Eigen::Matrix3d get_R_se(float t)
 inline Eigen::Matrix3d get_R_sn(float lat, float t)
 {
 
-  Eigen::Matrix3d R_en;
-
-  R_en << -sin(lat),0,-cos(lat),0,1,0,cos(lat),0,-sin(lat);
+  Eigen::Matrix3d R_en = get_R_en(lat);
   
   Eigen::Matrix3d R_se = get_R_se(t);
 
