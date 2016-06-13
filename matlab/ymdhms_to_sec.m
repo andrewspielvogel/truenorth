@@ -9,10 +9,11 @@ function secs_from_1970 = ymdhms_to_sec(year,month,day,hours,minutes,seconds)
 % as ref to be compatible w/ unix convention.
 %
 % August 1997 G. Lerner, cteated and written
+% June 2016 A. Spielvogel, change nargchk to narginchk
 %
 
 % check for exactly 6 input arguments
-error(nargchk(6,6,nargin))
+narginchk(6,6);
 
 % map 97 to 1997,  02 to 2002, etc
 if (year <50)

@@ -17,27 +17,37 @@ Rd   = get_R_d(data,eye(3));
 disp('Computing Rb');
 
 
-u = zeros(3,num_samp);
-y = zeros(3,num_samp);
+u_a = zeros(3,num_samp);
+y_a = zeros(3,num_samp);
+y_w = zeros(3,num_samp);
+u_w = samp.ang;
+
 Rsn{num_samp} = zeros(3,3);
 
 for i=1:num_samp
     
     
     Rsn{i} = get_Rsn(lat,samp.stamp(i));
-    y(:,i) = Rsn{i}*[0;0;-1];
-    u(:,i) = Rd{i}*samp.acc(:,i);
-    
+    y_a(:,i) = Rsn{i}*[0;0;-1];
+    u_a(:,i) = Rd{i}*samp.acc(:,i);
+    y_w(:,i) = [-sin(lat),0,cos(lat)];
+    %u_w(:,i) = samp.ang(:,i);
     
 end
 
 R0 = [-sin(lat),0,-cos(lat);0,1,0;cos(lat),0,-sin(lat)]*R_align;
-Rb = adap_so3(y,u,samp.stamp,R0);
+wrand = [3,10,10];
+
+R_distr = rph2R(wrand*pi/180);
+R0 = eye(3); %R0*R_distr;
+Rb = adap_so3(y_a,u_a,y_w,u_w,samp.stamp,R0,Rd);
 
 disp('Computing att');
 
-out.u = u;
-out.y = y;
+out.u_a = u_a;
+out.y_a = y_a;
+out.y_w = y_w;
+out.u_w = u_w;
 out.Rb = Rb;
 out.Rsn = Rsn;
 out.Rd = Rd;

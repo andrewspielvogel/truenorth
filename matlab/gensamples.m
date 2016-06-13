@@ -15,7 +15,8 @@ Rb = [-sin(lat),0,-cos(lat);0,1,0;cos(lat),0,-sin(lat)]*R_align;
 
 
 % Define t
-t = 0:1/hz:t_end;
+dt = 1/hz;
+t = 0:dt:t_end;
 
 % noise
 w_sig = 6.32 * 10^(-3)*pi/180;  % measured 1775, units are rad/sec
@@ -27,11 +28,14 @@ num = size(t,2);
 samp.ang = zeros(3,num);
 samp.acc = zeros(3,num);
 
+samp.Rd{1} = eye(3);
+
 for i=1:num
 
-
-    samp.ang(:,i) =  Rb'*[0;0;1]*15*pi/180/3600 + w_sig*randn(3,1) + bias.ang;
-    samp.acc(:,i) = Rb'*[cos(lat);0;sin(lat)]  + a_sig*randn(3,1) + bias.acc;
+    w = get_w(t(num));
+    samp.Rd{i+1} = samp.Rd{i}*expm(skew(w*dt));
+    samp.ang(:,i) = samp.Rd{i}'*(Rb'*[0;0;1]*15*pi/180/3600 + w) + w_sig*randn(3,1) + bias.ang;
+    samp.acc(:,i) = samp.Rd{i}'*Rb'*[cos(lat);0;sin(lat)]  + a_sig*randn(3,1) + bias.acc;
     
     % print progress
     if ~mod(t(i),30)

@@ -16,34 +16,35 @@ samp = wrapToPi(samp)*180/pi;
 subplot(3,1,1);
 hold on;
 plot(ground.t,ground.gyro_attitude(:,3),'-r');
-plot(data.t,samp(:,1),'-b');
+data_t = taxis(data.t);
+plot(data_t,samp(:,1),'-b');
 title('Roll');
 ylabel('Degrees');
-xlabel('Time [s]');
-xlim([data.t(1),data.t(end)]);
+xlabel(tlabel(data_t));
+xlim([data_t(1),data_t(end)]);
 grid on;
 
 subplot(3,1,2);
 hold on;
 plot(ground.t,ground.gyro_attitude(:,2),'-r');
-plot(data.t,samp(:,2),'-b');
+plot(data_t,samp(:,2),'-b');
 
 
 
 title('Pitch');
 ylabel('Degrees');
-xlabel('Time [s]');
-xlim([data.t(1),data.t(end)]);
+xlabel(tlabel(data_t));
+xlim([data_t(1),data_t(end)]);
 grid on;
 
 subplot(3,1,3);
 hold on;
 plot(ground.t,ground.gyro_attitude(:,1),'-r');
-plot(data.t,samp(:,3),'-b');
+plot(data_t,samp(:,3),'-b');
 title('Heading');
 ylabel('Degrees');
-xlabel('Time [s]');
-xlim([data.t(1),data.t(end)]);
+xlabel(tlabel(data_t));
+xlim([data_t(1),data_t(end)]);
 grid on;
 legend('Phins','KVH');
 
@@ -69,29 +70,29 @@ hold on;
 
 subplot(3,1,1);
 hold on;
-plot(data.t,diff(:,1));
+plot(data_t,diff(:,1));
 title('Roll');
 ylabel('Degrees');
-xlabel('Time [s]');
-xlim([data.t(1),data.t(end)]);
+xlabel(tlabel(data_t));
+xlim([data_t(1),data_t(end)]);
 grid on;
 
 subplot(3,1,2);
 hold on;
-plot(data.t,diff(:,2));
+plot(data_t,diff(:,2));
 title('Pitch');
 ylabel('Degrees');
-xlabel('Time [s]');
-xlim([data.t(1),data.t(end)]);
+xlabel(tlabel(data_t));
+xlim([data_t(1),data_t(end)]);
 grid on;
 
 subplot(3,1,3);
 hold on;
-plot(data.t,diff(:,3));
+plot(data_t,diff(:,3));
 title('Heading');
 ylabel('Degrees');
-xlabel('Time [s]');
-xlim([data.t(1),data.t(end)]);
+xlabel(tlabel(data_t));
+xlim([data_t(1),data_t(end)]);
 grid on;
 
 
