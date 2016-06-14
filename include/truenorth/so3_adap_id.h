@@ -30,7 +30,7 @@ class SO3AdapId
 {
 public:
 
-  SO3AdapId(float,Eigen::Matrix3d); /**< Constructor. */
+  SO3AdapId(float, float ,Eigen::Matrix3d); /**< Constructor. */
   virtual ~SO3AdapId(void); /**< Destructor. */
     
   /**
@@ -41,9 +41,12 @@ public:
    * @param y Output measurement.
    * @param dt Time between samples.
    */
-  void step(Eigen::Vector3d u,Eigen::Vector3d y,float dt);
+  void step(Eigen::Vector3d u_a,Eigen::Vector3d y_a,Eigen::Vector3d u_e,Eigen::Vector3d y_e, float dt);
   Eigen::Matrix3d R; /**< Estimatation of static rotation. */
-  float k;    /**< Estimation gain. */
+ private:
+
+  float k1_;    /**< Local Level estimation gain. */
+  float k2_;    /**< Heading estimation gain. */
     
 
 };

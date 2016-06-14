@@ -58,7 +58,7 @@ int main(int argc, char **argv)
     R_align.resize(3,3);
 
     // estimation gains
-    std::string gains = "1.0,0.005,0.005,0.005,0.3";  // default
+    std::string gains = "1.0,0.005,0.005,0.005,1.0,1.0";  // default
     n.getParam("gains",gains);
     
     Eigen::MatrixXd k = parse_string(gains);

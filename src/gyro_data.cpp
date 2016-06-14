@@ -26,7 +26,7 @@
  *
  */
 
-GyroData::GyroData(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_location, Eigen::Matrix3d R0):Rbar_(k(4),R0)
+GyroData::GyroData(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_location, Eigen::Matrix3d R0):Rbar_(k(4),k(5),R0)
 {
   // define inialization values
   Eigen::Vector3d zero_init(0.0,0.0,0.0);
@@ -59,6 +59,7 @@ GyroData::GyroData(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_loc
   k3_ = k(2);
   k4_ = k(3);
   k5_ = k(4);
+  k6_ = k(5);
 
   // initialize initial bias fields
   bias_acc = zero_init;
@@ -147,12 +148,16 @@ void GyroData::est_att()
   Eigen::Matrix3d R_sn = get_R_sn(lat,timestamp-t_start_);
   
   // Define inputs and outputs
-  Eigen::Vector3d u = Rd_*(acc_est-bias_acc);
-  Eigen::Vector3d acc_n(0.0,0.0,-1.0);
-  Eigen::Vector3d y = R_sn*acc_n;
+  Eigen::Vector3d u_a = Rd_*(acc_est-bias_acc);
+  Eigen::Vector3d acc_ned(0.0,0.0,-1.0);
+  Eigen::Vector3d y_a = R_sn*acc_ned;
+
+  Eigen::Vector3d u_e = Rd_*skew(ang-bias_ang)*(acc_est-bias_acc);
+  Eigen::Vector3d east_ned(0.0,1.0,0.0);
+  Eigen::Vector3d y_e = R_sn*acc_ned;
 
   // cycle Rbar estimation
-  Rbar_.step(u,y,diff);
+  Rbar_.step(u_a,y_a,u_e,y_e,diff);
 
   Eigen::Matrix3d R_si = Rbar_.R*Rd_;
   Eigen::Matrix3d R_ni = R_sn.transpose()*R_si;

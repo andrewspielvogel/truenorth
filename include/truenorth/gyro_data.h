@@ -65,7 +65,8 @@ public:
     float k2_; /**< Linear acceleration bias estimation gain. */
     float k3_; /**< Angular velocity bias estimation gain. */
     float k4_; /**< z bias constant estimation gain. */
-    float k5_; /**< Attitude estimation gain. */
+    float k5_; /**< Local level estimation gain. */
+    float k6_;    /**< Heading estimation gain. */
 
     float t_start_; /**< Start time. */
 
