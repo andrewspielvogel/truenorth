@@ -16,7 +16,7 @@ disp('Computing Rb');
 
 
 R0 = [-sin(lat),0,-cos(lat);0,1,0;cos(lat),0,-sin(lat)]*R_align;
-wrand = [10,10,10];
+wrand = [5,0,0];
 
 R_distr = rph2R(wrand*pi/180);
 R0 = R0*R_distr;

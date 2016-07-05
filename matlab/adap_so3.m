@@ -15,11 +15,14 @@ e_error = zeros(3,num_samp);
 
 k_a = 1;
 k_w = 500;
-k_w2 = 30;
+k_w2 = 500;
+k_w3 = 500;
 
 for i=2:num_samp
     
-    if samp.stamp(i)> 60*3
+    if samp.stamp(i)> 60*5
+        k_w = k_w3;
+    elseif samp.stamp(i)> 60*3
         k_w = k_w2;
     end
     

@@ -154,7 +154,7 @@ void GyroData::est_att()
 
   Eigen::Vector3d u_e = Rd_*skew(ang-bias_ang)*(acc_est-bias_acc);
   Eigen::Vector3d east_ned(0.0,1.0,0.0);
-  Eigen::Vector3d y_e = R_sn*acc_ned;
+  Eigen::Vector3d y_e = R_sn*east_ned;
 
   // cycle Rbar estimation
   Rbar_.step(u_a,y_a,u_e,y_e,diff);
