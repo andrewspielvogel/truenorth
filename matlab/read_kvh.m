@@ -16,6 +16,6 @@ out.temp = csv_input(:,10)';
 out.seq_num = csv_input(:,11)';
 out.stamp = csv_input(:,12)';
 out.status = csv_input(:,13:18)';
-out.t = out.stamp;
+out.t = out.stamp-out.stamp(1);
 out.hz = round(1/(((out.stamp(end)-out.stamp(1)))/size(out.stamp,2)));
 out.att = csv_input(:,19:21);

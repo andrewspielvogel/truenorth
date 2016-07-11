@@ -16,7 +16,7 @@ disp('Computing Rb');
 
 
 R0 = [-sin(lat),0,-cos(lat);0,1,0;cos(lat),0,-sin(lat)]*R_align;
-wrand = [5,0,0];
+wrand = [1,0,0];
 
 R_distr = rph2R(wrand*pi/180);
 R0 = R0*R_distr;
@@ -27,11 +27,12 @@ disp('Computing att');
 
 out.Rb = Rb;
 out.Rd = Rd;
-out.Rsn = get_Rsn(lat,samp.stamp);
+out.Rsn = get_Rsn(lat,samp.t);
 out.Rsi = cellfun(@(A,B) A*B,Rb.R,Rd,'UniformOutput',false);
 out.Rin = cellfun(@(A,B) R_align*B'*A,out.Rsn,out.Rsi,'UniformOutput',false);
 out.att = rph(out.Rin);
-out.t = samp.stamp;
+out.t = samp.t;
+out.stamp = samp.stamp;
 
 toc 
 

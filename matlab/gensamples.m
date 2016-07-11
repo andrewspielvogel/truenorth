@@ -32,7 +32,7 @@ samp.Rd{1} = eye(3);
 
 for i=1:num
 
-    w = get_w(t(num));
+    w = get_w(t(i));
     samp.Rd{i+1} = samp.Rd{i}*expm(skew(w*dt));
     samp.ang(:,i) = samp.Rd{i}'*(Rb'*[0;0;1]*15*pi/180/3600 + w) + w_sig*randn(3,1) + bias.ang;
     samp.acc(:,i) = samp.Rd{i}'*Rb'*[cos(lat);0;sin(lat)]  + a_sig*randn(3,1) + bias.acc;

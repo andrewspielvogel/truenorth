@@ -11,7 +11,6 @@
 #define HELPER_FUNCS_H
 
 #include <math.h>  
-#include <ros/ros.h>
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 #include <Eigen/Dense>
@@ -120,7 +119,7 @@ inline Eigen::Matrix3d mat_exp(Eigen::Matrix3d R)
 inline Eigen::Matrix3d get_R_se(float t)
 {
 
-  float rate = 15*M_PI/180/3600;
+  float rate = 15.041*M_PI/180/3600;
 
   Eigen::Vector3d w(0,0,1.0);
 

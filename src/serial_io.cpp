@@ -404,7 +404,7 @@ void SerialPort::on_receive_(const boost::system::error_code& ec, size_t bytes_t
     }
     else 
     {
-      ROS_WARN("lost byte: %02X",c);
+      //ROS_WARN("lost byte: %02X",c);
 
       data_cnt_=0;
       state_=0;

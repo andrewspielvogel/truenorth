@@ -157,13 +157,13 @@ void GyroData::est_att()
   Eigen::Vector3d y_e = R_sn*east_ned;
 
   // cycle Rbar estimation
-  Rbar_.step(u_a,y_a,u_e,y_e,diff);
+  Rbar_.step(u_a,y_a,u_e.normalized(),y_e,diff);
 
   Eigen::Matrix3d R_si = Rbar_.R*Rd_;
-  Eigen::Matrix3d R_ni = R_sn.transpose()*R_si;
+  Eigen::Matrix3d R_nv = R_sn.transpose()*R_si*R_align_;
 
   // get attitude estimation
-  att = rot2rph(R_ni*R_align_);
+  att = rot2rph(R_nv);
 
   // cycle Rd matrix
   Eigen::Matrix3d dRd = skew((ang-bias_ang)*diff);

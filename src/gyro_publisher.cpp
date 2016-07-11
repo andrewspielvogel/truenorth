@@ -145,7 +145,7 @@ int main(int argc, char **argv)
 	  ROS_ERROR("No data for over %d seconds. Restarting node...",time_from_last_msg);
 	  serial.stop();
           // connect to serial port
-	  serial.start(port.c_str(),baud);
+	  //serial.start(port.c_str(),baud);
 
 	}
 
