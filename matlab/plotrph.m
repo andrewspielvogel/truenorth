@@ -20,7 +20,7 @@ data_t = taxis(data.t);
 plot(data_t,samp(:,1),'-b');
 title('Roll');
 ylabel('Degrees');
-xlabel(tlabel(data_t));
+xlabel(tlabel(data.t));
 xlim([data_t(1),data_t(end)]);
 grid on;
 
@@ -33,7 +33,7 @@ plot(data_t,samp(:,2),'-b');
 
 title('Pitch');
 ylabel('Degrees');
-xlabel(tlabel(data_t));
+xlabel(tlabel(data.t));
 xlim([data_t(1),data_t(end)]);
 grid on;
 
@@ -43,7 +43,7 @@ plot(ground.t,ground.gyro_attitude(:,1),'-r');
 plot(data_t,samp(:,3),'-b');
 title('Heading');
 ylabel('Degrees');
-xlabel(tlabel(data_t));
+xlabel(tlabel(data.t));
 xlim([data_t(1),data_t(end)]);
 grid on;
 legend('Phins','KVH');
@@ -73,7 +73,7 @@ hold on;
 plot(data_t,diff(:,1));
 title('Roll');
 ylabel('Degrees');
-xlabel(tlabel(data_t));
+xlabel(tlabel(data.t));
 xlim([data_t(1),data_t(end)]);
 grid on;
 
@@ -82,7 +82,7 @@ hold on;
 plot(data_t,diff(:,2));
 title('Pitch');
 ylabel('Degrees');
-xlabel(tlabel(data_t));
+xlabel(tlabel(data.t));
 xlim([data_t(1),data_t(end)]);
 grid on;
 
@@ -91,7 +91,7 @@ hold on;
 plot(data_t,diff(:,3));
 title('Heading');
 ylabel('Degrees');
-xlabel(tlabel(data_t));
+xlabel(tlabel(data.t));
 xlim([data_t(1),data_t(end)]);
 grid on;
 

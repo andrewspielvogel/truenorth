@@ -97,8 +97,7 @@ out.acc_est = acc_est;
 out.e_m = e_m;
 out.e_est_z_avg = e_est_z_avg;
 out.e_est_z_avg_n = e_est_z_avg_n;
-out.err = err;
-out.e_err = e_err;
+
 
 
 function R = get_Rse(t)
