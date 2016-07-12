@@ -146,6 +146,7 @@ int main(int argc, char **argv)
 	  serial.stop();
           // connect to serial port
 	  //serial.start(port.c_str(),baud);
+	  return 1;
 
 	}
 

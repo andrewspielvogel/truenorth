@@ -10,6 +10,7 @@ a_error = zeros(3,num_samp);
 
 e_true  = zeros(3,num_samp);
 e_est   = zeros(3,num_samp);
+e_est_n   = zeros(3,num_samp);
 e_est_z   = zeros(3,num_samp);
 e_est_i   = zeros(3,num_samp);
 e_error = zeros(3,num_samp);
@@ -21,18 +22,15 @@ acc_est = zeros(3,num_samp);
 acc_est(:,1) = samp.acc(:,1);
 
 e_est_z_avg = zeros(3,num_samp);
+e_est_z_avg_n = zeros(3,num_samp);
 
 
+k_g = 1;
 k_a = 1;
-k_w = 1000;%.005
-k_w2 = 100;
+k_w = 0.1;
 k_e = .01;
 
 for i=2:num_samp
-    
-    if samp.t(i) > 2*60
-        k_w = k_w2;
-    end
     
     dt = samp.t(i) - samp.t(i-1);
     
@@ -43,15 +41,16 @@ for i=2:num_samp
     a_true(:,i-1) = Rsn*[0;0;-1];
     a_est(:,i-1)  = R{i-1}*Rd{i-1}*samp.acc(:,i-1);
     
-    a_error(:,i-1) = k_a*R{i-1}'*cross(a_est(:,i-1),a_true(:,i-1));
+    a_error(:,i-1) = k_g*R{i-1}'*cross(a_est(:,i-1),a_true(:,i-1));
     
     
     % east vector estimation
     e_true(:,i-1) = Rsn*[0;1;0];
+    n_true = Rsn*[0;0;-1];
     
     da = samp.acc(:,i-1) - acc_est(:,i-1);
     
-    acc_est(:,i) = acc_est(:,i-1) + da*dt;
+    acc_est(:,i) = acc_est(:,i-1) + k_a*da*dt;
     
     dacc(:,i) = (acc_est(:,i)-acc_est(:,i-1))/dt;
     e_m(:,i-1) = skew(samp.ang(:,i-1))*acc_est(:,i-1);
@@ -60,15 +59,25 @@ for i=2:num_samp
     
     de = e_est_z(:,i-1) - e_est_z_avg(:,i-1);
     e_est_z_avg(:,i) = e_est_z_avg(:,i-1) + k_e*dt*de;
+    
+    e_est_z_avg_n(:,i) = e_est_z_avg(:,i)/norm(e_est_z_avg(:,i));
         
-    e_est(:,i-1) = R{i-1}*e_est_z_avg(:,i-1);
+    e_est(:,i-1) = R{i-1}*e_est_z_avg(:,i);
     
-    e_error(:,i-1) = k_w*R{i-1}'*cross(e_est(:,i-1),e_true(:,i-1));
+    e_est_n(:,i-1) = e_est(:,i-1)/norm(e_est(:,i-1));
+    
+    e_err(:,i-1) = cross(e_est_n(:,i-1),e_true(:,i-1));
+    
+    err(:,i-1) = dot(e_err(:,i-1),n_true)*n_true;
+    
+    e_error(:,i-1) = k_w*R{i-1}'*err(:,i-1);
     
     
-    dR = expm(skew(a_error(:,i-1)+e_error(:,i-1))*dt);
+    dR_a = expm(skew(a_error(:,i-1))*dt);
+    dR_w = expm(skew(e_error(:,i-1))*dt);
     
-    R{i} = R{i-1}*dR;
+    
+    R{i} = R{i-1}*dR_a*dR_w;
     
     
 end
@@ -79,6 +88,7 @@ out.a_est   = a_est;
 out.a_error = a_error;
 out.e_true  = e_true;
 out.e_est   = e_est;
+out.e_est_n   = e_est_n;
 out.e_est_z   = e_est_z;
 out.e_est_i   = e_est_i;
 out.e_error = e_error;
@@ -86,6 +96,9 @@ out.dacc = dacc;
 out.acc_est = acc_est;
 out.e_m = e_m;
 out.e_est_z_avg = e_est_z_avg;
+out.e_est_z_avg_n = e_est_z_avg_n;
+out.err = err;
+out.e_err = e_err;
 
 
 function R = get_Rse(t)
