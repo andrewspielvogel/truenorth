@@ -28,7 +28,7 @@ e_est_z_avg_n = zeros(3,num_samp);
 k_g = 1;
 k_a = 1;
 k_w = 0.1;
-k_e = .01;
+k_e = .005;
 
 for i=2:num_samp
     
@@ -46,7 +46,7 @@ for i=2:num_samp
     
     % east vector estimation
     e_true(:,i-1) = Rsn*[0;1;0];
-    n_true = Rsn*[0;0;-1];
+    up_true = Rsn*[0;0;-1];
     
     da = samp.acc(:,i-1) - acc_est(:,i-1);
     
@@ -66,11 +66,11 @@ for i=2:num_samp
     
     e_est_n(:,i-1) = e_est(:,i-1)/norm(e_est(:,i-1));
     
-    e_err(:,i-1) = cross(e_est_n(:,i-1),e_true(:,i-1));
+    e_err = cross(e_est_n(:,i-1),e_true(:,i-1));
     
-    err(:,i-1) = dot(e_err(:,i-1),n_true)*n_true;
+    err = dot(e_err,up_true)*up_true;
     
-    e_error(:,i-1) = k_w*R{i-1}'*err(:,i-1);
+    e_error(:,i-1) = k_w*R{i-1}'*err;
     
     
     dR_a = expm(skew(a_error(:,i-1))*dt);
