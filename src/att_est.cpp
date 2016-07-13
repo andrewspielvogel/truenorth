@@ -28,7 +28,6 @@
  */
 AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R0)
 {
-  
   ka_ = k(0);
   ke_ = k(1);
   kg_ = k(2);
@@ -82,7 +81,6 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float t, float dt)
   Eigen::Vector3d acc_est_s  = Rb_*Rd_*acc_est_prev;
 
   Eigen::Vector3d g_error = kg_*Rb_.transpose()*skew(acc_est_s)*acc_true_s;
-
 
   // estimate east
   Eigen::Vector3d east_true_s = R_sn*east_n;

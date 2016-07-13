@@ -61,7 +61,6 @@ public:
  private:
     FILE *fp_; /**< Log file. */
     AttEst Rbar_; /**< Rbar matrix estimation. */
-    Eigen::Matrix3d Rd_; /**< Rdelta matrix. */
     Eigen::Matrix3d R_align_; /**< Instrument coordinate frame to vehicle coordinate frame rotation */
     float k1_; /**< Linear acceleration estimation gain. */
     float k2_; /**< Linear acceleration bias estimation gain. */

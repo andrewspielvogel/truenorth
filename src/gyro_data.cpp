@@ -26,7 +26,7 @@
  *
  */
 
-GyroData::GyroData(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_location, Eigen::Matrix3d R0):Rbar_(k.tail(4),R0)
+GyroData::GyroData(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_location, Eigen::Matrix3d R0):Rbar_(k.tail(5),R0)
 {
   // define inialization values
   Eigen::Vector3d zero_init(0.0,0.0,0.0);
@@ -35,7 +35,6 @@ GyroData::GyroData(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_loc
   init_mat << 1,0,0,0,1,0,0,0,1;
 
   //initialize est_att
-  Rd_ = init_mat;
   att = zero_init;
 
   R_align_ = align;
