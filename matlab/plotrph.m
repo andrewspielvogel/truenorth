@@ -6,8 +6,7 @@ samp = data.att;
 figure;
 hold on;
 
-
-ground.t = ground.t-data.t(1);
+ground.t = ground.t-data.stamp(1);
 data.t = data.t-data.t(1);
 
 ground.gyro_attitude=wrapToPi(ground.gyro_attitude*pi/180)*180/pi;

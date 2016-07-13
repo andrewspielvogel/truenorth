@@ -22,13 +22,12 @@ acc_est = zeros(3,num_samp);
 acc_est(:,1) = samp.acc(:,1);
 
 e_est_z_avg = zeros(3,num_samp);
-e_est_z_avg_n = zeros(3,num_samp);
 
 
 k_g = 1;
 k_a = 1;
-k_w = 0.1;
-k_e = .005;
+k_w = .05;
+k_e = .0001;
 
 for i=2:num_samp
     
@@ -36,39 +35,40 @@ for i=2:num_samp
     
     Rsn = get_Rsn(lat,samp.t(i-1));
     
+    % 1st order filter acc signal
+    da = samp.acc(:,i-1) - acc_est(:,i-1);
+    
+    acc_est(:,i) = acc_est(:,i-1) + k_a*da*dt;
     
     % gravity vector estimation
     a_true(:,i-1) = Rsn*[0;0;-1];
-    a_est(:,i-1)  = R{i-1}*Rd{i-1}*samp.acc(:,i-1);
+    a_est(:,i-1)  = R{i-1}*Rd{i-1}*acc_est(:,i-1);
     
     a_error(:,i-1) = k_g*R{i-1}'*cross(a_est(:,i-1),a_true(:,i-1));
     
     
-    % east vector estimation
-    e_true(:,i-1) = Rsn*[0;1;0];
-    up_true = Rsn*[0;0;-1];
-    
-    da = samp.acc(:,i-1) - acc_est(:,i-1);
-    
-    acc_est(:,i) = acc_est(:,i-1) + k_a*da*dt;
+    % east vector estimation in t_zero frame
+    e_true(:,i-1) = Rsn*[0;1;0];    
     
     dacc(:,i) = (acc_est(:,i)-acc_est(:,i-1))/dt;
     e_m(:,i-1) = skew(samp.ang(:,i-1))*acc_est(:,i-1);
     e_est_i(:,i-1) = e_m(:,i-1)  + dacc(:,i-1);
     e_est_z(:,i-1) = Rd{i-1}*e_est_i(:,i-1);
     
+    
+    % 1st order filter east estimation signal
     de = e_est_z(:,i-1) - e_est_z_avg(:,i-1);
     e_est_z_avg(:,i) = e_est_z_avg(:,i-1) + k_e*dt*de;
+            
     
-    e_est_z_avg_n(:,i) = e_est_z_avg(:,i)/norm(e_est_z_avg(:,i));
-        
+    % heading updat law
     e_est(:,i-1) = R{i-1}*e_est_z_avg(:,i);
     
     e_est_n(:,i-1) = e_est(:,i-1)/norm(e_est(:,i-1));
     
     e_err = cross(e_est_n(:,i-1),e_true(:,i-1));
     
-    err = dot(e_err,up_true)*up_true;
+    err = dot(e_err,a_true)*a_true;
     
     e_error(:,i-1) = k_w*R{i-1}'*err;
     
@@ -96,7 +96,6 @@ out.dacc = dacc;
 out.acc_est = acc_est;
 out.e_m = e_m;
 out.e_est_z_avg = e_est_z_avg;
-out.e_est_z_avg_n = e_est_z_avg_n;
 
 
 
