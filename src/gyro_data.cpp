@@ -16,7 +16,7 @@
 #include <Eigen/Dense>
 #include <truenorth/gyro_data.h>
 #include <truenorth/helper_funcs.h>
-#include <truenorth/so3_adap_id.h>
+#include <truenorth/att_est.h>
 #include <ctime>
 #include <string>
 
@@ -26,7 +26,7 @@
  *
  */
 
-GyroData::GyroData(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_location, Eigen::Matrix3d R0):Rbar_(k(4),k(5),R0)
+GyroData::GyroData(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_location, Eigen::Matrix3d R0):Rbar_(k.tail(4),R0)
 {
   // define inialization values
   Eigen::Vector3d zero_init(0.0,0.0,0.0);
@@ -50,7 +50,7 @@ GyroData::GyroData(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_loc
   seq_num = 500;
   status = init_stat;
   timestamp = ros::Time::now().toSec();
-  t_start_ = timestamp;
+  t_start = timestamp;
   diff = 0.0;
   
   // assign gains for bias estimation
@@ -142,31 +142,11 @@ void GyroData::est_bias()
 // estimate attitude
 void GyroData::est_att()
 {
-
-  float lat = 39.32*M_PI/180;
-
-  Eigen::Matrix3d R_sn = get_R_sn(lat,timestamp-t_start_);
+  Rbar_.step(ang-bias_ang,acc-bias_acc,timestamp-t_start,diff);
   
-  // Define inputs and outputs
-  Eigen::Vector3d u_a = Rd_*(acc_est-bias_acc);
-  Eigen::Vector3d acc_ned(0.0,0.0,-1.0);
-  Eigen::Vector3d y_a = R_sn*acc_ned;
-
-  Eigen::Vector3d u_e = Rd_*skew(ang-bias_ang)*(acc_est-bias_acc);
-  Eigen::Vector3d east_ned(0.0,1.0,0.0);
-  Eigen::Vector3d y_e = R_sn*east_ned;
-
-  // cycle Rbar estimation
-  Rbar_.step(u_a,y_a,u_e.normalized(),y_e,diff);
-
-  Eigen::Matrix3d R_si = Rbar_.R*Rd_;
-  Eigen::Matrix3d R_nv = R_sn.transpose()*R_si*R_align_;
-
+  
   // get attitude estimation
-  att = rot2rph(R_nv);
+  att = rot2rph(Rbar_.R_ni*R_align_);
 
-  // cycle Rd matrix
-  Eigen::Matrix3d dRd = skew((ang-bias_ang)*diff);
-  Rd_ = Rd_*mat_exp(dRd);
 
 }

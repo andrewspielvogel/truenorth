@@ -86,6 +86,15 @@ void SerialPort::parse_data_( char *data_raw)
   // store sequence number
   unsigned int seq_num = (unsigned int) (((unsigned char *) data_raw)[33]);
 
+  // define time and diff
+  data.diff = timestamp.f - data.timestamp;
+  data.timestamp = timestamp.f;
+
+  if (data.seq_num > 200){
+
+    data.t_start = data.timestamp;
+
+  }
 
   // store data
   data.ang = w;
@@ -96,9 +105,6 @@ void SerialPort::parse_data_( char *data_raw)
 
   data.temp = temp.f;
 
-  // define time and diff
-  data.diff = timestamp.f - data.timestamp;
-  data.timestamp = timestamp.f;
 
   // check for lost data packets
   if (skipped>1&&skipped<127)
@@ -112,8 +118,8 @@ void SerialPort::parse_data_( char *data_raw)
   data.log();
 
   //run integration, will need to add storage of previous estimate in GyroData class
-  data.est_bias();
-  data.est_att();
+  //data.est_bias();
+  //data.est_att();
  
 }
 
@@ -221,8 +227,8 @@ void SerialPort::parse_data_( char *data_raw)
   data.log();
 
   //run integration, will need to add storage of previous estimate in GyroData class
-  data.est_bias();
-  data.est_att();
+  //data.est_bias();
+  //data.est_att();
  
 }
 

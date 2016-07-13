@@ -12,7 +12,7 @@
 #ifndef GYRO_DATA_H
 #define GYRO_DATA_H
 
-#include <truenorth/so3_adap_id.h>
+#include <truenorth/att_est.h>
 #include <Eigen/Core>
 #include <string>
 
@@ -56,9 +56,11 @@ public:
     virtual ~GyroData(void); /**< Destructor. */
     void log(); /**< Log data. */
 
+    float t_start; /**< Start time. */
+
  private:
     FILE *fp_; /**< Log file. */
-    SO3AdapId Rbar_; /**< Rbar matrix estimation. */
+    AttEst Rbar_; /**< Rbar matrix estimation. */
     Eigen::Matrix3d Rd_; /**< Rdelta matrix. */
     Eigen::Matrix3d R_align_; /**< Instrument coordinate frame to vehicle coordinate frame rotation */
     float k1_; /**< Linear acceleration estimation gain. */
@@ -68,7 +70,6 @@ public:
     float k5_; /**< Local level estimation gain. */
     float k6_;    /**< Heading estimation gain. */
 
-    float t_start_; /**< Start time. */
 
 };
 
