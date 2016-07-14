@@ -26,13 +26,13 @@ e_est_z_avg = zeros(3,num_samp);
 
 k_g = 1;
 k_a = 1;
-k_w = .005;
-k_e = .0001;
+k_w = .0001;
+k_e = .1;
 
 for i=2:num_samp
     
-    dt = samp.t(i) - samp.t(i-1);
-    
+    %dt = samp.t(i) - samp.t(i-1);
+    dt = 1/5000;
     Rsn = get_Rsn(lat,samp.t(i-1));
     
     % 1st order filter acc signal
