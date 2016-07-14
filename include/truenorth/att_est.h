@@ -34,6 +34,7 @@ public:
   void step(Eigen::Vector3d w,Eigen::Vector3d a, float t, float dt);
   Eigen::Matrix3d R_ni;
  
+
  private:
 
   Eigen::Matrix3d Rb_; /**< Estimatation of static rotation. */

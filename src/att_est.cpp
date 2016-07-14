@@ -70,7 +70,7 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float t, float dt)
   Eigen::Vector3d acc_est_prev = acc_est_;
 
   // filter acc
-  Eigen::Vector3d da = acc_est_ - acc;
+  Eigen::Vector3d da = acc - acc_est_;
   acc_est_ = acc_est_ + ka_*da*dt;
 
   // differentiant acc_est
