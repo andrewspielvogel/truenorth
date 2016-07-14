@@ -26,7 +26,7 @@ e_est_z_avg = zeros(3,num_samp);
 
 k_g = 1;
 k_a = 1;
-k_w = .05;
+k_w = .005;
 k_e = .0001;
 
 for i=2:num_samp
@@ -68,7 +68,7 @@ for i=2:num_samp
     
     e_err = cross(e_est_n(:,i-1),e_true(:,i-1));
     
-    err = dot(e_err,a_true)*a_true;
+    err = dot(e_err,a_true(:,i-1))*a_true(:,i-1);
     
     e_error(:,i-1) = k_w*R{i-1}'*err;
     

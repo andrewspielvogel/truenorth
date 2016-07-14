@@ -26,10 +26,10 @@ public:
   /**
    * @brief Cycle estimation once.
    *
-   * Assume input output relation is \f$y = Ru\f$ where \f$R\in SO(3)\f$ is constant
-   * @param u Input measurement.
-   * @param y Output measurement.
-   * @param dt Time between samples.
+   * @param w Angular velocity measurement.
+   * @param a Linear acceleration measurement.
+   * @param t Time of measurement.
+   * @param dt Time between last two measurements.
    */
   void step(Eigen::Vector3d w,Eigen::Vector3d a, float t, float dt);
   Eigen::Matrix3d R_ni;
