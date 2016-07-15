@@ -113,7 +113,7 @@ public:
      * @param log_location_ Location of IMU data log file.
      * @param R0 Initial estimate of Rbar.
      */
- SerialPort(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_location,Eigen::Matrix3d R0): data(k,align, log_location, R0){};
+ SerialPort(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_location): data(k,align, log_location){};
 
     virtual ~SerialPort(void); /**< Destructor */
 

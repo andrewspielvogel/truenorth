@@ -52,7 +52,7 @@ public:
      * @param log_location Location of log file.
      * @param R0 Initial estimate of Rbar matrix.
      */
-    GyroData(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_location, Eigen::Matrix3d R0);
+    GyroData(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_location);
     virtual ~GyroData(void); /**< Destructor. */
     void log(); /**< Log data. */
 

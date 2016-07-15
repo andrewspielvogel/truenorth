@@ -69,10 +69,8 @@ int main(int argc, char **argv)
 
     float lat = 39.32*M_PI/180;
 
-    Eigen::Matrix3d R0 = get_R_en(lat);
-    R0 = R0*R_align;
 
-    SerialPort serial(k, R_align,log_location.c_str(),R0);
+    SerialPort serial(k, R_align,log_location.c_str());
 
     // connect to serial port
     bool connected =  serial.start(port.c_str(),baud);

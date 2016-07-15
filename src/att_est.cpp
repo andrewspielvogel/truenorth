@@ -35,9 +35,9 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align)
 
   lat_ =  39.32*M_PI/180;
 
-  Eigen::Matrix3d R_sn = get_R_sn(lat_, 0);
+  Eigen::Matrix3d R_en = get_R_en(lat_);
 
-  Rb_ = R_sn*R_align;
+  Rb_ = R_en*R_align;
 
   Rd_ = Eigen::Matrix3d::Identity(3,3);
 
