@@ -33,11 +33,11 @@ public:
    */
   void step(Eigen::Vector3d w,Eigen::Vector3d a, float t, float dt);
   Eigen::Matrix3d R_ni;
- 
+   Eigen::Matrix3d Rb_; /**< Estimatation of Rbar rotation. */
+
 
  private:
 
-  Eigen::Matrix3d Rb_; /**< Estimatation of static rotation. */
 
   Eigen::Matrix3d Rd_;
   float lat_;

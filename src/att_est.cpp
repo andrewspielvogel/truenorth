@@ -26,22 +26,23 @@
  * @param gain Estimation gain.
  * @param R0 Initial rotation estimate.
  */
-AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R0)
+AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align)
 {
   ka_ = k(0);
   ke_ = k(1);
   kg_ = k(2);
   kw_ = k(3);
-  Rb_ << R0;
 
-  Eigen::Vector3d zeros(0,0,0);
+  lat_ =  39.32*M_PI/180;
+
+  Eigen::Matrix3d R_sn = get_R_sn(lat_, 0);
+
+  Rb_ = R_sn*R_align;
 
   Rd_ = Eigen::Matrix3d::Identity(3,3);
 
-  acc_est_ = zeros;
-  east_est_z_ = zeros;
-
-  lat_ =  39.32*M_PI/180;
+  acc_est_ = -R_align.block<3,1>(0,2);
+  east_est_z_ = R_align.block<3,1>(0,1);
 
 }
 
@@ -92,16 +93,16 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float t, float dt)
 
   // calculate heading error
   Eigen::Vector3d east_est_s = Rb_*east_est_z_;
-  east_est_s.normalize();
+
   Eigen::Vector3d east_error_s = skew(east_est_s)*east_true_s;
   Eigen::Vector3d east_error_s_along_g = east_error_s.dot(acc_true_s)*acc_true_s;
 
   Eigen::Vector3d east_error = kw_*Rb_.transpose()*east_error_s_along_g;
 
-
   // update laws
   Eigen::Matrix3d dR_g = mat_exp(skew(g_error)*dt);
   Eigen::Matrix3d dR_e = mat_exp(skew(east_error)*dt);
+
 
   // update R
   Rb_ = Rb_*dR_g*dR_e;
