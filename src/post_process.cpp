@@ -10,7 +10,8 @@
 int main(int argc, char* argv[])
 {
 
-  int rows = 5000*60*8.5;
+  int hz = 5000;
+  int rows = hz*60*8.5;
   int cols = 21;
   float lat = 39.32*180/M_PI;
   Eigen::Matrix3d R_align;
@@ -44,15 +45,24 @@ int main(int argc, char* argv[])
     trph.block<3,1>(1,i-1) = rot2rph(att.R_ni*R_align);
     trph.block<3,1>(4,i-1) = rot2rph(att.Rb_);
 
+    if (i % (hz*30) == 0) {
+      
+      int seconds = i/hz;
+      int hours   = seconds/3600;
+      int minutes = (seconds - hours*3600)/60;
+      seconds = seconds - hours*3600 - minutes*60;
+      printf("%02d:%02d:%02d OF DATA PROCESSED\n",hours,minutes,seconds); 
+
+    }
+
   }
+
+  printf("WRITING TO FILE: %s\n",name_out.c_str());
 
   Eigen::IOFormat CSVFormat(Eigen::FullPrecision, Eigen::DontAlignCols, ", ", "\n");
   std::ofstream ofile(name_out.c_str());
 
   ofile << trph.format(CSVFormat);
   ofile.close();
-  
-  std::cout<<att.Rb_<<std::endl;
-std::cout<<att.R_ni<<std::endl;
 
 }
