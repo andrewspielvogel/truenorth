@@ -44,6 +44,7 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align)
   acc_est_ = -R_align.block<3,1>(0,2);
   east_est_z_ = R_align.block<3,1>(0,1);
 
+
 }
 
 /**
@@ -63,7 +64,6 @@ AttEst::~AttEst(void)
  */
 void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float t, float dt)
 {
-
   Eigen::Matrix3d R_sn = get_R_sn(lat_, t);
 
   Eigen::Vector3d up_n(0,0,-1);
@@ -89,14 +89,14 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float t, float dt)
   Eigen::Vector3d east_est_z = Rd_*east_est;
 
   // filter east estimation signal
-  east_est_z_ = east_est_z_ +ke_*dt*(east_est_z-east_est_z_);
+  east_est_z_ = east_est_z_ + ke_*dt*(east_est_z-east_est_z_);
+  
+  east_est_z_.normalize();
 
   // calculate heading error
   Eigen::Vector3d east_est_s = Rb_*east_est_z_;
-
   Eigen::Vector3d east_error_s = skew(east_est_s)*east_true_s;
   Eigen::Vector3d east_error_s_along_g = east_error_s.dot(acc_true_s)*acc_true_s;
-
   Eigen::Vector3d east_error = kw_*Rb_.transpose()*east_error_s_along_g;
 
   // update laws
