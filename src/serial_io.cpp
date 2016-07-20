@@ -119,7 +119,7 @@ void SerialPort::parse_data_( char *data_raw)
 
   //run integration, will need to add storage of previous estimate in GyroData class
   //data.est_bias();
-  //data.est_att();
+  data.est_att();
  
 }
 
@@ -210,10 +210,6 @@ void SerialPort::parse_data_( char *data_raw)
   data.seq_num = seq_num;
   data.status = status;
 
-  // define time and diff
-  double time = ros::Time::now().toSec();
-  data.diff = time - data.timestamp;
-  data.timestamp = time;
 
   // check for lost data packets
   if (skipped>1&&skipped<127)
@@ -394,6 +390,11 @@ void SerialPort::on_receive_(const boost::system::error_code& ec, size_t bytes_t
 	if (crc_sent_sum == crc_calc_sum) 
 	{	
 		    
+	  // define time and diff
+	  double time = ros::Time::now().toSec();
+	  data.diff = time - data.timestamp;
+	  data.timestamp = time;
+
 	  // parse data
 	  parse_data_(data_buf_raw_);
 			    

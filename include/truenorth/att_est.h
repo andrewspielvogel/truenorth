@@ -20,7 +20,7 @@ class AttEst
 {
 public:
 
-  AttEst(Eigen::VectorXd k,Eigen::Matrix3d R0); /**< Constructor. */
+  AttEst(Eigen::VectorXd k,Eigen::Matrix3d R0, float lat); /**< Constructor. */
   virtual ~AttEst(void); /**< Destructor. */
     
   /**
@@ -35,14 +35,18 @@ public:
   Eigen::Matrix3d R_ni;
    Eigen::Matrix3d Rb_; /**< Estimatation of Rbar rotation. */
 
-
+  Eigen::Vector3d acc_est_;
+  Eigen::Vector3d east_est_z_;
+  Eigen::Vector3d east_error_;
+  Eigen::Vector3d g_error_;
+  Eigen::Vector3d ang_est_;
+  Eigen::Vector3d dacc_;
  private:
 
 
   Eigen::Matrix3d Rd_;
   float lat_;
-  Eigen::Vector3d acc_est_;
-  Eigen::Vector3d east_est_z_;
+
   
   float kg_;    
   float ka_;    

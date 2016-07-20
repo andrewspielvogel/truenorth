@@ -63,14 +63,16 @@ int main(int argc, char **argv)
     
     Eigen::MatrixXd k = parse_string(gains);
 
+    // latitude
+    double lat_input = 39.32*M_PI/180;
+    n.getParam("latitude",lat_input);
+    float lat  = (float) lat_input;
+
     /*
      * INITIALIZE SERIAL PORT
      */
 
-    float lat = 39.32*M_PI/180;
-
-
-    SerialPort serial(k, R_align,log_location.c_str());
+    SerialPort serial(k, R_align,log_location.c_str(),lat);
 
     // connect to serial port
     bool connected =  serial.start(port.c_str(),baud);
