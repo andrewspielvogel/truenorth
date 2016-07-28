@@ -1,12 +1,12 @@
-function out = att_est( samp , real)
+function out = att_est( samp ,hz,  real)
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
 
 kg = 1;
-kw = .005;
-kdacc = 1e10;
+kw = .1;
+kw2 = .1;
+keast_z = .01;
 
-hz = 1000;
 lat = 39.32*pi/180;
 
 R_align = [1,0,0;0,-1,0;0,0,-1];
@@ -30,11 +30,10 @@ else
     out.t = samp.t;
 end
 
-acc = samp.acc;%my_lowpass(samp.acc',hz,1,30)';
-ang = samp.ang;%my_lowpass(samp.ang',hz,1,30)';
+acc = samp.acc;
+ang = samp.ang;
 
 earth_radius = 6371*1000;
-up_n = [0;0;-1];
 east_n = [0;1;0];
 
 acc_true_s = zeros(3,num);
@@ -48,7 +47,9 @@ east_error = zeros(3,num);
 dacc = zeros(3,num);
 att = zeros(3,num);
 
-Rb{1} = get_Rsn(lat,0)*R_align*rph2R([pi/20;0;0]);
+out.east_est_n = zeros(3,num);
+
+Rb{1} = get_Rsn(lat,0)*R_align*rph2R([pi/60;0;0]);
 Rb{num} = eye(3);
 Rd{1} = eye(3);
 Rd{num} = eye(3);
@@ -57,37 +58,48 @@ Rni{num} = eye(3);
 
 for i=2:num
 
+    if out.t(i) > 60*10
+        kw = kw2;
+    end
+    
     dt = out.t(i) - out.t(i-1);
    
-    R_sn = get_Rsn(lat,out.t(i)-out.t(1));
     
-    acc_true_s(:,i) = get_Rse(out.t(i))*([cos(lat);0;sin(lat)] - (15*pi/180/3600)^2*cos(lat)*[earth_radius;0;0]);
-    %acc_true_s(:,i) = R_sn*up_n; 
+    R_sn = get_Rsn(lat,out.t(i)-out.t(1)-1/(2*pi*keast_z));
+    
+    a_e = ([cos(lat);0;sin(lat)] - (15*pi/180/3600)^2*cos(lat)*[earth_radius;0;0]);
+    acc_true_s(:,i) = get_Rse(out.t(i))*(a_e/norm(a_e));
     acc_est_s(:,i) = Rb{i-1}*Rd{i-1}*acc(:,i);
     
-    g_error(:,i) = kg*Rb{i-1}'*skew(acc_est_s(:,i))*acc_true_s(:,i);
-
+    g_error(:,i) = kg*Rb{i-1}'*skew(acc_est_s(:,i))*acc_true_s(:,i);  
     
-    alpha = exp(-dt*2*pi*kdacc);
-    beta = 1 - alpha;    
+    dacc(:,i) =(acc(:,i)-acc(:,i-1))/dt;
     
-    dacc(:,i) = dacc(:,i-1)*alpha + beta*(acc(:,i)-acc(:,i-1))/dt;    
+    east_est(:,i) = skew(ang(:,i))*acc(:,i) +dacc(:,i);
     
-    
-    %east_est(:,i) = skew(ang(:,i))*acc(:,i);
-    
-    east_est(:,i) = east_est(:,i-1)*alpha + beta*(skew(ang(:,i))*acc(:,i)+dacc(:,i));
     east_est_z(:,i) = Rd{i-1}*(east_est(:,i));
+    
+    %east_est_z(:,i) = east_est_z(:,i-1)*exp(-dt*2*pi*keast_z) + (1-exp(-dt*2*pi*keast_z))*Rd{i-1}*(east_est(:,i));
 
     
-    east_est_z(:,i) = east_est_z(:,i)/norm(east_est_z(:,i));
+    %east_est_z(:,i) = east_est_z(:,i)/norm(east_est_z(:,i));
     
     out.east_est_s(:,i) = Rb{i-1}*east_est_z(:,i);
+    
+    out.east_est_n(:,i) = out.east_est_n(:,i-1)*exp(-dt*2*pi*keast_z) + (1-exp(-dt*2*pi*keast_z))*get_Rsn(lat,out.t(i))'*out.east_est_s(:,i);
+    out.east_est_n(:,i) = out.east_est_n(:,i)/norm(out.east_est_n(:,i));
+
+    
     out.east_true_s(:,i) = R_sn*east_n;
     
-    east_error_s(:,i) = skew(Rb{i-1}*east_est_z(:,i))*R_sn*east_n;
-    east_error_s(:,i) = dot(east_error_s(:,i),acc_true_s(:,i))*acc_true_s(:,i);
-    east_error(:,i) = kw*Rb{i-1}'*east_error_s(:,i);
+    east_error_s(:,i) = skew(out.east_est_n(:,i))*east_n;
+    %east_error_s(:,i) = dot(out.east_est_n(:,i),[0;0;-1])*[0;0;-1];
+        east_error(:,i) = kw*Rb{i-1}'*get_Rsn(lat,out.t(i))*east_error_s(:,i);
+
+    
+    %east_error_s(:,i) = skew(out.east_est_s(:,i))*out.east_true_s(:,i);
+    %east_error_s(:,i) = dot(east_error_s(:,i),acc_true_s(:,i))*acc_true_s(:,i);
+    %east_error(:,i) = kw*Rb{i-1}'*east_error_s(:,i);
 
     Rni{i-1} = R_sn'*Rb{i-1}*Rd{i-1};
     att(:,i) = rot2rph(Rni{i-1}*R_align);
