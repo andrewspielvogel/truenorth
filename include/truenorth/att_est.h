@@ -36,7 +36,7 @@ public:
    Eigen::Matrix3d Rb_; /**< Estimatation of Rbar rotation. */
 
   Eigen::Vector3d acc_est_;
-  Eigen::Vector3d east_est_z_;
+  Eigen::Vector3d east_est_n_;
   Eigen::Vector3d east_error_;
   Eigen::Vector3d g_error_;
   Eigen::Vector3d ang_est_;

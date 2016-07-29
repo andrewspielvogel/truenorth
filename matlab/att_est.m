@@ -4,7 +4,7 @@ function out = att_est( samp ,hz,  real)
 
 kg = 1;
 kw = .01;
-kw2 = .005;
+kw2 = .004;
 kerror = .01;
 seconds_to_gain_switch = 60*7;
 

@@ -43,7 +43,7 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat)
   Rd_ = Eigen::Matrix3d::Identity(3,3);
 
   acc_est_ = -R_align.block<3,1>(0,2);
-  east_est_z_ = R_align.block<3,1>(0,1);
+  east_est_n_ << 0,1,0;
   ang_est_ <<0,0,0;
 
 
@@ -75,10 +75,10 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float t, float dt)
 
 
   ka_ = exp(-dt*ka_*2*M_PI);
-  ke_ = exp(-dt*ke_*2*M_PI);
+  kw_ = exp(-dt*kw_*2*M_PI);
   // filter acc
   acc_est_ = acc_est_ + ka_*dt*( acc - acc_est_ );
-  ang_est_ = ang_est_ + ke_*dt*( ang - ang_est_ );
+  ang_est_ = ang_est_ + kw_*dt*( ang - ang_est_ );
 
   // calculate g error
   Eigen::Vector3d acc_true_s = R_sn*up_n;
@@ -90,13 +90,19 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float t, float dt)
 
   // estimate east
   Eigen::Vector3d east_est = skew(ang_est_)*acc_est_ + dacc_;
-  east_est_z_ = Rd_*east_est;
-  east_est_z_.normalize();
+  Eigen::Vector3d east_est_next = R_sn.transpose()*Rb_*east_est;
+
+  float ke_n = exp(-dt*0.01*2*M_PI);
+  east_est_n_ = east_est_n_*ke_n + (1-ke_n)*east_est_next;
+  Eigen::Vector3d east_est_n_norm = east_est_n_.normalized();
+
+
 
 
   // calculate heading error
-  Eigen::Vector3d east_error_s = skew(Rb_*east_est_z_)*R_sn*east_n;
-  east_error_ = kw_*Rb_.transpose()*east_error_s;
+  Eigen::Vector3d east_error_n = skew(east_est_n_norm)*east_n;
+  east_error_n = east_error_n.dot(up_n)*up_n;
+  east_error_ = ke_*Rb_.transpose()*R_sn*east_error_n;
 
   // update laws
   Eigen::Matrix3d dR = mat_exp(skew(g_error_ + east_error_)*dt);

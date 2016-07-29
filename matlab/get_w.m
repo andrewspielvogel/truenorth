@@ -1,3 +1,3 @@
 function w = get_w(t)
 
-w = [sin(t/2)/50;0;0]*0;
+w = [0;0;sin(t/20)/20];
