@@ -99,10 +99,10 @@ out.bias.ang = b_ang;
 out.bias.z = b_z;
 out.t = t;
 out.hz = samp.hz;
-
-if (any(strcmp('true',fieldnames(samp)))||any(strcmp('noise',fieldnames(samp))))
-
-    out.true = samp.true;
-    out.noise = samp.noise;
-
-end
+% 
+% if (any(strcmp('true',fieldnames(samp)))||any(strcmp('noise',fieldnames(samp))))
+% 
+%     out.true = samp.true;
+%     out.noise = samp.noise;
+% 
+% end

@@ -21,7 +21,7 @@ t = 0:dt:t_end;
 r = 6371*1000;
 
 % noise
-w_sig = 0*6.32 * 10^(-3)*pi/180;  % measured 1775, units are rad/sec
+w_sig = 6.32 * 10^(-3)*pi/180;  % measured 1775, units are rad/sec
 a_sig = 0.0037;            % measured 1775, units are g, not m/s^2
 
 num = size(t,2);
@@ -36,6 +36,7 @@ samp.Rd{1} = eye(3);
 for i=1:num
 
     a_e = [cos(lat);0;sin(lat)] - (15*pi/180/3600)^2*cos(lat)*[r;0;0];
+    a_e = a_e/norm(a_e);
     
     w = get_w(t(i));
     
