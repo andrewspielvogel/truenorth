@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
 {
 
   int hz = 5000;
-  int rows = hz*60*8;
+  int rows = hz*60*10;
   int cols = 21;
   float lat = 39.32*M_PI/180;
   Eigen::Matrix3d R_align;
@@ -24,8 +24,8 @@ int main(int argc, char* argv[])
   Eigen::VectorXd k(4);
   k << 1,.005,1,1; //a,e,g,w
 
-  std::string name_out = "/home/spiels/log/KVH/static_run3/processed.csv";
-  std::string file = "/home/spiels/log/KVH/static_run3/2016_7_13_15_23.KVH";
+  std::string name_out = "/home/spiels/log/KVH/static_run2/processed.csv";
+  std::string file = "/home/spiels/log/KVH/static_run2/2016_7_12_20_25.KVH";
 
 
   printf("LOADING CSV FILE: %s\n",file.c_str());
