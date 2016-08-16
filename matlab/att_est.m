@@ -2,11 +2,9 @@ function out = att_est( samp ,hz,  real)
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
 
-kg = 10;
-kw = .02;
-kerror = .005;
-cutoff_freq = 20;
-
+kg = 1;
+kw = .05;
+kerror = .01;
 
 lat = 39.32*pi/180;
 
@@ -32,11 +30,6 @@ else
     out.t = samp.t;
 end
 
-if cutoff_freq >= (hz/2)
-    disp(sprintf('Sampling not high enough for cutoff frequency: %d',cutoff_freq));
-    disp(sprintf('Using cutoff frequency of: %d',floor(hz/2)-1));
-    cutoff_freq = floor(hz/2)-1;
-end
 
 acc = samp.acc;
 ang = samp.ang;
@@ -55,7 +48,7 @@ dacc = zeros(3,num);
 att = zeros(3,num);
 
 
-Rb{1} = get_Rsn(lat,0)*R_align*rph2R([-pi/20;pi/20;-pi/20]);
+Rb{1} = get_Rsn(lat,0)*R_align*rph2R([pi/20;pi/20;pi/20]);
 Rb{num} = eye(3);
 Rd{1} = eye(3);
 Rd{num} = eye(3);
@@ -98,7 +91,7 @@ for i=2:num
 
     
     out.east_est_s(:,i) = Rb{i-1}*east_est_z(:,i);
-        east_est_z(:,i) = east_est_z(:,i)/norm(east_est_z(:,i));
+    east_est_z(:,i) = east_est_z(:,i)/norm(east_est_z(:,i));
 
     out.east_est_n(:,i) = R_sn'*out.east_est_s(:,i);
     out.east_est_n(:,i) = out.east_est_n(:,i-1)*exp(-dt*2*pi*kerror) + (1-exp(-dt*2*pi*kerror) )*out.east_est_n(:,i);
