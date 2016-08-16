@@ -43,9 +43,6 @@ subplot(3,1,2);
 hold on;
 plot(data_t,ground.gyro_attitude(:,2),'-r');
 plot(data_t,samp(:,2),'-b');
-
-
-
 title('Pitch');
 ylabel('Degrees');
 xlabel(tlabel(data.t));
@@ -61,11 +58,40 @@ ylabel('Degrees');
 xlabel(tlabel(data.t));
 xlim([data_t(1),data_t(end)]);
 grid on;
-legend('Phins','KVH');
+legend('Phins','KVH','Orientation','horizontal');
 
 
 
+figure;
+hold on;
 
+subplot(2,1,1);
+hold on;
+data_t = taxis(data.t(2:end));
+
+ymax = max(max(samp(:,1:2)));
+ymin = min(min(samp(:,1:2)));
+
+plot(data_t,ground.gyro_attitude(:,3),'-r');
+plot(data_t,samp(:,1),'-b');
+title('Roll');
+ylabel('Degrees');
+xlabel(tlabel(data.t));
+xlim([data_t(1),data_t(end)]);
+ylim([ymin-1,ymax+1]);
+grid on;
+
+subplot(2,1,2);
+hold on;
+plot(data_t,ground.gyro_attitude(:,2),'-r');
+plot(data_t,samp(:,2),'-b');
+title('Pitch');
+ylabel('Degrees');
+xlabel(tlabel(data.t));
+xlim([data_t(1),data_t(end)]);
+ylim([ymin-1,ymax+1]);
+grid on;
+legend('True','KVH','Orientation','horizontal');
 
 
 
@@ -107,6 +133,32 @@ xlabel(tlabel(data.t));
 xlim([data_t(1),data_t(end)]);
 grid on;
 
+
+figure;
+hold on;
+
+ymax = max(max(diff(:,1:2)));
+ymin = min(min(diff(:,1:2)));
+
+subplot(2,1,1);
+hold on;
+plot(data_t,diff(:,1));
+title('Roll');
+ylabel('Degrees');
+xlabel(tlabel(data.t));
+xlim([data_t(1),data_t(end)]);
+ylim([ymin-1,ymax+1]);
+grid on;
+
+subplot(2,1,2);
+hold on;
+plot(data_t,diff(:,2));
+title('Pitch');
+ylabel('Degrees');
+xlabel(tlabel(data.t));
+xlim([data_t(1),data_t(end)]);
+ylim([ymin-1,ymax+1]);
+grid on;
 
 
 
