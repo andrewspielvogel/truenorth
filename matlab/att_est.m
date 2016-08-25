@@ -4,7 +4,7 @@ function out = att_est( samp ,hz,  real)
 
 kg = 1;
 kw = .05;
-kerror = .01;
+east_cut = .005;
 
 lat = 39.32*pi/180;
 
@@ -30,6 +30,8 @@ else
     out.t = samp.t;
 end
 
+
+[A,B,~,~] = butter(1,east_cut/(.5*hz));
 
 acc = samp.acc;
 ang = samp.ang;
@@ -91,16 +93,15 @@ for i=2:num
 
     
     out.east_est_s(:,i) = Rb{i-1}*east_est_z(:,i);
-    east_est_z(:,i) = east_est_z(:,i)/norm(east_est_z(:,i));
 
     out.east_est_n(:,i) = R_sn'*out.east_est_s(:,i);
-    out.east_est_n(:,i) = out.east_est_n(:,i-1)*exp(-dt*2*pi*kerror) + (1-exp(-dt*2*pi*kerror) )*out.east_est_n(:,i);
+    out.east_est_n(:,i) = A*out.east_est_n(:,i-1) + B*out.east_est_n(:,i);
     out.east_est_n_norm(:,i) = out.east_est_n(:,i)/norm(out.east_est_n(:,i));
 
     out.east_error_n(:,i) = cross(out.east_est_n_norm(:,i),east_n);
+  
     out.east_error_n(:,i) = dot(out.east_error_n(:,i),a_n)*a_n;
     
-    east_error(:,i) = kw*Rb{i-1}'*east_error_s(:,i);
     east_error(:,i) = kw*Rb{i-1}'*R_sn*out.east_error_n(:,i);
 
     Rni{i-1} = R_sn'*Rb{i-1}*Rd{i};
