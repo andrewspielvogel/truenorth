@@ -33,25 +33,22 @@ public:
    */
   void step(Eigen::Vector3d w,Eigen::Vector3d a, float t, float dt);
   Eigen::Matrix3d R_ni;
-   Eigen::Matrix3d Rb_; /**< Estimatation of Rbar rotation. */
+  Eigen::Matrix3d Rb_; /**< Estimatation of Rbar rotation. */
 
-  Eigen::Vector3d acc_est_;
+  Eigen::Vector3d prev_acc_;
   Eigen::Vector3d east_est_n_;
-  Eigen::Vector3d east_error_;
-  Eigen::Vector3d g_error_;
-  Eigen::Vector3d ang_est_;
-  Eigen::Vector3d dacc_;
  private:
 
 
   Eigen::Matrix3d Rd_;
   float lat_;
 
+  float A_;
+  float B_;
   
-  float kg_;    
-  float ka_;    
+  float kg_;        
   float kw_;
-  float ke_;
+  float east_cut_;
     
 
 };

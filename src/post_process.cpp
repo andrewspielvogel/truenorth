@@ -11,21 +11,21 @@ int main(int argc, char* argv[])
 {
 
   int hz = 5000;
-  int rows = hz*60*10;
+  int rows = hz*60*15;
   int cols = 21;
   float lat = 39.32*M_PI/180;
   Eigen::Matrix3d R_align;
   R_align << 1,0,0,0,-1,0,0,0,-1;
 
-  Eigen::Vector3d w_err(0,0,1);
-  w_err = w_err*0*M_PI/180;
+  Eigen::Vector3d w_err(1,1,1);
+  w_err = w_err*5*M_PI/180;
   Eigen::Matrix3d R_err = mat_exp(skew(w_err));
 
-  Eigen::VectorXd k(4);
-  k << 1,.005,1,1; //a,e,g,w
+  Eigen::VectorXd k(3);
+  k << 1,.05,.005; //g,w,east_cutoff
 
-  std::string name_out = "/home/spiels/log/KVH/static_run2/processed.csv";
-  std::string file = "/home/spiels/log/KVH/static_run2/2016_7_12_20_25.KVH";
+  std::string name_out = "/home/spiels/log/matlab/debug/processed.csv";
+  std::string file = "/home/spiels/log/matlab/debug/data.KVH";
 
 
   printf("LOADING CSV FILE: %s\n",file.c_str());
@@ -38,21 +38,15 @@ int main(int argc, char* argv[])
 
   AttEst att(k, R_align*R_err,lat);
 
-  Eigen::MatrixXd trph(25,rows-1);
+  Eigen::MatrixXd trph(7,rows-1);
 
   for (int i=1; i<rows; i++) {
 
-    att.step(data.block<1,3>(i,0).transpose(),data.block<1,3>(i,3).transpose(),data(i,11)-data(0,11),1.0/5000.0);   
+    att.step(data.block<1,3>(i,0).transpose(),data.block<1,3>(i,3).transpose(),data(i,11)-data(0,11),data(i,11)-data(i-1,11));   
 
     trph(0,i-1) = data(i,11);
     trph.block<3,1>(1,i-1) = rot2rph(att.R_ni*R_align);
     trph.block<3,1>(4,i-1) = rot2rph(att.Rb_);
-    trph.block<3,1>(7,i-1) = att.acc_est_;
-    trph.block<3,1>(10,i-1) = att.east_est_n_;
-    trph.block<3,1>(13,i-1) = att.east_error_;
-    trph.block<3,1>(16,i-1) = att.g_error_;
-    trph.block<3,1>(19,i-1) = att.ang_est_;
-    trph.block<3,1>(22,i-1) = att.dacc_;
 
     if (i % (hz*30) == 0) {
       
