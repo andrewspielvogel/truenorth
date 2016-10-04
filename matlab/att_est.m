@@ -9,7 +9,7 @@ east_cut = .005;
 lat = 39.32*pi/180;
 
 R_align = [1,0,0;0,-1,0;0,0,-1];
-R_align = eye(3);
+%R_align = eye(3);
 
 num = size(samp.t,2);
 out.t(1) = samp.t(1);
@@ -32,7 +32,8 @@ end
 
 
 [A,B,~,~] = butter(1,east_cut/(.5*hz));
-
+A
+B
 acc = samp.acc;
 ang = samp.ang;
 

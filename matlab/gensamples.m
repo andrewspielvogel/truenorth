@@ -33,12 +33,14 @@ samp.Rzi{1} = eye(3);
 
 Ren = [-sin(lat),0,-cos(lat);0,1,0;cos(lat),0,-sin(lat)];
 a_e = [cos(lat);0;sin(lat)] - (15*pi/180/3600)^2*cos(lat)*[r;0;0]/9.81;
-a_e = a_e/norm(a_e);
+%a_e = a_e/norm(a_e);
 a_n = Ren'*a_e;
 
 Rsz = get_Rsn(lat,0)*R_align;
 samp.Rsz=Rsz;
     
+fileID = fopen('data.KVH','w');
+
 for i=1:num
 
 
@@ -65,6 +67,8 @@ for i=1:num
         str = sprintf('Made %i:%i0 of data at %i hz',floor(t(i)/60),mod(t(i),60)/10,hz);
         disp(str);
     end
+    
+    fprintf(fileID,'IMU_RAW, %.40f,%.40f,%.40f, %.35f,%.35f,%.35f,0,0,0, 0, 0, %.30f, 0,0,0,0,0,0, 0,0,0 \n',samp.ang(1,i),samp.ang(2,i),samp.ang(3,i),samp.acc(1,i),samp.acc(2,i),samp.acc(3,i),t(i));
         
 end
 
@@ -97,10 +101,12 @@ function w = get_w(t)
 if t<5*60*0
     w=[0;0;0];
 else
-
-w = [cos(t)/7;sin(t*2.3)/4;0];
-w = [cos(t/2)/20;sin(t)/10;cos(t/5)/40];
+    
+%w = [cos(t)/7;sin(t*2.3)/4;-sin(t/3)/40];
+%w = [cos(t/2)/20;sin(t)/10;cos(t/5)/40];
 w = [cos(t)/10;sin(t/2)/20;cos(t/10)/30];
+w=[0;0;0];
+
 end
 
 
