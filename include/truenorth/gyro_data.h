@@ -2,7 +2,6 @@
  * @file
  * @date May 2016
  * @author Andrew Spielvogel (andrewspielvogel@gmail.com)
- * 
  * @brief Gyro data class.
  * 
  * Class for storing a gyro data packet.
@@ -52,11 +51,13 @@ public:
      * @param log_location Location of log file.
      * @param R0 Initial estimate of Rbar matrix.
      */
-    GyroData(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_location, float lat);
+    GyroData(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_location, float lat, float hz);
     virtual ~GyroData(void); /**< Destructor. */
     void log(); /**< Log data. */
 
-    float t_start; /**< Start time. */
+    double t_start; /**< Start time. */
+    int hz; /**< Sampling hz. */
+
 
  private:
     FILE *fp_; /**< Log file. */
@@ -66,8 +67,6 @@ public:
     float k2_; /**< Linear acceleration bias estimation gain. */
     float k3_; /**< Angular velocity bias estimation gain. */
     float k4_; /**< z bias constant estimation gain. */
-    float k5_; /**< Local level estimation gain. */
-    float k6_;    /**< Heading estimation gain. */
 
 
 };

@@ -2,8 +2,7 @@
  * @file
  * @date July 2016.
  * @author Andrew Spielvogel (andrewspielvogel@gmail.com).
-
- * @brief Class for adaptive identification on SO(3).
+ * @brief Class for attitude adaptive identification on SO(3).
  */
 
 
@@ -14,13 +13,13 @@
 
 
 /**
- * @brief Class for adaptive identificaiton on SO(3).
+ * @brief Class for attitude adaptive identificaiton on SO(3).
  */
 class AttEst
 {
 public:
 
-  AttEst(Eigen::VectorXd k,Eigen::Matrix3d R0, float lat); /**< Constructor. */
+  AttEst(Eigen::VectorXd k,Eigen::Matrix3d R0, float lat, float hz); /**< Constructor. */
   virtual ~AttEst(void); /**< Destructor. */
     
   /**
@@ -32,23 +31,22 @@ public:
    * @param dt Time between last two measurements.
    */
   void step(Eigen::Vector3d w,Eigen::Vector3d a, float t, float dt);
-  Eigen::Matrix3d R_ni;
+  Eigen::Matrix3d R_ni; /**< Estimation of NED to instrument rotation. */
   Eigen::Matrix3d Rb_; /**< Estimatation of Rbar rotation. */
 
-  Eigen::Vector3d prev_acc_;
-  Eigen::Vector3d east_est_n_;
+
  private:
 
+  Eigen::Vector3d prev_acc_; /**< Previous acceleration. */
+  Eigen::Vector3d east_est_n_; /**< Estimation of east in NED frame. */
+  Eigen::Matrix3d Rd_; /**< Delta Rotation: zero to instrument rotation. */
+  float lat_; /**< Latitude. */
 
-  Eigen::Matrix3d Rd_;
-  float lat_;
-
-  float A_;
-  float B_;
+  float A_; /**< Butter filter coefficient. */
+  float B_; /**< Butter filter coefficient. */
   
-  float kg_;        
-  float kw_;
-  float east_cut_;
+  float kg_; /**< Gravity vector estimation gain. */        
+  float kw_; /**< East vector estimation gain. */
     
 
 };
