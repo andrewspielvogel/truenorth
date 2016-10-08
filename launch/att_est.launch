@@ -3,12 +3,13 @@
         <node pkg="truenorth" type="gyro_publisher" name="truenorth" output="screen">
 
                <param name="rate" value="10" type="int" />
+	       <param name="hz" value="5000" type="int" />
 	       <param name="port" value="/dev/ttyUSB0" type="str" />
-	       <param name="baud" value="921600" type="int" />
+	       <param name="baud" value="4147200" type="int" />
 	       <param name="latitude" value="39.32" type="double" />
 	       <param name="instr_align" value="1,0,0,0,-1,0,0,0,-1" type="string" />
-	       <param name="gains" value="3.0,0.00,0.00,0.0000,1,1,0.05,0.001" type="string" />
-	       <param name="log_loc" value="/home/spiels/log/KVH/static_run4/" type="string" />
+	       <param name="gains" value="3.0,0.00,0.00,0.0000,1,1,0.05,0.005" type="string" />
+	       <param name="log_loc" value="/home/spiels/log/test/" type="string" />
 
         </node>
 
