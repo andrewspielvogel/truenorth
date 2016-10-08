@@ -13,9 +13,11 @@
 #include <truenorth/gyro_data.h>
 #include "ros/ros.h"
 #include <boost/crc.hpp>
+#include <boost/thread.hpp>
 #include <bitset>
 #include <Eigen/Core>
 #include <Eigen/Geometry>
+#include <stdint.h>
 
 
 /*
@@ -31,6 +33,8 @@ union FloatSignals
 {
   char c[4];
   float f;
+  uint32_t uint32;
+  uint16_t uint16;
 };
 
 #if MESSAGE_TYPE == 1
@@ -59,7 +63,7 @@ void SerialPort::parse_data_( char *data_raw)
 
     }
 
-  for (int i=0:i<2:i++)
+  for (int i=0;i<2;i++)
     {
 
       temp.c[1-i] = ((unsigned char *) data_raw)[34+i];
@@ -86,9 +90,10 @@ void SerialPort::parse_data_( char *data_raw)
   // store sequence number
   unsigned int seq_num = (unsigned int) (((unsigned char *) data_raw)[33]);
 
+
   // define time and diff
-  data.diff = timestamp.f - data.timestamp;
-  data.timestamp = timestamp.f;
+  data.diff = ((float)timestamp.uint32) - data.timestamp;
+  data.timestamp = ((float)timestamp.uint32);
 
   if (data.seq_num > 200){
 
@@ -103,7 +108,7 @@ void SerialPort::parse_data_( char *data_raw)
   data.seq_num = seq_num;
   data.status = status;
 
-  data.temp = temp.f;
+  data.temp = temp.uint16;
 
 
   // check for lost data packets
@@ -115,11 +120,10 @@ void SerialPort::parse_data_( char *data_raw)
     }
 
   // log data
-  data.log();
-
+  boost::thread log_thread(&GyroData::log,&data);
   //run integration, will need to add storage of previous estimate in GyroData class
   //data.est_bias();
-  data.est_att();
+  boost::thread att_thread(&GyroData::est_att,&data);
  
 }
 
@@ -203,28 +207,46 @@ void SerialPort::parse_data_( char *data_raw)
 
     }   
 
+  // define time and diff
+  int seq_diff = seq_num - data.seq_num;
+  
+  if (data.seq_num > 128)
+  {
+
+    seq_diff = 0;
+
+  }
+  else if (seq_diff < 0)
+  {
+
+    seq_diff += 128;
+
+  }
+
+  // save timestamp
+  data.diff = 1.0/((double)data.hz);//((double)seq_diff)/((double)data.hz);
+  data.timestamp = data.timestamp + data.diff;
+
   // store data
   data.ang = w;
   data.acc = a;
-  int skipped = abs(data.seq_num-seq_num);
   data.seq_num = seq_num;
   data.status = status;
 
 
   // check for lost data packets
-  if (skipped>1&&skipped<127)
+  if (seq_diff>1)
     {
 
-      ROS_WARN("Lost %u data packets",skipped);
+      ROS_WARN("Lost %u data packets",seq_diff);
 
     }
 
   // log data
-  data.log();
-
+  boost::thread log_thread(&GyroData::log,&data);
   //run integration, will need to add storage of previous estimate in GyroData class
   //data.est_bias();
-  data.est_att();
+  boost::thread att_thread(&GyroData::est_att,&data);
  
 }
 

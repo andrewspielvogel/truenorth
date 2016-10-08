@@ -23,19 +23,24 @@
 
 /**
  * @brief Constructor.
- * @param gain Estimation gain.
- * @param R0 Initial rotation estimate.
+ * @param k Estimation gains/cutoff frequency (k(0): kg, k(1): kw, k(2): cuttoff_freq.
+ * @param R_align Initial NED 2 Instrument Alignment estimation.
+ * @param lat Latitude.
+ * @param hz Sampling hz.
  */
-AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat)
+AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, float hz)
 {
   kg_ = k(0);
   kw_ = k(1);
-  east_cut_ = k(2);
 
   lat_ = lat;
 
-  A_ = 0.999993716834432;
-  B_ = 8.885737960976864/1000000;
+  B_ = 1.0/hz/(1.0/hz + 1.0/(2.0*M_PI*k(2)));
+
+  A_ = 1 - B_;
+
+  std::cout<<A_<<std::endl;
+  std::cout<<B_<<std::endl;
 
   Eigen::Matrix3d R_en = get_R_en(lat_);
   Rb_ = R_en*R_align;
@@ -58,13 +63,18 @@ AttEst::~AttEst(void)
 /**
  * @brief Cycle estimation once.
  *
- * Assume input output relation is \f$y = Ru\f$ where \f$R\in SO(3)\f$ is constant
- * @param u Input measurement.
- * @param y Output measurement.
+ * @param ang Angular velocity measurement.
+ * @param acc Linear acceleration measurement.
+ * @param t Time of sample.
  * @param dt Time between samples.
  */
 void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float t, float dt)
 {
+  
+  if (dt == 0)
+  {
+    return;
+  }
 
   Eigen::Matrix3d R_sn = get_R_sn(lat_, t);
   Eigen::Matrix3d R_en = get_R_en(lat_);
@@ -76,9 +86,10 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float t, float dt)
  
 
   Eigen::Vector3d g_e(cos(lat_),0,sin(lat_));
-  Eigen::Vector3d w_e(0,0,15*M_PI/180/3600);
-  Eigen::Vector3d a_e = g_e + skew(w_e)*skew(w_e)*g_e;
+  Eigen::Vector3d w_e(0,0,15.0*M_PI/180.0/3600.0);
+  Eigen::Vector3d a_e = g_e + skew(w_e)*skew(w_e)*g_e*6371*1000/9.81;
   a_e.normalize();
+
   Eigen::Vector3d a_n = R_en.transpose()*a_e;
 
   Eigen::Vector3d acc_true_s = get_R_se(t)*a_e;

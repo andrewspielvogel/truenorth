@@ -26,7 +26,8 @@
  *
  */
 
-GyroData::GyroData(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_location, float lat):Rbar_(k.tail(5),align, lat)
+// Constructor
+GyroData::GyroData(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_location, float lat, float hz_):Rbar_(k.tail(4),align, lat, hz)
 {
   // define inialization values
   Eigen::Vector3d zero_init(0.0,0.0,0.0);
@@ -50,15 +51,14 @@ GyroData::GyroData(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_loc
   status = init_stat;
   timestamp = ros::Time::now().toSec();
   t_start = timestamp;
-  diff = 0.0;
+  diff = 1.0/((double)hz_);
   
   // assign gains for bias estimation
   k1_ = k(0);
   k2_ = k(1);
   k3_ = k(2);
   k4_ = k(3);
-  k5_ = k(4);
-  k6_ = k(5);
+  hz = hz_;
 
   // initialize initial bias fields
   bias_acc = zero_init;
@@ -141,8 +141,8 @@ void GyroData::est_bias()
 // estimate attitude
 void GyroData::est_att()
 {
+
   Rbar_.step(ang-bias_ang,acc-bias_acc,timestamp-t_start,diff);
-  
   
   // get attitude estimation
   att = rot2rph(Rbar_.R_ni*R_align_);

@@ -14,7 +14,7 @@
 #include <string>
 #include <math.h>
 
-#define NODE_RESTART_TIME 1 /**< Seconds without data before restart serial port. */
+#define NODE_RESTART_TIME 10 /**< Seconds without data before restart serial port. */
 
 
 int main(int argc, char **argv)
@@ -58,7 +58,7 @@ int main(int argc, char **argv)
     R_align.resize(3,3);
 
     // estimation gains
-    std::string gains = "1.0,0.005,0.005,0.005,1.0,1.0,0.01,0.001";  // default
+    std::string gains = "1.0,0.005,0.005,0.005,1.0,1.0,0.05,0.005";  // default
     n.getParam("gains",gains);
     
     Eigen::MatrixXd k = parse_string(gains);
@@ -68,11 +68,15 @@ int main(int argc, char **argv)
     n.getParam("latitude",lat_input);
     float lat  = (float) lat_input;
 
+    // sample rate
+    int hz = 1000; // default
+    n.getParam("hz",hz);
+
     /*
      * INITIALIZE SERIAL PORT
      */
 
-    SerialPort serial(k, R_align,log_location.c_str(),lat);
+    SerialPort serial(k, R_align,log_location.c_str(),lat, hz);
 
     // connect to serial port
     bool connected =  serial.start(port.c_str(),baud);
@@ -136,17 +140,17 @@ int main(int argc, char **argv)
 
 	if(cur_time_since_data != time_from_last_msg)
 	{
-	  ROS_ERROR("Lost Connection. No data for %d seconds",time_from_last_msg);
+	  //ROS_ERROR("Lost Connection. No data for %d seconds",time_from_last_msg);
 	  cur_time_since_data = time_from_last_msg;
 	}
 	if (time_from_last_msg>NODE_RESTART_TIME)
 	{
 	
-	  ROS_ERROR("No data for over %d seconds. Restarting node...",time_from_last_msg);
-	  serial.stop();
+	  //ROS_ERROR("No data for over %d seconds. Restarting node...",time_from_last_msg);
+	  //serial.stop();
           // connect to serial port
 	  //serial.start(port.c_str(),baud);
-	  return 1;
+	  //return 1;
 
 	}
 
