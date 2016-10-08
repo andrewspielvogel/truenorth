@@ -17,7 +17,7 @@ out.t(1) = samp.t(1);
 if real
 for i= 2:num
     
-    diff = samp.seq_num(i)-samp.seq_num(i-1);
+	 diff = samp.seq_num(i)-samp.seq_num(i-1);
     if diff<0
        
        diff = diff + 128;
@@ -32,8 +32,7 @@ end
 
 
 [A,B,~,~] = butter(1,east_cut/(.5*hz));
-A
-B
+
 acc = samp.acc;
 ang = samp.ang;
 
@@ -51,7 +50,7 @@ dacc = zeros(3,num);
 att = zeros(3,num);
 
 
-Rb{1} = get_Rsn(lat,0)*R_align*rph2R([pi/20;pi/20;pi/20]);
+Rb{1} = get_Rsn(lat,0)*R_align;%*rph2R([pi/20;pi/20;pi/20]);
 Rb{num} = eye(3);
 Rd{1} = eye(3);
 Rd{num} = eye(3);
@@ -79,7 +78,16 @@ for i=2:num
     
     R_sn = get_Rsn(lat,out.t(i)-out.t(1));
     
-
+    if (dt==0)
+    
+        out.east_est_n(:,i) = out.east_est_n(:,i-1);
+        att(:,i) = att(:,i-1);
+        Rb{i} = Rb{i-1};
+        out.Rsi{i} = out.Rsi{i-1};
+        continue;
+    
+    end
+    
     acc_true_s(:,i) = get_Rse(out.t(i))*a_e;
     acc_est_s(:,i) = Rb{i-1}*Rd{i}*acc(:,i);
     out.acc_z(:,i) = Rd{i}*acc(:,i); 
@@ -108,8 +116,9 @@ for i=2:num
     Rni{i-1} = R_sn'*Rb{i-1}*Rd{i};
     att(:,i) = rot2rph(Rni{i-1}*R_align);
     
+    out.dR{i-1} = expm(skew(g_error(:,i)+east_error(:,i))*dt);
     
-    Rb{i} = Rb{i-1}*expm(skew(g_error(:,i)+east_error(:,i))*dt);
+    Rb{i} = Rb{i-1}*out.dR{i-1};
     
     out.Rsi{i} = Rb{i}*Rd{i};
     
