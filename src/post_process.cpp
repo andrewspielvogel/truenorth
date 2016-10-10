@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
   Eigen::Matrix3d R_err = mat_exp(skew(w_err));
 
   Eigen::VectorXd k(3);
-  k << 1,.05,.005; //g,w,east_cutoff
+  k << 1,.03,.005; //g,w,east_cutoff
 
   std::string name_out = "/home/spiels/log/test/processed.csv";
   std::string file = "/home/spiels/log/test/2016_10_7_20_57.KVH";
@@ -42,9 +42,11 @@ int main(int argc, char* argv[])
 
   for (int i=1; i<rows; i++) {
 
-    att.step(data.block<1,3>(i,0).transpose(),data.block<1,3>(i,3).transpose(),((float)i)/((float)hz),1.0/(float)hz);   
+    //((float)i)/((float)hz)
 
-    trph(0,i-1) = ((float)i)/((float)hz);
+    att.step(data.block<1,3>(i,0).transpose(),data.block<1,3>(i,3).transpose(),data(i,11)-data(0,11),1.0/(float)hz);   
+
+    trph(0,i-1) = data(i,11)-data(0,11);
     trph.block<3,1>(1,i-1) = rot2rph(att.R_ni*R_align);
     trph.block<3,1>(4,i-1) = rot2rph(att.Rb_);
 

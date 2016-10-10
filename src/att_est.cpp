@@ -39,8 +39,6 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, float hz)
 
   A_ = 1 - B_;
 
-  std::cout<<A_<<std::endl;
-  std::cout<<B_<<std::endl;
 
   Eigen::Matrix3d R_en = get_R_en(lat_);
   Rb_ = R_en*R_align;

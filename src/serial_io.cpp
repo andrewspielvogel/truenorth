@@ -121,8 +121,7 @@ void SerialPort::parse_data_( char *data_raw)
 
   // log data
   boost::thread log_thread(&GyroData::log,&data);
-  //run integration, will need to add storage of previous estimate in GyroData class
-  //data.est_bias();
+  boost::thread bias_thread(&GyroData::est_bias,&data);
   boost::thread att_thread(&GyroData::est_att,&data);
  
 }
@@ -224,7 +223,7 @@ void SerialPort::parse_data_( char *data_raw)
   }
 
   // save timestamp
-  data.diff = 1.0/((double)data.hz);//((double)seq_diff)/((double)data.hz);
+  data.diff = ((double)seq_diff)/((double)data.hz);
   data.timestamp = data.timestamp + data.diff;
 
   // store data
@@ -244,8 +243,7 @@ void SerialPort::parse_data_( char *data_raw)
 
   // log data
   boost::thread log_thread(&GyroData::log,&data);
-  //run integration, will need to add storage of previous estimate in GyroData class
-  //data.est_bias();
+  boost::thread bias_thread(&GyroData::est_bias,&data);
   boost::thread att_thread(&GyroData::est_att,&data);
  
 }

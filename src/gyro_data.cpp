@@ -14,6 +14,7 @@
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 #include <Eigen/Dense>
+#include <unsupported/Eigen/KroneckerProduct>
 #include <truenorth/gyro_data.h>
 #include <truenorth/helper_funcs.h>
 #include <truenorth/att_est.h>
@@ -34,11 +35,19 @@ GyroData::GyroData(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_loc
   std::vector<bool> init_stat(6,false);
   Eigen::Matrix3d init_mat;
   init_mat << 1,0,0,0,1,0,0,0,1;
+  Eigen::MatrixXd R_init(9,1);
+  R_init << 1,0,0,0,-1,0,0,0,-1;
+  // R = align;
 
   //initialize est_att
   att = zero_init;
 
   R_align_ = align;
+  R = align;
+  R.resize(9,1);
+  Rd  = init_mat;
+
+  lat_ = lat;
 
   // initialize imu data to zero
   mag = zero_init;
@@ -98,42 +107,50 @@ void GyroData::log()
 {
 
     //log data
-    fprintf(fp_,"IMU_RAW, %.40f,%.40f,%.40f, %.35f,%.35f,%.35f, %.30f,%.30f,%.30f, %f, %d, %.30f, %d, %d, %d, %d, %d, %d, %.30f, %.30f,%.30f \n",
+    fprintf(fp_,"IMU_RAW, %.40f,%.40f,%.40f, %.35f,%.35f,%.35f, %.30f,%.30f,%.30f, %f, %d, %.30f, %d, %d, %d, %d, %d, %d, %.30f, %.30f,%.30f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f \n",
 	    ang(0),ang(1),ang(2),acc(0),acc(1),acc(2),mag(0),mag(1),mag(2),temp,seq_num,timestamp,(int) status.at(0),
 	    (int) status.at(1),(int) status.at(2),(int) status.at(3),(int) status.at(4),(int) status.at(5),att(0),
-	    att(1),att(2));
+	    att(1),att(2),bias_ang(0),bias_ang(1),bias_ang(2),acc_est(0),acc_est(1),acc_est(2));
 
 }
 
 // estimate bias
 void GyroData::est_bias()
 {
-  
-  if(seq_num>200)
-  {
 
-    acc_est = acc;
+  // get dt and da
+  double dt = diff;
+  Eigen::Vector3d da = acc_est - acc;
 
-  }
-  else
-  {
-    // get dt and da
-    double dt = diff;
-    Eigen::Vector3d da = acc_est - acc;
+  Rd = Rd*mat_exp(skew(ang)*dt);
 
-    // calculate dx
-    Eigen::Vector3d da_est = -ang.cross(acc_est) + ang.cross(bias_acc) - acc.cross(bias_ang) - bias_z - k1_*da;
-    Eigen::Vector3d dab = k2_*ang.cross(da);
-    Eigen::Vector3d dwb = -k3_*acc.cross(da);
-    Eigen::Vector3d dzb = k4_*da;
+  Eigen::Matrix3d R_sn = get_R_sn(lat_, timestamp-t_start);
+  Eigen::Matrix3d R_en = get_R_en(lat_);
+  Eigen::Vector3d up_n(0,0,-1);
+
+  // integrate Rd
+  Rd = Rd*mat_exp(skew((ang)*dt));
  
-    // calculate next bias estimate 
-    acc_est = acc_est + dt*da_est;
-    bias_acc = bias_acc + dt*dab;
-    bias_ang = bias_ang + dt*dwb;
-    bias_z = bias_z + dt*dzb;
 
-    }
+  Eigen::Vector3d g_e(cos(lat_),0,sin(lat_));
+  Eigen::Vector3d w_e(0,0,15.0*M_PI/180.0/3600.0);
+  Eigen::Vector3d a_e = g_e + skew(w_e)*skew(w_e)*g_e*6371*1000/9.81;
+
+  Eigen::Vector3d a_n = R_en.transpose()*a_e;
+  Eigen::Vector3d w_n = R_en.transpose()*w_e;
+
+  Eigen::Vector3d e_n = skew(w_n)*a_n;
+
+  Eigen::MatrixXd kronecker = Eigen::kroneckerProduct(R_sn*e_n,Rd);
+
+  Eigen::Vector3d dacc = -skew(ang-bias_ang)*acc + kronecker.transpose()*R - k1_*da;
+  Eigen::VectorXd dR   = kronecker*da;
+  Eigen::Vector3d dwb  = -skew(acc)*da;
+
+  acc_est  = acc_est + dt*dacc;
+  R        = R + dt*k2_*dR;
+  bias_ang = bias_ang + dt*k3_*dwb;
+
 
 }
 
@@ -142,7 +159,7 @@ void GyroData::est_bias()
 void GyroData::est_att()
 {
 
-  Rbar_.step(ang-bias_ang,acc-bias_acc,timestamp-t_start,diff);
+  Rbar_.step(ang-bias_ang,acc_est-bias_acc,timestamp-t_start,diff);
   
   // get attitude estimation
   att = rot2rph(Rbar_.R_ni*R_align_);

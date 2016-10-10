@@ -36,8 +36,10 @@ public:
     Eigen::Vector3d bias_acc; /**< Linear acceleration bias estimation. */
     Eigen::Vector3d bias_ang; /**< Angular velocity bias estimation. */
     Eigen::Vector3d bias_z; /**< z bias constant estimation. */
+    Eigen::MatrixXd R;
     Eigen::Vector3d acc_est; /**< Linear acceleration estimation. */
     Eigen::Vector3d att; /**< Attitude estimation. */
+    Eigen::Matrix3d Rd; /** Rd rotation. */
 
     void est_bias(); /**< Cycle bias estimation. */
     void est_att(); /**< Cycle attitude estimation. */
@@ -67,6 +69,7 @@ public:
     float k2_; /**< Linear acceleration bias estimation gain. */
     float k3_; /**< Angular velocity bias estimation gain. */
     float k4_; /**< z bias constant estimation gain. */
+    float lat_; /**< Latitude. */
 
 
 };
