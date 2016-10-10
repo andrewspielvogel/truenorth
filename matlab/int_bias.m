@@ -2,8 +2,8 @@ function out = int_bias(samp,lat)
 
 
 kdacc = 10;
-kwb = 2;
-kR = 0;
+kwb = diag([2;2;2])/40;
+kR = 1;
 
 out.t = samp.t;
 lat = lat*pi/180;
@@ -15,7 +15,7 @@ out.acc = zeros(3,num);
 out.wb = zeros(3,num);
 
 out.R = zeros(9,num);
-out.R(:,1) = reshape(diag([1;1;1]),9,1);
+out.R(:,1) = reshape(diag([1;-1;-1]),9,1);
 out.Rd{1} = eye(3);
 out.Rd{num} = eye(3);
 out.dacc = zeros(3,num);
@@ -28,8 +28,8 @@ samp.t = samp.t-samp.t(1);
 out.acc(:,1) = samp.acc(:,1);
 r = 6371*1000;
 a_e = [cos(lat);0;sin(lat)] - (15*pi/180/3600)^2*cos(lat)*[r;0;0]/9.81;
-a_n = Rne*a_e;
-w_n = Rne*w_e;
+a_n = Rne'*a_e;
+w_n = Rne'*w_e;
 e_n = skew(w_n)*a_n;
 
 

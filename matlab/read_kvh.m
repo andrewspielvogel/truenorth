@@ -19,3 +19,5 @@ out.status = csv_input(:,13:18)';
 out.t = out.stamp-out.stamp(1);
 out.hz = round(1/(((out.stamp(end)-out.stamp(1)))/size(out.stamp,2)));
 out.att = csv_input(:,19:21);
+out.bias.ang = csv_input(:,22:24);
+out.acc_est = csv_input(:,25:27);
