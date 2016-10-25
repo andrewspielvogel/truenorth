@@ -86,9 +86,9 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float t, float dt)
   Eigen::Vector3d g_e(cos(lat_),0,sin(lat_));
   Eigen::Vector3d w_e(0,0,15.0*M_PI/180.0/3600.0);
   Eigen::Vector3d a_e = g_e + skew(w_e)*skew(w_e)*g_e*6371*1000/9.81;
-  a_e.normalize();
+  //a_e.normalize();
 
-  Eigen::Vector3d a_n = R_en.transpose()*a_e;
+  Eigen::Vector3d a_n = R_en.transpose()*a_e.normalized();
 
   Eigen::Vector3d acc_true_s = get_R_se(t)*a_e;
   Eigen::Vector3d acc_est_s  = Rb_*Rd_*acc;

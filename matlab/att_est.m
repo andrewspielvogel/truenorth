@@ -3,8 +3,8 @@ function out = att_est( samp ,hz,  real)
 %   Detailed explanation goes here
 
 kg = 1;
-kw = .05;
-east_cut = .005;
+kw = .01;
+east_cut = .003;
 
 lat = 39.32*pi/180;
 
@@ -66,9 +66,8 @@ out.east_error_n2 = zeros(3,num);
 
 Ren = [-sin(lat),0,-cos(lat);0,1,0;cos(lat),0,-sin(lat)];
 a_e = ([cos(lat);0;sin(lat)] - (15*pi/180/3600)^2*cos(lat)*[earth_radius;0;0]/9.81);
-a_e = a_e/norm(a_e);
 
-a_n = Ren'*a_e;
+a_n = Ren'*a_e/norm(a_e);
 out.Rsi{1} = Rb{1};
 for i=2:num
     

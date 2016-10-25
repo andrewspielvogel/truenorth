@@ -55,7 +55,7 @@ for i=1:num
         samp.Rzi{i + 1} = samp.Rzi{i}*expm(skew(w)*dt);
     end
 
-    samp.att(:,i) = rot2rph(Rsn'*samp.Rsi{i});  
+    samp.att(:,i) = rot2rph(Rsn'*samp.Rsi{i}*R_align);  
     
     samp.ang(:,i) =  w + w_sig*randn(3,1) + bias.ang;
     samp.acc(:,i) =  samp.Rsi{i}'*Rsn*a_n + a_sig*randn(3,1) + bias.acc;
@@ -105,7 +105,7 @@ else
 %w = [cos(t)/7;sin(t*2.3)/4;-sin(t/3)/40];
 %w = [cos(t/2)/20;sin(t)/10;cos(t/5)/40];
 w = [cos(t)/10;sin(t/2)/20;cos(t/10)/30];
-%w=[0;0;0];
+w=[0;0;0];
 
 end
 

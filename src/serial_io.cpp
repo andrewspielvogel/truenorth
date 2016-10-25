@@ -223,8 +223,8 @@ void SerialPort::parse_data_( char *data_raw)
   }
 
   // save timestamp
-  data.diff = ((double)seq_diff)/((double)data.hz);
-  data.timestamp = data.timestamp + data.diff;
+  data.diff = ((double) 1)/((double)data.hz);//((double)seq_diff)/((double)data.hz);
+  data.timestamp += data.diff;
 
   // store data
   data.ang = w;

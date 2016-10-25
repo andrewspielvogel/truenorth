@@ -2,7 +2,7 @@ function out = int_bias(samp,lat)
 
 
 kdacc = 10;
-kwb = diag([2;2;2])/40;
+kwb = diag([1;1;1])/10;
 kR = 1;
 
 out.t = samp.t;
@@ -44,7 +44,6 @@ for i=2:num
     out.dacc(:,i) = -skew(samp.ang(:,i)-out.wb(:,i-1))*samp.acc(:,i) + kronecker'*out.R(:,i-1) - kdacc*out.da(:,i);
     out.dR(:,i) = kronecker*out.da(:,i);
     out.dwb(:,i)   = -skew(samp.acc(:,i))*out.da(:,i);
-    
     
     out.acc(:,i) = out.acc(:,i-1) + dt*out.dacc(:,i);
     out.R(:,i)   = out.R(:,i-1)   + dt*kR*out.dR(:,i);
