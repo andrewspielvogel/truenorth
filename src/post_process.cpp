@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
 {
 
   int hz = 5000;
-  int rows = hz*60*20;
+  int rows = hz*60*5;
   int cols = 21;
   float lat = 39.32*M_PI/180;
   Eigen::Matrix3d R_align;
@@ -22,10 +22,10 @@ int main(int argc, char* argv[])
   Eigen::Matrix3d R_err = mat_exp(skew(w_err));
 
   Eigen::VectorXd k(3);
-  k << 1,.04,.003; //g,w,east_cutoff
+  k << 1,.05,.003; //g,w,east_cutoff
 
-  std::string name_out = "/home/spiels/log/static/processed_bias_comp2.csv";
-  std::string file = "/home/spiels/log/static/2016_10_11_14_38.KVH";
+  std::string name_out = "/home/spiels/log/test/processed_bias_comp3.csv";
+  std::string file = "/home/spiels/log/test/2016_10_27_15_40.KVH";
 
 
   printf("LOADING CSV FILE: %s\n",file.c_str());
@@ -41,7 +41,8 @@ int main(int argc, char* argv[])
   Eigen::MatrixXd trph(7,rows-1);
 
   //Eigen::Vector3d bias_offset(0.059109,0.138986,-0.405373);
-  Eigen::Vector3d bias_offset(-0.044764,0.159871,-0.459614);
+  //Eigen::Vector3d bias_offset(-0.044764,0.159871,-0.459614);
+  Eigen::Vector3d bias_offset(0.0480503,0.1251386,-0.35924638);
 
   for (int i=1; i<rows; i++) {
 

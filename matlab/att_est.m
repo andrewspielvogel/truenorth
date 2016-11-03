@@ -9,8 +9,7 @@ east_cut = .003;
 lat = 39.32*pi/180;
 
 R_align = [1,0,0;0,-1,0;0,0,-1];
-%R_align = eye(3);
-
+R_align = eye(3);
 num = size(samp.t,2);
 out.t(1) = samp.t(1);
 
@@ -65,7 +64,7 @@ out.east_est_n(:,1) = [0;1;0]*(15*pi/180/3600)*cos(lat);
 out.east_error_n2 = zeros(3,num);
 
 Ren = [-sin(lat),0,-cos(lat);0,1,0;cos(lat),0,-sin(lat)];
-a_e = ([cos(lat);0;sin(lat)] - (15*pi/180/3600)^2*cos(lat)*[earth_radius;0;0]/9.81);
+a_e = [cos(lat);0;sin(lat)] - (15*pi/180/3600)^2*cos(lat)*[earth_radius;0;0]/9.81;
 
 a_n = Ren'*a_e/norm(a_e);
 out.Rsi{1} = Rb{1};

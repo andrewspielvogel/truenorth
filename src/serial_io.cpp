@@ -223,7 +223,7 @@ void SerialPort::parse_data_( char *data_raw)
   }
 
   // save timestamp
-  data.diff = ((double) 1)/((double)data.hz);//((double)seq_diff)/((double)data.hz);
+  data.diff = ((double)seq_diff)/((double)data.hz);
   data.timestamp += data.diff;
 
   // store data
@@ -242,7 +242,8 @@ void SerialPort::parse_data_( char *data_raw)
     }
 
   // log data
-  boost::thread log_thread(&GyroData::log,&data);
+  data.log();
+  //boost::thread log_thread(&GyroData::log,&data);
   boost::thread bias_thread(&GyroData::est_bias,&data);
   boost::thread att_thread(&GyroData::est_att,&data);
  
@@ -411,9 +412,9 @@ void SerialPort::on_receive_(const boost::system::error_code& ec, size_t bytes_t
 	{	
 		    
 	  // define time and diff
-	  double time = ros::Time::now().toSec();
-	  data.diff = time - data.timestamp;
-	  data.timestamp = time;
+	  //double time = ros::Time::now().toSec();
+	  //data.diff = time - data.timestamp;
+	  //data.timestamp = time;
 
 	  // parse data
 	  parse_data_(data_buf_raw_);

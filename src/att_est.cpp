@@ -97,6 +97,8 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float t, float dt)
   // calculate local level error
   Eigen::Vector3d g_error = kg_*Rb_.transpose()*skew(acc_est_s)*acc_true_s;
 
+
+  // calculate east error
   Eigen::Vector3d dacc = (acc-prev_acc_)/dt;
 
   Eigen::Vector3d east_est_n = R_sn.transpose()*Rb_*Rd_*(skew(ang)*acc + dacc);

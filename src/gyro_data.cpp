@@ -159,7 +159,8 @@ void GyroData::est_bias()
 void GyroData::est_att()
 {
 
-  Rbar_.step(ang-bias_ang,acc_est-bias_acc,timestamp-t_start,diff);
+  //Rbar_.step(ang-bias_ang,acc_est-bias_acc,timestamp-t_start,diff);
+  Rbar_.step(ang,acc_est,timestamp-t_start,diff);
   
   // get attitude estimation
   att = rot2rph(Rbar_.R_ni*R_align_);

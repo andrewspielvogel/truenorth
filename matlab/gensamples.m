@@ -1,4 +1,5 @@
 function samp = gensamples(lat,hz,t_end,R_align,bias)
+% gensamples(lat,hz,t_end,R_align,bias)
 
 tic
 
@@ -19,8 +20,8 @@ t = 0:dt:t_end;
 r = 6371*1000;
 
 % noise
-w_sig = 6.32 * 10^(-3)*pi/180;  % measured 1775, units are rad/sec
-a_sig = 0.0037;            % measured 1775, units are g, not m/s^2
+w_sig = 0*6.32 * 10^(-3)*pi/180;  % measured 1775, units are rad/sec
+a_sig = 0*0.0037;            % measured 1775, units are g, not m/s^2
 
 num = size(t,2);
 
@@ -31,9 +32,9 @@ samp.att = zeros(3,num);
 
 samp.Rzi{1} = eye(3);
 
+% generate a_n
 Ren = [-sin(lat),0,-cos(lat);0,1,0;cos(lat),0,-sin(lat)];
 a_e = [cos(lat);0;sin(lat)] - (15*pi/180/3600)^2*cos(lat)*[r;0;0]/9.81;
-%a_e = a_e/norm(a_e);
 a_n = Ren'*a_e;
 
 Rsz = get_Rsn(lat,0)*R_align;
@@ -44,7 +45,7 @@ fileID = fopen('data.KVH','w');
 for i=1:num
 
 
-    
+    % get w_v, Rsn
     w_veh = get_w(t(i));
     Rsn = get_Rsn(lat,t(i));
     
@@ -102,9 +103,7 @@ if t<5*60*0
     w=[0;0;0];
 else
     
-%w = [cos(t)/7;sin(t*2.3)/4;-sin(t/3)/40];
-%w = [cos(t/2)/20;sin(t)/10;cos(t/5)/40];
-w = [cos(t)/10;sin(t/2)/20;cos(t/10)/30];
+%w = [cos(t/2);sin(t)/10;cos(t/5)];
 w=[0;0;0];
 
 end
