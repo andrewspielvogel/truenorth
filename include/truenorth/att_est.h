@@ -33,17 +33,16 @@ public:
   void step(Eigen::Vector3d w,Eigen::Vector3d a, float t, float dt);
   Eigen::Matrix3d R_ni; /**< Estimation of NED to instrument rotation. */
   Eigen::Matrix3d Rb_; /**< Estimatation of Rbar rotation. */
-
+  Eigen::Vector3d east_est_n_; /**< Estimation of east in NED frame. */
 
  private:
 
   Eigen::Vector3d prev_acc_; /**< Previous acceleration. */
-  Eigen::Vector3d east_est_n_; /**< Estimation of east in NED frame. */
   Eigen::Matrix3d Rd_; /**< Delta Rotation: zero to instrument rotation. */
   float lat_; /**< Latitude. */
 
-  float A_; /**< Butter filter coefficient. */
-  float B_; /**< Butter filter coefficient. */
+  double A_; /**< Butter filter coefficient. */
+  double B_; /**< Butter filter coefficient. */
   
   float kg_; /**< Gravity vector estimation gain. */        
   float kw_; /**< East vector estimation gain. */

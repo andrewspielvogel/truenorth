@@ -37,8 +37,7 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, float hz)
 
   B_ = 1.0/hz/(1.0/hz + 1.0/(2.0*M_PI*k(2)));
 
-  A_ = 1 - B_;
-
+  A_ = 1.0 - B_;
 
   Eigen::Matrix3d R_en = get_R_en(lat_);
   Rb_ = R_en*R_align;
@@ -46,6 +45,7 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, float hz)
   Rd_ = Eigen::Matrix3d::Identity(3,3);
 
   east_est_n_ << 0,(15*M_PI/180/3600)*cos(lat_),0;
+
   prev_acc_ << 0,0,0;
 
 
@@ -107,6 +107,7 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float t, float dt)
   Eigen::Vector3d east_error_n = skew(east_est_n_.normalized())*east_n;
   
   Eigen::Vector3d east_error = kw_*Rb_.transpose()*R_sn*east_error_n.dot(a_n)*a_n;
+  //error_ = east_error;
 
   Eigen::Matrix3d dR = mat_exp(skew(g_error + east_error)*dt);
 

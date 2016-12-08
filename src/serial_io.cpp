@@ -121,7 +121,7 @@ void SerialPort::parse_data_( char *data_raw)
 
   // log data
   boost::thread log_thread(&GyroData::log,&data);
-  boost::thread bias_thread(&GyroData::est_bias,&data);
+  //boost::thread bias_thread(&GyroData::est_bias,&data);
   boost::thread att_thread(&GyroData::est_att,&data);
  
 }
@@ -223,7 +223,9 @@ void SerialPort::parse_data_( char *data_raw)
   }
 
   // save timestamp
-  data.diff = ((double)seq_diff)/((double)data.hz);
+  //data.diff = ((double)seq_diff)/((double)data.hz);
+  data.diff = ((double)1)/((double)data.hz);
+
   data.timestamp += data.diff;
 
   // store data
@@ -244,7 +246,7 @@ void SerialPort::parse_data_( char *data_raw)
   // log data
   data.log();
   //boost::thread log_thread(&GyroData::log,&data);
-  boost::thread bias_thread(&GyroData::est_bias,&data);
+  //boost::thread bias_thread(&GyroData::est_bias,&data);
   boost::thread att_thread(&GyroData::est_att,&data);
  
 }

@@ -64,9 +64,10 @@ int main(int argc, char **argv)
     Eigen::MatrixXd k = parse_string(gains);
 
     // latitude
-    double lat_input = 39.32*M_PI/180;
+    double lat_input = 39.32;
     n.getParam("latitude",lat_input);
     float lat  = (float) lat_input;
+    lat = lat*M_PI/180;
 
     // sample rate
     int hz = 1000; // default
