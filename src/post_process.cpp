@@ -10,22 +10,22 @@
 int main(int argc, char* argv[])
 {
 
-  int hz = 5000;
-  int rows = hz*60*29.5;
+  int hz = 1000;
+  int rows = hz*60*29;
   int cols = 21;
   float lat = 39.32*M_PI/180;
   Eigen::Matrix3d R_align;
-  R_align << 1,0,0,0,-1,0,0,0,-1;
+  R_align << 1,0,0,0,1,0,0,0,1;
 
   Eigen::Vector3d w_err(1,1,1);
   w_err = w_err*5*M_PI/180;
   Eigen::Matrix3d R_err = mat_exp(skew(w_err));
 
   Eigen::VectorXd k(3);
-  k << 1,.02,.01; //g,w,east_cutoff
+  k << 1,.03,.01; //g,w,east_cutoff
 
-  std::string name_out = "/home/spiels/processed3.csv";
-  std::string file = "/home/spiels/log/test/2016_12_7_17_30.KVH";
+  std::string name_out = "/home/spiels/processed.csv";
+  std::string file = "/home/spiels/data.KVH";
 
 
   printf("LOADING CSV FILE: %s\n",file.c_str());

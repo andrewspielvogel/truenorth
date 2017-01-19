@@ -120,9 +120,10 @@ void SerialPort::parse_data_( char *data_raw)
     }
 
   // log data
-  boost::thread log_thread(&GyroData::log,&data);
+  data.log()
+  //boost::thread log_thread(&GyroData::log,&data);
   //boost::thread bias_thread(&GyroData::est_bias,&data);
-  boost::thread att_thread(&GyroData::est_att,&data);
+  //boost::thread att_thread(&GyroData::est_att,&data);
  
 }
 
@@ -247,7 +248,7 @@ void SerialPort::parse_data_( char *data_raw)
   data.log();
   //boost::thread log_thread(&GyroData::log,&data);
   //boost::thread bias_thread(&GyroData::est_bias,&data);
-  boost::thread att_thread(&GyroData::est_att,&data);
+  //boost::thread att_thread(&GyroData::est_att,&data);
  
 }
 
