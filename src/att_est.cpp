@@ -80,7 +80,8 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float t, float dt)
   Eigen::Vector3d east_n(0,1,0);
 
   // integrate Rd
-  Rd_ = Rd_*mat_exp(skew((ang)*dt));
+  Eigen::Matrix3d w_hat = skew(ang)*dt;
+  Rd_ = Rd_*w_hat.exp();
  
 
   Eigen::Vector3d g_e(cos(lat_),0,sin(lat_));
@@ -109,7 +110,8 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float t, float dt)
   Eigen::Vector3d east_error = kw_*Rb_.transpose()*R_sn*east_error_n.dot(a_n)*a_n;
   //error_ = east_error;
 
-  Eigen::Matrix3d dR = mat_exp(skew(g_error + east_error)*dt);
+  Eigen::Matrix3d error_hat = skew(g_error + east_error)*dt;
+  Eigen::Matrix3d dR = error_hat.exp();
 
   prev_acc_ = acc;
 

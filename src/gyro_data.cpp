@@ -14,7 +14,7 @@
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 #include <Eigen/Dense>
-#include <unsupported/Eigen/KroneckerProduct>
+//#include <unsupported/Eigen/KroneckerProduct>
 #include <truenorth/gyro_data.h>
 #include <truenorth/helper_funcs.h>
 #include <truenorth/att_est.h>
