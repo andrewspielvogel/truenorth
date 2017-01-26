@@ -9,7 +9,7 @@
 	       <param name="latitude" value="39.32" type="double" />
 	       <param name="instr_align" value="1,0,0,0,-1,0,0,0,-1" type="string" />
 	       <param name="gains" value="10.0,2.00,1.00,0.0000,1,1,0.02,0.01" type="string" />
-	       <param name="log_loc" value="/home/spiels/log/test/" type="string" />
+	       <param name="log_loc" value="/home/spiels/log/" type="string" />
 
         </node>
 
