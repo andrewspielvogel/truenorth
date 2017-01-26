@@ -63,10 +63,10 @@ include_directories( include
 
 
 ## Declare a cpp library
-add_library(truenorth src/serial_io.cpp src/gyro_data.cpp src/att_est.cpp)
+add_library(truenorth src/serial_io.cpp src/gyro_data.cpp src/att_est.cpp src/bias_est.cpp)
 target_link_libraries(truenorth ${catkin_LIBRARIES})
 
-add_executable(gyro_publisher src/gyro_publisher.cpp src/serial_io.cpp src/gyro_data.cpp src/att_est.cpp)
+add_executable(gyro_publisher src/gyro_publisher.cpp src/serial_io.cpp src/gyro_data.cpp src/att_est.cpp src/bias_est.cpp)
 target_link_libraries(gyro_publisher ${catkin_LIBRARIES})
 add_dependencies(gyro_publisher truenorth_generate_messages_cpp)
 
@@ -75,5 +75,5 @@ target_link_libraries(data_2_csv ${catkin_LIBRARIES})
 add_dependencies(data_2_csv truenorth_generate_messages_cpp)
 
 
-add_executable(post_process src/post_process.cpp src/att_est.cpp)
+add_executable(post_process src/post_process.cpp src/att_est.cpp src/bias_est.cpp)
 target_link_libraries(post_process ${catkin_LIBRARIES})

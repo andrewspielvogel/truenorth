@@ -18,6 +18,7 @@
 #include <truenorth/gyro_data.h>
 #include <truenorth/helper_funcs.h>
 #include <truenorth/att_est.h>
+#include <truenorth/bias_est.h>
 #include <ctime>
 #include <string>
 
@@ -118,40 +119,7 @@ void GyroData::log()
 // estimate bias
 void GyroData::est_bias()
 {
-  /*
-  // get dt and da
-  double dt = diff;
-  Eigen::Vector3d da = acc_est - acc;
-
-  Rd = Rd*mat_exp(skew(ang)*dt);
-
-  Eigen::Matrix3d R_sn = get_R_sn(lat_, timestamp-t_start);
-  Eigen::Matrix3d R_en = get_R_en(lat_);
-  Eigen::Vector3d up_n(0,0,-1);
-
-  // integrate Rd
-  Rd = Rd*mat_exp(skew((ang)*dt));
  
-
-  Eigen::Vector3d g_e(cos(lat_),0,sin(lat_));
-  Eigen::Vector3d w_e(0,0,15.0*M_PI/180.0/3600.0);
-  Eigen::Vector3d a_e = g_e + skew(w_e)*skew(w_e)*g_e*6371*1000/9.81;
-
-  Eigen::Vector3d a_n = R_en.transpose()*a_e;
-  Eigen::Vector3d w_n = R_en.transpose()*w_e;
-
-  Eigen::Vector3d e_n = skew(w_n)*a_n;
-
-  Eigen::MatrixXd kronecker = Eigen::kroneckerProduct(R_sn*e_n,Rd);
-
-  Eigen::Vector3d dacc = -skew(ang-bias_ang)*acc + kronecker.transpose()*R - k1_*da;
-  Eigen::VectorXd dR   = kronecker*da;
-  Eigen::Vector3d dwb  = -skew(acc)*da;
-
-  acc_est  = acc_est + dt*dacc;
-  R        = R + dt*k2_*dR;
-  bias_ang = bias_ang + dt*k3_*dwb;
-  */
 
 }
 

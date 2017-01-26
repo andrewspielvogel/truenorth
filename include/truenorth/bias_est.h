@@ -20,7 +20,7 @@ class BiasEst
 public:
 
   BiasEst(Eigen::VectorXd k, float lat); /**< Constructor. */
-  virtual ~AttEst(void); /**< Destructor. */
+  virtual ~BiasEst(void); /**< Destructor. */
     
   /**
    * @brief Cycle estimation once.

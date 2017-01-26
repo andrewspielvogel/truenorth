@@ -24,7 +24,8 @@
  * @brief Constructor.
  * @param k Estimation gains.
  */
-AttEst::AttEst(Eigen::VectorXd k, float lat)
+
+BiasEst::BiasEst(Eigen::VectorXd k, float lat)
 {
   kg_ = k(0);
   kw_ = k(1);
