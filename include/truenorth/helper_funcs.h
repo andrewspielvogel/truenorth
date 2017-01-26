@@ -98,21 +98,6 @@ inline Eigen::Matrix3d rot_earth2ned(float lat)
 
 }
 
-/**
- * @brief Matrix exponential.
- * @param R Input matrix.
- */
-inline Eigen::Matrix3d mat_exp(Eigen::Matrix3d R)
-{
-
-  Eigen::MatrixExponential<Eigen::Matrix3d> exp_inst(R);
-  Eigen::Matrix3d R_exp;
-  exp_inst.compute(R_exp);
-
-  return R_exp;
-
-}
-
 
 /**
  * @brief Returns Star to Earth rotation
@@ -125,7 +110,9 @@ inline Eigen::Matrix3d get_R_se(float t)
 
   Eigen::Vector3d w(0,0,1.0);
 
-  Eigen::Matrix3d R_se = mat_exp(skew(w)*rate*t);
+  Eigen::Matrix3d w_hat = skew(w)*rate*t;
+
+  Eigen::Matrix3d R_se = w_hat.exp();
 
   return R_se;
 }

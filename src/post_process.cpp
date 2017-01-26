@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
 
   Eigen::Vector3d w_err(1,1,1);
   w_err = w_err*5*M_PI/180;
-  Eigen::Matrix3d R_err = mat_exp(skew(w_err));
+  Eigen::Matrix3d R_err = skew(w_err).exp();
 
   Eigen::VectorXd k(3);
   k << 1,.03,.01; //g,w,east_cutoff
