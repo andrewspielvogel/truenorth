@@ -20,8 +20,8 @@ t = 0:dt:t_end;
 r = 6371*1000;
 
 % noise
-w_sig = 0*6.32 * 10^(-3)*pi/180;  % measured 1775, units are rad/sec
-a_sig = 0*0.0037;            % measured 1775, units are g, not m/s^2
+w_sig = 6.32 * 10^(-3)*pi/180;  % measured 1775, units are rad/sec
+a_sig = 0.0037;            % measured 1775, units are g, not m/s^2
 
 num = size(t,2);
 
@@ -69,7 +69,7 @@ for i=1:num
         disp(str);
     end
     
-    fprintf(fileID,'IMU_RAW, %.40f,%.40f,%.40f, %.35f,%.35f,%.35f,0,0,0, 0, 0, %.30f, 0,0,0,0,0,0, 0,0,0 \n',samp.ang(1,i),samp.ang(2,i),samp.ang(3,i),samp.acc(1,i),samp.acc(2,i),samp.acc(3,i),t(i));
+    fprintf(fileID,'IMU_RAW, %.40f,%.40f,%.40f, %.35f,%.35f,%.35f,0,0,0, 0, 0, %.30f, 0,0,0,0,0,0, 0,0,1 \n',samp.ang(1,i),samp.ang(2,i),samp.ang(3,i),samp.acc(1,i),samp.acc(2,i),samp.acc(3,i),t(i));
         
 end
 
@@ -103,8 +103,8 @@ if t<5*60*0
     w=[0;0;0];
 else
     
-%w = [cos(t/2);sin(t)/10;cos(t/5)];
-w=[0;0;0];
+w = [cos(t/2)/40;sin(t/3)/15;cos(t/5)/10];
+w=[0;0;sin(t/10)/20];
 
 end
 
