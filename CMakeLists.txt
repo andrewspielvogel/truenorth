@@ -77,3 +77,6 @@ add_dependencies(data_2_csv truenorth_generate_messages_cpp)
 
 add_executable(post_process src/post_process.cpp src/att_est.cpp src/bias_est.cpp)
 target_link_libraries(post_process ${catkin_LIBRARIES})
+
+add_executable(bias_process src/bias_process.cpp src/bias_est.cpp)
+target_link_libraries(bias_process ${catkin_LIBRARIES})

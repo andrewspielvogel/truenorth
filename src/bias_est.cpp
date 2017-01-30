@@ -29,8 +29,8 @@ BiasEst::BiasEst(Eigen::VectorXd k, float lat)
 {
   kg_ = k(0);
   kw_ = k(1);
-  ka_ = k(2);
-  kz_ = k(3);
+  ka_ = 0;//k(2);
+  kz_ = 0;//k(3);
 
   float earth_rate = 15.04*M_PI/180.0/3600.0;
   float earth_radius = 6371.0*1000.0;
