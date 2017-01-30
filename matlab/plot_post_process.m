@@ -17,10 +17,10 @@ out.Rb_rph = data_parsed(5:7,:);
 out.east_n = data_parsed(8:10,:);
 
 
-figure;
-plot(data_parsed(1,:),data_parsed(2:4,:)*180/pi);
-grid on;
-
-figure;
-plot(data_parsed(1,:),data_parsed(5:7,:)*180/pi);
-grid on;
+% figure;
+% plot(data_parsed(1,:),data_parsed(2:4,:)*180/pi);
+% grid on;
+% 
+% figure;
+% plot(data_parsed(1,:),data_parsed(5:7,:)*180/pi);
+% grid on;

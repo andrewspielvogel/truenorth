@@ -10,17 +10,17 @@
 int main(int argc, char* argv[])
 {
 
-  int hz = 1000;
-  int rows = hz*60*9.9;
+  int hz = 5000;
+  int rows = hz*60*15;
   int cols = 21;
   float lat = 39.32*M_PI/180;
 
 
   Eigen::VectorXd k(4);
-  k << 1,0.02,0*0.02,0*0.002; 
+  k << 1,0.02,1000,0.002; 
 
-  std::string name_out = "/home/spiels/processed.csv";
-  std::string file = "/home/spiels/data.KVH";
+  std::string name_out = "/home/spiels/log/processed/processed.csv";
+  std::string file = "/home/spiels/log/2017_1_30_16_56.KVH";
 
 
   printf("LOADING CSV FILE: %s\n",file.c_str());
