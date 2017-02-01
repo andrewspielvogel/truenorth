@@ -57,7 +57,7 @@ for i=1:num
     end
 
     samp.att(:,i) = rot2rph(Rsn'*samp.Rsi{i}*R_align);  
-    
+    samp.Rni{i} = Rsn'*samp.Rsi{i}*R_align;
     samp.ang(:,i) =  w + w_sig*randn(3,1) + bias.ang;
     samp.acc(:,i) =  samp.Rsi{i}'*Rsn*a_n + a_sig*randn(3,1) + bias.acc;
     samp.acc_z(:,i) = samp.Rzi{i}*samp.acc(:,i);
@@ -68,8 +68,8 @@ for i=1:num
         str = sprintf('Made %i:%i0 of data at %i hz',floor(t(i)/60),mod(t(i),60)/10,hz);
         disp(str);
     end
-    
-    fprintf(fileID,'IMU_RAW, %.40f,%.40f,%.40f, %.35f,%.35f,%.35f,0,0,0, 0, 0, %.30f, 0,0,0,0,0,0, 0,0,1 \n',samp.ang(1,i),samp.ang(2,i),samp.ang(3,i),samp.acc(1,i),samp.acc(2,i),samp.acc(3,i),t(i));
+    R = samp.Rni{i};
+    fprintf(fileID,'IMU_RAW, %.40f,%.40f,%.40f, %.35f,%.35f,%.35f,0,0,0, 0, 0, %.30f, %f,%f,%f,%f,%f,%f,%f,%f,%f \n',samp.ang(1,i),samp.ang(2,i),samp.ang(3,i),samp.acc(1,i),samp.acc(2,i),samp.acc(3,i),t(i),R(1,1),R(1,2),R(1,3),R(2,1),R(2,2),R(2,3),R(3,1),R(3,2),R(3,3));
         
 end
 
@@ -104,7 +104,7 @@ if t<5*60*0
 else
     
 w = [cos(t/2)/40;sin(t/3)/15;cos(t/5)/10];
-w=[0;0;sin(t/10)/20]*0;
+w=[cos(t/5)/2*0;0*sin(t/7)/4;sin(t/10)/40]*0;
 
 end
 
