@@ -57,7 +57,7 @@ for i=1:num
     end
 
     samp.att(:,i) = rot2rph(Rsn'*samp.Rsi{i}*R_align);  
-    samp.Rni{i} = Rsn'*samp.Rsi{i}*R_align;
+    samp.Rni{i} = Rsn'*samp.Rsi{i};
     samp.ang(:,i) =  w + w_sig*randn(3,1) + bias.ang;
     samp.acc(:,i) =  samp.Rsi{i}'*Rsn*a_n + a_sig*randn(3,1) + bias.acc;
     samp.acc_z(:,i) = samp.Rzi{i}*samp.acc(:,i);
@@ -103,8 +103,7 @@ if t<5*60*0
     w=[0;0;0];
 else
     
-w = [cos(t/2)/40;sin(t/3)/15;cos(t/5)/10];
-w=[cos(t/5)/2*0;0*sin(t/7)/4;sin(t/10)/40]*0;
+w = [cos(t/7)/120*0;-cos(t/5)/20;-cos(t/5)/20];
 
 end
 

@@ -10,7 +10,7 @@
 int main(int argc, char* argv[])
 {
 
-  int hz = 5000;
+  int hz = 1000;
   int rows = hz*60*29.9;
   int cols = 21;
   float lat = 39.32*M_PI/180;
@@ -24,8 +24,8 @@ int main(int argc, char* argv[])
   Eigen::VectorXd k(3);
   k << 1,.03,.01; //g,w,east_cutoff
 
-  std::string name_out = "/home/spiels/processedsampatt.csv";
-  std::string file = "/home/spiels/data.KVH";
+  std::string name_out = "/home/spiels/catkin_ws/src/truenorth/matlab/processedsampatt.csv";
+  std::string file = "/home/spiels/catkin_ws/src/truenorth/matlab/data.KVH";
 
 
   printf("LOADING CSV FILE: %s\n",file.c_str());
@@ -40,10 +40,9 @@ int main(int argc, char* argv[])
 
   Eigen::MatrixXd trph(10,rows-1);
 
-  //Eigen::Vector3d bias_offset(0.059109,0.138986,-0.405373);
-  //Eigen::Vector3d bias_offset(-0.044764,0.159871,-0.459614);
-  Eigen::Vector3d bias_offset(0.99/100000.0,-2.42/100000.0,2.44/100000.0);
-  //bias_offset <<0.0,0.0,0.0;
+  Eigen::Vector3d bias_offset_a(0.001,0.002,-0.002);
+  Eigen::Vector3d bias_offset_w(-1.9/100000.0,1.06/100000.0,-.0934/100000.0);
+
   for (int i=1; i<rows; i++) {
 
     float seq_diff = data(i,10)-data(i-1,10);
@@ -55,8 +54,7 @@ int main(int argc, char* argv[])
     }
 
 
-    att.step(data.block<1,3>(i,0).transpose()-bias_offset,data.block<1,3>(i,3).transpose(),data(i,11)-data(0,11),((float) 1)/(float)hz);   
-    //att.step(data.block<1,3>(i,0).transpose()-bias_offset/10000,data.block<1,3>(i,3).transpose(),((float) i)/(float)hz,((float) 1)/(float)hz);   
+    att.step(data.block<1,3>(i,0).transpose()-bias_offset_w,data.block<1,3>(i,3).transpose()-bias_offset_a,data(i,11)-data(0,11),((float) 1)/(float)hz);      
 
 
     trph(0,i-1) = data(i,11)-data(0,11);
