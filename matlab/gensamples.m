@@ -40,7 +40,7 @@ a_n = Ren'*a_e;
 Rsz = get_Rsn(lat,0)*R_align;
 samp.Rsz=Rsz;
     
-fileID = fopen('data.KVH','w');
+fileID = fopen('/home/spiels/log/data.KVH','w');
 
 for i=1:num
 

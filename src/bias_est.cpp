@@ -68,6 +68,9 @@ BiasEst::~BiasEst(void)
  */
 void BiasEst::step(Eigen::Matrix3d Rni, Eigen::Vector3d ang,Eigen::Vector3d acc, float dt)
 {
+
+  double a = 0.6;
+  double b = 1.0 - a;
   
   Eigen::Vector3d da = a_hat - acc;
   Eigen::Vector3d a_dot = Rni.transpose()*e_n_ - skew(ang-w_b)*acc + skew(ang)*a_b - z - kg_*da;
@@ -76,7 +79,8 @@ void BiasEst::step(Eigen::Matrix3d Rni, Eigen::Vector3d ang,Eigen::Vector3d acc,
   Eigen::Vector3d z_dot   = kz_*da;
 
   a_hat = a_hat + a_dot*dt;
-  w_b   = w_b   + w_b_dot*dt; 
+  //w_b   = w_b*a + b*(w_b   + w_b_dot*dt); 
+  w_b   = w_b   + w_b_dot*dt;
   a_b   = a_b   + a_b_dot*dt;
   z     = z     + z_dot*dt;
 

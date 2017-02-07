@@ -48,7 +48,6 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, float hz)
 
   prev_acc_ << 0,0,0;
 
-
 }
 
 /**

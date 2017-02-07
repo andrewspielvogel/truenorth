@@ -10,8 +10,8 @@
 int main(int argc, char* argv[])
 {
 
-  int hz = 1000;
-  int rows = hz*60*29.9;
+  int hz = 5000;
+  int rows = hz*60*30;
   int cols = 21;
   float lat = 39.32*M_PI/180;
   Eigen::Matrix3d R_align;
@@ -24,8 +24,8 @@ int main(int argc, char* argv[])
   Eigen::VectorXd k(3);
   k << 1,.03,.01; //g,w,east_cutoff
 
-  std::string name_out = "/home/spiels/catkin_ws/src/truenorth/matlab/processedsampatt.csv";
-  std::string file = "/home/spiels/catkin_ws/src/truenorth/matlab/data.KVH";
+  std::string name_out = "/home/spiels/log/sim/processedattnomag.csv";
+  std::string file = "/home/spiels/log/sim/data.KVH";
 
 
   printf("LOADING CSV FILE: %s\n",file.c_str());
@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
   Eigen::MatrixXd trph(10,rows-1);
 
   Eigen::Vector3d bias_offset_a(0.001,0.002,-0.002);
-  Eigen::Vector3d bias_offset_w(-1.9/100000.0,1.06/100000.0,-.0934/100000.0);
+  Eigen::Vector3d bias_offset_w(-2.0/100000.0,1.04/100000.0,-0.98/100000.0);
 
   for (int i=1; i<rows; i++) {
 
