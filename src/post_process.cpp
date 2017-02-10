@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
 {
 
   int hz = 5000;
-  int rows = hz*60*30;
+  int rows = hz*60*44;
   int cols = 21;
   float lat = 39.32*M_PI/180;
   Eigen::Matrix3d R_align;
@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
   Eigen::MatrixXd trph(10,rows-1);
 
   Eigen::Vector3d bias_offset_a(0.001,0.002,-0.002);
-  Eigen::Vector3d bias_offset_w(-2.0/100000.0,1.04/100000.0,-0.98/100000.0);
+  Eigen::Vector3d bias_offset_w(-2.0/100000.0,1.0/100000.0,-0.98/100000.0);
 
   for (int i=1; i<rows; i++) {
 

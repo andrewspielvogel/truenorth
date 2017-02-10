@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
 
 
   Eigen::VectorXd k(4);
-  k << 1,.01,2,.00001; 
+  k << 1,.01,2,0.000001; 
 
   std::string name_out = "/home/spiels/log/sim/processedbias.csv";
   std::string file = "/home/spiels/log/sim/data.KVH";
