@@ -14,7 +14,7 @@
 #include <string>
 #include <math.h>
 
-#define NODE_RESTART_TIME 10 /**< Seconds without data before restart serial port. */
+#define NODE_RESTART_TIME 1 /**< Seconds without data before restart serial port. */
 
 
 int main(int argc, char **argv)
@@ -114,11 +114,6 @@ int main(int argc, char **argv)
 	data_msg.ang.at(i) = serial.data.ang(i);
 	data_msg.acc.at(i) = serial.data.acc(i);
 	data_msg.mag.at(i) = serial.data.mag(i);
-	data_msg.acc_est.at(i) = serial.data.acc_est(i);
-	data_msg.bias_acc.at(i) = serial.data.bias_acc(i);
-	data_msg.bias_ang.at(i) = serial.data.bias_ang(i);
-	data_msg.bias_z.at(i) = serial.data.bias_z(i);
-	data_msg.att.at(i) = serial.data.att(i)*(180.0/M_PI);
       }
 	
       for (int i=0;i<6;i++)
@@ -127,36 +122,12 @@ int main(int argc, char **argv)
       }
 	
       data_msg.temp = serial.data.temp;
-      data_msg.stamp = ros::Time::now();
+      data_msg.stamp = serial.data.timestamp;
       data_msg.seq_num = serial.data.seq_num;
 
       // publish packet
       chatter.publish(data_msg);
-
-      // check if still getting data
-      int time_from_last_msg = (int)abs(ros::Time::now().toSec()-serial.data.timestamp);
-
-      if (time_from_last_msg>=1)
-      {
-
-	if(cur_time_since_data != time_from_last_msg)
-	{
-	  //ROS_ERROR("Lost Connection. No data for %d seconds",time_from_last_msg);
-	  cur_time_since_data = time_from_last_msg;
-	}
-	if (time_from_last_msg>NODE_RESTART_TIME)
-	{
-	
-	  //ROS_ERROR("No data for over %d seconds. Restarting node...",time_from_last_msg);
-	  //serial.stop();
-          // connect to serial port
-	  //serial.start(port.c_str(),baud);
-	  //return 1;
-
-	}
-
-      }
-      
+  
       ros::spinOnce();
       
       loop_rate.sleep();

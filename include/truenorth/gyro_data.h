@@ -33,16 +33,6 @@ public:
 
     double timestamp; /**< Timestamp. */
     double diff; /**< Time difference between last two data packets. */
-    Eigen::Vector3d bias_acc; /**< Linear acceleration bias estimation. */
-    Eigen::Vector3d bias_ang; /**< Angular velocity bias estimation. */
-    Eigen::Vector3d bias_z; /**< z bias constant estimation. */
-    Eigen::MatrixXd R;
-    Eigen::Vector3d acc_est; /**< Linear acceleration estimation. */
-    Eigen::Vector3d att; /**< Attitude estimation. */
-    Eigen::Matrix3d Rd; /** Rd rotation. */
-
-    void est_bias(); /**< Cycle bias estimation. */
-    void est_att(); /**< Cycle attitude estimation. */
 
     /**
      * @brief Constructor.
@@ -53,23 +43,17 @@ public:
      * @param log_location Location of log file.
      * @param R0 Initial estimate of Rbar matrix.
      */
-    GyroData(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_location, float lat, float hz);
+    GyroData(std::string log_location, float hz);
     virtual ~GyroData(void); /**< Destructor. */
     void log(); /**< Log data. */
 
     double t_start; /**< Start time. */
-    int hz; /**< Sampling hz. */
+
+    double hz;
 
 
  private:
     FILE *fp_; /**< Log file. */
-    AttEst Rbar_; /**< Rbar matrix estimation. */
-    Eigen::Matrix3d R_align_; /**< Instrument coordinate frame to vehicle coordinate frame rotation */
-    float k1_; /**< Linear acceleration estimation gain. */
-    float k2_; /**< Linear acceleration bias estimation gain. */
-    float k3_; /**< Angular velocity bias estimation gain. */
-    float k4_; /**< z bias constant estimation gain. */
-    float lat_; /**< Latitude. */
 
 
 };
