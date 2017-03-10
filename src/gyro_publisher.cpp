@@ -13,6 +13,9 @@
 #include <Eigen/Core>
 #include <string>
 #include <math.h>
+#include <truenorth/wqueue.h>
+#include <truenorth/gyro_data.h>
+#include <truenorth/consumer.h>
 
 #define NODE_RESTART_TIME 1 /**< Seconds without data before restart serial port. */
 
@@ -35,8 +38,8 @@ int main(int argc, char **argv)
      */
 
     // topic publish rate in Hz
-    int rate = 10; // default
-    n.getParam("rate",rate);
+    int rate = 1; // default
+    //n.getParam("rate",rate);
     ros::Rate loop_rate(rate);
 
     // port name
@@ -73,11 +76,15 @@ int main(int argc, char **argv)
     int hz = 1000; // default
     n.getParam("hz",hz);
 
+
+   
     /*
      * INITIALIZE SERIAL PORT
      */
 
     SerialPort serial(k, R_align,log_location.c_str(),lat, hz);
+    ConsumerThread* thread = new ConsumerThread(serial.queue);
+    thread->start();
 
     // connect to serial port
     bool connected =  serial.start(port.c_str(),baud);
@@ -93,7 +100,6 @@ int main(int argc, char **argv)
     }
 
 
-
     /*      
      * MAIN LOOP
      */
@@ -105,6 +111,7 @@ int main(int argc, char **argv)
     while (ros::ok())
     {
 
+      ROS_ERROR("%d",serial.queue.size());
       // initialize data_msg
       truenorth::gyro_sensor_data data_msg;
 

@@ -246,6 +246,7 @@ void SerialPort::parse_data_( char *data_raw)
 
   // log data
   data.log();
+  queue.add(&data);
   //boost::thread bias_thread(&GyroData::est_bias,&data);
   //boost::thread att_thread(&GyroData::est_att,&data);
  
@@ -305,9 +306,9 @@ bool SerialPort::start(const char *com_port_name, int baud_rate)
   port_->set_option(boost::asio::serial_port_base::parity(boost::asio::serial_port_base::parity::none));
   port_->set_option(boost::asio::serial_port_base::flow_control(boost::asio::serial_port_base::flow_control::none));
  
-  boost::thread t(boost::bind(&boost::asio::io_service::run, &io_service_));
- 
+  //boost::thread t(boost::bind(&boost::asio::io_service::run, &io_service_));
   async_read_some_();
+  boost::thread t(boost::bind(&boost::asio::io_service::run, &io_service_));
  
   return true;
 }
@@ -333,7 +334,7 @@ void SerialPort::stop()
 void SerialPort::async_read_some_()
 {
   if (port_.get() == NULL || !port_->is_open()) return;
- 
+
   port_->async_read_some(
 			 boost::asio::buffer(read_buf_raw_, SERIAL_PORT_READ_BUF_SIZE),
 			 boost::bind(
@@ -412,30 +413,19 @@ void SerialPort::on_receive_(const boost::system::error_code& ec, size_t bytes_t
 	// check that calculated and sent checksums are the same     
 	if (crc_sent_sum == crc_calc_sum) 
 	{	
-		    
-	  // define time and diff
-	  //double time = ros::Time::now().toSec();
-	  //data.diff = time - data.timestamp;
-	  //data.timestamp = time;
-
+		   
 	  // parse data
 	  parse_data_(data_buf_raw_);
 			    
 	}
 	else
 	{
-
 	  ROS_WARN("corrupted package");
-
 	}
-			
-
       }
     }
     else 
     {
-      //ROS_WARN("lost byte: %02X",c);
-
       data_cnt_=0;
       state_=0;
     }

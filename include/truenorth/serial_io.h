@@ -18,6 +18,8 @@
 #include <boost/asio/read.hpp>
 #include <Eigen/Core>
 #include <truenorth/gyro_data.h>
+#include <truenorth/wqueue.h>
+#include <truenorth/thread.h>
 #include <string>
 
 
@@ -93,13 +95,15 @@ protected:
 
     int state_; /**< State of data read in. */
     int data_cnt_; /**< Track number of bytes read in. */
-  
+
+    
 private:
     SerialPort(const SerialPort &p);
-    SerialPort &operator=(const SerialPort &p); 
+    SerialPort &operator=(const SerialPort &p);
  
 public:
     GyroData data; /**< Class for storing IMU data. */
+    wqueue<GyroData*> queue;
 
 
     /**
