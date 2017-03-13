@@ -43,17 +43,12 @@ public:
      * @param log_location Location of log file.
      * @param R0 Initial estimate of Rbar matrix.
      */
-    GyroData(std::string log_location, float hz);
+    GyroData(float hz);
     virtual ~GyroData(void); /**< Destructor. */
-    void log(); /**< Log data. */
 
     double t_start; /**< Start time. */
 
     double hz;
-
-
- private:
-    FILE *fp_; /**< Log file. */
 
 
 };

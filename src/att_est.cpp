@@ -67,11 +67,6 @@ AttEst::~AttEst(void)
  */
 void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float t, float dt)
 {
-  
-  if (dt == 0)
-  {
-    return;
-  }
 
   Eigen::Matrix3d R_sn = get_R_sn(lat_, t);
   Eigen::Matrix3d R_en = get_R_en(lat_);

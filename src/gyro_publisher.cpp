@@ -38,8 +38,8 @@ int main(int argc, char **argv)
      */
 
     // topic publish rate in Hz
-    int rate = 1; // default
-    //n.getParam("rate",rate);
+    int rate = 10; // default
+    n.getParam("rate",rate);
     ros::Rate loop_rate(rate);
 
     // port name
@@ -82,8 +82,8 @@ int main(int argc, char **argv)
      * INITIALIZE SERIAL PORT
      */
 
-    SerialPort serial(k, R_align,log_location.c_str(),lat, hz);
-    ConsumerThread* thread = new ConsumerThread(serial.queue);
+    SerialPort serial(k, R_align,log_location.c_str(), hz);
+    ConsumerThread* thread = new ConsumerThread(serial.queue,k,R_align,lat,hz);
     thread->start();
 
     // connect to serial port
@@ -111,9 +111,9 @@ int main(int argc, char **argv)
     while (ros::ok())
     {
 
-      ROS_ERROR("%d",serial.queue.size());
       // initialize data_msg
       truenorth::gyro_sensor_data data_msg;
+
 
       // fill data_msg with data packet
       for (int i=0;i<3;i++)

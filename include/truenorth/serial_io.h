@@ -95,6 +95,7 @@ protected:
 
     int state_; /**< State of data read in. */
     int data_cnt_; /**< Track number of bytes read in. */
+    FILE *fp_; /**< Log file. */
 
     
 private:
@@ -104,7 +105,7 @@ private:
 public:
     GyroData data; /**< Class for storing IMU data. */
     wqueue<GyroData*> queue;
-
+    void log(); /**< Log data. */
 
     /**
      * Constructor.
@@ -117,7 +118,7 @@ public:
      * @param log_location_ Location of IMU data log file.
      * @param R0 Initial estimate of Rbar.
      */
- SerialPort(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_location, float lat, float hz): data(log_location, hz){};
+    SerialPort(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_location, float hz);
 
     virtual ~SerialPort(void); /**< Destructor */
 
