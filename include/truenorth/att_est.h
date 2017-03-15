@@ -46,6 +46,10 @@ public:
   
   float kg_; /**< Gravity vector estimation gain. */        
   float kw_; /**< East vector estimation gain. */
+
+  Eigen::Vector3d a_n_;
+  Eigen::Vector3d e_n_;
+  Eigen::Matrix3d P_;
     
 
 };

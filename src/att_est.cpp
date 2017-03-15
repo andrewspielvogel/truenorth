@@ -35,12 +35,21 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, float hz)
 
   lat_ = lat;
 
-  B_ = 1.0/hz/(1.0/hz + 1.0/(2.0*M_PI*k(2)));
+  B_ = 1.0;//1.0/hz/(1.0/hz + 1.0/(2.0*M_PI*k(2)));
 
   A_ = 1.0 - B_;
 
   Eigen::Matrix3d R_en = get_R_en(lat_);
-  Rb_ = R_en*R_align;
+  Rb_ = R_align;
+
+  Eigen::Vector3d g_e(cos(lat_),0,sin(lat_));
+  Eigen::Vector3d w_e(0,0,15.0*M_PI/180.0/3600.0);
+  Eigen::Vector3d a_e = g_e + skew(w_e)*skew(w_e)*g_e*6371*1000/9.81;
+  Eigen::Vector3d e_e = w_e.cross(a_e);
+
+  a_n_ = R_en.transpose()*a_e;
+  e_n_ = R_en.transpose()*e_e;
+  P_   = a_e.normalized()*a_e.normalized().transpose(); 
 
   Rd_ = Eigen::Matrix3d::Identity(3,3);
 
@@ -68,54 +77,30 @@ AttEst::~AttEst(void)
 void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float t, float dt)
 {
 
-  Eigen::Matrix3d R_sn = get_R_sn(lat_, t);
-  Eigen::Matrix3d R_en = get_R_en(lat_);
-  Eigen::Vector3d up_n(0,0,-1);
-  Eigen::Vector3d east_n(0,1,0);
-
   // integrate Rd
   Eigen::Matrix3d w_hat = skew(ang)*dt;
   Rd_ = Rd_*w_hat.exp();
  
-
-  Eigen::Vector3d g_e(cos(lat_),0,sin(lat_));
-  Eigen::Vector3d w_e(0,0,15.0*M_PI/180.0/3600.0);
-  Eigen::Vector3d a_e = g_e + skew(w_e)*skew(w_e)*g_e*6371*1000/9.81;
-  //a_e.normalize();
-
-  Eigen::Vector3d a_n = R_en.transpose()*a_e.normalized();
-
-  Eigen::Vector3d acc_true_s = get_R_se(t)*a_e;
-  Eigen::Vector3d acc_est_s  = Rb_*Rd_*acc;
-
-
-  // calculate local level error
-  Eigen::Vector3d g_error = kg_*Rb_.transpose()*skew(acc_est_s)*acc_true_s;
-
-
+ 
   // calculate east error
   Eigen::Vector3d dacc = (acc-prev_acc_)/dt;
 
-  Eigen::Vector3d east_est_n = R_sn.transpose()*Rb_*Rd_*(skew(ang)*acc + dacc);
-  east_est_n_ = A_*east_est_n_ + B_*east_est_n;
+  east_est_n_ = A_*east_est_n_ + B_*Rb_*Rd_*(ang.cross(acc) + dacc);
 
-  Eigen::Vector3d east_error_n = skew(east_est_n_.normalized())*east_n;
+  Eigen::Vector3d a_tilde = kg_*Rb_.transpose()*(Rb_*Rd_*acc).cross(a_n_);
+  Eigen::Vector3d e_tilde = kw_*Rb_.transpose()*P_*east_est_n_.cross(e_n_);
+
+
   
-  Eigen::Vector3d east_error = kw_*Rb_.transpose()*R_sn*east_error_n.dot(a_n)*a_n;
-  //error_ = east_error;
-
-  Eigen::Matrix3d error_hat = skew(g_error + east_error)*dt;
-  Eigen::Matrix3d dR = error_hat.exp();
-
   prev_acc_ = acc;
 
   // update R
-  Rb_ = Rb_*dR;
+  Rb_ = Rb_*((skew(a_tilde + e_tilde)*dt).exp());
 
 
 
   // update R_ni
-  R_ni = R_sn.transpose()*Rb_*Rd_;
+  R_ni = Rb_*Rd_;
 
 
 }
