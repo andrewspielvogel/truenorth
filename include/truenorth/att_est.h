@@ -35,6 +35,11 @@ public:
   Eigen::Matrix3d Rb_; /**< Estimatation of Rbar rotation. */
   Eigen::Vector3d east_est_n_; /**< Estimation of east in NED frame. */
 
+  Eigen::Vector3d wearth_n;
+  Eigen::Vector3d g_error_;
+  Eigen::Vector3d h_error_;
+
+
  private:
 
   Eigen::Vector3d prev_acc_; /**< Previous acceleration. */

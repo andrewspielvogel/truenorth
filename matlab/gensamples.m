@@ -40,7 +40,7 @@ a_n = Ren'*a_e;
 Rsz = get_Rsn(lat,0)*R_align;
 samp.Rsz=Rsz;
     
-fileID = fopen('/home/spiels/log/data.KVH','w');
+fileID = fopen('/home/spiels/log/data2.KVH','w');
 
 for i=1:num
 
@@ -103,7 +103,7 @@ if t<5*60*0
     w=[0;0;0];
 else
     
-w = [cos(t/7)/120*0;-cos(t/5)/20;-cos(t/5)/20];
+w = [cos(t/7)/120*0;-cos(t/5)/20*0;-cos(t/5)/20];
 
 end
 

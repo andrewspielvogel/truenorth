@@ -10,8 +10,8 @@
 int main(int argc, char* argv[])
 {
 
-  int hz = 1000;
-  int rows = hz*60*14.9;
+  int hz = 5000;
+  int rows = hz*60*24.9;
   int cols = 18;
   float lat = 39.32*M_PI/180;
   Eigen::Matrix3d R_align;
@@ -22,10 +22,10 @@ int main(int argc, char* argv[])
   Eigen::Matrix3d R_err = skew(w_err).exp();
 
   Eigen::VectorXd k(3);
-  k << 1,300,0.01; //g,w,east_cutoff
+  k << 1,.01,0.01; //g,w,east_cutoff
 
   std::string name_out = "/home/spiels/log/processedtest.csv";
-  std::string file = "/home/spiels/log/data.KVH";
+  std::string file = "/home/spiels/log/data2.KVH";
 
 
   printf("LOADING CSV FILE: %s\n",file.c_str());
@@ -58,7 +58,7 @@ int main(int argc, char* argv[])
 
     trph(0,i-1) = data(i,11)-data(0,11);
     trph.block<3,1>(1,i-1) = rot2rph(att.R_ni*R_align);
-    trph.block<3,1>(4,i-1) = rot2rph(att.Rb_);
+    trph.block<3,1>(4,i-1) = att.h_error_;//rot2rph(att.Rb_);
     trph.block<3,1>(7,i-1) = att.east_est_n_;
     
     att.step(data.block<1,3>(i,0).transpose()-0*bias_offset_w,data.block<1,3>(i,3).transpose()-0*bias_offset_a,data(i,11)-data(0,11),((float) 1)/(float)hz);
