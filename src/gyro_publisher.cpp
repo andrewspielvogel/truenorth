@@ -113,7 +113,7 @@ int main(int argc, char **argv)
 
       // initialize data_msg
       truenorth::gyro_sensor_data data_msg;
-
+      ROS_ERROR("%d",serial.queue.size());
 
       // fill data_msg with data packet
       for (int i=0;i<3;i++)

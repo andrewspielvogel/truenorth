@@ -267,7 +267,7 @@ void SerialPort::parse_data_( char *data_raw)
 
   // log data
   log();
-  //queue.add(&data);
+  queue.add(&data);
   //boost::thread bias_thread(&GyroData::est_bias,&data);
   //boost::thread att_thread(&GyroData::est_att,&data);
  
