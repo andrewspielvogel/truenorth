@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
   Eigen::Matrix3d R_err = skew(w_err).exp();
 
   Eigen::VectorXd k(3);
-  k << 1,.01,0.01; //g,w,east_cutoff
+  k << 1,.03,0.01; //g,w,east_cutoff
 
   std::string name_out = "/home/spiels/log/processedtest.csv";
   std::string file = "/home/spiels/log/data2.KVH";

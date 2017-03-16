@@ -36,9 +36,11 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, float hz)
   lat_ = lat;
 
   B_ = 1.0/hz/(1.0/hz + 1.0/(2.0*M_PI*k(2)));
+  //B_ << 1.0/hz/(1.0/hz + 1.0/(2.0*M_PI*k(2))),0,0,0,1.0/hz/(1.0/hz + 1.0/(2.0*M_PI*k(2))),0,0,0,0;
 
-  A_ = 1.0 - B_;
-
+  //A_ = 1.0 - B_;
+  A_ = 1.0 - 1.0/hz/(1.0/hz + 1.0/(2.0*M_PI*k(2)));
+  
   double earthrate = 15.0*M_PI/180.0/3600.0;
   Eigen::Matrix3d R_en = get_R_en(lat_);
   Rb_ = R_align;
@@ -57,6 +59,7 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, float hz)
   R_ni = Rb_*Rd_;
 
   east_est_n_ << 0.0,earthrate*cos(lat_),0.0;
+  east_est_n_ = R_align*east_est_n_;
 
   prev_acc_ << 0,0,0;
 
