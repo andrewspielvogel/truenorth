@@ -84,12 +84,12 @@ int main(int argc, char **argv)
      */
 
     SerialPort serial(k, R_align,log_location.c_str(), hz);
-    ConsumerThread* thread = new ConsumerThread(serial.queue,k,R_align,lat,hz);
-
     BiasConsumerThread* bias_thread = new BiasConsumerThread(serial.bias_queue,k.block<4,1>(3,0),lat,hz);
-    
-    thread->start();
     bias_thread->start();
+    
+    ConsumerThread* thread = new ConsumerThread(bias_thread,serial.queue,k,R_align,lat,hz);
+    thread->start();
+
     
     // connect to serial port
     bool connected =  serial.start(port.c_str(),baud);
