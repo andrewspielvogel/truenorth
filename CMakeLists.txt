@@ -14,6 +14,8 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate messages in the 'msg' folder
  add_message_files(
    FILES
+   imu_bias.msg
+   kvh_imu.msg
    gyro_sensor_data.msg
  )
 

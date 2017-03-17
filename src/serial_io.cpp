@@ -52,7 +52,8 @@ SerialPort::SerialPort(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log
   
   char file_name [128];
   sprintf(file_name,"%s%d_%d_%d_%d_%d.KVH",log_location.c_str(),year,month,day,hour,minute);
-  
+
+  ROS_INFO("Logging IMU Data to: %s",file_name);
   // open log file
   fp_ = fopen(file_name,"w");
 };
@@ -268,6 +269,7 @@ void SerialPort::parse_data_( char *data_raw)
   // log data
   log();
   queue.add(&data);
+  bias_queue.add(&data);
   //boost::thread bias_thread(&GyroData::est_bias,&data);
   //boost::thread att_thread(&GyroData::est_att,&data);
  

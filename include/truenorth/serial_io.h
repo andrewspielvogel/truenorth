@@ -105,6 +105,7 @@ private:
 public:
     GyroData data; /**< Class for storing IMU data. */
     wqueue<GyroData*> queue;
+    wqueue<GyroData*> bias_queue;
     void log(); /**< Log data. */
 
     /**

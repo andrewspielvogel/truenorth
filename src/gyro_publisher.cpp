@@ -16,6 +16,7 @@
 #include <truenorth/wqueue.h>
 #include <truenorth/gyro_data.h>
 #include <truenorth/consumer.h>
+#include <truenorth/bias_consumer.h>
 
 #define NODE_RESTART_TIME 1 /**< Seconds without data before restart serial port. */
 
@@ -84,8 +85,12 @@ int main(int argc, char **argv)
 
     SerialPort serial(k, R_align,log_location.c_str(), hz);
     ConsumerThread* thread = new ConsumerThread(serial.queue,k,R_align,lat,hz);
-    thread->start();
 
+    BiasConsumerThread* bias_thread = new BiasConsumerThread(serial.bias_queue,k.block<4,1>(3,0),lat,hz);
+    
+    thread->start();
+    bias_thread->start();
+    
     // connect to serial port
     bool connected =  serial.start(port.c_str(),baud);
 
@@ -115,26 +120,33 @@ int main(int argc, char **argv)
       truenorth::gyro_sensor_data data_msg;
       if (serial.queue.size()>100)
       {
-	ROS_ERROR("%d",serial.queue.size());
+	ROS_ERROR("Att queue exceeds 100 - Size: :%d",serial.queue.size());
+      }
+      if (serial.bias_queue.size()>100)
+      {
+	ROS_ERROR("Bias Estimation queue exceeds 100 - Size: :%d",serial.bias_queue.size());
       }
       
       // fill data_msg with data packet
       for (int i=0;i<3;i++)
       {
-	data_msg.ang.at(i) = serial.data.ang(i);
-	data_msg.acc.at(i) = serial.data.acc(i);
-	data_msg.mag.at(i) = serial.data.mag(i);
+	data_msg.imu.ang.at(i) = serial.data.ang(i);
+	data_msg.imu.acc.at(i) = serial.data.acc(i);
+	data_msg.imu.mag.at(i) = serial.data.mag(i);
 	data_msg.att.at(i) = 180*rot2rph((thread->att.R_ni)*R_align)(i)/M_PI;
+	data_msg.bias.ang.at(i) = bias_thread->bias.w_b(i);
+	data_msg.bias.acc.at(i) = bias_thread->bias.a_b(i);
+	data_msg.bias.z.at(i) = bias_thread->bias.z(i);
       }
 
       for (int i=0;i<6;i++)
       {
-	data_msg.status.at(i) = serial.data.status.at(i);
+	data_msg.imu.status.at(i) = serial.data.status.at(i);
       }
 	
-      data_msg.temp = serial.data.temp;
-      data_msg.stamp = serial.data.timestamp;
-      data_msg.seq_num = serial.data.seq_num;
+      data_msg.imu.temp = serial.data.temp;
+      data_msg.imu.stamp = serial.data.timestamp;
+      data_msg.imu.seq_num = serial.data.seq_num;
 
       // publish packet
       chatter.publish(data_msg);

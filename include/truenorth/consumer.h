@@ -18,12 +18,13 @@ class ConsumerThread : public Thread
     AttEst att;
  
     void* run() {
+      
         // Remove 1 item at a time and process it. Blocks if no items are 
         // available to process.
         for (int i = 0;; i++)
 	{
 	  GyroData* item = m_queue.remove();
-	  att.step(item->ang,item->acc,item->timestamp,item->diff);
+	  att.step(item->ang-,item->acc,item->timestamp,item->diff);
 
 	  //delete item;
 	 }
