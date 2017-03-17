@@ -11,21 +11,21 @@ int main(int argc, char* argv[])
 {
 
   int hz = 5000;
-  int rows = hz*60*24.9;
+  int rows = hz*60*18;
   int cols = 18;
   float lat = 39.32*M_PI/180;
   Eigen::Matrix3d R_align;
   R_align << 1,0,0,0,-1,0,0,0,-1;
   //R_align << 1,0,0,0,cos(M_PI/4),-sin(M_PI/4),0,sin(M_PI/4),cos(M_PI/4);
   Eigen::Vector3d w_err(1,1,1);
-  w_err = w_err*5*M_PI/180;
+  w_err = 0*w_err*5*M_PI/180;
   Eigen::Matrix3d R_err = skew(w_err).exp();
 
   Eigen::VectorXd k(3);
-  k << 1,.03,0.01; //g,w,east_cutoff
+  k << 1,0.03,0.01; //g,w,east_cutoff
 
-  std::string name_out = "/home/spiels/log/processedtest.csv";
-  std::string file = "/home/spiels/log/data2.KVH";
+  std::string name_out = "/home/spiels/log/processed/test.csv";
+  std::string file = "/home/spiels/log/2017_3_17_11_34.KVH";
 
 
   printf("LOADING CSV FILE: %s\n",file.c_str());
@@ -54,9 +54,8 @@ int main(int argc, char* argv[])
 
     }
 
-          
 
-    trph(0,i-1) = data(i,11)-data(0,11);
+    trph(0,i-1) = data(i,11)-data(i,0);
     trph.block<3,1>(1,i-1) = rot2rph(att.R_ni*R_align);
     trph.block<3,1>(4,i-1) = att.h_error_;//rot2rph(att.Rb_);
     trph.block<3,1>(7,i-1) = att.east_est_n_;

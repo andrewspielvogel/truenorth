@@ -113,16 +113,20 @@ int main(int argc, char **argv)
 
       // initialize data_msg
       truenorth::gyro_sensor_data data_msg;
-      ROS_ERROR("%d",serial.queue.size());
-
+      if (serial.queue.size()>100)
+      {
+	ROS_ERROR("%d",serial.queue.size());
+      }
+      
       // fill data_msg with data packet
       for (int i=0;i<3;i++)
       {
 	data_msg.ang.at(i) = serial.data.ang(i);
 	data_msg.acc.at(i) = serial.data.acc(i);
 	data_msg.mag.at(i) = serial.data.mag(i);
+	data_msg.att.at(i) = 180*rot2rph((thread->att.R_ni)*R_align)(i)/M_PI;
       }
-	
+
       for (int i=0;i<6;i++)
       {
 	data_msg.status.at(i) = serial.data.status.at(i);

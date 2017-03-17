@@ -23,7 +23,6 @@ class ConsumerThread : public Thread
         for (int i = 0;; i++)
 	{
 	  GyroData* item = m_queue.remove();
-
 	  att.step(item->ang,item->acc,item->timestamp,item->diff);
 
 	  //delete item;
