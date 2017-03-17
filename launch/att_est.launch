@@ -8,7 +8,7 @@
 	       <param name="baud" value="4147200" type="int" />
 	       <param name="latitude" value="39.32" type="double" />
 	       <param name="instr_align" value="1,0,0,0,-1,0,0,0,-1" type="string" />
-	       <param name="gains" value="1.0,0.01,0.01,1.0,0.01,20.0,0.000001" type="string" />
+	       <param name="gains" value="1.0,0.02,0.01,1.0,0.01,2.0,0.000001" type="string" />
 	       <param name="log_loc" value="/home/spiels/log/" type="string" />
 
         </node>
