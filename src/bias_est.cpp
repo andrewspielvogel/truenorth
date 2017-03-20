@@ -20,11 +20,6 @@
  *
  */
 
-/**
- * @brief Constructor.
- * @param k Estimation gains.
- */
-
 BiasEst::BiasEst(Eigen::VectorXd k, float lat)
 {
   kg_ = k(0);
@@ -51,21 +46,10 @@ BiasEst::BiasEst(Eigen::VectorXd k, float lat)
 
 }
 
-/**
- * Destructor.
- */
 BiasEst::~BiasEst(void)
 {
 }
 
-/**
- * @brief Cycle estimation once.
- *
- * @param ang Angular velocity measurement.
- * @param acc Linear acceleration measurement.
- * @param t Time of sample.
- * @param dt Time between samples.
- */
 void BiasEst::step(Eigen::Matrix3d Rni, Eigen::Vector3d ang,Eigen::Vector3d acc, float dt)
 {
 
