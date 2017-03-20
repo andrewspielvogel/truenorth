@@ -19,14 +19,14 @@ class AttEst
 {
 public:
 
-  /**
-   * @brief Constructor.
-   * 
-   * @param k Attitude estimation gains.
-   * @param R0 Initial attitude rotation.
-   * @param lat Latitude.
-   * @param hz Sampling rate.
-   */
+  
+/**
+ * @brief Constructor.
+ * @param k Estimation gains/cutoff frequency (k(0): kg, k(1): kw, k(2): cuttoff_freq.
+ * @param R0 Initial NED 2 Instrument Alignment estimation.
+ * @param lat Latitude.
+ * @param hz Sampling hz.
+ */
   AttEst(Eigen::VectorXd k,Eigen::Matrix3d R0, float lat, float hz);
   virtual ~AttEst(void); /**< Destructor. */
     

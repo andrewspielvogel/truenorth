@@ -21,13 +21,6 @@
  *
  */
 
-/**
- * @brief Constructor.
- * @param k Estimation gains/cutoff frequency (k(0): kg, k(1): kw, k(2): cuttoff_freq.
- * @param R_align Initial NED 2 Instrument Alignment estimation.
- * @param lat Latitude.
- * @param hz Sampling hz.
- */
 AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, float hz)
 {
   // estimator gains
@@ -63,20 +56,10 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, float hz)
 
 }
 
-/**
- * Destructor.
- */
 AttEst::~AttEst(void)
 {
 }
 
-/**
- * @brief Cycle estimation once.
- *
- * @param ang Angular velocity measurement.
- * @param acc Linear acceleration measurement.
- * @param dt Time between samples.
- */
 void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float dt)
 {
 
