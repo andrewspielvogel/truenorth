@@ -34,9 +34,9 @@ int main(int argc, char **argv)
     ros::Publisher chatter = n.advertise<truenorth::gyro_sensor_data>("gyro_data",1000);
 
 
-    /*
+    /******************************************************
      * Load in params
-     */
+     ******************************************************/
 
     // topic publish rate in Hz
     int rate = 10; // default
@@ -79,15 +79,15 @@ int main(int argc, char **argv)
 
 
    
-    /*
+    /************************************************************
      * INITIALIZE SERIAL PORT/START ATT/BIAS ESTIMATION THREADS
-     */
+     ************************************************************/
 
     SerialPort serial(k, R_align,log_location.c_str(), hz);
     BiasConsumerThread* bias_thread = new BiasConsumerThread(serial.bias_queue,k.block<4,1>(3,0),lat,hz);
     bias_thread->start();
     
-    AttConsumerThread* att_thread = new AttConsumerThread(bias_thread,serial.queue,k,R_align,lat,hz);
+    AttConsumerThread* att_thread = new AttConsumerThread(bias_thread,serial.att_queue,k,R_align,lat,hz);
     att_thread->start();
 
     
@@ -105,9 +105,9 @@ int main(int argc, char **argv)
     }
 
 
-    /*      
+    /************************************************************      
      * MAIN LOOP
-     */
+     ************************************************************/
 
    
     // main loop
@@ -116,9 +116,9 @@ int main(int argc, char **argv)
 
       // initialize data_msg
       truenorth::gyro_sensor_data data_msg;
-      if (serial.queue.size()>100)
+      if (serial.att_queue.size()>100)
       {
-	ROS_WARN("Att queue exceeds 100 - Size: :%d",serial.queue.size());
+	ROS_WARN("Att queue exceeds 100 - Size: :%d",serial.att_queue.size());
       }
       if (serial.bias_queue.size()>100)
       {

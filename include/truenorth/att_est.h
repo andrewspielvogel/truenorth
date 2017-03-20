@@ -47,8 +47,7 @@ public:
 
   double A_; /**< Butter filter coefficient. */
   double B_; /**< Butter filter coefficient. */
-  //Eigen::Matrix3d B_;
-  
+
   float kg_; /**< Gravity vector estimation gain. */        
   float kw_; /**< East vector estimation gain. */
 
