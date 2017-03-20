@@ -111,13 +111,12 @@ public:
     /**
      * Constructor.
      * @param k Estimation gains. 
-     * @parblock The elements in order are: linear accleration estimation gain, linear 
-     * acceleration bias estimation gain, angular velocity bias estimation gain,
-     * z bias constant estimation gain, and attitude estimation gain.
+     * @parblock The elements in order are: Local level estimation gain, heading estimation gain,
+     * linear accleration estimation gain, linear acceleration bias estimation gain, angular 
+     * velocity bias estimation gain, and z bias constant estimation gain.
      * @endparblock
-     * @param align_ Alignment rotation from instrument to vehicle coordinates.
+     * @param align Initial estimation of attitude rotation.
      * @param log_location_ Location of IMU data log file.
-     * @param R0 Initial estimate of Rbar.
      */
     SerialPort(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_location, float hz);
 

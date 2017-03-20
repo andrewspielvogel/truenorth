@@ -1,3 +1,11 @@
+/** 
+ * @file
+ * @date March 2017.
+ * @author Andrew Spielvogel (andrewspielvogel@gmail.com).
+ * @brief Consumer thread for doing bias estimation. (Based on the work 
+ * done by Spielvogel and Whitcomb.
+ */
+
 #ifndef BIAS_CONSUMER_H
 #define BIAS_CONSUMER_H
 
@@ -7,12 +15,23 @@
 #include <ros/ros.h>
 #include <Eigen/Core>
 
-
+/**
+ * @brief Class for consumer thread doing bias estimation.
+ */
 class BiasConsumerThread : public Thread
 {
-  wqueue<GyroData*>& m_queue;
+  wqueue<GyroData*>& m_queue; /**< Queue. */
  
  public:
+  /**
+   * @brief Constructor.
+   * 
+   * @param queue Queue to consume from.
+   * @param k Attitude estimation gains.
+   * @param lat Latitude.
+   * @param hz Sampling rate.
+   * 
+   */
  BiasConsumerThread(wqueue<GyroData*>& queue, Eigen::VectorXd k, float lat, float hz) : m_queue(queue), bias(k,lat) {}
 
   BiasEst bias;

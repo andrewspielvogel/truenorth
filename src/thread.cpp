@@ -1,3 +1,10 @@
+/**
+ * @file
+ * @date March 2017
+ * @author Andrew Spielvogel (andrewspielvogel@gmail.com)
+ * @brief Thread Class. See thread.h for documentation.
+ */
+
 #include <truenorth/thread.h>
 
 static void* runThread(void* arg)

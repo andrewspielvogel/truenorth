@@ -39,8 +39,7 @@ public:
 
  private:
 
-  Eigen::Vector3d e_n_;
-  
+  Eigen::Vector3d e_n_; /**< East vector in NED frame. */
   float kg_; /**< Gravity vector estimation gain. */        
   float kw_; /**< Angular velocity bias estimation gain. */
   float ka_; /**< Linear Acceleration bias estimation gain. */

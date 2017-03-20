@@ -57,10 +57,10 @@ int main(int argc, char* argv[])
 
     trph(0,i-1) = data(i,11)-data(i,0);
     trph.block<3,1>(1,i-1) = rot2rph(att.R_ni*R_align);
-    trph.block<3,1>(4,i-1) = att.h_error_;//rot2rph(att.Rb_);
-    trph.block<3,1>(7,i-1) = att.east_est_n_;
+    trph.block<3,1>(4,i-1) = rot2rph(att.R_ni*R_align);
+    trph.block<3,1>(7,i-1) = rot2rph(att.R_ni*R_align);
     
-    att.step(data.block<1,3>(i,0).transpose()-0*bias_offset_w,data.block<1,3>(i,3).transpose()-0*bias_offset_a,data(i,11)-data(0,11),((float) 1)/(float)hz);
+    att.step(data.block<1,3>(i,0).transpose()-0*bias_offset_w,data.block<1,3>(i,3).transpose()-0*bias_offset_a,((float) 1)/(float)hz);
 
 
     if ((i) % (hz*30) == 0) {

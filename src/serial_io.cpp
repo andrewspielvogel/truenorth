@@ -459,7 +459,7 @@ void SerialPort::on_receive_(const boost::system::error_code& ec, size_t bytes_t
 }
 
 
-// set kvh 1775 data packet values
+// log kvh 1775 data packet values
 void SerialPort::log()
 {
 

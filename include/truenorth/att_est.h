@@ -19,7 +19,15 @@ class AttEst
 {
 public:
 
-  AttEst(Eigen::VectorXd k,Eigen::Matrix3d R0, float lat, float hz); /**< Constructor. */
+  /**
+   * @brief Constructor.
+   * 
+   * @param k Attitude estimation gains.
+   * @param R0 Initial attitude rotation.
+   * @param lat Latitude.
+   * @param hz Sampling rate.
+   */
+  AttEst(Eigen::VectorXd k,Eigen::Matrix3d R0, float lat, float hz);
   virtual ~AttEst(void); /**< Destructor. */
     
   /**
@@ -27,23 +35,14 @@ public:
    *
    * @param w Angular velocity measurement.
    * @param a Linear acceleration measurement.
-   * @param t Time of measurement.
    * @param dt Time between last two measurements.
    */
-  void step(Eigen::Vector3d w,Eigen::Vector3d a, float t, float dt);
+  void step(Eigen::Vector3d w,Eigen::Vector3d a, float dt);
   Eigen::Matrix3d R_ni; /**< Estimation of NED to instrument rotation. */
-  Eigen::Matrix3d Rb_; /**< Estimatation of Rbar rotation. */
-  Eigen::Vector3d east_est_n_; /**< Estimation of east in NED frame. */
-
-  Eigen::Vector3d wearth_n;
-  Eigen::Vector3d g_error_;
-  Eigen::Vector3d h_error_;
-
 
  private:
 
   Eigen::Vector3d prev_acc_; /**< Previous acceleration. */
-  Eigen::Matrix3d Rd_; /**< Delta Rotation: zero to instrument rotation. */
   float lat_; /**< Latitude. */
 
   double A_; /**< Butter filter coefficient. */
@@ -53,10 +52,14 @@ public:
   float kg_; /**< Gravity vector estimation gain. */        
   float kw_; /**< East vector estimation gain. */
 
-  Eigen::Vector3d a_n_;
-  Eigen::Vector3d e_n_;
-  Eigen::Matrix3d P_;
-    
+  Eigen::Vector3d a_n_; /**< Linear Acceleration in the NED frame.*/
+  Eigen::Vector3d e_n_; /**< East Direction in the NED frame.*/
+  Eigen::Vector3d wearth_n_; /**< Earth's angular velocity in the NED frame. */
+  Eigen::Matrix3d P_; /**< Projection matrix onto a_n_ vector. */
+
+  Eigen::Vector3d g_error_; /**< Local level error term. */
+  Eigen::Vector3d h_error_; /**< Heading error term. */
+  Eigen::Vector3d east_est_n_; /**< Estimation of east in NED frame. */
 
 };
 

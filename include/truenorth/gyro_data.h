@@ -18,7 +18,7 @@
 /**
  * @brief Gyro data class.
  * 
- * Class for storing a gyro data packet.
+ * Class for storing a IMU data packet.
  */
 class GyroData
 {
@@ -29,28 +29,20 @@ public:
     std::vector<bool> status; /**< sensor status. */
     float temp; /**< Sensor temperature. */
     unsigned int seq_num; /**< Sequence number. */
-
-
     double timestamp; /**< Timestamp. */
     double diff; /**< Time difference between last two data packets. */
+    double t_start; /**< Start time. */
+    double hz; /**< Sampling rate. */
 
     /**
      * @brief Constructor.
      *
      * GyroData class constructor.
-     * @param k Estimation gains.
-     * @param align Alignment rotation between instrument and vehicle.
-     * @param log_location Location of log file.
-     * @param R0 Initial estimate of Rbar matrix.
+     * @param hz Sampling rate.
      */
     GyroData(float hz);
     virtual ~GyroData(void); /**< Destructor. */
 
-    double t_start; /**< Start time. */
-
-    double hz;
-
-
-};
+ };
 
 #endif
