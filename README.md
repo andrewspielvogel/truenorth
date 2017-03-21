@@ -57,7 +57,7 @@ roslaunch truenorth truenorth.launch
 
 To generate documentation, use doxygen.
 
-- Install doxygen from [here](http://www.stack.nl/~dimitri/doxygen/download.html). Note you need to install the packages flex and bison before making doxygen with:
+- Install doxygen from [here](http://www.stack.nl/~dimitri/doxygen/download.html). Note: you need to install the packages flex and bison before making doxygen with:
 ```
 sudo apt install flex
 sudo apt instal bison
