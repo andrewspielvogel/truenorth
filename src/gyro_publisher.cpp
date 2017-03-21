@@ -123,13 +123,18 @@ int main(int argc, char **argv)
 
       // initialize data_msg
       truenorth::gyro_sensor_data data_msg;
-      if (serial.att_queue.size()>100)
+      int queue_warn_size = 500;
+      if (serial.att_queue.size()>queue_warn_size)
       {
-	ROS_WARN("Att queue exceeds 100 - Size: :%d",serial.att_queue.size());
+	ROS_WARN("Att queue exceeds %d - Size: :%d",serial.att_queue.size(),queue_warn_size);
       }
-      if (serial.bias_queue.size()>100)
+      if (serial.bias_queue.size()>queue_warn_size)
       {
-	ROS_WARN("Bias Estimation queue exceeds 100 - Size: :%d",serial.bias_queue.size());
+	ROS_WARN("Bias Estimation queue exceeds %d - Size: :%d",serial.bias_queue.size(),queue_warn_size);
+      }
+      if (serial.log_queue.size()>queue_warn_size)
+      {
+	ROS_WARN("Logging queue exceeds %d - Size: :%d",serial.log_queue.size(),queue_warn_size);
       }
       
       // fill data_msg with data packet
