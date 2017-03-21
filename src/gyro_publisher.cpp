@@ -89,6 +89,7 @@ int main(int argc, char **argv)
 
     SerialPort serial(hz);
     LogConsumerThread* log_thread = new LogConsumerThread(serial.log_queue,log_location.c_str());
+    log_thread->start();
     
     BiasConsumerThread* bias_thread = new BiasConsumerThread(serial.bias_queue,k.block<4,1>(3,0),lat,hz);
     bias_thread->start();
