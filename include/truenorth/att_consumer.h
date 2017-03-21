@@ -16,6 +16,7 @@
 #include "bias_consumer.h"
 #include <ros/ros.h>
 #include <Eigen/Core>
+#include <semaphore.h>
 
 /**
  * @brief Class for consumer thread doing attitude estimation.
@@ -47,8 +48,10 @@ class AttConsumerThread : public Thread
     for (int i = 0;; i++)
     {
       GyroData* item = m_queue.remove();
+      sem_wait(&semaphore);
       att.step(item->ang-bias->bias.w_b,item->acc-bias->bias.a_b,item->diff);
-
+      sem_post(&semaphore);
+      
       //delete item;
     }
     return NULL;

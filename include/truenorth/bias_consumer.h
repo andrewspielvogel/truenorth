@@ -14,6 +14,7 @@
 #include "thread.h"
 #include <ros/ros.h>
 #include <Eigen/Core>
+#include <semaphore.h>
 
 /**
  * @brief Class for consumer thread doing bias estimation.
@@ -29,10 +30,9 @@ class BiasConsumerThread : public Thread
    * @param queue Queue to consume from.
    * @param k Attitude estimation gains.
    * @param lat Latitude.
-   * @param hz Sampling rate.
    * 
    */
- BiasConsumerThread(wqueue<GyroData*>& queue, Eigen::VectorXd k, float lat, float hz) : m_queue(queue), bias(k,lat) {}
+ BiasConsumerThread(wqueue<GyroData*>& queue, Eigen::VectorXd k, float lat) : m_queue(queue), bias(k,lat) {}
 
   BiasEst bias;
  
@@ -51,8 +51,10 @@ class BiasConsumerThread : public Thread
     for (int i = 0;; i++)
     {
       GyroData* item = m_queue.remove();
+      sem_wait(&semaphore);
       bias.step(Rni,item->ang,item->acc,item->diff);
-
+      sem_post(&semaphore);
+      
       //delete item;
     }
     return NULL;
@@ -60,3 +62,4 @@ class BiasConsumerThread : public Thread
 };
 
 #endif
+

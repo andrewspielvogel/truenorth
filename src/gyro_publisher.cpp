@@ -19,6 +19,7 @@
 #include <truenorth/bias_consumer.h>
 #include <truenorth/log_consumer.h>
 
+
 int main(int argc, char **argv)
 {
 
@@ -91,7 +92,7 @@ int main(int argc, char **argv)
     LogConsumerThread* log_thread = new LogConsumerThread(serial.log_queue,log_location.c_str());
     log_thread->start();
     
-    BiasConsumerThread* bias_thread = new BiasConsumerThread(serial.bias_queue,k.block<4,1>(3,0),lat,hz);
+    BiasConsumerThread* bias_thread = new BiasConsumerThread(serial.bias_queue,k.block<4,1>(3,0),lat);
     bias_thread->start();
     
     AttConsumerThread* att_thread = new AttConsumerThread(bias_thread,serial.att_queue,k,R0*R_align,lat,hz);
