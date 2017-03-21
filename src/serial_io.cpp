@@ -38,7 +38,7 @@ union FloatSignals
 };
 
 
-SerialPort::SerialPort(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_location, float hz): data(hz)
+SerialPort::SerialPort(Eigen::VectorXd k, std::string log_location, float hz): data(hz)
 {
   // get current time to name log file
   time_t now = time(0);
@@ -142,10 +142,9 @@ void SerialPort::parse_data_( char *data_raw)
     }
 
   // log data
-  data.log()
-  //boost::thread log_thread(&GyroData::log,&data);
-  //boost::thread bias_thread(&GyroData::est_bias,&data);
-  //boost::thread att_thread(&GyroData::est_att,&data);
+  log();
+  att_queue.add(&data);
+  bias_queue.add(&data);
  
 }
 
@@ -270,8 +269,7 @@ void SerialPort::parse_data_( char *data_raw)
   log();
   att_queue.add(&data);
   bias_queue.add(&data);
-  //boost::thread bias_thread(&GyroData::est_bias,&data);
-  //boost::thread att_thread(&GyroData::est_att,&data);
+
  
 }
 

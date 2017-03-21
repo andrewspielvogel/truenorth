@@ -18,9 +18,6 @@
 #include <truenorth/att_consumer.h>
 #include <truenorth/bias_consumer.h>
 
-#define NODE_RESTART_TIME 1 /**< Seconds without data before restart serial port. */
-
-
 int main(int argc, char **argv)
 {
 
@@ -61,6 +58,12 @@ int main(int argc, char **argv)
     Eigen::MatrixXd R_align = parse_string(instr_align);
     R_align.resize(3,3);
 
+    // Rni(t0) matrix
+    std::string R0_ = "1,0,0,0,1,0,0,0,1";  // default
+    n.getParam("R0",R0_);
+    Eigen::MatrixXd R0 = parse_string(R0_);
+    R0.resize(3,3);
+    
     // estimation gains
     std::string gains = "1.0,0.005,0.005,0.005,1.0,1.0,0.05,0.005";  // default
     n.getParam("gains",gains);
@@ -83,11 +86,11 @@ int main(int argc, char **argv)
      * INITIALIZE SERIAL PORT/START ATT/BIAS ESTIMATION THREADS
      ************************************************************/
 
-    SerialPort serial(k, R_align,log_location.c_str(), hz);
+    SerialPort serial(k,log_location.c_str(), hz);
     BiasConsumerThread* bias_thread = new BiasConsumerThread(serial.bias_queue,k.block<4,1>(3,0),lat,hz);
     bias_thread->start();
     
-    AttConsumerThread* att_thread = new AttConsumerThread(bias_thread,serial.att_queue,k,R_align,lat,hz);
+    AttConsumerThread* att_thread = new AttConsumerThread(bias_thread,serial.att_queue,k,R0*R_align,lat,hz);
     att_thread->start();
 
     

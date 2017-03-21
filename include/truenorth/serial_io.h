@@ -118,7 +118,7 @@ public:
      * @param align Initial estimation of attitude rotation.
      * @param log_location_ Location of IMU data log file.
      */
-    SerialPort(Eigen::VectorXd k, Eigen::Matrix3d align, std::string log_location, float hz);
+    SerialPort(Eigen::VectorXd k, std::string log_location, float hz);
 
     virtual ~SerialPort(void); /**< Destructor */
 

@@ -39,8 +39,13 @@ class BiasConsumerThread : public Thread
   void* run()
   {
 
+    /*
+     * TODO!!!!!!!!!!!
+     * NEED TO ADD FUNCTIONALITY TO PASS IN Rni(t). RIGHT NOW Rni(t) IS STATIC.
+     */
     Eigen::Matrix3d Rni;
     Rni << 1,0,0,0,-1,0,0,0,-1;
+
     // Remove 1 item at a time and process it. Blocks if no items are 
     // available to process.
     for (int i = 0;; i++)

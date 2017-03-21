@@ -42,8 +42,6 @@ BiasEst::BiasEst(Eigen::VectorXd k, float lat)
   a_b << 0,0,0;
   z << 0,0,0;
 
-
-
 }
 
 BiasEst::~BiasEst(void)
