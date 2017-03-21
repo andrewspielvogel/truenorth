@@ -85,11 +85,12 @@ int main(int argc, char **argv)
 
 
    
-    /************************************************************
-     * INITIALIZE SERIAL PORT/START ATT/BIAS ESTIMATION THREADS
-     ************************************************************/
+    /***********************************************************************
+     * INITIALIZE SERIAL PORT, START ATT/BIAS ESTIMATION AND LOGGING THREADS
+     ***********************************************************************/
 
     SerialPort serial(hz);
+    
     LogConsumerThread* log_thread = new LogConsumerThread(serial.log_queue,log_location.c_str());
     log_thread->start();
     
@@ -125,6 +126,8 @@ int main(int argc, char **argv)
 
       // initialize data_msg
       truenorth::gyro_sensor_data data_msg;
+
+      // warn if queues are growing large
       int queue_warn_size = 500;
       if (serial.att_queue.size()>queue_warn_size)
       {
@@ -153,6 +156,7 @@ int main(int argc, char **argv)
 	data_msg.bias.acc.at(i) = bias_thread->bias.a_b(i);
 	data_msg.bias.z.at(i) = bias_thread->bias.z(i);
       }
+      
       pthread_mutex_unlock(&mutex_att);
       pthread_mutex_unlock(&mutex_bias);
 
@@ -177,6 +181,7 @@ int main(int argc, char **argv)
 
     bias_thread->detach();
     att_thread->detach();
+    log_thread->detach();
     serial.stop();
     return 0;
 }
