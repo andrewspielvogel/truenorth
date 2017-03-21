@@ -48,33 +48,31 @@ SerialPort::SerialPort(float hz): data(hz)
 // parse data packet into fields
 void SerialPort::parse_data_( char *data_raw)
 {
-
    
   FloatSignals wx, wy, wz, ax, ay, az, timestamp, temp; //ang, acc components and timestamp
     
-
   // get ang, acc, and mag/temp data
   for (int i=0;i<4;i++)
-    {
-
-      wx.c[3-i] = ((unsigned char *) data_raw)[4+i];
-      wy.c[3-i] = ((unsigned char *) data_raw)[8+i];
-      wz.c[3-i] = ((unsigned char *) data_raw)[12+i];
+  {
     
-      ax.c[3-i] = ((unsigned char *) data_raw)[16+i];
-      ay.c[3-i] = ((unsigned char *) data_raw)[20+i];
-      az.c[3-i] = ((unsigned char *) data_raw)[24+i];
+    wx.c[3-i] = ((unsigned char *) data_raw)[4+i];
+    wy.c[3-i] = ((unsigned char *) data_raw)[8+i];
+    wz.c[3-i] = ((unsigned char *) data_raw)[12+i];
+    
+    ax.c[3-i] = ((unsigned char *) data_raw)[16+i];
+    ay.c[3-i] = ((unsigned char *) data_raw)[20+i];
+    az.c[3-i] = ((unsigned char *) data_raw)[24+i];
 
-      timestamp.c[3-i]= ((unsigned char *) data_raw)[28+i];
-
-    }
+    timestamp.c[3-i]= ((unsigned char *) data_raw)[28+i];
+    
+  }
 
   for (int i=0;i<2;i++)
-    {
-
-      temp.c[1-i] = ((unsigned char *) data_raw)[34+i];
-
-    }
+  {
+    
+    temp.c[1-i] = ((unsigned char *) data_raw)[34+i];
+    
+  }
 
   // store ang data in a vec
   Eigen::Vector3d w(wx.f,wy.f,wz.f);
@@ -87,24 +85,29 @@ void SerialPort::parse_data_( char *data_raw)
   std::vector<bool> status;
 
   for(int i=0;i<7;i++)
+  {
+    
+    if (i!=3)
     {
-      if (i!=3){
-	status.push_back(stat[i]==1);
-      }
+      
+      status.push_back(stat[i]==1);
+      
     }
+    
+  }
 
   // store sequence number
   unsigned int seq_num = (unsigned int) (((unsigned char *) data_raw)[33]);
-
 
   // define time and diff
   data.diff = ((float)timestamp.uint32) - data.timestamp;
   data.timestamp = ((float)timestamp.uint32);
 
-  if (data.seq_num > 200){
-
+  if (data.seq_num > 200)
+  {
+    
     data.t_start = data.timestamp;
-
+    
   }
 
   // store data
@@ -119,11 +122,11 @@ void SerialPort::parse_data_( char *data_raw)
 
   // check for lost data packets
   if (skipped>1&&skipped<127)
-    {
+  {
 
-      ROS_WARN("Lost %u data packets",skipped);
+    ROS_WARN("Lost %u data packets",skipped);
 
-    }
+   }
 
   // log data
   log();
@@ -145,19 +148,19 @@ void SerialPort::parse_data_( char *data_raw)
 
   // get ang, acc, and mag/temp data
   for (int i=0;i<4;i++)
-    {
+  {
 
-      wx.c[3-i] = ((unsigned char *) data_raw)[4+i];
-      wy.c[3-i] = ((unsigned char *) data_raw)[8+i];
-      wz.c[3-i] = ((unsigned char *) data_raw)[12+i];
+    wx.c[3-i] = ((unsigned char *) data_raw)[4+i];
+    wy.c[3-i] = ((unsigned char *) data_raw)[8+i];
+    wz.c[3-i] = ((unsigned char *) data_raw)[12+i];
     
-      ax.c[3-i] = ((unsigned char *) data_raw)[16+i];
-      ay.c[3-i] = ((unsigned char *) data_raw)[20+i];
-      az.c[3-i] = ((unsigned char *) data_raw)[24+i];
+    ax.c[3-i] = ((unsigned char *) data_raw)[16+i];
+    ay.c[3-i] = ((unsigned char *) data_raw)[20+i];
+    az.c[3-i] = ((unsigned char *) data_raw)[24+i];
 
-      m_t.c[3-i]= ((unsigned char *) data_raw)[28+i];
+    m_t.c[3-i]= ((unsigned char *) data_raw)[28+i];
 
-    }
+  }
 
   // store ang data in a vec
   Eigen::Vector3d w(wx.f,wy.f,wz.f);
@@ -170,11 +173,13 @@ void SerialPort::parse_data_( char *data_raw)
   std::vector<bool> status;
 
   for(int i=0;i<7;i++)
-    {
-      if (i!=3){
+  {
+    
+      if (i!=3)
+      {
 	status.push_back(stat[i]==1);
       }
-    }
+  }
 
   // store sequence number
   unsigned int seq_num = (unsigned int) (((unsigned char *) data_raw)[33]);
@@ -188,29 +193,29 @@ void SerialPort::parse_data_( char *data_raw)
   int mod = seq_num % 4;
     
   if (mod == 0)
-    {
+  {
 
-      data.temp = m_t.f;
+    data.temp = m_t.f;
 
-    }
+  }
   else if (mod == 1)
-    {
+  {
 
-      data.mag(0) = m_t.f;
+    data.mag(0) = m_t.f;
 
-    }
+  }
   else if (mod == 2)
-    {
+  {
 
-      data.mag(1) = m_t.f;
+    data.mag(1) = m_t.f;
 
-    }
+  }
   else if (mod == 3)
-    {
+  {
 
-      data.mag(2) = m_t.f;
+    data.mag(2) = m_t.f;
 
-    }   
+  }   
 
   // define time and diff
   int seq_diff = seq_num - data.seq_num;
@@ -243,11 +248,11 @@ void SerialPort::parse_data_( char *data_raw)
 
   // check for lost data packets
   if (seq_diff>1)
-    {
+  {
 
-      ROS_WARN("Lost %u data packets",seq_diff);
+    ROS_WARN("Lost %u data packets",seq_diff);
 
-    }
+  }
 
   // log data
   log_queue.add(&data);
@@ -276,20 +281,20 @@ bool SerialPort::start(const char *com_port_name, int baud_rate)
 
   // check if already opened
   if (port_)
-    {
-      ROS_ERROR("error : port is already opened...");
-      return false;
-    }
+  {
+    ROS_ERROR("error : port is already opened...");
+    return false;
+  }
  
   // open port
   port_ = serial_port_ptr(new boost::asio::serial_port(io_service_));
   port_->open(com_port_name, ec);
   if (ec) 
-    {
-      ROS_ERROR( "error : port_->open() failed...com_port_name= %s, e = %s",
-		 com_port_name , ec.message().c_str() ); 
-      return false;
-    }
+  {
+    ROS_ERROR( "error : port_->open() failed...com_port_name= %s, e = %s",
+	       com_port_name , ec.message().c_str() ); 
+    return false;
+   }
  
   // get fd of serial port native handle
   int fd;
@@ -325,13 +330,15 @@ void SerialPort::stop()
   boost::mutex::scoped_lock look(mutex_);
  
   if (port_) 
-    {
-      port_->cancel();
-      port_->close();
-      port_.reset();
-    }
+  {
+    port_->cancel();
+    port_->close();
+    port_.reset();
+  }
+  
   io_service_.stop();
   io_service_.reset();
+  
 }
 
 
