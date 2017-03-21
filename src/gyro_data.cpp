@@ -46,6 +46,7 @@ GyroData::GyroData(float hz_)
   temp = 0.0;
   seq_num = 500;
   status = init_stat;
+  comp_timestamp = ros::Time::now().toSec();
   timestamp = ros::Time::now().toSec();
   t_start = timestamp;
   diff = 1.0/((double)hz);

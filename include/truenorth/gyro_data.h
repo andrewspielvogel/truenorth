@@ -30,6 +30,7 @@ public:
     float temp; /**< Sensor temperature. */
     unsigned int seq_num; /**< Sequence number. */
     double timestamp; /**< Timestamp. */
+    double comp_timestamp; /**< Computer timestamp. */
     double diff; /**< Time difference between last two data packets. */
     double t_start; /**< Start time. */
     double hz; /**< Sampling rate. */

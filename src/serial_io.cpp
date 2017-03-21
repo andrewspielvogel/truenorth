@@ -43,101 +43,6 @@ SerialPort::SerialPort(float hz): data(hz)
 };
 
 
-#if MESSAGE_TYPE == 1
-
-// parse data packet into fields
-void SerialPort::parse_data_( char *data_raw)
-{
-   
-  FloatSignals wx, wy, wz, ax, ay, az, timestamp, temp; //ang, acc components and timestamp
-    
-  // get ang, acc, and mag/temp data
-  for (int i=0;i<4;i++)
-  {
-    
-    wx.c[3-i] = ((unsigned char *) data_raw)[4+i];
-    wy.c[3-i] = ((unsigned char *) data_raw)[8+i];
-    wz.c[3-i] = ((unsigned char *) data_raw)[12+i];
-    
-    ax.c[3-i] = ((unsigned char *) data_raw)[16+i];
-    ay.c[3-i] = ((unsigned char *) data_raw)[20+i];
-    az.c[3-i] = ((unsigned char *) data_raw)[24+i];
-
-    timestamp.c[3-i]= ((unsigned char *) data_raw)[28+i];
-    
-  }
-
-  for (int i=0;i<2;i++)
-  {
-    
-    temp.c[1-i] = ((unsigned char *) data_raw)[34+i];
-    
-  }
-
-  // store ang data in a vec
-  Eigen::Vector3d w(wx.f,wy.f,wz.f);
-
-  // store acc data in a vec
-  Eigen::Vector3d a(ax.f,ay.f,az.f);
-
-  // store status data in a vec
-  std::bitset<8> stat(((unsigned char *) data_raw)[32]);
-  std::vector<bool> status;
-
-  for(int i=0;i<7;i++)
-  {
-    
-    if (i!=3)
-    {
-      
-      status.push_back(stat[i]==1);
-      
-    }
-    
-  }
-
-  // store sequence number
-  unsigned int seq_num = (unsigned int) (((unsigned char *) data_raw)[33]);
-
-  // define time and diff
-  data.diff = ((float)timestamp.uint32) - data.timestamp;
-  data.timestamp = ((float)timestamp.uint32);
-
-  if (data.seq_num > 200)
-  {
-    
-    data.t_start = data.timestamp;
-    
-  }
-
-  // store data
-  data.ang = w;
-  data.acc = a;
-  int skipped = abs(data.seq_num-seq_num);
-  data.seq_num = seq_num;
-  data.status = status;
-
-  data.temp = temp.uint16;
-
-
-  // check for lost data packets
-  if (skipped>1&&skipped<127)
-  {
-
-    ROS_WARN("Lost %u data packets",skipped);
-
-   }
-
-  // log data
-  log();
-  att_queue.add(&data);
-  bias_queue.add(&data);
- 
-}
-
-
-#else
-
 // parse data packet into fields
 void SerialPort::parse_data_( char *data_raw)
 {
@@ -217,42 +122,17 @@ void SerialPort::parse_data_( char *data_raw)
 
   }   
 
-  // define time and diff
-  int seq_diff = seq_num - data.seq_num;
-  
-  if (data.seq_num > 128)
-  {
-
-    seq_diff = 0;
-
-  }
-  else if (seq_diff < 0)
-  {
-
-    seq_diff += 128;
-
-  }
-
-  // save timestamp
-  //data.diff = ((double)seq_diff)/((double)data.hz);
   data.diff = ((double)1)/((double)data.hz);
 
   data.timestamp += data.diff;
+  data.comp_timestamp = ros::Time::now().toSec();
+
 
   // store data
   data.ang = w;
   data.acc = a;
   data.seq_num = seq_num;
   data.status = status;
-
-
-  // check for lost data packets
-  if (seq_diff>1)
-  {
-
-    ROS_WARN("Lost %u data packets",seq_diff);
-
-  }
 
   // log data
   log_queue.add(&data);
@@ -262,7 +142,6 @@ void SerialPort::parse_data_( char *data_raw)
  
 }
 
-#endif
 
 // destructor
 SerialPort::~SerialPort(void)
