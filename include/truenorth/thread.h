@@ -9,9 +9,9 @@
 #define THREAD_H
 
 #include <pthread.h>
-#include <semaphore.h>
 
-static sem_t semaphore; /**< Semaphore for blocking access to thread elements. */
+static pthread_mutex_t mutex_bias;
+static pthread_mutex_t mutex_att;
 
 /**
  * @brief Thread class bassed on pthread.
@@ -26,8 +26,8 @@ class Thread
   int start(); 
   int join();
   int detach();
-  pthread_t self(); 
- 
+  pthread_t self();
+
   virtual void* run() = 0;
  
   private:

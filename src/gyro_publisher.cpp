@@ -18,6 +18,7 @@
 #include <truenorth/att_consumer.h>
 #include <truenorth/bias_consumer.h>
 #include <truenorth/log_consumer.h>
+#include <truenorth/thread.h>
 
 
 int main(int argc, char **argv)
@@ -127,28 +128,34 @@ int main(int argc, char **argv)
       int queue_warn_size = 500;
       if (serial.att_queue.size()>queue_warn_size)
       {
-	ROS_WARN("Att queue exceeds %d - Size: :%d",serial.att_queue.size(),queue_warn_size);
+	ROS_WARN("Att queue exceeds %d - Size: :%d",queue_warn_size,serial.att_queue.size());
       }
       if (serial.bias_queue.size()>queue_warn_size)
       {
-	ROS_WARN("Bias Estimation queue exceeds %d - Size: :%d",serial.bias_queue.size(),queue_warn_size);
+	ROS_WARN("Bias Estimation queue exceeds %d - Size: :%d",queue_warn_size,serial.bias_queue.size());
       }
       if (serial.log_queue.size()>queue_warn_size)
       {
-	ROS_WARN("Logging queue exceeds %d - Size: :%d",serial.log_queue.size(),queue_warn_size);
+	ROS_WARN("Logging queue exceeds %d - Size: :%d",queue_warn_size,serial.log_queue.size());
       }
       
       // fill data_msg with data packet
+      pthread_mutex_lock(&mutex_bias);
+      pthread_mutex_lock(&mutex_att);
+
       for (int i=0;i<3;i++)
       {
 	data_msg.imu.ang.at(i) = serial.data.ang(i);
 	data_msg.imu.acc.at(i) = serial.data.acc(i);
 	data_msg.imu.mag.at(i) = serial.data.mag(i);
-	data_msg.att.at(i) = 180*rot2rph((att_thread->att.R_ni)*R_align)(i)/M_PI;
+	data_msg.att.at(i) = 180*rot2rph((att_thread->R_ni)*R_align)(i)/M_PI;
 	data_msg.bias.ang.at(i) = bias_thread->bias.w_b(i);
 	data_msg.bias.acc.at(i) = bias_thread->bias.a_b(i);
 	data_msg.bias.z.at(i) = bias_thread->bias.z(i);
       }
+      pthread_mutex_unlock(&mutex_att);
+      pthread_mutex_unlock(&mutex_bias);
+
 
       for (int i=0;i<6;i++)
       {

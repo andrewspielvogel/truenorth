@@ -54,7 +54,7 @@ struct termios2 {
 
 typedef boost::shared_ptr<boost::asio::serial_port> serial_port_ptr; /**< Serial port pointer. */
 
-#define SERIAL_PORT_READ_BUF_SIZE 10 /**< Size of read in buffer. */
+#define SERIAL_PORT_READ_BUF_SIZE 32 /**< Size of read in buffer. */
 
 
 /*

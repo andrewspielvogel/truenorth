@@ -16,17 +16,24 @@
 #include "bias_consumer.h"
 #include <ros/ros.h>
 #include <Eigen/Core>
-#include <semaphore.h>
+#include "bias_est.h"
 
 /**
  * @brief Class for consumer thread doing attitude estimation.
  */
 class AttConsumerThread : public Thread
 {
-  wqueue<GyroData*>& m_queue; /**< Queue.*/
-  BiasConsumerThread* bias; /**< Bias consumer thread.*/
+
+ private:
+  wqueue<GyroData*>& m_queue_; /**< Queue.*/
+  BiasConsumerThread* bias_thread_; /**< Bias consumer thread.*/
+  BiasEst bias_; /**< Store current bias estimation. */
+  AttEst att_; /**< Attitude estimation class*/
+
  
  public:
+    Eigen::Matrix3d R_ni;
+
   /**
    * @brief Constructor.
    * 
@@ -37,9 +44,8 @@ class AttConsumerThread : public Thread
    * @param hz Sampling rate.
    * 
    */
- AttConsumerThread(BiasConsumerThread* & bias_thread, wqueue<GyroData*>& queue, Eigen::VectorXd k, Eigen::Matrix3d R_align, float lat, float hz) : m_queue(queue), att(k,R_align,lat,hz), bias(bias_thread) {} 
+ AttConsumerThread(BiasConsumerThread* & bias_thread, wqueue<GyroData*>& queue, Eigen::VectorXd k, Eigen::Matrix3d R_align, float lat, float hz) : m_queue_(queue), att_(k,R_align,lat,hz), bias_thread_(bias_thread), bias_(k,lat) {} 
 
-  AttEst att; /**< Attitude estimation class*/
  
   void* run() {
 
@@ -47,10 +53,16 @@ class AttConsumerThread : public Thread
     // available to process.
     for (int i = 0;; i++)
     {
-      GyroData* item = m_queue.remove();
-      sem_wait(&semaphore);
-      att.step(item->ang-bias->bias.w_b,item->acc-bias->bias.a_b,item->diff);
-      sem_post(&semaphore);
+      GyroData* item = m_queue_.remove();
+      pthread_mutex_lock(&mutex_bias);
+      bias_ = bias_thread_->bias;
+      pthread_mutex_unlock(&mutex_bias);
+
+      att_.step(item->ang-bias_.w_b,item->acc-bias_.a_b,item->diff);
+
+      pthread_mutex_lock(&mutex_att);
+      R_ni = att_.R_ni;
+      pthread_mutex_unlock(&mutex_att);
       
       //delete item;
     }

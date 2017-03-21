@@ -14,16 +14,20 @@
 #include "thread.h"
 #include <ros/ros.h>
 #include <Eigen/Core>
-#include <semaphore.h>
 
 /**
  * @brief Class for consumer thread doing bias estimation.
  */
 class BiasConsumerThread : public Thread
 {
-  wqueue<GyroData*>& m_queue; /**< Queue. */
+ private:
+  wqueue<GyroData*>& m_queue_; /**< Queue. */
+  BiasEst bias_;
+
  
  public:
+  BiasEst bias;
+
   /**
    * @brief Constructor.
    * 
@@ -32,9 +36,8 @@ class BiasConsumerThread : public Thread
    * @param lat Latitude.
    * 
    */
- BiasConsumerThread(wqueue<GyroData*>& queue, Eigen::VectorXd k, float lat) : m_queue(queue), bias(k,lat) {}
+ BiasConsumerThread(wqueue<GyroData*>& queue, Eigen::VectorXd k, float lat) : m_queue_(queue), bias_(k,lat), bias(k,lat) {}
 
-  BiasEst bias;
  
   void* run()
   {
@@ -50,11 +53,14 @@ class BiasConsumerThread : public Thread
     // available to process.
     for (int i = 0;; i++)
     {
-      GyroData* item = m_queue.remove();
-      sem_wait(&semaphore);
-      bias.step(Rni,item->ang,item->acc,item->diff);
-      sem_post(&semaphore);
+      GyroData* item = m_queue_.remove();
       
+      pthread_mutex_lock(&mutex_bias);
+      bias = bias_;
+      pthread_mutex_unlock(&mutex_bias);
+
+      bias_.step(Rni,item->ang,item->acc,item->diff);
+
       //delete item;
     }
     return NULL;
