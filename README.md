@@ -1,8 +1,8 @@
-Rosnode for true-north seeking gyrocompass. Tested on Ubuntu 14.04
+Rosnode for true-north seeking gyrocompass. Tested on Ubuntu 16.04
 
 ##Installation:
 
-- Install ROS. Instructions [here](http://wiki.ros.org/indigo/Installation).
+- Install ROS. Instructions [here](http://wiki.ros.org/kinetic/Installation).
 - Setup ROS workspace. Instructions [here](http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment).
 - Install eigen3
 ```
