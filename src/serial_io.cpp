@@ -38,24 +38,8 @@ union FloatSignals
 };
 
 
-SerialPort::SerialPort(Eigen::VectorXd k, std::string log_location, float hz): data(hz)
+SerialPort::SerialPort(float hz): data(hz)
 {
-  // get current time to name log file
-  time_t now = time(0);
-  tm *time = localtime(&now);
-
-  int year = 1900 +time->tm_year;
-  int month = 1 + time->tm_mon;
-  int day = time->tm_mday;
-  int hour = time->tm_hour;
-  int minute = 1 + time->tm_min;
-  
-  char file_name [128];
-  sprintf(file_name,"%s%d_%d_%d_%d_%d.KVH",log_location.c_str(),year,month,day,hour,minute);
-
-  ROS_INFO("Logging IMU Data to: %s",file_name);
-  // open log file
-  fp_ = fopen(file_name,"w");
 };
 
 
@@ -266,7 +250,7 @@ void SerialPort::parse_data_( char *data_raw)
     }
 
   // log data
-  log();
+  log_queue.add(&data);
   att_queue.add(&data);
   bias_queue.add(&data);
 
@@ -457,14 +441,3 @@ void SerialPort::on_receive_(const boost::system::error_code& ec, size_t bytes_t
 }
 
 
-// log kvh 1775 data packet values
-void SerialPort::log()
-{
-
-    //log data
-    fprintf(fp_,"IMU_RAW, %.40f,%.40f,%.40f, %.35f,%.35f,%.35f, %.30f,%.30f,%.30f, %f, %d, %.30f, %d, %d, %d, %d, %d, %d \n",
-	    data.ang(0),data.ang(1),data.ang(2),data.acc(0),data.acc(1),data.acc(2),data.mag(0),data.mag(1),data.mag(2),data.temp,
-	    data.seq_num,data.timestamp,(int) data.status.at(0),(int) data.status.at(1),(int) data.status.at(2),(int) data.status.at(3),
-	    (int) data.status.at(4),(int) data.status.at(5));
-
-}

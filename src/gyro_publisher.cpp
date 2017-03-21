@@ -17,6 +17,7 @@
 #include <truenorth/gyro_data.h>
 #include <truenorth/att_consumer.h>
 #include <truenorth/bias_consumer.h>
+#include <truenorth/log_consumer.h>
 
 int main(int argc, char **argv)
 {
@@ -86,7 +87,9 @@ int main(int argc, char **argv)
      * INITIALIZE SERIAL PORT/START ATT/BIAS ESTIMATION THREADS
      ************************************************************/
 
-    SerialPort serial(k,log_location.c_str(), hz);
+    SerialPort serial(hz);
+    LogConsumerThread* log_thread = new LogConsumerThread(serial.log_queue,log_location.c_str());
+    
     BiasConsumerThread* bias_thread = new BiasConsumerThread(serial.bias_queue,k.block<4,1>(3,0),lat,hz);
     bias_thread->start();
     

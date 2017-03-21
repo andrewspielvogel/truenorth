@@ -95,8 +95,6 @@ protected:
 
     int state_; /**< State of data read in. */
     int data_cnt_; /**< Track number of bytes read in. */
-    FILE *fp_; /**< Log file. */
-
     
 private:
     SerialPort(const SerialPort &p);
@@ -106,7 +104,7 @@ public:
     GyroData data; /**< Class for storing IMU data. */
     wqueue<GyroData*> att_queue; /**< Queue for attitude estimation. */
     wqueue<GyroData*> bias_queue; /**< Queue for bias estimation. */
-    void log(); /**< Log data. */
+    wqueue<GyroData*> log_queue; /**< Queue for logging IMU data. */
 
     /**
      * Constructor.
@@ -118,7 +116,7 @@ public:
      * @param align Initial estimation of attitude rotation.
      * @param log_location_ Location of IMU data log file.
      */
-    SerialPort(Eigen::VectorXd k, std::string log_location, float hz);
+    SerialPort(float hz);
 
     virtual ~SerialPort(void); /**< Destructor */
 
