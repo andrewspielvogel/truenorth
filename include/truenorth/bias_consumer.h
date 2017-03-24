@@ -62,11 +62,6 @@ class BiasConsumerThread : public Thread
   void* run()
   {
 
-    /*
-     * TODO!!!!!!!!!!!
-     * NEED TO ADD FUNCTIONALITY TO PASS IN Rni(t). RIGHT NOW Rni(t) IS STATIC.
-     */
-    
 
     // Remove 1 item at a time and process it. Blocks if no items are 
     // available to process.
