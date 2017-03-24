@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate messages in the 'msg' folder
  add_message_files(
    FILES
+   imu.msg
    imu_bias.msg
    kvh_imu.msg
    gyro_sensor_data.msg
@@ -46,13 +47,6 @@ catkin_package(
 ## Build ##
 ###########
 
-## Specify additional locations of header files
-## Your package locations should be listed before other locations
-# include_directories(include)
-include_directories(
-  include
-  ${catkin_INCLUDE_DIRS}
-)
 
 ## For Eigen library support
 find_package(cmake_modules REQUIRED)

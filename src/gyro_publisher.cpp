@@ -119,13 +119,12 @@ int main(int argc, char **argv)
      * MAIN LOOP
      ************************************************************/
 
-   
+    // initialize data_msg
+    truenorth::gyro_sensor_data data_msg;
+    
     // main loop
     while (ros::ok())
     {
-
-      // initialize data_msg
-      truenorth::gyro_sensor_data data_msg;
 
       // warn if queues are growing large
       int queue_warn_size = 500;
@@ -148,9 +147,9 @@ int main(int argc, char **argv)
 
       for (int i=0;i<3;i++)
       {
-	data_msg.imu.ang.at(i) = serial.data.ang(i);
-	data_msg.imu.acc.at(i) = serial.data.acc(i);
-	data_msg.imu.mag.at(i) = serial.data.mag(i);
+	data_msg.kvh.imu.ang.at(i) = serial.data.ang(i);
+	data_msg.kvh.imu.acc.at(i) = serial.data.acc(i);
+	data_msg.kvh.imu.mag.at(i) = serial.data.mag(i);
 	data_msg.att.at(i) = 180*rot2rph((att_thread->R_ni)*R_align)(i)/M_PI;
 	data_msg.bias.ang.at(i) = bias_thread->bias.w_b(i);
 	data_msg.bias.acc.at(i) = bias_thread->bias.a_b(i);
@@ -163,12 +162,12 @@ int main(int argc, char **argv)
 
       for (int i=0;i<6;i++)
       {
-	data_msg.imu.status.at(i) = serial.data.status.at(i);
+	data_msg.kvh.status.at(i) = serial.data.status.at(i);
       }
 	
-      data_msg.imu.temp = serial.data.temp;
-      data_msg.imu.stamp = serial.data.timestamp;
-      data_msg.imu.seq_num = serial.data.seq_num;
+      data_msg.kvh.temp = serial.data.temp;
+      data_msg.kvh.stamp = serial.data.timestamp;
+      data_msg.kvh.seq_num = serial.data.seq_num;
 
       // publish packet
       chatter.publish(data_msg);

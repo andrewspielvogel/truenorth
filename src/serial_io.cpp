@@ -43,6 +43,14 @@ SerialPort::SerialPort(float hz): data(hz)
 };
 
 
+
+// destructor
+SerialPort::~SerialPort(void)
+{
+  stop();
+}
+
+
 // parse data packet into fields
 void SerialPort::parse_data_( char *data_raw)
 {
@@ -140,13 +148,6 @@ void SerialPort::parse_data_( char *data_raw)
   bias_queue.add(&data);
 
  
-}
-
-
-// destructor
-SerialPort::~SerialPort(void)
-{
-  stop();
 }
 
 
