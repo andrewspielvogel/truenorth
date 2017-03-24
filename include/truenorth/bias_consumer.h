@@ -14,6 +14,11 @@
 #include "thread.h"
 #include <ros/ros.h>
 #include <Eigen/Core>
+#include <math.h>
+#include <phins/phins_msg.h>
+#include <pthread.h>
+
+static pthread_mutex_t mutex_phins;
 
 /**
  * @brief Class for consumer thread doing bias estimation.
@@ -23,11 +28,13 @@ class BiasConsumerThread : public Thread
  private:
   wqueue<GyroData*>& m_queue_; /**< Queue. */
   BiasEst bias_;
+  Eigen::Matrix3d R_align_;
+  Eigen::Matrix3d Rni_;
 
  
  public:
   BiasEst bias;
-
+  Eigen::Matrix3d Rni;
   /**
    * @brief Constructor.
    * 
@@ -36,8 +43,21 @@ class BiasConsumerThread : public Thread
    * @param lat Latitude.
    * 
    */
- BiasConsumerThread(wqueue<GyroData*>& queue, Eigen::VectorXd k, float lat) : m_queue_(queue), bias_(k,lat), bias(k,lat) {}
+ BiasConsumerThread(wqueue<GyroData*>& queue, Eigen::VectorXd k, float lat) : m_queue_(queue), bias_(k,lat), bias(k,lat) {R_align_<<1,0,0,0,-1,0,0,0,-1; Rni_ <<1,0,0,0,1,0,0,0,1;}
 
+  void callback(const phins::phins_msg::ConstPtr &msg)
+{
+
+  double r = (msg->att.at(0))*M_PI/180;
+  double p = (msg->att.at(1))*M_PI/180;
+  double h = (msg->att.at(2))*M_PI/180;
+  pthread_mutex_lock(&mutex_phins);
+  Rni_ << cos(h)*cos(p),cos(h)*sin(p)*sin(r) - sin(h)*cos(r),cos(h)*sin(p)*cos(r) + sin(h)*sin(r),
+    sin(h)*cos(p),sin(h)*sin(p)*sin(r) + cos(h)*cos(r),sin(h)*sin(p)*cos(r) - cos(h)*sin(r),
+    -sin(p),cos(p)*sin(r),cos(p)*cos(r);
+  pthread_mutex_unlock(&mutex_phins);
+
+}
  
   void* run()
   {
@@ -46,8 +66,7 @@ class BiasConsumerThread : public Thread
      * TODO!!!!!!!!!!!
      * NEED TO ADD FUNCTIONALITY TO PASS IN Rni(t). RIGHT NOW Rni(t) IS STATIC.
      */
-    Eigen::Matrix3d Rni;
-    Rni << 1,0,0,0,-1,0,0,0,-1;
+    
 
     // Remove 1 item at a time and process it. Blocks if no items are 
     // available to process.
@@ -58,8 +77,12 @@ class BiasConsumerThread : public Thread
       pthread_mutex_lock(&mutex_bias);
       bias = bias_;
       pthread_mutex_unlock(&mutex_bias);
+      
+      pthread_mutex_lock(&mutex_phins);
+      Rni = Rni_;
+      pthread_mutex_unlock(&mutex_phins);
 
-      bias_.step(Rni,item->ang,item->acc,item->diff);
+      bias_.step(Rni*R_align_,item->ang,item->acc,item->diff);
 
       //delete item;
     }

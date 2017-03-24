@@ -9,6 +9,7 @@
 #include <ros/ros.h>
 #include <truenorth/serial_io.h>
 #include <truenorth/gyro_sensor_data.h>
+#include <phins/phins_msg.h>
 #include <truenorth/helper_funcs.h>
 #include <Eigen/Core>
 #include <string>
@@ -19,6 +20,8 @@
 #include <truenorth/bias_consumer.h>
 #include <truenorth/log_consumer.h>
 #include <truenorth/thread.h>
+#include <boost/bind.hpp>
+
 
 
 int main(int argc, char **argv)
@@ -29,9 +32,6 @@ int main(int argc, char **argv)
 
     // must initialize with "~" for param passing
     ros::NodeHandle n("~");
-
-    // initialize publisher
-    ros::Publisher chatter = n.advertise<truenorth::gyro_sensor_data>("gyro_data",1000);
 
 
     /******************************************************
@@ -83,21 +83,36 @@ int main(int argc, char **argv)
     int hz = 1000; // default
     n.getParam("hz",hz);
 
-
-   
     /***********************************************************************
-     * INITIALIZE SERIAL PORT, START ATT/BIAS ESTIMATION AND LOGGING THREADS
+     * START SERIAL PORT, START ATT/BIAS ESTIMATION AND LOGGING THREADS
      ***********************************************************************/
 
     SerialPort serial(hz);
     
     LogConsumerThread* log_thread = new LogConsumerThread(serial.log_queue,log_location.c_str());
-    log_thread->start();
-    
+   
     BiasConsumerThread* bias_thread = new BiasConsumerThread(serial.bias_queue,k.block<4,1>(3,0),lat);
-    bias_thread->start();
     
     AttConsumerThread* att_thread = new AttConsumerThread(bias_thread,serial.att_queue,k,R0*R_align,lat,hz);
+
+
+    /**********************************************************************
+     * INITIALIZE PUBLISHER AND SUBSCRIBER
+     **********************************************************************/
+    // initialize publisher
+    ros::Publisher chatter = n.advertise<truenorth::gyro_sensor_data>("gyro_data",1000);
+
+    // init phins sub
+    ros::Subscriber sub    = n.subscribe("/phins/phins_data",1,&BiasConsumerThread::callback, bias_thread);
+
+
+   
+    /***********************************************************************
+     * START SERIAL PORT, START ATT/BIAS ESTIMATION AND LOGGING THREADS
+     ***********************************************************************/
+
+    log_thread->start();
+    bias_thread->start();
     att_thread->start();
 
     
