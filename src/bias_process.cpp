@@ -10,17 +10,17 @@
 int main(int argc, char* argv[])
 {
 
-  int hz = 5000;
-  int rows = hz*60*44.9;
-  int cols = 21;
+  int hz = 1000;
+  int rows = hz*60*10;
+  int cols = 21;//12;
   float lat = 39.32*M_PI/180;
 
 
   Eigen::VectorXd k(4);
-  k << 1,.01,2,0.000001; 
-
-  std::string name_out = "/home/spiels/log/sim/processedbias.csv";
-  std::string file = "/home/spiels/log/sim/data.KVH";
+  //k << .1,.001,2,0.000001; 
+  k<<1.0,0.03,.05,0.00000001;
+  std::string name_out = "/home/spiels/log/processedbias.csv";
+  std::string file = "/home/spiels/log/data.KVH";
 
 
   printf("LOADING CSV FILE: %s\n",file.c_str());
@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
     trph(0,i-1) = data(i,11)-data(0,11);
     trph.block<3,1>(1,i-1) = bias.w_b;
     trph.block<3,1>(4,i-1) = bias.a_b;
-    trph.block<3,1>(7,i-1) = bias.z;
+    trph.block<3,1>(7,i-1) = bias.a_hat;
 
     if ((i) % (hz*30) == 0) {
       

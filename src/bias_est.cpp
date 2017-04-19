@@ -35,8 +35,10 @@ BiasEst::BiasEst(Eigen::VectorXd k, float lat)
   Eigen::Vector3d e_e = skew(w_e)*a_e;
   
   e_n_ = get_R_en(lat).transpose()*e_e;
+  a_n_ = get_R_en(lat).transpose()*a_e;
 
-  a_hat << 0,0,1;
+  a_hat << 0,0,0;
+  prev_acc_ << 0,0,0;
 
   w_b << 0,0,0;
   a_b << 0,0,0;
@@ -51,19 +53,27 @@ BiasEst::~BiasEst(void)
 void BiasEst::step(Eigen::Matrix3d Rni, Eigen::Vector3d ang,Eigen::Vector3d acc, float dt)
 {
 
-  double a = 0.6;
-  double b = 1.0 - a;
-  
-  Eigen::Vector3d da = a_hat - acc;
-  Eigen::Vector3d a_dot = Rni.transpose()*e_n_ - skew(ang-w_b)*acc + skew(ang)*a_b - z - kg_*da;
-  Eigen::Vector3d w_b_dot = -kw_*skew(acc)*da;
-  Eigen::Vector3d a_b_dot = ka_*skew(ang)*da;
-  Eigen::Vector3d z_dot   = kz_*da;
+  Eigen::Vector3d da_dt = (acc - prev_acc_)/dt;
+  prev_acc_ = acc;
+  Eigen::Vector3d da = a_hat - acc + Rni.transpose()*a_n_;
+  // Eigen::Vector3d da = a_hat - acc;
+  // Eigen::Vector3d a_dot = Rni.transpose()*e_n_ - skew(ang)*a_hat +skew(w_b)*a_hat + skew(ang)*a_b - z - kg_*da;
+  // Eigen::Vector3d w_b_dot = -kw_*skew(acc)*da;
+  // Eigen::Vector3d a_b_dot = ka_*skew(ang)*da;
+  // Eigen::Vector3d z_dot   = kz_*da;
+
+  // a_hat = a_hat + a_dot*dt;
+  // w_b   = w_b   + w_b_dot*dt;
+  // a_b   = a_b   + a_b_dot*dt;
+  // z     = z     + z_dot*dt;
+
+
+  Eigen::Vector3d a_dot = skew(ang-w_b)*Rni.transpose()*a_n_ - Rni.transpose()*e_n_ + da_dt - kg_*da;
+  Eigen::Vector3d w_b_dot = kw_*skew(Rni.transpose()*a_n_)*da;
+
 
   a_hat = a_hat + a_dot*dt;
-  w_b   = w_b*a + b*(w_b   + w_b_dot*dt); 
-  //w_b   = w_b   + w_b_dot*dt;
-  a_b   = a_b   + a_b_dot*dt;
-  z     = z     + z_dot*dt;
+  w_b   = w_b   + w_b_dot*dt;
+  
 
 }

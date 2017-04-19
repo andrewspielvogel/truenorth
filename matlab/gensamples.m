@@ -29,18 +29,19 @@ num = size(t,2);
 samp.ang = zeros(3,num);
 samp.acc = zeros(3,num);
 samp.att = zeros(3,num);
+samp.att_v = zeros(3,num);
 
 samp.Rzi{1} = eye(3);
 
 % generate a_n
 Ren = [-sin(lat),0,-cos(lat);0,1,0;cos(lat),0,-sin(lat)];
-a_e = [cos(lat);0;sin(lat)] - (15*pi/180/3600)^2*cos(lat)*[r;0;0]/9.81;
+a_e = [cos(lat);0;sin(lat)] - (15.04*pi/180/3600)^2*cos(lat)*[r;0;0]/9.81;
 a_n = Ren'*a_e;
 
 Rsz = get_Rsn(lat,0)*R_align;
 samp.Rsz=Rsz;
     
-fileID = fopen('/home/spiels/log/data2.KVH','w');
+fileID = fopen('/home/spiels/log/data.KVH','w');
 
 for i=1:num
 
@@ -52,17 +53,19 @@ for i=1:num
     samp.Rsi{i} = Rsz*samp.Rzi{i};
     if i~=num
         
-        w = samp.Rsi{i}'*[0;0;1]*15*pi/180/3600 + w_veh;
+        w = samp.Rsi{i}'*[0;0;1]*15.04*pi/180/3600 + samp.Rsi{i}'*Rsn*w_veh;
         samp.Rzi{i + 1} = samp.Rzi{i}*expm(skew(w)*dt);
     end
 
-    samp.att(:,i) = rot2rph(Rsn'*samp.Rsi{i}*R_align);  
+    samp.ang_v(:,i) = samp.Rsi{i}'*Rsn*w_veh;
+    samp.att(:,i) = rot2rph(Rsn'*samp.Rsi{i}*R_align');  
     samp.Rni{i} = Rsn'*samp.Rsi{i};
     samp.ang(:,i) =  w + w_sig*randn(3,1) + bias.ang;
-    samp.acc(:,i) =  samp.Rsi{i}'*Rsn*a_n + a_sig*randn(3,1) + bias.acc;
+    samp.acc(:,i) =  samp.Rsi{i}'*Rsn*(a_n + get_a(t(i))) + a_sig*randn(3,1) + bias.acc;
     samp.acc_z(:,i) = samp.Rzi{i}*samp.acc(:,i);
-   
+    samp.acc_v(:,i) = samp.Rsi{i}'*Rsn*get_a(t(i));  
     samp.e_v(:,i) = skew(w_veh)*samp.acc(:,i);
+
     % print progress
     if ~mod(t(i),30)
         str = sprintf('Made %i:%i0 of data at %i hz',floor(t(i)/60),mod(t(i),60)/10,hz);
@@ -84,7 +87,7 @@ toc
 
 function R = get_Rse(t)
 
-rate = 15*pi/180/3600;
+rate = 15.04*pi/180/3600;
 
 Rse = expm(skew([0,0,1])*rate*t);
 
@@ -103,8 +106,11 @@ if t<5*60*0
     w=[0;0;0];
 else
     
-w = [cos(t/7)/120*0;-cos(t/5)/20*0;-cos(t/5)/20];
+w = [0;0;cos(t/5)/20]*0;
+%w = [sin(t/5)/70;cos(t/3)/50;sin(t/9)/30];
 
 end
 
+function a = get_a(t)
 
+a = [sin(t/5)/20;cos(t/7)/22;sin(t/4)/15]*0;

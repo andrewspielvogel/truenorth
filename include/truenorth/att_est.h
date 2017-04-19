@@ -39,6 +39,8 @@ public:
    */
   void step(Eigen::Vector3d w,Eigen::Vector3d a, float dt);
   Eigen::Matrix3d R_ni; /**< Estimation of NED to instrument rotation. */
+  Eigen::Vector3d a_n; /**< Linear Acceleration in the NED frame.*/
+
 
  private:
 
@@ -51,7 +53,6 @@ public:
   float kg_; /**< Gravity vector estimation gain. */        
   float kw_; /**< East vector estimation gain. */
 
-  Eigen::Vector3d a_n_; /**< Linear Acceleration in the NED frame.*/
   Eigen::Vector3d e_n_; /**< East Direction in the NED frame.*/
   Eigen::Vector3d wearth_n_; /**< Earth's angular velocity in the NED frame. */
   Eigen::Matrix3d P_; /**< Projection matrix onto a_n_ vector. */
