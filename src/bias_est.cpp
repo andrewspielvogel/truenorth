@@ -74,6 +74,9 @@ void BiasEst::step(Eigen::Matrix3d Rni, Eigen::Vector3d ang,Eigen::Vector3d acc,
 
   a_hat = a_hat + a_dot*dt;
   w_b   = w_b   + w_b_dot*dt;
+
+  float a = 0.99999;
+  a_b = a_b*a + (1-a)*a_hat;
   
 
 }
