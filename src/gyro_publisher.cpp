@@ -160,6 +160,8 @@ int main(int argc, char **argv)
       pthread_mutex_lock(&mutex_bias);
       pthread_mutex_lock(&mutex_att);
 
+      bias_thread->bias.z = 180*rot2rph((bias_thread->Rni)*R_align)/M_PI;
+      
       for (int i=0;i<3;i++)
       {
 	data_msg.kvh.imu.ang.at(i) = serial.data.ang(i);
@@ -170,7 +172,6 @@ int main(int argc, char **argv)
 	data_msg.bias.acc.at(i) = bias_thread->bias.a_b(i);
 	data_msg.bias.z.at(i) = bias_thread->bias.z(i);
       }
-      
       pthread_mutex_unlock(&mutex_att);
       pthread_mutex_unlock(&mutex_bias);
 

@@ -58,8 +58,9 @@ class AttConsumerThread : public Thread
       bias_ = bias_thread_->bias;
       pthread_mutex_unlock(&mutex_bias);
 
-      att_.step(item->ang-bias_.w_b,item->acc-bias_.a_b,item->diff);
-
+      //att_.step(item->ang-bias_.w_b,item->acc-bias_.a_b,item->diff);
+      att_.step(item->ang,item->acc,item->diff);
+      
       pthread_mutex_lock(&mutex_att);
       R_ni = att_.R_ni;
       pthread_mutex_unlock(&mutex_att);
