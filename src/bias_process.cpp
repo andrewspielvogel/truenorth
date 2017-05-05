@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
 
   int hz = 100;
   int rows = hz*60*4.2;
-  int cols = 21;//12;
+  int cols = 27;//12;
   float lat = 39.32*M_PI/180;
 
 
@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
 
     }
    
-    Rni << data(i,12),data(i,13),data(i,14),data(i,15),data(i,16),data(i,17),data(i,18),data(i,19),data(i,20);
+    Rni << data(i,18),data(i,19),data(i,20),data(i,21),data(i,22),data(i,23),data(i,24),data(i,25),data(i,26);
 
 
     

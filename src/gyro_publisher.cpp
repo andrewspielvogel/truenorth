@@ -112,8 +112,8 @@ int main(int argc, char **argv)
      * START SERIAL PORT, START ATT/BIAS ESTIMATION AND LOGGING THREADS
      ***********************************************************************/
 
-    log_thread->start();
     bias_thread->start();
+    log_thread->start();
     att_thread->start();
 
     
