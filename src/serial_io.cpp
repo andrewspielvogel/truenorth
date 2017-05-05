@@ -143,8 +143,8 @@ void SerialPort::parse_data_( char *data_raw)
   data.status = status;
 
   // log data
-  log_queue.add(&data);
   att_queue.add(&data);
+  log_queue.add(&data);
   bias_queue.add(&data);
 
  
