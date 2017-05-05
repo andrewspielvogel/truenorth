@@ -10,15 +10,15 @@
 int main(int argc, char* argv[])
 {
 
-  int hz = 100;
-  int rows = hz*60*4.2;
-  int cols = 27;//12;
+  int hz = 5000;
+  int rows = hz*60*3;
+  int cols = 28;//12;
   float lat = 39.32*M_PI/180;
 
 
   Eigen::VectorXd k(4);
   //k << .1,.0003,0.0,0.0;
-  k<<10,0.10,0.0,0.0;
+  k<<10,0.001,0.0,0.0;
   std::string name_out = "/home/spiels/log/processedbias.csv";
   std::string file = "/home/spiels/log/data2.KVH";
 
@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
 
   printf("CSV FILE LOADED: %s\n",file.c_str());
 
-  printf("RUNNING ATTITUDE ESTIMATION\n");
+  printf("RUNNING BIAS ESTIMATION\n");
 
   BiasEst bias(k,lat);
 
@@ -37,6 +37,8 @@ int main(int argc, char* argv[])
 
   Eigen::Matrix3d Rni;
   Rni <<1,0,0,0,-1,0,0,0,-1;
+  Eigen::Matrix3d Ralign;
+  Ralign << 1,0,0,0,-1,0,0,0,-1;
   Eigen::Vector3d w_err(0,0,3*M_PI/180);
   Eigen::Matrix3d R_err = skew(w_err*0).exp();
 
@@ -49,18 +51,18 @@ int main(int argc, char* argv[])
       seq_diff += 128;
 
     }
-   
-    Rni << data(i,18),data(i,19),data(i,20),data(i,21),data(i,22),data(i,23),data(i,24),data(i,25),data(i,26);
 
 
-    
+    Rni << data(i,19),data(i,20),data(i,21),data(i,22),data(i,23),data(i,24),data(i,25),data(i,26),data(i,27);
+
+    Rni = Rni*Ralign;
 
     bias.step(Rni*R_err,data.block<1,3>(i,0).transpose(),data.block<1,3>(i,3).transpose(),1.0/hz);   
    
     trph(0,i-1) = data(i,11)-data(0,11);
-    trph.block<3,1>(1,i-1) = bias.w_b;//data.block<1,3>(i,0).transpose();
-    trph.block<3,1>(4,i-1) = bias.a_b;//data.block<1,3>(i,3).transpose();
-    trph.block<3,1>(7,i-1) = bias.a_hat;
+    trph.block<3,1>(1,i-1) = rot2rph(Rni)*180/M_PI;
+    trph.block<3,1>(4,i-1) = data.block<1,3>(i,0).transpose();
+    trph.block<3,1>(7,i-1) = data.block<1,3>(i,3).transpose();
 
     if ((i) % (hz*30) == 0) {
       
