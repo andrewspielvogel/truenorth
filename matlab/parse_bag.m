@@ -56,5 +56,5 @@ for i=1:num
     R = rph2R(fliplr(out.phins_att(:,i)'*pi/180)');
 
     out.acc_v(:,i) = out.acc(:,i) - R'*a_n;
-    fprintf(fileID,'IMU_RAW, %.40f,%.40f,%.40f, %.35f,%.35f,%.35f,0,0,0, 0, 0, %.30f, 1,1,1,1,1,1,%f,%f,%f,%f,%f,%f,%f,%f,%f \n',out.ang(1,i),out.ang(2,i),out.ang(3,i),out.acc(1,i),out.acc(2,i),out.acc(3,i),out.t(i),R(1,1),R(1,2),R(1,3),R(2,1),R(2,2),R(2,3),R(3,1),R(3,2),R(3,3));
+    fprintf(fileID,'IMU_RAW, %.40f,%.40f,%.40f, %.35f,%.35f,%.35f,0,0,0, 0, 0, %.30f, 0,1,1,1,1,1,1,%f,%f,%f,%f,%f,%f,%f,%f,%f \n',out.ang(1,i),out.ang(2,i),out.ang(3,i),out.acc(1,i),out.acc(2,i),out.acc(3,i),out.t(i),R(1,1),R(1,2),R(1,3),R(2,1),R(2,2),R(2,3),R(3,1),R(3,2),R(3,3));
 end
