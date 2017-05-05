@@ -4,13 +4,13 @@
 	
         <node pkg="truenorth" type="gyro_publisher" name="truenorth" output="screen">
 
-               <param name="rate" value="100" type="int" />
+               <param name="rate" value="10" type="int" />
 	       <param name="hz" value="5000" type="int" />
 	       <param name="port" value="/dev/ttyUSB0" type="str" />
 	       <param name="baud" value="4147200" type="int" />
 	       <param name="latitude" value="39.32" type="double" />
 	       <param name="instr_align" value="1,0,0,0,-1,0,0,0,-1" type="string" />
-	       <param name="gains" value="0.1,0.01,0.0,10,0.01,0.0,0.0" type="string" />
+	       <param name="gains" value="0.1,0.1,0.0,100,0.1,0.0,0.0" type="string" />
 	       <param name="log_loc" value="/home/spiels/log/imu_data/" type="string" />
 
         </node>

@@ -26,7 +26,7 @@ static pthread_mutex_t mutex_phins;
 class BiasConsumerThread : public Thread
 {
  private:
-  wqueue<GyroData*>& m_queue_; /**< Queue. */
+  wqueue<GyroData>& m_queue_; /**< Queue. */
   BiasEst bias_;
   Eigen::Matrix3d R_align_;
   Eigen::Matrix3d Rni_;
@@ -43,7 +43,7 @@ class BiasConsumerThread : public Thread
    * @param lat Latitude.
    * 
    */
- BiasConsumerThread(wqueue<GyroData*>& queue, Eigen::VectorXd k, float lat) : m_queue_(queue), bias_(k,lat), bias(k,lat) {R_align_<<1,0,0,0,-1,0,0,0,-1; Rni_ <<1,0,0,0,1,0,0,0,1; Rni<<1,0,0,0,1,0,0,0,1;}
+ BiasConsumerThread(wqueue<GyroData>& queue, Eigen::VectorXd k, float lat) : m_queue_(queue), bias_(k,lat), bias(k,lat) {R_align_<<1,0,0,0,-1,0,0,0,-1; Rni_ <<1,0,0,0,1,0,0,0,1; Rni<<1,0,0,0,1,0,0,0,1;}
 
   void callback(const phins::phins_msg::ConstPtr &msg)
 {
@@ -52,10 +52,12 @@ class BiasConsumerThread : public Thread
   double p = (msg->att.at(1))*M_PI/180;
   double h = (msg->att.at(2))*M_PI/180;
   pthread_mutex_lock(&mutex_phins);
+
   Rni_ << cos(h)*cos(p),cos(h)*sin(p)*sin(r) - sin(h)*cos(r),cos(h)*sin(p)*cos(r) + sin(h)*sin(r),
     sin(h)*cos(p),sin(h)*sin(p)*sin(r) + cos(h)*cos(r),sin(h)*sin(p)*cos(r) - cos(h)*sin(r),
     -sin(p),cos(p)*sin(r),cos(p)*cos(r);
   pthread_mutex_unlock(&mutex_phins);
+
 
 }
  
@@ -67,7 +69,7 @@ class BiasConsumerThread : public Thread
     // available to process.
     for (int i = 0;; i++)
     {
-      GyroData* item = m_queue_.remove();
+      GyroData item = m_queue_.remove();
       
       pthread_mutex_lock(&mutex_bias);
       bias = bias_;
@@ -77,7 +79,7 @@ class BiasConsumerThread : public Thread
       Rni = Rni_;
       pthread_mutex_unlock(&mutex_phins);
 
-      bias_.step(Rni*R_align_,item->ang,item->acc,item->diff);
+      bias_.step(Rni*R_align_,item.ang,item.acc,item.diff);
 
       //delete item;
     }

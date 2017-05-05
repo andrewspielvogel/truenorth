@@ -18,6 +18,9 @@
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 #include <stdint.h>
+#include <pthread.h>
+
+static pthread_mutex_t mutex_data;
 
 
 /*
@@ -143,10 +146,9 @@ void SerialPort::parse_data_( char *data_raw)
   data.status = status;
 
   // log data
-  att_queue.add(&data);
-  log_queue.add(&data);
-  bias_queue.add(&data);
-
+  att_queue.add(data);
+  bias_queue.add(data);
+  log_queue.add(data);
  
 }
 
