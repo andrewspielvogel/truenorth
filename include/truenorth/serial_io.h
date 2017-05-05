@@ -20,6 +20,7 @@
 #include <truenorth/gyro_data.h>
 #include <truenorth/wqueue.h>
 #include <truenorth/thread.h>
+#include <truenorth/bias_consumer.h>
 #include <string>
 
 
@@ -91,12 +92,13 @@ protected:
 private:
     SerialPort(const SerialPort &p);
     SerialPort &operator=(const SerialPort &p);
+
  
 public:
     GyroData data; /**< Class for storing IMU data. */
-    wqueue<GyroData*> att_queue; /**< Queue for attitude estimation. */
-    wqueue<GyroData*> bias_queue; /**< Queue for bias estimation. */
-    wqueue<GyroData*> log_queue; /**< Queue for logging IMU data. */
+    wqueue<GyroData> att_queue; /**< Queue for attitude estimation. */
+    wqueue<GyroData> bias_queue; /**< Queue for bias estimation. */
+    wqueue<GyroData> log_queue; /**< Queue for logging IMU data. */
 
     /**
      * Constructor.

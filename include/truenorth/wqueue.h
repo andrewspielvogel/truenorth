@@ -8,11 +8,13 @@ using namespace std;
  
 template <typename T> class wqueue
 { 
-    list<T>   m_queue;
     pthread_mutex_t m_mutex;
     pthread_cond_t  m_condv;
+    list<T>   m_queue;
+
 
 public:
+
     wqueue() {
         pthread_mutex_init(&m_mutex, NULL);
         pthread_cond_init(&m_condv, NULL);
@@ -36,6 +38,24 @@ public:
         m_queue.pop_front();
         pthread_mutex_unlock(&m_mutex);
         return item;
+    }
+    T back() {
+      pthread_mutex_lock(&m_mutex);
+        while (m_queue.size() == 0) {
+            pthread_cond_wait(&m_condv, &m_mutex);
+        }
+        T item = m_queue.back();
+        pthread_mutex_unlock(&m_mutex);
+        return item;
+    }
+    T front() {
+      pthread_mutex_lock(&m_mutex);
+      while (m_queue.size() == 0) {
+	pthread_cond_wait(&m_condv, &m_mutex);
+      }
+      T item = m_queue.front();
+      pthread_mutex_unlock(&m_mutex);
+      return item;
     }
     int size() {
         pthread_mutex_lock(&m_mutex);
