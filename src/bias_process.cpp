@@ -11,14 +11,14 @@ int main(int argc, char* argv[])
 {
 
   int hz = 5000;
-  int rows = hz*60*3;
+  int rows = hz*60*1.5;
   int cols = 28;//12;
   float lat = 39.32*M_PI/180;
 
 
   Eigen::VectorXd k(4);
   //k << .1,.0003,0.0,0.0;
-  k<<10,0.001,0.0,0.0;
+  k<<10,0.03,0.0,0.0;
   std::string name_out = "/home/spiels/log/processedbias.csv";
   std::string file = "/home/spiels/log/data2.KVH";
 
