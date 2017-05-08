@@ -1,9 +1,7 @@
 function out = plot_post_process( data )
-
     num_cat=10;
-    num_samples = size(data,1)/num_cat;
+    num_samples = (size(data,1)/num_cat);
     data_parsed = zeros(num_cat,num_samples);
-
     for i=1:num_cat
 
         data_parsed(i,:) = data((i-1)*num_samples+1:i*num_samples);

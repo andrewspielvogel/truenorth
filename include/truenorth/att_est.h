@@ -18,7 +18,9 @@
 class AttEst
 {
 public:
-
+  Eigen::Vector3d g_error_; /**< Local level error term. */
+  Eigen::Vector3d h_error_; /**< Heading error term. */
+  Eigen::Vector3d east_est_n_; /**< Estimation of east in NED frame. */
   
 /**
  * @brief Constructor.
@@ -57,9 +59,7 @@ public:
   Eigen::Vector3d wearth_n_; /**< Earth's angular velocity in the NED frame. */
   Eigen::Matrix3d P_; /**< Projection matrix onto a_n_ vector. */
 
-  Eigen::Vector3d g_error_; /**< Local level error term. */
-  Eigen::Vector3d h_error_; /**< Heading error term. */
-  Eigen::Vector3d east_est_n_; /**< Estimation of east in NED frame. */
+
 
 };
 

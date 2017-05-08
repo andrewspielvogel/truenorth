@@ -20,8 +20,8 @@ t = 0:dt:t_end;
 r = 6371*1000;
 
 % noise
-w_sig = 2*6.32 * 10^(-3)*pi/180;  % measured 1775, units are rad/sec
-a_sig = 0.0037;            % measured 1775, units are g, not m/s^2
+w_sig = 0*6.32 * 10^(-3)*pi/180;  % measured 1775, units are rad/sec
+a_sig = 0*0.0037;            % measured 1775, units are g, not m/s^2
 
 num = size(t,2);
 
@@ -113,4 +113,4 @@ end
 
 function a = get_a(t)
 
-a = [sin(t/5)/20;cos(t/5)/22;0];
+a = [sin(t/5)/20;cos(t/5)/22;0]*0;
