@@ -27,15 +27,14 @@ class BiasConsumerThread : public Thread
 {
  private:
   wqueue<GyroData>& m_queue_; /**< Queue. */
-  BiasEst bias_;
-  Eigen::Matrix3d R_align_;
-  Eigen::Matrix3d Rni_;
-  int start_;
+  Eigen::Matrix3d R_align_; /**< PHINS to KVH rotation. */
+  Eigen::Matrix3d Rni_; /**< PHINS attitude. */
+  int start_; /**< Start Bias estimator when PHINS data valid. */
 
  
  public:
-  BiasEst bias;
-  Eigen::Matrix3d Rni;
+  BiasEst bias; /**< Bias estimator. */
+  Eigen::Matrix3d Rni; /**< KVH attitude (from PHINS). */
   /**
    * @brief Constructor.
    * 
@@ -44,7 +43,7 @@ class BiasConsumerThread : public Thread
    * @param lat Latitude.
    * 
    */
- BiasConsumerThread(wqueue<GyroData>& queue, Eigen::VectorXd k, float lat) : m_queue_(queue), bias_(k,lat), bias(k,lat) {R_align_<<1,0,0,0,-1,0,0,0,-1; Rni_ <<1,0,0,0,1,0,0,0,1; Rni<<1,0,0,0,1,0,0,0,1; start_ = 0;}
+ BiasConsumerThread(wqueue<GyroData>& queue, Eigen::VectorXd k, float lat) : m_queue_(queue),bias(k,lat) {R_align_<<1,0,0,0,-1,0,0,0,-1; Rni_ <<1,0,0,0,1,0,0,0,1; Rni<<1,0,0,0,1,0,0,0,1; start_ = 0;}
 
   void callback(const phins::phins_msg::ConstPtr &msg)
 {
@@ -71,18 +70,19 @@ class BiasConsumerThread : public Thread
     for (int i = 0;; i++)
     {
       GyroData item = m_queue_.remove();
-      
-      pthread_mutex_lock(&mutex_bias);
-      bias = bias_;
-      pthread_mutex_unlock(&mutex_bias);
-      
+            
       pthread_mutex_lock(&mutex_phins);
       Rni = Rni_*R_align_;
       pthread_mutex_unlock(&mutex_phins);
 
       if (start_)
       {
-	bias_.step(Rni,item.ang,item.acc,item.diff);
+	pthread_mutex_lock(&mutex_bias);
+
+	bias.step(Rni,item.ang,item.acc,item.diff);
+
+	pthread_mutex_unlock(&mutex_bias);
+
       }
       
     }

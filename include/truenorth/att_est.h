@@ -22,14 +22,16 @@ public:
   Eigen::Vector3d h_error_; /**< Heading error term. */
   Eigen::Vector3d east_est_n_; /**< Estimation of east in NED frame. */
   
-/**
- * @brief Constructor.
- * @param k Estimation gains/cutoff frequency (k(0): kg, k(1): kw, k(2): cuttoff_freq.
- * @param R0 Initial NED 2 Instrument Alignment estimation.
- * @param lat Latitude.
- * @param hz Sampling hz.
- */
+  /**
+   * @brief Constructor.
+   * @param k Estimation gains/cutoff frequency (k(0): kg, k(1): kw, k(2): cuttoff_freq.
+   * @param R0 Initial NED 2 Instrument Alignment estimation.
+   * @param lat Latitude.
+   * @param hz Sampling hz.
+   */
   AttEst(Eigen::VectorXd k,Eigen::Matrix3d R0, float lat, float hz);
+
+  
   virtual ~AttEst(void); /**< Destructor. */
     
   /**
@@ -40,6 +42,8 @@ public:
    * @param dt Time between last two measurements.
    */
   void step(Eigen::Vector3d w,Eigen::Vector3d a, float dt);
+
+  
   Eigen::Matrix3d R_ni; /**< Estimation of NED to instrument rotation. */
   Eigen::Vector3d a_n; /**< Linear Acceleration in the NED frame.*/
 

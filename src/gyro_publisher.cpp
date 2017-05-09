@@ -84,7 +84,7 @@ int main(int argc, char **argv)
     n.getParam("hz",hz);
 
     /***********************************************************************
-     * START SERIAL PORT, START ATT/BIAS ESTIMATION AND LOGGING THREADS
+     * INITIALIZE SERIAL PORT, INITIALIZE ATT/BIAS ESTIMATION AND LOGGING THREADS
      ***********************************************************************/
 
     SerialPort serial(hz);

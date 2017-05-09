@@ -23,8 +23,8 @@ class LogConsumerThread : public Thread
  private:
   FILE *fp_; /**< Log file. */
   wqueue<GyroData> &m_queue_; /**< Queue.*/
-  BiasConsumerThread* bias_thread_;
-  Eigen::Matrix3d Rni_;
+  BiasConsumerThread* bias_thread_; /**< Bias estimation thread. */
+  Eigen::Matrix3d Rni_; /**< KVH attitude (from PHINS). */
  
  public:
 
