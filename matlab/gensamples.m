@@ -20,8 +20,8 @@ t = 0:dt:t_end;
 r = 6371*1000;
 
 % noise
-w_sig = 0*6.32 * 10^(-3)*pi/180;  % measured 1775, units are rad/sec
-a_sig = 0*0.0037;            % measured 1775, units are g, not m/s^2
+w_sig = 6.32 * 10^(-3)*pi/180;  % measured 1775, units are rad/sec
+a_sig = 0.0037;            % measured 1775, units are g, not m/s^2
 
 num = size(t,2);
 
@@ -59,7 +59,7 @@ for i=1:num
 
     samp.ang_v(:,i) = samp.Rsi{i}'*Rsn*w_veh;
     samp.att(:,i) = rot2rph(Rsn'*samp.Rsi{i}*R_align');  
-    samp.Rni{i} = Rsn'*samp.Rsi{i};
+    samp.Rni{i} = Rsn'*samp.Rsi{i}*R_align';
     samp.ang(:,i) =  w + w_sig*randn(3,1) + bias.ang;
     samp.acc(:,i) =  samp.Rsi{i}'*Rsn*(a_n + get_a(t(i))) + a_sig*randn(3,1) + bias.acc;
     samp.acc_z(:,i) = samp.Rzi{i}*samp.acc(:,i);
@@ -106,7 +106,7 @@ if t<5*60*0
     w=[0;0;0];
 else
     
-w = [0;0;cos(t/5)/20];
+w = [0;0;cos(t/5)/20]*0;
 %w = [sin(t/5)/70;cos(t/3)/50;sin(t/9)/30];
 
 end
