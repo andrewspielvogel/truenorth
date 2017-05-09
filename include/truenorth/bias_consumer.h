@@ -76,10 +76,10 @@ class BiasConsumerThread : public Thread
       pthread_mutex_unlock(&mutex_bias);
       
       pthread_mutex_lock(&mutex_phins);
-      Rni = Rni_;
+      Rni = Rni_*R_align_;
       pthread_mutex_unlock(&mutex_phins);
 
-      bias_.step(Rni*R_align_,item.ang,item.acc,item.diff);
+      bias_.step(Rni,item.ang,item.acc,item.diff);
 
       //delete item;
     }

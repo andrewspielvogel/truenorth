@@ -20,7 +20,6 @@
 #include <truenorth/gyro_data.h>
 #include <truenorth/wqueue.h>
 #include <truenorth/thread.h>
-#include <truenorth/bias_consumer.h>
 #include <string>
 
 

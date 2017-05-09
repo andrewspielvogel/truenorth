@@ -14,7 +14,7 @@ static pthread_mutex_t mutex_bias;
 static pthread_mutex_t mutex_att;
 
 /**
- * @brief Thread class bassed on pthread.
+ * @brief Thread class based on pthread.
  */
 class Thread
 {
