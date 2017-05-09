@@ -58,10 +58,10 @@ class AttConsumerThread : public Thread
       bias_ = bias_thread_->bias;
       pthread_mutex_unlock(&mutex_bias);
 
-      bias_.w_b <<2.6/1000000.0,2.3/100000.0,3.09/1000000.0;
-      bias_.a_b << 0.0012,-0.0043,0.0018;
-      //att_.step(item.ang-bias_.w_b,item.acc-bias_.a_b,item.diff);
-      att_.step(item.ang,item.acc,item.diff);
+      //bias_.w_b <<5.32/1000000.0,2.3/100000.0,5.1/10000000.0;
+      //bias_.a_b << 0.0026,-0.0043,0.0018;
+      att_.step(item.ang-bias_.w_b,item.acc-bias_.a_b,item.diff);
+      //att_.step(item.ang,item.acc,item.diff);
       
       pthread_mutex_lock(&mutex_att);
       R_ni = att_.R_ni;

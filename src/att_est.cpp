@@ -68,9 +68,9 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float dt)
     return;
   }
   
-  east_est_n_ = A_*east_est_n_ + B_*R_ni*(ang.cross(acc) + (acc-prev_acc_)/dt);
+  //east_est_n_ = A_*east_est_n_ + B_*R_ni*(ang.cross(acc) + (acc-prev_acc_)/dt);
 
-  //east_est_n_ = R_ni*(ang.cross(acc) + (acc-prev_acc_)/dt);
+  east_est_n_ = R_ni*(ang.cross(acc) + (acc-prev_acc_)/dt);
   
   prev_acc_ = acc;
   
