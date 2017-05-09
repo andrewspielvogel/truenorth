@@ -87,6 +87,8 @@ protected:
 
     int state_; /**< State of data read in. */
     int data_cnt_; /**< Track number of bytes read in. */
+
+    FILE *fp_;
     
 private:
     SerialPort(const SerialPort &p);

@@ -44,7 +44,7 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, float hz)
 
   a_n = R_en.transpose()*a_e;
   e_n_ = R_en.transpose()*e_e.normalized();
-  P_   = a_n.normalized()*a_n.normalized().transpose(); 
+  P_   <<0,0,0,0,0,0,0,0,1;//= a_n.normalized()*a_n.normalized().transpose(); 
 
   R_ni = R_align;
 
