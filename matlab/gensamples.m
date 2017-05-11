@@ -9,6 +9,7 @@ if nargin<5
    
     bias.acc = zeros(3,1);
     bias.ang = zeros(3,1);
+    bias.mag = zeros(3,1);
     
 end
 
@@ -20,8 +21,9 @@ t = 0:dt:t_end;
 r = 6371*1000;
 
 % noise
-w_sig = 6.32 * 10^(-3)*pi/180;  % measured 1775, units are rad/sec
-a_sig = 0.0037;            % measured 1775, units are g, not m/s^2
+w_sig = 0*6.32 * 10^(-3)*pi/180;  % measured 1775, units are rad/sec
+a_sig = 0*0.0037;            % measured 1775, units are g, not m/s^2
+m_sig = 0*0.002;
 
 num = size(t,2);
 
@@ -30,6 +32,7 @@ samp.ang = zeros(3,num);
 samp.acc = zeros(3,num);
 samp.att = zeros(3,num);
 samp.att_v = zeros(3,num);
+samp.mag = zeros(3,num);
 
 samp.Rzi{1} = eye(3);
 
@@ -38,7 +41,10 @@ Ren = [-sin(lat),0,-cos(lat);0,1,0;cos(lat),0,-sin(lat)];
 a_e = [cos(lat);0;sin(lat)] - (15.04*pi/180/3600)^2*cos(lat)*[r;0;0]/9.81;
 a_n = Ren'*a_e;
 
+m_n = [0.205;-0.041;0.470];
+
 Rsz = get_Rsn(lat,0)*R_align;
+
 samp.Rsz=Rsz;
     
 fileID = fopen('/home/spiels/log/data.KVH','w');
@@ -60,6 +66,7 @@ for i=1:num
     samp.ang_v(:,i) = samp.Rsi{i}'*Rsn*w_veh;
     samp.att(:,i) = rot2rph(Rsn'*samp.Rsi{i}*R_align');  
     samp.Rni{i} = Rsn'*samp.Rsi{i};
+    samp.mag(:,i) = samp.Rni{i}'*m_n + bias.mag + m_sig*randn(3,1);
     samp.ang(:,i) =  w + w_sig*randn(3,1) + bias.ang;
     samp.acc(:,i) =  samp.Rsi{i}'*Rsn*(a_n + get_a(t(i))) + a_sig*randn(3,1) + bias.acc;
     samp.acc_z(:,i) = samp.Rzi{i}*samp.acc(:,i);
@@ -72,7 +79,7 @@ for i=1:num
         disp(str);
     end
     R = samp.Rni{i};
-    fprintf(fileID,'IMU_RAW, %.40f,%.40f,%.40f, %.35f,%.35f,%.35f,0,0,0, 0, 0, %.30f,0,1,1,1,1,1,1, %f,%f,%f,%f,%f,%f,%f,%f,%f \n',samp.ang(1,i),samp.ang(2,i),samp.ang(3,i),samp.acc(1,i),samp.acc(2,i),samp.acc(3,i),t(i),R(1,1),R(1,2),R(1,3),R(2,1),R(2,2),R(2,3),R(3,1),R(3,2),R(3,3));
+    fprintf(fileID,'IMU_RAW, %.40f,%.40f,%.40f, %.35f,%.35f,%.35f,%f,%f,%f, 0, 0, %.30f,0,1,1,1,1,1,1, %f,%f,%f,%f,%f,%f,%f,%f,%f \n',samp.ang(1,i),samp.ang(2,i),samp.ang(3,i),samp.acc(1,i),samp.acc(2,i),samp.acc(3,i),samp.mag(1,i),samp.mag(2,i),samp.mag(3,i),t(i),R(1,1),R(1,2),R(1,3),R(2,1),R(2,2),R(2,3),R(3,1),R(3,2),R(3,3));
         
 end
 
@@ -102,12 +109,13 @@ R = Rse*Ren;
 
 function w = get_w(t)
 
-if t<5*60*0
+if t>25*60
     w=[0;0;0];
 else
     
-w = [0;0;cos(t/5)/20]*0;
-%w = [sin(t/5)/70;cos(t/3)/50;sin(t/9)/30];
+w = [sin(t/7)/10;cos(t/6)/20;cos(t/5)/20]*0;
+%w = [cos(t/5)/20;0;0];
+%w = [sin(t/5)/70+cos(t/11)/40;cos(t/3)/50-sin(t/8)/20;sin(t/9)/30-cos(t/5)/50];
 
 end
 

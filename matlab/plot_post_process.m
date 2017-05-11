@@ -10,7 +10,7 @@ function out = plot_post_process( data )
 
 out.t = data_parsed(1,:);
 out.stamp = out.t;
-out.att = data_parsed(2:4,:)';
+out.att = data_parsed(2:4,:);
 out.Rb_rph = data_parsed(5:7,:);
 out.east_n = data_parsed(8:10,:);
 

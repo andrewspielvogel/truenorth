@@ -10,8 +10,8 @@
 int main(int argc, char* argv[])
 {
 
-  int hz = 100;
-  int rows = hz*60*9.9;
+  int hz = 5000;
+  int rows = hz*60*1;
   int cols = 28;
   float lat = 39.32*M_PI/180;
   Eigen::Matrix3d R_align;
@@ -19,14 +19,14 @@ int main(int argc, char* argv[])
   //R_align << 1,0,0,0,cos(M_PI/4),-sin(M_PI/4),0,sin(M_PI/4),cos(M_PI/4);
 
   Eigen::Vector3d w_err(1,1,1);
-  w_err = -w_err*0*M_PI/180;
+  w_err = -w_err*5*M_PI/180;
   Eigen::Matrix3d R_err = skew(w_err).exp();
 
   Eigen::VectorXd k(3);
-  k << 0.1,0.5,0; //g,w,east_cutoff
+  k << 1,0.105,0.105; //g,w,east_cutoff
 
-  std::string name_out = "/home/spiels/log/data.csv";
-  std::string file = "/home/spiels/log/data.KVH";
+  std::string name_out = "/home/spiels/log/data2.csv";
+  std::string file = "/home/spiels/log/data2.KVH";
 
 
   printf("LOADING CSV FILE: %s\n",file.c_str());
@@ -51,13 +51,14 @@ int main(int argc, char* argv[])
     if (seq_diff < 0)
     {
 	
+
       seq_diff += 128;
 
     }
 
     Rni << data(i-1,19),data(i-1,20),data(i-1,21),data(i-1,22),data(i-1,23),data(i-1,24),data(i-1,25),data(i-1,26),data(i-1,27);
 
-    att.step(data.block<1,3>(i,0).transpose()-0*bias_offset_w,data.block<1,3>(i,3).transpose()-0*bias_offset_a,((float) 1)/(float)hz);
+    att.step(data.block<1,3>(i,0).transpose()-bias_offset_w,data.block<1,3>(i,3).transpose()-bias_offset_a,((float) 1)/(float)hz);
     
     trph(0,i-1) = data(i,11)-data(0,11);
     trph.block<3,1>(1,i-1) = rot2rph(att.R_ni*R_align);

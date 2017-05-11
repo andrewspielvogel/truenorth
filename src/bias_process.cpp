@@ -10,16 +10,16 @@
 int main(int argc, char* argv[])
 {
 
-  int hz = 100;
-  int rows = hz*60*9.9;
+  int hz = 10;
+  int rows = hz*60*34.9;
   int cols = 28;//12;
   float lat = 39.32*M_PI/180;
 
 
   Eigen::VectorXd k(4);
   //k << .1,.0003,0.0,0.0;
-  k<<10,0.1,0.0,0.0;
-  std::string name_out = "/home/spiels/log/processedbias.csv";
+  k<<10,.1,1,.000001;
+  std::string name_out = "/home/spiels/log/processedbiasn.csv";
   std::string file = "/home/spiels/log/data.KVH";
 
 
@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
   Eigen::Vector3d w_err(0,0,3*M_PI/180);
   Eigen::Matrix3d R_err = skew(w_err*0).exp();
 
-  for (int i=1*hz; i<rows; i++) {
+  for (int i=1; i<rows; i++) {
 
     float seq_diff = data(i,10)-data(i-1,10);
     if (seq_diff < 0)
@@ -56,11 +56,11 @@ int main(int argc, char* argv[])
     Rni << data(i,19),data(i,20),data(i,21),data(i,22),data(i,23),data(i,24),data(i,25),data(i,26),data(i,27);
 
 
-    bias.step(Rni*R_err,data.block<1,3>(i,0).transpose(),data.block<1,3>(i,3).transpose(),1.0/hz);
+    bias.step(Rni*R_err,data.block<1,3>(i,0).transpose(),data.block<1,3>(i,3).transpose(),data.block<1,3>(i,6).transpose(),1.0/hz);
 
    
     trph(0,i-1) = data(i,11)-data(0,11);
-    trph.block<3,1>(1,i-1) = rot2rph(Rni);
+    trph.block<3,1>(1,i-1) = bias.m_b;;
     trph.block<3,1>(4,i-1) = bias.w_b;//data.block<1,3>(i,0).transpose();
     trph.block<3,1>(7,i-1) = bias.a_hat;//b;//data.block<1,3>(i,3).transpose();
 

@@ -30,15 +30,18 @@ public:
    * @param Rni Instrument attitude.
    * @param dt Time between last two measurements.
    */
-  void step(Eigen::Matrix3d Rni, Eigen::Vector3d w,Eigen::Vector3d a, float dt);
+  void step(Eigen::Matrix3d Rni, Eigen::Vector3d w,Eigen::Vector3d a, Eigen::Vector3d m, float dt);
 
   Eigen::Vector3d a_hat; /**< Linear acceleration estimation. */
+  Eigen::Vector3d m_hat;
   Eigen::Vector3d w_b; /**< Angular velocity bias estimation. */
   Eigen::Vector3d a_b; /**< Linear acceleration bias estimation. */
+  Eigen::Vector3d m_b;
   Eigen::Vector3d z; /**< z bias estimation. */
 
  private:
 
+  Eigen::Vector3d w_n_;
   Eigen::Vector3d e_n_; /**< East vector in NED frame. */
   Eigen::Vector3d a_n_; /**< Gravity vector in NED frame. */
   Eigen::Vector3d prev_acc_; /**< Previous acc reading. */
@@ -46,6 +49,7 @@ public:
   float kw_; /**< Angular velocity bias estimation gain. */
   float ka_; /**< Linear Acceleration bias estimation gain. */
   float kz_; /**< z bias estimation gain. */
+  float km_;
     
 
 };
