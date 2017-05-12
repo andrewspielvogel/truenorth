@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
 
   Eigen::VectorXd k(4);
   //k << .1,.0003,0.0,0.0;
-  k<<10,.1,1,.000001;
+  k<<10,.005,1,.000001;
   std::string name_out = "/home/spiels/log/processedbiasn.csv";
   std::string file = "/home/spiels/log/data.KVH";
 

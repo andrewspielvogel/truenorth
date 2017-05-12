@@ -44,7 +44,7 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, float hz)
 
   a_n = R_en.transpose()*a_e;
   e_n_ = R_en.transpose()*e_e.normalized();
-  P_   <<0,0,0,0,0,0,0,0,1;//= a_n.normalized()*a_n.normalized().transpose(); 
+  P_   = a_n.normalized()*a_n.normalized().transpose(); 
 
   R_ni = R_align;
 
@@ -76,8 +76,8 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float dt)
   
   g_error_ = R_ni.transpose()*(kg_*(R_ni*acc).cross(a_n));
   h_error_ = R_ni.transpose()*(kw_*P_*east_est_n_.normalized().cross(e_n_));
+  //h_error_ = R_ni.transpose()*(kw_*east_est_n_.normalized().cross(e_n_));
 
   R_ni = R_ni*((skew(g_error_ + h_error_ + ang - R_ni.transpose()*wearth_n_)*dt).exp());
 
- 
 }
