@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
   Eigen::Matrix3d R_err = skew(w_err).exp();
 
   Eigen::VectorXd k(3);
-  k << .1,0.002,0.002; //g,w,east_cutoff
+  k << .1,0.1,1; //g,w,east_cutoff
 
   std::string name_out = "/home/spiels/log/data2.csv";
   std::string file = "/home/spiels/log/data.KVH";
@@ -63,7 +63,7 @@ int main(int argc, char* argv[])
     trph(0,i-1) = data(i,11)-data(0,11);
     trph.block<3,1>(1,i-1) = rot2rph(att.R_ni*R_align);
     trph.block<3,1>(4,i-1) = rot2rph(Rni*R_align);
-    trph.block<3,1>(7,i-1) = att.h_error_;
+    trph.block<3,1>(7,i-1) = att.prev_afilt_;
     
 
 

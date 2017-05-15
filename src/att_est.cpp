@@ -51,6 +51,7 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, float hz)
   east_est_n_ << 0.0,earthrate*cos(lat_),0.0;
 
   prev_acc_ << 0,0,0;
+  prev_afilt_ << 0,0,0;
 
   wearth_n_ = R_en.transpose()*w_e;
 
@@ -68,10 +69,14 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float dt)
     return;
   }
   
-  east_est_n_ = A_*east_est_n_ + B_*R_ni*(ang.cross(acc) + (acc-prev_acc_)/dt);
+  //east_est_n_ = A_*east_est_n_ + B_*R_ni*(ang.cross(acc) + (acc-prev_acc_)/dt);
 
-  //east_est_n_ = R_ni*(ang.cross(acc) + (acc-prev_acc_)/dt);
+  Eigen::Vector3d prev_afil = prev_afilt_;
   
+  prev_afilt_ = A_*prev_afilt_ + B_*acc;
+
+  east_est_n_ = R_ni*(ang.cross(acc) + (B_*acc)/dt);
+  //east_est_n_ = R_ni*(ang.cross(acc) + (acc - prev_acc_)/dt);
   prev_acc_ = acc;
   
   g_error_ = R_ni.transpose()*(kg_*(R_ni*acc).cross(a_n));

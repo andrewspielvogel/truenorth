@@ -21,6 +21,9 @@ public:
   Eigen::Vector3d g_error_; /**< Local level error term. */
   Eigen::Vector3d h_error_; /**< Heading error term. */
   Eigen::Vector3d east_est_n_; /**< Estimation of east in NED frame. */
+
+    Eigen::Vector3d prev_afilt_;
+
   
   /**
    * @brief Constructor.
