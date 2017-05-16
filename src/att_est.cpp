@@ -33,6 +33,7 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, float hz)
   // lowpass filter params
   B_ = 1.0/hz/(1.0/hz + 1.0/(2.0*M_PI*k(2)));
   A_ = 1.0 - B_;
+  std::cout<< B_<<"\n";
   
   double earthrate = 15.04*M_PI/180.0/3600.0;
   Eigen::Matrix3d R_en = get_R_en(lat_);
@@ -75,7 +76,7 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float dt)
   
   prev_afilt_ = A_*prev_afilt_ + B_*acc;
 
-  east_est_n_ = R_ni*(ang.cross(acc) + (B_*acc)/dt);
+  east_est_n_ = R_ni*(ang.cross(acc) + (prev_afilt_-prev_afil)/dt);
   //east_est_n_ = R_ni*(ang.cross(acc) + (acc - prev_acc_)/dt);
   prev_acc_ = acc;
   
