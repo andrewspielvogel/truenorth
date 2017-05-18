@@ -26,7 +26,7 @@ BiasEst::BiasEst(Eigen::VectorXd k, float lat)
   kw_ = k(1);
   ka_ = k(2);
   kz_ = k(3);
-  km_ = 1;
+  km_ = 10;
 
 
   float earth_rate = 15.04*M_PI/180.0/3600.0;
@@ -68,6 +68,7 @@ void BiasEst::step(Eigen::Matrix3d Rni, Eigen::Vector3d ang,Eigen::Vector3d acc,
 
   Eigen::Vector3d a_dot = skew(ang-w_b)*Rni.transpose()*a_n_ - Rni.transpose()*e_n_ + da_dt - kg_*da;
   Eigen::Vector3d w_b_dot = kw_*(skew(Rni.transpose()*a_n_)*da - skew(mag)*dm);
+  //Eigen::Vector3d w_b_dot = kw_*(skew(Rni.transpose()*a_n_)*da);
 
   Eigen::Vector3d m_dot = -skew(ang - Rni.transpose()*w_n_ - w_b)*mag + skew(ang - Rni.transpose()*w_n_)*m_b - z - km_*dm;
 
@@ -105,7 +106,7 @@ void BiasEst::step(Eigen::Matrix3d Rni, Eigen::Vector3d ang,Eigen::Vector3d acc,
 // }
 
 
-// void BiasEst::step(Eigen::Matrix3d Rni, Eigen::Vector3d ang,Eigen::Vector3d acc, float dt)
+// void BiasEst::step(Eigen::Matrix3d Rni, Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag,float dt)
 // {
 
 //   Eigen::Vector3d da_dt = (acc - prev_acc_)/dt;

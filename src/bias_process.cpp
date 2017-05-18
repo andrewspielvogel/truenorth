@@ -10,17 +10,17 @@
 int main(int argc, char* argv[])
 {
 
-  int hz = 10;
-  int rows = hz*60*34.9;
+  int hz = 5000;
+  int rows = hz*60*19.9;
   int cols = 28;//12;
   float lat = 39.32*M_PI/180;
 
 
   Eigen::VectorXd k(4);
   //k << .1,.0003,0.0,0.0;
-  k<<10,.005,1,.000001;
-  std::string name_out = "/home/spiels/log/processedbiasn.csv";
-  std::string file = "/home/spiels/log/data.KVH";
+  k<<10,.05,0,0;
+  std::string name_out = "/home/spiels/log/processedbias.csv";
+  std::string file = "/home/spiels/log/static.KVH";
 
 
   printf("LOADING CSV FILE: %s\n",file.c_str());
@@ -55,12 +55,14 @@ int main(int argc, char* argv[])
 
     Rni << data(i,19),data(i,20),data(i,21),data(i,22),data(i,23),data(i,24),data(i,25),data(i,26),data(i,27);
 
-
-    bias.step(Rni*R_err,data.block<1,3>(i,0).transpose(),data.block<1,3>(i,3).transpose(),data.block<1,3>(i,6).transpose(),1.0/hz);
-
+    if ((1- data(i,19))> 0.0001)
+    {
+      // bias.step(Rni*R_err,data.block<1,3>(i,0).transpose(),data.block<1,3>(i,3).transpose(),data.block<1,3>(i,6).transpose(),1.0/hz);
+      bias.step(Rni*R_err,data.block<1,3>(i,0).transpose(),data.block<1,3>(i,3).transpose(),Rni.block<3,1>(0,0),1.0/hz);
+    }
    
     trph(0,i-1) = data(i,11)-data(0,11);
-    trph.block<3,1>(1,i-1) = bias.m_b;;
+    trph.block<3,1>(1,i-1) = rot2rph(Rni);//bias.m_b;//data.block<1,3>(i,6).transpose();
     trph.block<3,1>(4,i-1) = bias.w_b;//data.block<1,3>(i,0).transpose();
     trph.block<3,1>(7,i-1) = bias.a_hat;//b;//data.block<1,3>(i,3).transpose();
 

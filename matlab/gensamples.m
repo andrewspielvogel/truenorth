@@ -78,17 +78,14 @@ for i=1:num
         str = sprintf('Made %i:%i0 of data at %i hz',floor(t(i)/60),mod(t(i),60)/10,hz);
         disp(str);
     end
-
-end
-
-
-for i=1:num
-    
     R = samp.Rni{i};
     fprintf(fileID,'IMU_RAW, %.40f,%.40f,%.40f, %.35f,%.35f,%.35f,%f,%f,%f, 0, 0, %.30f,0,1,1,1,1,1,1, %f,%f,%f,%f,%f,%f,%f,%f,%f \n',samp.ang(1,i),samp.ang(2,i),samp.ang(3,i),samp.acc(1,i),samp.acc(2,i),samp.acc(3,i),samp.mag(1,i),samp.mag(2,i),samp.mag(3,i),t(i),R(1,1),R(1,2),R(1,3),R(2,1),R(2,2),R(2,3),R(3,1),R(3,2),R(3,3));
-         
-    
+    % fprintf(fileID,'IMU_RAW, %.40f,%.40f,%.40f, %.35f,%.35f,%.35f,%f,%f,%f, %d,%.5f,1,1,1,1,1,1 \n',samp.ang(1,i),samp.ang(2,i),samp.ang(3,i),samp.acc(1,i),samp.acc(2,i),samp.acc(3,i),samp.mag(1,i),samp.mag(2,i),samp.mag(3,i),mod(i,128),t(i));
+
 end
+
+
+
 
 % save
 samp.t = t;
@@ -116,13 +113,13 @@ R = Rse*Ren;
 
 function w = get_w(t)
 
-if t>25*60
+if t>30*60
     w=[0;0;0];
 else
     
-w = [0;0;cos(t/5)/20];
+w = [cos(t)/60;0;cos(t/5)/40]*0;
 %w = [cos(t/5)/20;0;0];
-w = [sin(t/5)/70+cos(t/11)/40;cos(t/3)/50-sin(t/8)/20;sin(t/9)/30-cos(t/5)/50];
+%w = [sin(t/5)/70+cos(t/11)/40;cos(t/3)/50-sin(t/8)/20;sin(t/9)/30-cos(t/5)/50];
 
 end
 

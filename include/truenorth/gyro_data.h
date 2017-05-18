@@ -11,14 +11,12 @@
 #ifndef GYRO_DATA_H
 #define GYRO_DATA_H
 
-#include <truenorth/att_est.h>
 #include <Eigen/Core>
-#include <string>
 
 /**
  * @brief Gyro data class.
  * 
- * Class for storing a IMU data packet.
+ * Class for storing an IMU data packet.
  */
 class GyroData
 {
