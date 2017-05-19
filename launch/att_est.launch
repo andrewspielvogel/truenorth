@@ -10,7 +10,7 @@
 	       <param name="baud" value="4147200" type="int" />
 	       <param name="latitude" value="39.32" type="double" />
 	       <param name="instr_align" value="1,0,0,0,-1,0,0,0,-1" type="string" />
-	       <param name="gains" value="1,.1,.1,10,0.1,0.0,0.0" type="string" />
+	       <param name="gains" value="1,.1,.1,10,0.01,10,0.0" type="string" />
 	       <param name="log_loc" value="/home/spiels/log/imu_data/" type="string" />
 
         </node>
