@@ -1,6 +1,6 @@
 function R = rph2R(ang)
 
-R = Rz(ang(1))*Ry(ang(2))*Rx(ang(3));
+R = Rz(ang(3))*Ry(ang(2))*Rx(ang(1));
 
 function R = Rx(x)
 

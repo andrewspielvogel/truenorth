@@ -10,8 +10,8 @@
 int main(int argc, char* argv[])
 {
 
-  int hz = 1000;
-  int rows = hz*60*14.9;
+  int hz = 100;
+  int rows = hz*60*29.9;
   int cols = 28;
   float lat = 39.32*M_PI/180;
   Eigen::Matrix3d R_align;
@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
   Eigen::Matrix3d R_err = skew(w_err).exp();
 
   Eigen::VectorXd k(3);
-  k << 1,.01,10; //g,w,east_cutoff
+  k << 0.1,0.01,.005; //g,w,east_cutoff
 
   std::string name_out = "/home/spiels/log/data2.csv";
   std::string file = "/home/spiels/log/data.KVH";
@@ -41,8 +41,8 @@ int main(int argc, char* argv[])
 
   Eigen::MatrixXd trph(10,rows-1);
 
-  Eigen::Vector3d bias_offset_a(0.003,-0.004,0.002);
-  Eigen::Vector3d bias_offset_w(0.05/10000,0.25/10000,-0.1/10000);
+  Eigen::Vector3d bias_offset_a(0.0014,-0.005,0.0013);
+  Eigen::Vector3d bias_offset_w(0.0525/10000,0.235/10000,0.008/10000);
   Eigen::Matrix3d Rni;
 
   for (int i=1; i<rows; i++) {
@@ -61,9 +61,9 @@ int main(int argc, char* argv[])
     att.step(data.block<1,3>(i,0).transpose()-bias_offset_w,data.block<1,3>(i,3).transpose()-bias_offset_a,((float) 1)/(float)hz);
     
     trph(0,i-1) = data(i,11)-data(0,11);
-    trph.block<3,1>(1,i-1) = rot2rph(att.R_ni*R_align);
-    trph.block<3,1>(4,i-1) = rot2rph(Rni*R_align);
-    trph.block<3,1>(7,i-1) = att.h_error_;
+    trph.block<3,1>(1,i-1) = rot2rph(att.R_ni);
+    trph.block<3,1>(4,i-1) = rot2rph(Rni);
+    trph.block<3,1>(7,i-1) = att.east_est_n_;
     
 
 

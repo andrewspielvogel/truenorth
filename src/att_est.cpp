@@ -69,14 +69,14 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float dt)
     return;
   }
   
-  //east_est_n_ = A_*east_est_n_ + B_*R_ni*(ang.cross(acc) + (acc-prev_acc_)/dt);
+  east_est_n_ = A_*east_est_n_ + B_*R_ni*(ang.cross(acc) + (acc-prev_acc_)/dt);
 
-  Eigen::Vector3d prev_afil = prev_afilt_;
-  
+  //Eigen::Vector3d prev_afil = prev_afilt_;
+
   //prev_afilt_ = A_*prev_afilt_ + B_*acc;
 
-  //east_est_n_ = R_ni*(ang.cross(acc) + (prev_afilt_-prev_afil)/dt);
-  east_est_n_ = R_ni*(ang.cross(acc) + (acc - prev_acc_)/dt);
+  //east_est_n_ = R_ni*(ang.cross(prev_afilt_) + (prev_afilt_-prev_afil)/dt);
+  //east_est_n_ = R_ni*(ang.cross(acc) + (acc - prev_acc_)/dt);
   prev_acc_ = acc;
   
   g_error_ = R_ni.transpose()*(kg_*(R_ni*acc).cross(a_n));

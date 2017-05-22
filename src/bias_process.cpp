@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
 
   Eigen::VectorXd k(4);
   //k << .1,.0003,0.0,0.0;
-  k<<10,.05,0,0;
+  k<<10,.1,10,0;
   std::string name_out = "/home/spiels/log/processedbias.csv";
   std::string file = "/home/spiels/log/static.KVH";
 
@@ -55,14 +55,14 @@ int main(int argc, char* argv[])
 
     Rni << data(i,19),data(i,20),data(i,21),data(i,22),data(i,23),data(i,24),data(i,25),data(i,26),data(i,27);
 
-    if ((1- data(i,19))> 0.0001)
+    if (1)//(1- data(i,19))> 0.0001)
     {
-      // bias.step(Rni*R_err,data.block<1,3>(i,0).transpose(),data.block<1,3>(i,3).transpose(),data.block<1,3>(i,6).transpose(),1.0/hz);
-      bias.step(Rni*R_err,data.block<1,3>(i,0).transpose(),data.block<1,3>(i,3).transpose(),Rni.block<3,1>(0,0),1.0/hz);
+      bias.step(Rni*R_err,data.block<1,3>(i,0).transpose(),data.block<1,3>(i,3).transpose(),data.block<1,3>(i,6).transpose(),1.0/hz);
+
     }
    
     trph(0,i-1) = data(i,11)-data(0,11);
-    trph.block<3,1>(1,i-1) = rot2rph(Rni);//bias.m_b;//data.block<1,3>(i,6).transpose();
+    trph.block<3,1>(1,i-1) = bias.m_hat;
     trph.block<3,1>(4,i-1) = bias.w_b;//data.block<1,3>(i,0).transpose();
     trph.block<3,1>(7,i-1) = bias.a_hat;//b;//data.block<1,3>(i,3).transpose();
 
