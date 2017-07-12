@@ -63,8 +63,8 @@ class AttConsumerThread : public Thread
       
       //pthread_mutex_lock(&mutex_bias);
 
-      //w_b <<6.3/1000000.0,1.56/100000.0,-1.93/100000.0;
-      //a_b << 0.0034,-0.0055,0.0018;
+      //w_b <<-1.18/100000.0,4.78/100000.0,-2.51/100000.0;
+      //a_b << 0.017,0.0025,0.000;
       att_.step(item.ang-w_b,item.acc-a_b,item.diff);
       //pthread_mutex_unlock(&mutex_bias);
 
