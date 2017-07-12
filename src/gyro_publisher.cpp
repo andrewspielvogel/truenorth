@@ -92,11 +92,11 @@ int main(int argc, char **argv)
     SerialPort serial(hz);
     
    
-    BiasConsumerThread* bias_thread = new BiasConsumerThread(serial.bias_queue,k.block<4,1>(3,0),lat);
+    BiasConsumerThread* bias_thread = new BiasConsumerThread(serial.bias_queue,R_align,k.block<4,1>(3,0),lat);
 
     LogConsumerThread* log_thread = new LogConsumerThread(bias_thread,serial.log_queue,log_location.c_str());
     
-    AttConsumerThread* att_thread = new AttConsumerThread(bias_thread,R_align,serial.att_queue,k,R0*R_align,lat,hz);
+    AttConsumerThread* att_thread = new AttConsumerThread(bias_thread,serial.att_queue,k,R0*R_align,lat,hz);
 
 
     /**********************************************************************
@@ -169,7 +169,7 @@ int main(int argc, char **argv)
 	data_msg.kvh.imu.ang.at(i) = serial.data.ang(i);
 	data_msg.kvh.imu.acc.at(i) = serial.data.acc(i);
 	data_msg.kvh.imu.mag.at(i) = serial.data.mag(i);
-	data_msg.att.at(i) = 180*rot2rph((att_thread->R_ni)*R_align.transpose())(i)/M_PI;
+	data_msg.att.at(i) = 180*rot2rph((att_thread->R_ni))(i)/M_PI;
 	data_msg.bias.ang.at(i) = bias_thread->bias.w_b(i);
 	data_msg.bias.acc.at(i) = bias_thread->bias.a_hat(i);
 	data_msg.bias.z.at(i) = bias_thread->bias.m_hat(i);
