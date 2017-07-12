@@ -54,18 +54,20 @@ int main(int argc, char **argv)
     // baud rate
     int baud = 921600;
     n.getParam("baud",baud);
-    
+
+    Eigen::Vector3d rpy;
+
     // instrument alignment matrix
     std::string instr_align = "1,0,0,0,1,0,0,0,1";  // default
     n.getParam("instr_align",instr_align);
-    Eigen::MatrixXd R_align = parse_string(instr_align);
-    R_align.resize(3,3);
+    sscanf(instr_align.c_str(),"%lf,%lf,%lf",&rpy(0),&rpy(1),&rpy(2));
+    Eigen::MatrixXd R_align = rpy2rot(rpy);
 
     // Rni(t0) matrix
-    std::string R0_ = "1,0,0,0,1,0,0,0,1";  // default
+    std::string R0_ = "0,0,0";  // default
     n.getParam("R0",R0_);
-    Eigen::MatrixXd R0 = parse_string(R0_);
-    R0.resize(3,3);
+    sscanf(R0_.c_str(),"%lf,%lf,%lf",&rpy(0),&rpy(1),&rpy(2));
+    Eigen::MatrixXd R0 = rpy2rot(rpy);
     
     // estimation gains
     std::string gains = "1.0,0.005,0.005,0.005,1.0,1.0,0.05,0.005";  // default
@@ -143,7 +145,7 @@ int main(int argc, char **argv)
     {
 
       // warn if queues are growing large
-      int queue_warn_size = 500;
+      int queue_warn_size = 1000;
       if (serial.att_queue.size()>queue_warn_size)
       {
 	ROS_WARN("Att queue exceeds %d - Size: :%d",queue_warn_size,serial.att_queue.size());

@@ -39,7 +39,7 @@ public:
      * GyroData class constructor.
      * @param hz Sampling rate.
      */
-    GyroData(float hz); /**< Constructor. */
+    GyroData(int hz); /**< Constructor. */
     virtual ~GyroData(void); /**< Destructor. */
 
  };

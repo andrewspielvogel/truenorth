@@ -27,9 +27,6 @@ BiasEst::BiasEst(Eigen::VectorXd k, float lat)
   ka_ = k(2);
   kz_ = k(3);
   km_ = k(2);
-
-  std::cout<<kg_<<"\n";
-  std::cout<<kw_<<"\n";
   
 
   float earth_rate = 15.04*M_PI/180.0/3600.0;

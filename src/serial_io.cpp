@@ -41,7 +41,7 @@ union FloatSignals
 };
 
 
-SerialPort::SerialPort(float hz): data(hz)
+SerialPort::SerialPort(int hz): data(hz)
 {
      fp_ = fopen("/home/spiels/log/test.KVH","w");
 

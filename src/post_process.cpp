@@ -1,76 +1,83 @@
-#include <stdlib.h>
-#include <iostream>
+#include <sstream>
+#include <fstream>
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <truenorth/helper_funcs.h>
 #include <truenorth/att_est.h>
+#include <truenorth/gyro_data.h>
 #include <string>
 #include <math.h>
 
 int main(int argc, char* argv[])
 {
 
-  int hz = 100;
-  int rows = hz*60*29.9;
-  int cols = 28;
+  /***************************************************
+   *
+   * INPUTS
+   *
+   ***************************************************/
+  
+  int hz = 5000;
   float lat = 39.32*M_PI/180;
+
+  
+  std::string out_file_name = "/home/spiels/log/data2.csv";
+  std::string in_file_name = "/home/spiels/log/imu_data/2017_7_11_11_9.KVH";
+
+  Eigen::Vector3d rpy(M_PI,0,M_PI/4);
+
+  Eigen::VectorXd k(3);
+  k << 0.1,0.01,.005; //g,w,east_cutoff
+
+
+  
+  
   Eigen::Matrix3d R_align;
-  R_align << 1,0,0,0,-1,0,0,0,-1;
-  //R_align << 1,0,0,0,cos(M_PI/4),-sin(M_PI/4),0,sin(M_PI/4),cos(M_PI/4);
+
+  R_align = rpy2rot(rpy);
 
   Eigen::Vector3d w_err(1,1,1);
   w_err = -w_err*5*M_PI/180;
   Eigen::Matrix3d R_err = skew(w_err).exp();
 
-  Eigen::VectorXd k(3);
-  k << 0.1,0.01,.005; //g,w,east_cutoff
-
-  std::string name_out = "/home/spiels/log/data2.csv";
-  std::string file = "/home/spiels/log/data.KVH";
 
 
-  printf("LOADING CSV FILE: %s\n",file.c_str());
 
-  Eigen::MatrixXd data = readCSV(file,rows,cols);
+  AttEst att(k, R_align,lat,hz);
+  GyroData gyro_data(hz);
+  Eigen::Matrix3d Rni_phins;
+  char msg_type[32];
 
-  printf("CSV FILE LOADED: %s\n",file.c_str());
 
-  printf("RUNNING ATTITUDE ESTIMATION\n");
+  printf("RUNNING ATTITUDE ESTIMATION ON CSV FILE: %s\n",in_file_name.c_str());
+  printf("WRITING TO FILE: %s\n",out_file_name.c_str());
 
-  AttEst att(k, R_align*R_err,lat,hz);
+  
+  std::ifstream infile(in_file_name.c_str());
+  FILE *outfile;
+  outfile = fopen(out_file_name.c_str(),"w");
 
-  Eigen::MatrixXd trph(10,rows-1);
+  std::string line;
+  int samp_processed = 0;
+  Eigen::Vector3d att_euler_ang;
+  
+  while (std::getline(infile, line))
+  {
 
-  Eigen::Vector3d bias_offset_a(0.0014,-0.005,0.0013);
-  Eigen::Vector3d bias_offset_w(0.0525/10000,0.235/10000,0.008/10000);
-  Eigen::Matrix3d Rni;
 
-  for (int i=1; i<rows; i++) {
+    sscanf(line.c_str(),"%[^,],%lf,%lf,%lf,%lf,%lf,%lf, %lf,%lf,%lf, %f, %d, %lf,%lf, %*d, %*d, %*d, %*d, %*d, %*d,%*lf,%*lf,%*lf,%*lf,%*lf,%*lf,%*lf,%*lf,%*lf \n",msg_type,&gyro_data.ang(0),&gyro_data.ang(1),&gyro_data.ang(2),&gyro_data.acc(0),&gyro_data.acc(1),&gyro_data.acc(2),&gyro_data.mag(0),&gyro_data.mag(1),&gyro_data.mag(2),&gyro_data.temp,&gyro_data.seq_num,&gyro_data.timestamp,&gyro_data.comp_timestamp);
 
-    float seq_diff = data(i,10)-data(i-1,10);
-    if (seq_diff < 0)
-    {
-	
+    att.step(gyro_data.ang,gyro_data.acc,((float) 1)/(float)hz);
 
-      seq_diff += 128;
-
-    }
-
-    Rni << data(i-1,19),data(i-1,20),data(i-1,21),data(i-1,22),data(i-1,23),data(i-1,24),data(i-1,25),data(i-1,26),data(i-1,27);
-
-    att.step(data.block<1,3>(i,0).transpose()-bias_offset_w,data.block<1,3>(i,3).transpose()-bias_offset_a,((float) 1)/(float)hz);
+    att_euler_ang = rot2rph(att.R_ni);
     
-    trph(0,i-1) = data(i,11)-data(0,11);
-    trph.block<3,1>(1,i-1) = rot2rph(att.R_ni);
-    trph.block<3,1>(4,i-1) = rot2rph(Rni);
-    trph.block<3,1>(7,i-1) = att.east_est_n_;
+    fprintf(outfile,"ATT_PRO,%f,%f,%f,%f\n",gyro_data.timestamp,att_euler_ang(0),att_euler_ang(1),att_euler_ang(2));
     
+    samp_processed++;
 
-
-
-    if ((i) % (hz*30) == 0) {
+    if ((samp_processed) % (((int)hz)*30) == 0) {
       
-      int seconds = i/hz;
+      int seconds = samp_processed/hz;
       int hours   = seconds/3600;
       int minutes = (seconds - hours*3600)/60;
       seconds = seconds - hours*3600 - minutes*60;
@@ -79,13 +86,12 @@ int main(int argc, char* argv[])
     }
 
   }
+  
+  infile.close();
+  fclose(outfile);
 
-  printf("WRITING TO FILE: %s\n",name_out.c_str());
-
-  Eigen::IOFormat CSVFormat(Eigen::FullPrecision, Eigen::DontAlignCols, ", ", "\n");
-  std::ofstream ofile(name_out.c_str());
-
-  ofile << trph.format(CSVFormat);
-  ofile.close();
+  return 0;
+  
+  
 
 }

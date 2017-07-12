@@ -41,6 +41,48 @@ inline Eigen::Matrix3d skew(Eigen::Vector3d w)
 }
 
 /**
+ * @brief Rotation around x-axis.
+ * @param x angle (units: radians).
+ */
+inline Eigen::Matrix3d Rx(double x)
+{
+
+  Eigen::Matrix3d Rx;
+  Rx << 1,0,0,0,cos(x),-sin(x),0,sin(x),cos(x);
+
+  return Rx;
+
+}
+
+/**
+ * @brief Rotation around y-axis.
+ * @param y angle (units: radians).
+ */
+inline Eigen::Matrix3d Ry(double y)
+{
+
+  Eigen::Matrix3d Ry;
+  Ry << cos(y),0,sin(y),0,1,0,-sin(y),0,cos(y);
+
+  return Ry;
+
+}
+
+/**
+ * @brief Rotation around z-axis.
+ * @param z angle (units: radians).
+ */
+inline Eigen::Matrix3d Rz(double z)
+{
+
+  Eigen::Matrix3d Rz;
+  Rz << cos(z),-sin(z),0,sin(z),cos(z),0,0,0,1;
+
+  return Rz;
+
+}
+
+/**
  * @brief Rotation to roll, pitch, heading euler angles.
  * @param R Input rotation.
  */
@@ -58,6 +100,18 @@ inline Eigen::Vector3d rot2rph(Eigen::Matrix3d R)
 
   return rph;
 
+}
+
+/**
+ * @brief Roll, pitch, yaw euler angles to rotation.
+ * @param rpy Roll, pitch, yaw vector (units: radians).
+ */
+
+inline Eigen::Matrix3d rpy2rot(Eigen::Vector3d rpy)
+{
+
+  return Rz(rpy(2))*Rz(rpy(1))*Rx(rpy(0));
+  
 }
 
 /**
