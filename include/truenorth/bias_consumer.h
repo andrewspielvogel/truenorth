@@ -43,7 +43,7 @@ class BiasConsumerThread : public Thread
    * @param lat Latitude.
    * 
    */
- BiasConsumerThread(wqueue<GyroData>& queue, Eigen::VectorXd k, float lat) : m_queue_(queue),bias(k,lat) {R_align_<<1,0,0,0,-1,0,0,0,-1; Rni_ <<1,0,0,0,1,0,0,0,1; Rni<<1,0,0,0,1,0,0,0,1; start_ = 0;}
+ BiasConsumerThread(wqueue<GyroData>& queue, Eigen::Matrix3d R_align, Eigen::VectorXd k, float lat) : m_queue_(queue),bias(k,lat) {R_align_ = R_align; Rni_ <<1,0,0,0,1,0,0,0,1; Rni<<1,0,0,0,1,0,0,0,1; start_ = 0;}
 
   void callback(const phins::phins_msg::ConstPtr &msg)
 {

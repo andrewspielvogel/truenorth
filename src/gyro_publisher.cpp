@@ -96,7 +96,7 @@ int main(int argc, char **argv)
 
     LogConsumerThread* log_thread = new LogConsumerThread(bias_thread,serial.log_queue,log_location.c_str());
     
-    AttConsumerThread* att_thread = new AttConsumerThread(bias_thread,serial.att_queue,k,R0*R_align,lat,hz);
+    AttConsumerThread* att_thread = new AttConsumerThread(bias_thread,R_align,serial.att_queue,k,R0*R_align,lat,hz);
 
 
     /**********************************************************************

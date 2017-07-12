@@ -11,16 +11,16 @@ int main(int argc, char* argv[])
 {
 
   int hz = 5000;
-  int rows = hz*60*19.9;
+  int rows = hz*60*29;
   int cols = 28;//12;
   float lat = 39.32*M_PI/180;
 
 
   Eigen::VectorXd k(4);
   //k << .1,.0003,0.0,0.0;
-  k<<10,.1,10,0;
+  k<<10,.05,10,0;
   std::string name_out = "/home/spiels/log/processedbias.csv";
-  std::string file = "/home/spiels/log/static.KVH";
+  std::string file = "/home/spiels/log/test/2017_7_12_16_5.KVH";
 
 
   printf("LOADING CSV FILE: %s\n",file.c_str());

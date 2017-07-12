@@ -125,4 +125,4 @@ end
 
 function a = get_a(t)
 
-a = [sin(t/5)/20;cos(t/5)/22;0]*0;
+a = 0*[sin(t/5)/20;cos(t/5)/22;0];

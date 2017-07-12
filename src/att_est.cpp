@@ -33,7 +33,6 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, float hz)
   // lowpass filter params
   B_ = 1.0/hz/(1.0/hz + 1.0/(2.0*M_PI*k(2)));
   A_ = 1.0 - B_;
-  std::cout<<A_ <<" : "<<B_<<"\n";
   
   double earthrate = 15.04*M_PI/180.0/3600.0;
   Eigen::Matrix3d R_en = get_R_en(lat_);
