@@ -72,7 +72,7 @@ class BiasConsumerThread : public Thread
       GyroData item = m_queue_.remove();
             
       pthread_mutex_lock(&mutex_phins);
-      Rni = Rni_*R_align_;
+      Rni = Rni_;
       pthread_mutex_unlock(&mutex_phins);
 
       if (start_)

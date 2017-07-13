@@ -19,9 +19,9 @@ int main(int argc, char* argv[])
   k<<1,.01,10,0;
 
   std::string out_file_name = "/home/spiels/log/processedbias.csv";
-  std::string in_file_name = "/home/spiels/log/test/2017_7_12_16_5.KVH";
+  std::string in_file_name = "/home/spiels/log/test/2017_7_13_15_32.KVH";
 
-  Eigen::Vector3d rpy(0,0,0);//(M_PI,0,M_PI/4.0);
+  Eigen::Vector3d rpy(M_PI,0,M_PI/4.0);
 
   printf("RUNNING BIAS ESTIMATION ON CSV FILE: %s\n",in_file_name.c_str());
   printf("WRITING TO FILE: %s\n",out_file_name.c_str());
@@ -48,10 +48,12 @@ int main(int argc, char* argv[])
   while (std::getline(infile, line))
   {
     sscanf(line.c_str(),"%[^,],%lf,%lf,%lf,%lf,%lf,%lf, %lf,%lf,%lf, %f, %d, %lf,%lf, %*d, %*d, %*d, %*d, %*d, %*d,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf \n",msg_type,&gyro_data.ang(0),&gyro_data.ang(1),&gyro_data.ang(2),&gyro_data.acc(0),&gyro_data.acc(1),&gyro_data.acc(2),&gyro_data.mag(0),&gyro_data.mag(1),&gyro_data.mag(2),&gyro_data.temp,&gyro_data.seq_num,&gyro_data.timestamp,&gyro_data.comp_timestamp,&Rni_phins(0,0),&Rni_phins(0,1),&Rni_phins(0,2),&Rni_phins(1,0),&Rni_phins(1,1),&Rni_phins(1,2),&Rni_phins(2,0),&Rni_phins(2,1),&Rni_phins(2,2));
+
+    Eigen::Vector3d phins_rpy = rot2rph(Rni_phins*Ralign.transpose());
     
     bias.step(Rni_phins*Ralign,gyro_data.ang,gyro_data.acc,gyro_data.mag,1.0/((float)hz));
 
-    fprintf(outfile,"BIAS_PRO,%f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f\n",gyro_data.timestamp,bias.w_b(0),bias.w_b(1),bias.w_b(2),bias.a_hat(0),bias.a_hat(1),bias.a_hat(2));
+    fprintf(outfile,"BIAS_PRO,%f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f\n",gyro_data.timestamp,bias.w_b(0),bias.w_b(1),bias.w_b(2),phins_rpy(0),phins_rpy(1),phins_rpy(2));
 
     samp_processed++;
     

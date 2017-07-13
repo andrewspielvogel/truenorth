@@ -65,7 +65,7 @@ for i=1:num
 
     samp.ang_v(:,i) = samp.Rsi{i}'*Rsn*w_veh;
     samp.att(:,i) = rot2rph(Rsn'*samp.Rsi{i}*R_align');  
-    samp.Rni{i} = Rsn'*samp.Rsi{i};
+    samp.Rni{i} = Rsn'*samp.Rsi{i}*R_align;
     samp.mag(:,i) = samp.Rni{i}'*m_n + bias.mag + m_sig*randn(3,1);
     samp.ang(:,i) =  w + w_sig*randn(3,1) + bias.ang;
     samp.acc(:,i) =  samp.Rsi{i}'*Rsn*(a_n + get_a(t(i))) + a_sig*randn(3,1) + bias.acc;
