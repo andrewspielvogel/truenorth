@@ -32,9 +32,7 @@ int main(int argc, char* argv[])
 
   
   
-  Eigen::Matrix3d R_align;
-
-  R_align = rpy2rot(rpy);
+  Eigen::Matrix3d R_align = rpy2rot(rpy);
 
   Eigen::Vector3d w_err(1,1,1);
   w_err = -w_err*5*M_PI/180;
@@ -68,7 +66,7 @@ int main(int argc, char* argv[])
   {
 
 
-    sscanf(line.c_str(),"%[^,],%lf,%lf,%lf,%lf,%lf,%lf, %lf,%lf,%lf, %f, %d, %lf,%lf, %*d, %*d, %*d, %*d, %*d, %*d,%*lf,%*lf,%*lf,%*lf,%*lf,%*lf,%*lf,%*lf,%*lf \n",msg_type,&gyro_data.ang(0),&gyro_data.ang(1),&gyro_data.ang(2),&gyro_data.acc(0),&gyro_data.acc(1),&gyro_data.acc(2),&gyro_data.mag(0),&gyro_data.mag(1),&gyro_data.mag(2),&gyro_data.temp,&gyro_data.seq_num,&gyro_data.timestamp,&gyro_data.comp_timestamp);
+    sscanf(line.c_str(),"%[^,],%lf,%lf,%lf,%lf,%lf,%lf, %lf,%lf,%lf, %f, %d, %lf,%lf, %*d, %*d, %*d, %*d, %*d, %*d,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf \n",msg_type,&gyro_data.ang(0),&gyro_data.ang(1),&gyro_data.ang(2),&gyro_data.acc(0),&gyro_data.acc(1),&gyro_data.acc(2),&gyro_data.mag(0),&gyro_data.mag(1),&gyro_data.mag(2),&gyro_data.temp,&gyro_data.seq_num,&gyro_data.timestamp,&gyro_data.comp_timestamp,&Rni_phins(0,0),&Rni_phins(0,1),&Rni_phins(0,2),&Rni_phins(1,0),&Rni_phins(1,1),&Rni_phins(1,2),&Rni_phins(2,0),&Rni_phins(2,1),&Rni_phins(2,2));
 
     att.step(gyro_data.ang - w_b,gyro_data.acc,((float) 1)/(float)hz);
 
@@ -78,7 +76,7 @@ int main(int argc, char* argv[])
     
     samp_processed++;
 
-    if ((samp_processed) % (((int)hz)*60) == 0) {
+    if ((samp_processed) % (hz*60) == 0) {
       
       int seconds = samp_processed/hz;
       int hours   = seconds/3600;

@@ -41,6 +41,7 @@ public:
 
  private:
 
+  Eigen::Matrix3d Rni_hat_;
   Eigen::Vector3d w_n_;
   Eigen::Vector3d e_n_; /**< East vector in NED frame. */
   Eigen::Vector3d a_n_; /**< Gravity vector in NED frame. */

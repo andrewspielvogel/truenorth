@@ -12,6 +12,7 @@
 #include <Eigen/Dense>
 #include <truenorth/helper_funcs.h>
 #include <truenorth/bias_est.h>
+#include <unsupported/Eigen/MatrixFunctions>
 
 
 /*
@@ -43,6 +44,9 @@ BiasEst::BiasEst(Eigen::VectorXd k, float lat)
   a_hat << 0,0,0;
   prev_acc_ << 0,0,0;
 
+  Eigen::Vector3d rpy(M_PI,0,M_PI/4.0);
+  Rni_hat_ = rpy2rot(rpy);
+  
   w_b << 0,0,0;
   a_b << 0,0,0;
   z << 0,0,0;
@@ -55,31 +59,42 @@ BiasEst::~BiasEst(void)
 {
 }
 
-
-
 void BiasEst::step(Eigen::Matrix3d Rni, Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag, float dt)
 {
 
-  Eigen::Vector3d da_dt = (acc - prev_acc_)/dt;
-  prev_acc_ = acc;
-  Eigen::Vector3d da = a_hat - acc + Rni.transpose()*a_n_;
-  Eigen::Vector3d n_(1,0,0);
-  mag = Rni.transpose()*n_;
-  Eigen::Vector3d dm = m_hat - mag;
-  
-
-  Eigen::Vector3d a_dot = skew(ang-w_b)*Rni.transpose()*a_n_ - Rni.transpose()*e_n_ + da_dt - kg_*da;
-  Eigen::Vector3d w_b_dot = kw_*(skew(Rni.transpose()*a_n_)*da - skew(mag)*dm);
-
-  Eigen::Vector3d m_dot = -skew(ang - Rni.transpose()*w_n_ - w_b)*mag - km_*dm;
+  Eigen::Matrix3d R_tilde = Rni.transpose()*Rni_hat_;
+  Eigen::Matrix3d Q_tilde = R_tilde.log();
+  Eigen::Matrix3d Rni_hat_twist = (skew(ang-w_b) - Rni_hat_.transpose()*skew(w_n_)*Rni_hat_ - kg_*Q_tilde)*dt;
 
   
-  a_hat = a_hat + a_dot*dt;
-  w_b   = w_b   + w_b_dot*dt;
-  m_hat = m_hat + m_dot*dt;
+  w_b = w_b + kw_*dt*unskew(Q_tilde);
+  Rni_hat_ = Rni_hat_*Rni_hat_twist.exp();
+
+}
+
+// void BiasEst::step(Eigen::Matrix3d Rni, Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag, float dt)
+// {
+
+//   Eigen::Vector3d da_dt = (acc - prev_acc_)/dt;
+//   prev_acc_ = acc;
+//   Eigen::Vector3d da = a_hat - acc + Rni.transpose()*a_n_;
+//   Eigen::Vector3d n_(1,0,0);
+//   mag = Rni.transpose()*n_;
+//   Eigen::Vector3d dm = m_hat - mag;
+  
+
+//   Eigen::Vector3d a_dot = skew(ang-w_b)*Rni.transpose()*a_n_ - Rni.transpose()*e_n_ + da_dt - kg_*da;
+//   Eigen::Vector3d w_b_dot = kw_*(skew(Rni.transpose()*a_n_)*da - skew(mag)*dm);
+
+//   Eigen::Vector3d m_dot = -skew(ang - Rni.transpose()*w_n_ - w_b)*mag - km_*dm;
+
+  
+//   a_hat = a_hat + a_dot*dt;
+//   w_b   = w_b   + w_b_dot*dt;
+//   m_hat = m_hat + m_dot*dt;
  
 
- }
+//  }
 
 
 

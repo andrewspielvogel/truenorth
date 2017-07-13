@@ -41,6 +41,20 @@ inline Eigen::Matrix3d skew(Eigen::Vector3d w)
 }
 
 /**
+ * @brief Unskew function.
+ *
+ * @param w_hat Input so(3) matrix.
+ */
+inline Eigen::Vector3d unskew(Eigen::Matrix3d w_hat)
+{
+
+  Eigen::Vector3d w(-w_hat(1,2),w_hat(0,2),-w_hat(0,1));
+
+  return w;
+
+}
+
+/**
  * @brief Rotation around x-axis.
  * @param x angle (units: radians).
  */
