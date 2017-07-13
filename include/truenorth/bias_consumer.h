@@ -79,7 +79,7 @@ class BiasConsumerThread : public Thread
       {
 	pthread_mutex_lock(&mutex_bias);
 
-	bias.step(Rni*R_align,item.ang,item.acc,item.mag,item.diff);
+	bias.step(Rni*R_align_,item.ang,item.acc,item.mag,item.diff);
 	
 	pthread_mutex_unlock(&mutex_bias);
 
