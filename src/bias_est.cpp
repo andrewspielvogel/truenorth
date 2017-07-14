@@ -69,6 +69,7 @@ void BiasEst::step(Eigen::Matrix3d Rni, Eigen::Vector3d ang,Eigen::Vector3d acc,
   
   w_b = w_b + kw_*dt*unskew(Q_tilde);
   Rni_hat_ = Rni_hat_*Rni_hat_twist.exp();
+  a_b = rot2rph(Rni_hat_);
 
 }
 
