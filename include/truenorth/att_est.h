@@ -22,7 +22,8 @@ public:
   Eigen::Vector3d h_error_; /**< Heading error term. */
   Eigen::Vector3d east_est_n_; /**< Estimation of east in NED frame. */
 
-    Eigen::Vector3d prev_afilt_;
+  Eigen::Vector3d prev_afilt_;
+  Eigen::Vector3d prev_wfilt_;
 
   
   /**

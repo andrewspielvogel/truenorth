@@ -33,6 +33,7 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, float hz)
   // lowpass filter params
   B_ = 1.0/hz/(1.0/hz + 1.0/(2.0*M_PI*k(2)));
   A_ = 1.0 - B_;
+  std::cout<<"A = "<<A_<<", B = "<<B_<<"\n";
   
   double earthrate = 15.04*M_PI/180.0/3600.0;
   Eigen::Matrix3d R_en = get_R_en(lat_);
@@ -52,6 +53,7 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, float hz)
 
   prev_acc_ << 0,0,0;
   prev_afilt_ << 0,0,0;
+  prev_wfilt_ << 0,0,0;
 
   wearth_n_ = R_en.transpose()*w_e;
 
@@ -68,17 +70,14 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float dt)
   {
     return;
   }
+
+  prev_afilt_ = A_*prev_afilt_ + B_*acc;
+  prev_wfilt_ = A_*prev_wfilt_ + B_*ang;
   
-  east_est_n_ = A_*east_est_n_ + B_*R_ni*(ang.cross(acc) + (acc-prev_acc_)/dt);
+  east_est_n_ = R_ni*(prev_wfilt_.cross(prev_afilt_) + (prev_afilt_-prev_acc_)/dt);//A_*east_est_n_ + B_*R_ni*(ang.cross(acc) + (acc-prev_acc_)/dt);
 
   
-  //Eigen::Vector3d prev_afil = prev_afilt_;
-
-  //prev_afilt_ = A_*prev_afilt_ + B_*acc;
-
-  //east_est_n_ = R_ni*(ang.cross(prev_afilt_) + (prev_afilt_-prev_afil)/dt);
-  //east_est_n_ = R_ni*(ang.cross(acc) + (acc - prev_acc_)/dt);
-  prev_acc_ = acc;
+  prev_acc_ = prev_afilt_;//acc;
   
   g_error_ = R_ni.transpose()*(kg_*(R_ni*acc).cross(a_n));
   h_error_ = R_ni.transpose()*(kw_*P_*east_est_n_.normalized().cross(e_n_));

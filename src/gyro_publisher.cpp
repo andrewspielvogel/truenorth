@@ -58,7 +58,7 @@ int main(int argc, char **argv)
     Eigen::Vector3d rpy;
 
     // instrument alignment matrix
-    std::string instr_align = "1,0,0,0,1,0,0,0,1";  // default
+    std::string instr_align = "0,0,0";  // default
     n.getParam("instr_align",instr_align);
     sscanf(instr_align.c_str(),"%lf,%lf,%lf",&rpy(0),&rpy(1),&rpy(2));
     Eigen::MatrixXd R_align = rpy2rot(rpy);
