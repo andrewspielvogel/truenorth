@@ -11,7 +11,7 @@
 int main(int argc, char* argv[])
 {
 
-  int hz = 5000;
+  int hz = 100;
   float lat = 39.32*M_PI/180;
 
 
@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
   k<<1,.01,10,0;
 
   std::string out_file_name = "/home/spiels/log/processedbias.csv";
-  std::string in_file_name = "/home/spiels/log/test/2017_7_13_15_32.KVH";
+  std::string in_file_name = "/home/spiels/log/data.KVH";//test/2017_7_13_15_32.KVH";
 
   Eigen::Vector3d rpy(M_PI,0,M_PI/4.0);
 
