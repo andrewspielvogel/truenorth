@@ -54,6 +54,7 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, float hz)
   prev_acc_ << 0,0,0;
   prev_afilt_ << 0,0,0;
   prev_wfilt_ << 0,0,0;
+  h_error_<< 0,0,0;
 
   wearth_n_ = R_en.transpose()*w_e;
 
@@ -74,14 +75,14 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float dt)
   prev_afilt_ = A_*prev_afilt_ + B_*acc;
   prev_wfilt_ = A_*prev_wfilt_ + B_*ang;
   
-  east_est_n_ = R_ni*(prev_wfilt_.cross(prev_afilt_) + (prev_afilt_-prev_acc_)/dt);//A_*east_est_n_ + B_*R_ni*(ang.cross(acc) + (acc-prev_acc_)/dt);
-
+  east_est_n_ = R_ni*(ang.cross(acc) + (acc-prev_acc_)/dt);//A_*east_est_n_ + B_*R_ni*(ang.cross(acc) + (acc-prev_acc_)/dt);
+  // east_est_n_ = R_ni*(prev_wfilt_.cross(prev_afilt_) + (prev_afilt_-prev_acc_)/dt);
   
-  prev_acc_ = prev_afilt_;//acc;
+  prev_acc_ = acc;//prev_afilt_;//acc;
   
   g_error_ = R_ni.transpose()*(kg_*(R_ni*acc).cross(a_n));
-  h_error_ = R_ni.transpose()*(kw_*P_*east_est_n_.normalized().cross(e_n_));
+  h_error_ = (A_*h_error_ + B_*P_*(east_est_n_.cross(e_n_)));
 
-  R_ni = R_ni*((skew(g_error_ + h_error_ + ang - R_ni.transpose()*wearth_n_)*dt).exp());
+  R_ni = R_ni*((skew(g_error_ + R_ni.transpose()*kw_*h_error_.normalized() + ang - R_ni.transpose()*wearth_n_)*dt).exp());
 
 }

@@ -22,20 +22,20 @@ int main(int argc, char* argv[])
 
   
   std::string out_file_name = "/home/spiels/log/data.csv";
-  std::string in_file_name = "/home/spiels/log/test/2017_7_12_16_5.KVH";
+  std::string in_file_name = "/home/spiels/log/test/data.KVH";
 
   Eigen::Vector3d rpy(M_PI,0,M_PI/4.0);
 
   Eigen::VectorXd k(3);
-  k << 0.1,0.025,.01; //g,w,east_cutoff
+  k << 0.1,0.001,0.001; //g,w,east_cutoff
 
 
   
   
   Eigen::Matrix3d R_align = rpy2rot(rpy);
 
-  Eigen::Vector3d w_err(1,1,1);
-  w_err = -w_err*1*M_PI/180;
+  Eigen::Vector3d w_err(0,0,1);
+  w_err = -w_err*2*M_PI/180;
   Eigen::Matrix3d R_err = skew(w_err).exp();
 
 
@@ -82,7 +82,7 @@ int main(int argc, char* argv[])
 
     att_euler_ang = rot2rph(att.R_ni*R_align.transpose());
     
-    fprintf(outfile,"ATT_PRO,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",gyro_data.timestamp,att_euler_ang(0),att_euler_ang(1),att_euler_ang(2),phins_rpy(0),phins_rpy(1),phins_rpy(2),gyro_data.acc(0),gyro_data.acc(1),gyro_data.acc(2),att.prev_afilt_(0),att.prev_afilt_(1),att.prev_afilt_(2),att.east_est_n_(0),att.east_est_n_(1),att.east_est_n_(2));
+    fprintf(outfile,"ATT_PRO,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",gyro_data.timestamp,att_euler_ang(0),att_euler_ang(1),att_euler_ang(2),phins_rpy(0),phins_rpy(1),phins_rpy(2),gyro_data.acc(0),gyro_data.acc(1),gyro_data.acc(2),att.prev_afilt_(0),att.prev_afilt_(1),att.prev_afilt_(2),att.h_error_(0),att.h_error_(1),att.h_error_(2));
     
     samp_processed++;
 
