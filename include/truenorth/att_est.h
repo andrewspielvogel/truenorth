@@ -10,7 +10,10 @@
 #define ATT_EST_H
 
 #include <Eigen/Core>
-
+#include <boost/accumulators/accumulators.hpp>
+#include <boost/accumulators/statistics/rolling_mean.hpp>
+#include <boost/accumulators/statistics/rolling_count.hpp>
+#include <boost/accumulators/statistics/stats.hpp>
 
 /**
  * @brief Class for attitude adaptive identificaiton on SO(3).
@@ -24,8 +27,8 @@ public:
 
   Eigen::Vector3d prev_afilt_;
   Eigen::Vector3d prev_wfilt_;
-
-  
+  int window_size_;
+  int hz_;
   /**
    * @brief Constructor.
    * @param k Estimation gains/cutoff frequency (k(0): kg, k(1): kw, k(2): cuttoff_freq.
@@ -33,7 +36,7 @@ public:
    * @param lat Latitude.
    * @param hz Sampling hz.
    */
-  AttEst(Eigen::VectorXd k,Eigen::Matrix3d R0, float lat, float hz);
+  AttEst(Eigen::VectorXd k,Eigen::Matrix3d R0, float lat, int hz);
 
   
   virtual ~AttEst(void); /**< Destructor. */
@@ -66,6 +69,8 @@ public:
   Eigen::Vector3d e_n_; /**< East Direction in the NED frame.*/
   Eigen::Vector3d wearth_n_; /**< Earth's angular velocity in the NED frame. */
   Eigen::Matrix3d P_; /**< Projection matrix onto a_n_ vector. */
+
+  boost::accumulators::accumulator_set<double, boost::accumulators::stats<boost::accumulators::tag::rolling_mean,boost::accumulators::tag::rolling_count> > accumulator_;
 
 
 

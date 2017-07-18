@@ -27,15 +27,12 @@ int main(int argc, char* argv[])
   Eigen::Vector3d rpy(M_PI,0,M_PI/4.0);
 
   Eigen::VectorXd k(3);
-  k << 0.1,0.001,0.001; //g,w,east_cutoff
+  k << 0.005,0.00005,10; //g,w,east_cutoff
 
-
-  
-  
   Eigen::Matrix3d R_align = rpy2rot(rpy);
 
-  Eigen::Vector3d w_err(0,0,1);
-  w_err = -w_err*2*M_PI/180;
+  Eigen::Vector3d w_err(.1,.1,1);
+  w_err = w_err*3*M_PI/180;
   Eigen::Matrix3d R_err = skew(w_err).exp();
 
 
@@ -59,8 +56,10 @@ int main(int argc, char* argv[])
   int samp_processed = 0;
   Eigen::Vector3d att_euler_ang;
 
-  Eigen::Vector3d w_b(-1.18/100000.0,4.78/100000.0,-2.51/100000.0);
-  w_b = w_b*0;
+  Eigen::Vector3d w_b(5.1/1000000.0,8.5/1000000.0,-2.31/100000.0);
+  Eigen::Vector3d a_b(0.003,-0.005,0.002);
+  w_b = w_b;
+  
   
   while (std::getline(infile, line))
   {
@@ -78,7 +77,7 @@ int main(int argc, char* argv[])
     
     Eigen::Vector3d phins_rpy = rot2rph(Rni_phins);
 
-    att.step(gyro_data.ang,gyro_data.acc,((float) 1)/(float)hz);
+    att.step(gyro_data.ang - w_b,gyro_data.acc,((float) 1)/(float)hz);
 
     att_euler_ang = rot2rph(att.R_ni*R_align.transpose());
     

@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
   k<<10,.1,10,0;
 
   std::string out_file_name = "/home/spiels/log/processedbias.csv";
-  std::string in_file_name = "/home/spiels/log/test/data.KVH";//test/2017_7_13_15_32.KVH";
+  std::string in_file_name = "/home/spiels/log/test/data.KVH";
 
   Eigen::Vector3d rpy(M_PI,0,M_PI/4.0);
 
@@ -40,9 +40,6 @@ int main(int argc, char* argv[])
   int samp_processed = 0;
   
   Eigen::Matrix3d Ralign = rpy2rot(rpy);
-
-  Eigen::Vector3d w_err(0,0,3*M_PI/180);
-  Eigen::Matrix3d R_err = skew(w_err*0).exp();
 
 
   while (std::getline(infile, line))
