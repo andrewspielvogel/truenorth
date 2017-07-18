@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
   Eigen::Matrix3d R_align = rpy2rot(rpy);
 
   Eigen::Vector3d w_err(.1,.1,1);
-  w_err = w_err*3*M_PI/180;
+  w_err = w_err*1.5*M_PI/180;
   Eigen::Matrix3d R_err = skew(w_err).exp();
 
 
