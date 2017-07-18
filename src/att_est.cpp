@@ -33,12 +33,8 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, int hz) :  
   window_size_ = k(2);
 
   hz_ = hz;
-  // latitude
   lat_ = lat;
 
-  // lowpass filter params
-  B_ = 1.0/hz/(1.0/hz + 1.0/(2.0*M_PI*k(2)));
-  A_ = 1.0 - B_;
   
   double earthrate = 15.04*M_PI/180.0/3600.0;
   Eigen::Matrix3d R_en = get_R_en(lat_);
@@ -54,7 +50,6 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, int hz) :  
 
   R_ni = R_align;
 
-  east_est_n_ << 0.0,earthrate*cos(lat_),0.0;
 
   prev_acc_ << 0,0,0;
 
@@ -77,12 +72,12 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float dt)
   }
 
   
-  east_est_n_ = R_ni*(ang.cross(R_ni.transpose()*a_n) + (R_ni.transpose()*a_n-prev_acc_)/dt);
-
+  Eigen::Vector3d east_est_n = R_ni*(ang.cross(R_ni.transpose()*a_n) + (R_ni.transpose()*a_n-prev_acc_)/dt);
+  // Define local level (g_error_) and heading (h_error_) error terms
   g_error_ = R_ni.transpose()*(kg_*(R_ni*acc).cross(a_n));
+  h_error_ = P_*(east_est_n.cross(e_n_));
 
-  //h_error_ = A_*h_error_ + B_*P_*(east_est_n_.cross(e_n_));
-  h_error_ = P_*(east_est_n_.cross(e_n_));
+  // add h_error_ to accumulator
   accumulator_(h_error_(2));
 
   h_error_(0) = 0.0;
@@ -90,12 +85,16 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float dt)
   h_error_(2) = boost::accumulators::rolling_mean(accumulator_);
   h_error_ = h_error_.normalized();
 
+  // wait for heading error accumulator to fill up before doing heading correction
   if (boost::accumulators::rolling_count(accumulator_) < (hz_)*window_size_)
   {
     h_error_(2) = 0.0;
   }
+
+  // update R_ni
   R_ni = R_ni*((skew(g_error_ + R_ni.transpose()*kw_*h_error_ + ang - R_ni.transpose()*wearth_n_)*dt).exp());
 
-  prev_acc_ = R_ni.transpose()*a_n;//acc;
+  // save current gravity vector for doing calculating heading error
+  prev_acc_ = R_ni.transpose()*a_n;
 
 }

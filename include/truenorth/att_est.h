@@ -23,15 +23,11 @@ class AttEst
 public:
   Eigen::Vector3d g_error_; /**< Local level error term. */
   Eigen::Vector3d h_error_; /**< Heading error term. */
-  Eigen::Vector3d east_est_n_; /**< Estimation of east in NED frame. */
 
-  Eigen::Vector3d prev_afilt_;
-  Eigen::Vector3d prev_wfilt_;
-  int window_size_;
-  int hz_;
+
   /**
    * @brief Constructor.
-   * @param k Estimation gains/cutoff frequency (k(0): kg, k(1): kw, k(2): cuttoff_freq.
+   * @param k Estimation gains and rolling mean window size (k(0): kg, k(1): kw, k(2): window_size).
    * @param R0 Initial NED 2 Instrument Alignment estimation.
    * @param lat Latitude.
    * @param hz Sampling hz.
@@ -60,8 +56,8 @@ public:
   Eigen::Vector3d prev_acc_; /**< Previous acceleration. */
   float lat_; /**< Latitude. */
 
-  double A_; /**< Butter filter coefficient. */
-  double B_; /**< Butter filter coefficient. */
+  int window_size_; /**< Rolling mean window size. */
+  int hz_; /**< Sampling hz. */
 
   float kg_; /**< Gravity vector estimation gain. */        
   float kw_; /**< East vector estimation gain. */

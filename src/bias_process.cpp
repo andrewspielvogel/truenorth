@@ -11,15 +11,15 @@
 int main(int argc, char* argv[])
 {
 
-  int hz = 5000;
+  int hz = 1000;
   float lat = 39.32*M_PI/180;
 
 
   Eigen::VectorXd k(4);
-  k<<10,.1,10,0;
+  k<<10,.1,0,0;
 
   std::string out_file_name = "/home/spiels/log/processedbias.csv";
-  std::string in_file_name = "/home/spiels/log/test/data.KVH";
+  std::string in_file_name = "/home/spiels/log/data2.KVH";
 
   Eigen::Vector3d rpy(M_PI,0,M_PI/4.0);
 
@@ -40,7 +40,9 @@ int main(int argc, char* argv[])
   int samp_processed = 0;
   
   Eigen::Matrix3d Ralign = rpy2rot(rpy);
-
+  Eigen::Vector3d w_err(.1,.1,1);
+  w_err = w_err*1*M_PI/180;
+  Eigen::Matrix3d R_err = skew(w_err).exp();
 
   while (std::getline(infile, line))
   {
@@ -48,9 +50,9 @@ int main(int argc, char* argv[])
 
     Eigen::Vector3d phins_rpy = rot2rph(Rni_phins*Ralign);
     
-    bias.step(Rni_phins*Ralign,gyro_data.ang,gyro_data.acc,gyro_data.mag,1.0/((float)hz));
+    bias.step(Rni_phins*Ralign*R_err,gyro_data.ang,gyro_data.acc,gyro_data.mag,1.0/((float)hz));
 
-    fprintf(outfile,"BIAS_PRO,%f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f\n",gyro_data.timestamp,bias.w_b(0),bias.w_b(1),bias.w_b(2),phins_rpy(0),phins_rpy(1),phins_rpy(2),bias.a_b(0),bias.a_b(1),bias.a_b(2));
+    fprintf(outfile,"BIAS_PRO,%f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f\n",gyro_data.timestamp,bias.w_b(0),bias.w_b(1),bias.w_b(2),phins_rpy(0),phins_rpy(1),phins_rpy(2),bias.a_b(0),bias.a_b(1),bias.a_b(2),bias.m_b(0),bias.m_b(1),bias.m_b(2));
 
     samp_processed++;
     
