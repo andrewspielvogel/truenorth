@@ -10,10 +10,7 @@
 #define ATT_EST_H
 
 #include <Eigen/Core>
-#include <boost/accumulators/accumulators.hpp>
-#include <boost/accumulators/statistics/rolling_mean.hpp>
-#include <boost/accumulators/statistics/rolling_count.hpp>
-#include <boost/accumulators/statistics/stats.hpp>
+
 
 /**
  * @brief Class for attitude adaptive identificaiton on SO(3).
@@ -49,14 +46,14 @@ public:
   
   Eigen::Matrix3d R_ni; /**< Estimation of NED to instrument rotation. */
   Eigen::Vector3d a_n; /**< Linear Acceleration in the NED frame.*/
-
+  Eigen::Vector3d east_est_n;
 
  private:
 
   Eigen::Vector3d prev_acc_; /**< Previous acceleration. */
   float lat_; /**< Latitude. */
 
-  int window_size_; /**< Rolling mean window size. */
+  double kf_; /**< Rolling mean window size. */
   int hz_; /**< Sampling hz. */
 
   float kg_; /**< Gravity vector estimation gain. */        
@@ -65,10 +62,6 @@ public:
   Eigen::Vector3d e_n_; /**< East Direction in the NED frame.*/
   Eigen::Vector3d wearth_n_; /**< Earth's angular velocity in the NED frame. */
   Eigen::Matrix3d P_; /**< Projection matrix onto a_n_ vector. */
-
-  boost::accumulators::accumulator_set<double, boost::accumulators::stats<boost::accumulators::tag::rolling_mean,boost::accumulators::tag::rolling_count> > accumulator_;
-
-
 
 };
 

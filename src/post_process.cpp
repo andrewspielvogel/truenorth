@@ -24,21 +24,17 @@ int main(int argc, char* argv[])
   std::string out_file_name = "/home/spiels/log/data.csv";
   std::string in_file_name = "/home/spiels/log/test/data.KVH";
 
-  Eigen::Vector3d rpy(M_PI,0,M_PI/4.0);
+  Eigen::Vector3d rpy_align(M_PI,0,M_PI/4.0);
+  Eigen::Vector3d rpy_R0(0.0,0.0,0.0);
 
+  
   Eigen::VectorXd k(3);
-  k << 0.005,0.00005,10; //g,w,east_cutoff
+  k << 0.01,10,0.99999; //g,w,kf
 
-  Eigen::Matrix3d R_align = rpy2rot(rpy);
+  Eigen::Matrix3d R_align = rpy2rot(rpy_align);
+  Eigen::Matrix3d R0 = rpy2rot(rpy_R0);
 
-  Eigen::Vector3d w_err(.1,.1,1);
-  w_err = w_err*1.5*M_PI/180;
-  Eigen::Matrix3d R_err = skew(w_err).exp();
-
-
-
-
-  AttEst att(k, R_align*R_err,lat,hz);
+  AttEst att(k, R0*R_align,lat,hz);
   GyroData gyro_data(hz);
   Eigen::Matrix3d Rni_phins;
   char msg_type[32];
@@ -56,24 +52,25 @@ int main(int argc, char* argv[])
   int samp_processed = 0;
   Eigen::Vector3d att_euler_ang;
 
-  Eigen::Vector3d w_b(5.1/1000000.0,8.5/1000000.0,-2.31/100000.0);
-  Eigen::Vector3d a_b(0.003,-0.005,0.002);
-  w_b = w_b;
   
   
   while (std::getline(infile, line))
   {
 
 
-    sscanf(line.c_str(),"%[^,],%lf,%lf,%lf,%lf,%lf,%lf, %lf,%lf,%lf, %f, %d, %lf,%lf, %*d, %*d, %*d, %*d, %*d, %*d,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf \n",msg_type,&gyro_data.ang(0),&gyro_data.ang(1),&gyro_data.ang(2),&gyro_data.acc(0),&gyro_data.acc(1),&gyro_data.acc(2),&gyro_data.mag(0),&gyro_data.mag(1),&gyro_data.mag(2),&gyro_data.temp,&gyro_data.seq_num,&gyro_data.timestamp,&gyro_data.comp_timestamp,&Rni_phins(0,0),&Rni_phins(0,1),&Rni_phins(0,2),&Rni_phins(1,0),&Rni_phins(1,1),&Rni_phins(1,2),&Rni_phins(2,0),&Rni_phins(2,1),&Rni_phins(2,2));
+    //sscanf(line.c_str(),"%[^,],%lf,%lf,%lf,%lf,%lf,%lf, %lf,%lf,%lf, %f, %d, %lf,%lf, %*d, %*d, %*d, %*d, %*d, %*d,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf \n",msg_type,&gyro_data.ang(0),&gyro_data.ang(1),&gyro_data.ang(2),&gyro_data.acc(0),&gyro_data.acc(1),&gyro_data.acc(2),&gyro_data.mag(0),&gyro_data.mag(1),&gyro_data.mag(2),&gyro_data.temp,&gyro_data.seq_num,&gyro_data.timestamp,&gyro_data.comp_timestamp,&Rni_phins(0,0),&Rni_phins(0,1),&Rni_phins(0,2),&Rni_phins(1,0),&Rni_phins(1,1),&Rni_phins(1,2),&Rni_phins(2,0),&Rni_phins(2,1),&Rni_phins(2,2));
 
-    Eigen::Vector3d phins_rpy = rot2rph(Rni_phins);
+    sscanf(line.c_str(),"%[^,],%lf,%lf,%lf,%lf,%lf,%lf, %lf,%lf,%lf, %f, %d, %lf, %*d, %*d, %*d, %*d, %*d, %*d \n",msg_type,&gyro_data.ang(0),&gyro_data.ang(1),&gyro_data.ang(2),&gyro_data.acc(0),&gyro_data.acc(1),&gyro_data.acc(2),&gyro_data.mag(0),&gyro_data.mag(1),&gyro_data.mag(2),&gyro_data.temp,&gyro_data.seq_num,&gyro_data.timestamp);
 
-    att.step(gyro_data.ang - w_b,gyro_data.acc,((float) 1)/(float)hz);
+    //Eigen::Vector3d phins_rpy = rot2rph(Rni_phins);
+
+    att.step(gyro_data.ang,gyro_data.acc,((float) 1)/(float)hz);
 
     att_euler_ang = rot2rph(att.R_ni*R_align.transpose());
     
-    fprintf(outfile,"ATT_PRO,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",gyro_data.timestamp,att_euler_ang(0),att_euler_ang(1),att_euler_ang(2),phins_rpy(0),phins_rpy(1),phins_rpy(2),gyro_data.acc(0),gyro_data.acc(1),gyro_data.acc(2),att.h_error_(0),att.h_error_(1),att.h_error_(2));
+    //fprintf(outfile,"ATT_PRO,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",gyro_data.timestamp,att_euler_ang(0),att_euler_ang(1),att_euler_ang(2),phins_rpy(0),phins_rpy(1),phins_rpy(2),att.g_error_(0),att.g_error_(1),att.g_error_(2),att.h_error_(0),att.h_error_(1),att.h_error_(2),att.east_est_n(0),att.east_est_n(1),att.east_est_n(2));
+
+    fprintf(outfile,"ATT_PRO,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",gyro_data.timestamp,att_euler_ang(0),att_euler_ang(1),att_euler_ang(2),att.g_error_(0),att.g_error_(1),att.g_error_(2),att.h_error_(0),att.h_error_(1),att.h_error_(2),att.east_est_n(0),att.east_est_n(1),att.east_est_n(2));
     
     samp_processed++;
 

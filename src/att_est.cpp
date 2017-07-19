@@ -13,10 +13,7 @@
 #include <unsupported/Eigen/MatrixFunctions>
 #include <truenorth/helper_funcs.h>
 #include <truenorth/att_est.h>
-#include <boost/accumulators/accumulators.hpp>
-#include <boost/accumulators/statistics/rolling_mean.hpp>
-#include <boost/accumulators/statistics/rolling_count.hpp>
-#include <boost/accumulators/statistics/stats.hpp>
+
 
 
 /*
@@ -25,12 +22,12 @@
  *
  */
 
-AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, int hz) :  accumulator_(boost::accumulators::tag::rolling_window::window_size = hz*k(2))
+AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, int hz) 
 {
   // estimator gains
   kg_ = k(0);
   kw_ = k(1);
-  window_size_ = k(2);
+  kf_ = k(2);
 
   hz_ = hz;
   lat_ = lat;
@@ -46,16 +43,16 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, int hz) :  
 
   a_n = R_en.transpose()*a_e;
   e_n_ = R_en.transpose()*e_e.normalized();
-  P_   = a_n.normalized()*a_n.normalized().transpose(); 
-
+  P_   = a_n.normalized()*a_n.normalized().transpose();
   R_ni = R_align;
 
 
-  prev_acc_ << 0,0,0;
+  prev_acc_ = R_ni.transpose()*a_n;
 
   h_error_<< 0,0,0;
 
   wearth_n_ = R_en.transpose()*w_e;
+  east_est_n = R_en.transpose()*e_e;
 
 }
 
@@ -71,30 +68,21 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float dt)
     return;
   }
 
+  east_est_n = kf_*east_est_n + (1.0-kf_)*(R_ni*(ang.cross(R_ni.transpose()*a_n) + (R_ni.transpose()*a_n-prev_acc_)/dt));
   
-  Eigen::Vector3d east_est_n = R_ni*(ang.cross(R_ni.transpose()*a_n) + (R_ni.transpose()*a_n-prev_acc_)/dt);
   // Define local level (g_error_) and heading (h_error_) error terms
   g_error_ = R_ni.transpose()*(kg_*(R_ni*acc).cross(a_n));
-  h_error_ = P_*(east_est_n.cross(e_n_));
+  h_error_ = (east_est_n.cross(e_n_));
 
-  // add h_error_ to accumulator
-  accumulator_(h_error_(2));
 
-  h_error_(0) = 0.0;
-  h_error_(1) = 0.0;
-  h_error_(2) = boost::accumulators::rolling_mean(accumulator_);
-  h_error_ = h_error_.normalized();
-
-  // wait for heading error accumulator to fill up before doing heading correction
-  if (boost::accumulators::rolling_count(accumulator_) < (hz_)*window_size_)
-  {
-    h_error_(2) = 0.0;
-  }
+  h_error_ = P_*h_error_;
+  
+  // save current gravity vector for doing calculating heading error
+  prev_acc_ = R_ni.transpose()*a_n;
 
   // update R_ni
   R_ni = R_ni*((skew(g_error_ + R_ni.transpose()*kw_*h_error_ + ang - R_ni.transpose()*wearth_n_)*dt).exp());
 
-  // save current gravity vector for doing calculating heading error
-  prev_acc_ = R_ni.transpose()*a_n;
+
 
 }
