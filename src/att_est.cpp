@@ -32,7 +32,7 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, int hz)
   hz_ = hz;
   lat_ = lat;
 
-  
+  // initialize usefull vectors
   double earthrate = 15.04*M_PI/180.0/3600.0;
   Eigen::Matrix3d R_en = get_R_en(lat_);
 

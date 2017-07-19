@@ -16,24 +16,31 @@ int main(int argc, char* argv[])
    * INPUTS
    *
    ***************************************************/
-  
+
+  // sampling hz
   int hz = 5000;
+
+  // location latitude
   float lat = 39.32*M_PI/180;
 
-  
+  // input, output files
   std::string out_file_name = "/home/spiels/log/data.csv";
   std::string in_file_name = "/home/spiels/log/test/data.KVH";
 
+  // alignment (roll,pitch,heading) from vehicle to instrument
   Eigen::Vector3d rpy_align(M_PI,0,M_PI/4.0);
+
+  // initial guess of attitude (in roll, pitch, heading)
   Eigen::Vector3d rpy_R0(0.0,0.0,0.0);
 
-  
+  // estimator gains
   Eigen::VectorXd k(3);
   k << 0.01,10,0.99999; //g,w,kf
 
   Eigen::Matrix3d R_align = rpy2rot(rpy_align);
   Eigen::Matrix3d R0 = rpy2rot(rpy_R0);
 
+  // initialize estimator
   AttEst att(k, R0*R_align,lat,hz);
   GyroData gyro_data(hz);
   Eigen::Matrix3d Rni_phins;
@@ -48,6 +55,7 @@ int main(int argc, char* argv[])
   FILE *outfile;
   outfile = fopen(out_file_name.c_str(),"w");
 
+  
   std::string line;
   int samp_processed = 0;
   Eigen::Vector3d att_euler_ang;

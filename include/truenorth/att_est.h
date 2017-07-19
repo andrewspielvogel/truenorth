@@ -53,7 +53,7 @@ public:
   Eigen::Vector3d prev_acc_; /**< Previous acceleration. */
   float lat_; /**< Latitude. */
 
-  double kf_; /**< Rolling mean window size. */
+  double kf_; /**< . */
   int hz_; /**< Sampling hz. */
 
   float kg_; /**< Gravity vector estimation gain. */        
