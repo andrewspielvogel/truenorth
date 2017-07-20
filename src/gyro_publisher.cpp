@@ -91,12 +91,12 @@ int main(int argc, char **argv)
 
     SerialPort serial(hz);
     
-   
-    BiasConsumerThread* bias_thread = new BiasConsumerThread(serial.bias_queue,R_align,k.block<4,1>(3,0),lat);
+    AttConsumerThread* att_thread = new AttConsumerThread(serial.att_queue,k,R0*R_align,lat,hz);
+
+    BiasConsumerThread* bias_thread = new BiasConsumerThread(att_thread,serial.bias_queue,R_align,k.block<4,1>(3,0),lat);
 
     LogConsumerThread* log_thread = new LogConsumerThread(bias_thread,serial.log_queue,log_location.c_str());
     
-    AttConsumerThread* att_thread = new AttConsumerThread(bias_thread,serial.att_queue,k,R0*R_align,lat,hz);
 
 
     /**********************************************************************

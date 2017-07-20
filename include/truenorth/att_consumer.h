@@ -13,7 +13,6 @@
 #include "wqueue.h"
 #include "att_est.h"
 #include "thread.h"
-#include "bias_consumer.h"
 #include <ros/ros.h>
 #include <Eigen/Core>
 #include "bias_est.h"
@@ -26,7 +25,6 @@ class AttConsumerThread : public Thread
 
  private:
   wqueue<GyroData>& m_queue_; /**< Queue.*/
-  BiasConsumerThread* bias_thread_; /**< Bias consumer thread.*/
   AttEst att_; /**< Attitude estimation class.*/
 
  
@@ -44,7 +42,7 @@ class AttConsumerThread : public Thread
    * @param hz Sampling rate.
    * 
    */
- AttConsumerThread(BiasConsumerThread* & bias_thread, wqueue<GyroData>& queue, Eigen::VectorXd k, Eigen::Matrix3d R_align, float lat, float hz) : m_queue_(queue), att_(k,R_align,lat,hz), bias_thread_(bias_thread) {} 
+ AttConsumerThread(wqueue<GyroData>& queue, Eigen::VectorXd k, Eigen::Matrix3d R_align, float lat, float hz) : m_queue_(queue), att_(k,R_align,lat,hz) {} 
 
 
   /**
@@ -61,12 +59,10 @@ class AttConsumerThread : public Thread
     {
       GyroData item = m_queue_.remove();
       
-      //pthread_mutex_lock(&mutex_bias);
 
       //w_b <<-1.18/100000.0,4.78/100000.0,-2.51/100000.0;
       //a_b << 0.017,0.0025,0.000;
       att_.step(item.ang-w_b,item.acc-a_b,item.diff);
-      //pthread_mutex_unlock(&mutex_bias);
 
       pthread_mutex_lock(&mutex_att);
       R_ni = att_.R_ni;

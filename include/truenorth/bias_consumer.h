@@ -16,6 +16,7 @@
 #include <Eigen/Core>
 #include <math.h>
 #include <phins/phins_msg.h>
+#include "att_consumer.h"
 #include <pthread.h>
 
 static pthread_mutex_t mutex_phins;
@@ -26,6 +27,7 @@ static pthread_mutex_t mutex_phins;
 class BiasConsumerThread : public Thread
 {
  private:
+  AttConsumerThread* att_thread_; /**< Attitude consumer thread.*/
   wqueue<GyroData>& m_queue_; /**< Queue. */
   Eigen::Matrix3d R_align_; /**< PHINS to KVH rotation. */
   Eigen::Matrix3d Rni_; /**< PHINS attitude. */
@@ -43,23 +45,23 @@ class BiasConsumerThread : public Thread
    * @param lat Latitude.
    * 
    */
- BiasConsumerThread(wqueue<GyroData>& queue, Eigen::Matrix3d R_align, Eigen::VectorXd k, float lat) : m_queue_(queue),bias(k,lat) {R_align_ = R_align; Rni_ <<1,0,0,0,1,0,0,0,1; Rni<<1,0,0,0,1,0,0,0,1; start_ = 0;}
+ BiasConsumerThread(AttConsumerThread* & att_thread,wqueue<GyroData>& queue, Eigen::Matrix3d R_align, Eigen::VectorXd k, float lat) : m_queue_(queue),bias(k,lat), att_thread_(att_thread) {R_align_ = R_align; Rni_ <<1,0,0,0,1,0,0,0,1; Rni<<1,0,0,0,1,0,0,0,1; start_ = 0;}
 
   void callback(const phins::phins_msg::ConstPtr &msg)
-{
+  {
   
-  double r = (msg->att.at(0))*M_PI/180;
-  double p = (msg->att.at(1))*M_PI/180;
-  double h = (msg->att.at(2))*M_PI/180;
-  pthread_mutex_lock(&mutex_phins);
+    double r = (msg->att.at(0))*M_PI/180;
+    double p = (msg->att.at(1))*M_PI/180;
+    double h = (msg->att.at(2))*M_PI/180;
+    pthread_mutex_lock(&mutex_phins);
 
-  Rni_ << cos(h)*cos(p),cos(h)*sin(p)*sin(r) - sin(h)*cos(r),cos(h)*sin(p)*cos(r) + sin(h)*sin(r),
-    sin(h)*cos(p),sin(h)*sin(p)*sin(r) + cos(h)*cos(r),sin(h)*sin(p)*cos(r) - cos(h)*sin(r),
-    -sin(p),cos(p)*sin(r),cos(p)*cos(r);
-  pthread_mutex_unlock(&mutex_phins);
-  start_ = 1;
+    Rni_ << cos(h)*cos(p),cos(h)*sin(p)*sin(r) - sin(h)*cos(r),cos(h)*sin(p)*cos(r) + sin(h)*sin(r),
+      sin(h)*cos(p),sin(h)*sin(p)*sin(r) + cos(h)*cos(r),sin(h)*sin(p)*cos(r) - cos(h)*sin(r),
+      -sin(p),cos(p)*sin(r),cos(p)*cos(r);
+    pthread_mutex_unlock(&mutex_phins);
+    start_ = 1;
 
-}
+  }
  
   void* run()
   {
@@ -70,11 +72,12 @@ class BiasConsumerThread : public Thread
     for (int i = 0;; i++)
     {
       GyroData item = m_queue_.remove();
-            
+
+      /*
       pthread_mutex_lock(&mutex_phins);
       Rni = Rni_;
       pthread_mutex_unlock(&mutex_phins);
-
+      
       if (start_)
       {
 	pthread_mutex_lock(&mutex_bias);
@@ -84,6 +87,19 @@ class BiasConsumerThread : public Thread
 	pthread_mutex_unlock(&mutex_bias);
 
       }
+
+
+      */
+
+      pthread_mutex_lock(&mutex_att);
+      Rni = att_thread_->R_ni;
+      pthread_mutex_unlock(&mutex_att);
+      
+      pthread_mutex_lock(&mutex_bias);
+
+      bias.step(Rni,item.ang,item.acc,item.mag,item.diff);
+	
+      pthread_mutex_unlock(&mutex_bias);
       
     }
     return NULL;
