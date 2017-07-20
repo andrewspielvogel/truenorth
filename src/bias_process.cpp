@@ -11,15 +11,15 @@
 int main(int argc, char* argv[])
 {
 
-  int hz = 1000;
+  int hz = 5000;
   float lat = 39.32*M_PI/180;
 
 
   Eigen::VectorXd k(4);
   k<<10,.1,0,0;
 
-  std::string out_file_name = "/home/spiels/log/processedbias.csv";
-  std::string in_file_name = "/home/spiels/log/data2.KVH";
+  std::string out_file_name = "/home/spiels/log/processedbias2.csv";
+  std::string in_file_name = "/home/spiels/log/test/data.KVH";
 
   Eigen::Vector3d rpy(M_PI,0,M_PI/4.0);
 
@@ -47,6 +47,8 @@ int main(int argc, char* argv[])
   while (std::getline(infile, line))
   {
     sscanf(line.c_str(),"%[^,],%lf,%lf,%lf,%lf,%lf,%lf, %lf,%lf,%lf, %f, %d, %lf,%lf, %*d, %*d, %*d, %*d, %*d, %*d,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf \n",msg_type,&gyro_data.ang(0),&gyro_data.ang(1),&gyro_data.ang(2),&gyro_data.acc(0),&gyro_data.acc(1),&gyro_data.acc(2),&gyro_data.mag(0),&gyro_data.mag(1),&gyro_data.mag(2),&gyro_data.temp,&gyro_data.seq_num,&gyro_data.timestamp,&gyro_data.comp_timestamp,&Rni_phins(0,0),&Rni_phins(0,1),&Rni_phins(0,2),&Rni_phins(1,0),&Rni_phins(1,1),&Rni_phins(1,2),&Rni_phins(2,0),&Rni_phins(2,1),&Rni_phins(2,2));
+
+    //sscanf(line.c_str(),"%lf,%lf,%lf,%lf,%lf,%lf, %lf,%lf,%lf, %f, %d, %lf,%lf, %*d, %*d, %*d, %*d, %*d, %*d,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf \n",&gyro_data.ang(0),&gyro_data.ang(1),&gyro_data.ang(2),&gyro_data.acc(0),&gyro_data.acc(1),&gyro_data.acc(2),&gyro_data.mag(0),&gyro_data.mag(1),&gyro_data.mag(2),&gyro_data.temp,&gyro_data.seq_num,&gyro_data.timestamp,&gyro_data.comp_timestamp,&Rni_phins(0,0),&Rni_phins(0,1),&Rni_phins(0,2),&Rni_phins(1,0),&Rni_phins(1,1),&Rni_phins(1,2),&Rni_phins(2,0),&Rni_phins(2,1),&Rni_phins(2,2));
 
     Eigen::Vector3d phins_rpy = rot2rph(Rni_phins*Ralign);
     

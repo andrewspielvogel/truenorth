@@ -72,7 +72,7 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float dt)
   
   // Define local level (g_error_) and heading (h_error_) error terms
   g_error_ = R_ni.transpose()*(kg_*(R_ni*acc).cross(a_n));
-  h_error_ = (east_est_n.cross(e_n_));
+  h_error_ = (east_est_n.normalized().cross(e_n_));
 
 
   h_error_ = P_*h_error_;
