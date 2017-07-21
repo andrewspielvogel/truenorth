@@ -12,7 +12,7 @@
 #define GYRO_DATA_H
 
 #include <Eigen/Core>
-
+#include <vector>
 /**
  * @brief Gyro data class.
  * 

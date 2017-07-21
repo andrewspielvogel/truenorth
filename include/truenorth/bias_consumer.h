@@ -19,7 +19,7 @@
 #include "att_consumer.h"
 #include <pthread.h>
 
-static pthread_mutex_t mutex_phins;
+static pthread_mutex_t mutex_phins; 
 
 /**
  * @brief Class for consumer thread doing bias estimation.
@@ -30,13 +30,14 @@ class BiasConsumerThread : public Thread
   AttConsumerThread* att_thread_; /**< Attitude consumer thread.*/
   wqueue<GyroData>& m_queue_; /**< Queue. */
   Eigen::Matrix3d R_align_; /**< PHINS to KVH rotation. */
-  Eigen::Matrix3d Rni_; /**< PHINS attitude. */
   int start_; /**< Start Bias estimator when PHINS data valid. */
 
  
  public:
   BiasEst bias; /**< Bias estimator. */
-  Eigen::Matrix3d Rni; /**< KVH attitude (from PHINS). */
+  Eigen::Matrix3d Rni; /**< KVH attitude. */
+  Eigen::Matrix3d Rni_; /**< PHINS attitude. */
+
   /**
    * @brief Constructor.
    * 
@@ -47,6 +48,11 @@ class BiasConsumerThread : public Thread
    */
  BiasConsumerThread(AttConsumerThread* & att_thread,wqueue<GyroData>& queue, Eigen::Matrix3d R_align, Eigen::VectorXd k, float lat) : m_queue_(queue),bias(k,lat), att_thread_(att_thread) {R_align_ = R_align; Rni_ <<1,0,0,0,1,0,0,0,1; Rni<<1,0,0,0,1,0,0,0,1; start_ = 0;}
 
+  /**
+   * @brief Callback function for subscribing to PHINS topic.
+   *
+   * @param msg PHINS message.
+   */
   void callback(const phins::phins_msg::ConstPtr &msg)
   {
   

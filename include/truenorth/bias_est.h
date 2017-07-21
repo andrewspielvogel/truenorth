@@ -25,18 +25,19 @@ public:
   /**
    * @brief Cycle estimation once.
    *
-   * @param w Angular velocity measurement.
-   * @param a Linear acceleration measurement.
+   * @param ang Angular velocity measurement.
+   * @param acc Linear acceleration measurement.
+   * @param mag Magnetometer measurement.
    * @param Rni Instrument attitude.
    * @param dt Time between last two measurements.
    */
-  void step(Eigen::Matrix3d Rni, Eigen::Vector3d w,Eigen::Vector3d a, Eigen::Vector3d m, float dt);
+  void step(Eigen::Matrix3d Rni, Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag, float dt);
 
   Eigen::Vector3d a_hat; /**< Linear acceleration estimation. */
-  Eigen::Vector3d m_hat;
+  Eigen::Vector3d m_hat; /** Magnetometer estimation. */
   Eigen::Vector3d w_b; /**< Angular velocity bias estimation. */
   Eigen::Vector3d a_b; /**< Linear acceleration bias estimation. */
-  Eigen::Vector3d m_b;
+  Eigen::Vector3d m_b; /** Magnetometer bias estimation. */
   Eigen::Vector3d z; /**< z bias estimation. */
 
  private:

@@ -73,7 +73,7 @@ class LogConsumerThread : public Thread
 
       
       pthread_mutex_lock(&mutex_phins);
-      Rni_ = bias_thread_->Rni;
+      Rni_ = bias_thread_->Rni_;
       pthread_mutex_unlock(&mutex_phins);
 
       fprintf(fp_,"IMU_RAW, %.40f,%.40f,%.40f, %.35f,%.35f,%.35f, %.30f,%.30f,%.30f, %f, %d, %.30f,%.30f, %d, %d, %d, %d, %d, %d,%f,%f,%f,%f,%f,%f,%f,%f,%f \n",

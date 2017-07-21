@@ -34,7 +34,6 @@ class AttConsumerThread : public Thread
   /**
    * @brief Constructor.
    * 
-   * @param bias_thread Bias estimation thread.
    * @param queue Queue to consume from.
    * @param k Attitude estimation gains.
    * @param R_align Initial attitude alignment rotation.

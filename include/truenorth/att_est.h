@@ -2,7 +2,7 @@
  * @file
  * @date July 2016.
  * @author Andrew Spielvogel (andrewspielvogel@gmail.com).
- * @brief Class for attitude adaptive identification on SO(3).
+ * @brief Class for attitude adaptive identification on SO(3). 
  */
 
 
@@ -20,11 +20,13 @@ class AttEst
 public:
   Eigen::Vector3d g_error_; /**< Local level error term. */
   Eigen::Vector3d h_error_; /**< Heading error term. */
+  Eigen::Vector3d east_est_n; /**< \f${}^Nw_E \times {}^Na_g\f$ vector estimation. */
 
 
   /**
    * @brief Constructor.
-   * @param k Estimation gains and rolling mean window size (k(0): kg, k(1): kw, k(2): window_size).
+   *
+   * @param k Estimation gains and rolling mean window size (k(0): kg, k(1): kw, k(2): kf).
    * @param R0 Initial NED 2 Instrument Alignment estimation.
    * @param lat Latitude.
    * @param hz Sampling hz.
@@ -37,16 +39,15 @@ public:
   /**
    * @brief Cycle estimation once.
    *
-   * @param w Angular velocity measurement.
-   * @param a Linear acceleration measurement.
+   * @param ang Angular velocity measurement.
+   * @param acc Linear acceleration measurement.
    * @param dt Time between last two measurements.
    */
-  void step(Eigen::Vector3d w,Eigen::Vector3d a, float dt);
+  void step(Eigen::Vector3d ang,Eigen::Vector3d acc, float dt);
 
   
   Eigen::Matrix3d R_ni; /**< Estimation of NED to instrument rotation. */
   Eigen::Vector3d a_n; /**< Linear Acceleration in the NED frame.*/
-  Eigen::Vector3d east_est_n;
 
  private:
 

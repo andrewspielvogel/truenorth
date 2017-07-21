@@ -67,13 +67,13 @@ int main(int argc, char **argv)
     std::string R0_ = "0,0,0";  // default
     n.getParam("R0",R0_);
     sscanf(R0_.c_str(),"%lf,%lf,%lf",&rpy(0),&rpy(1),&rpy(2));
-    Eigen::MatrixXd R0 = rpy2rot(rpy);
+    Eigen::Matrix3d R0 = rpy2rot(rpy);
     
     // estimation gains
-    std::string gains = "1.0,0.005,0.005,0.005,1.0,1.0,0.05,0.005";  // default
+    std::string gains = "0.01,0.02,0.0,1.0,0.01,0.0,0.0";  // default
     n.getParam("gains",gains);
-    
-    Eigen::MatrixXd k = parse_string(gains);
+    Eigen::VectorXd k(7);
+    sscanf(gains.c_str(),"%lf,%lf,%lf,%lf,%lf,%lf,%lf",&k(0),&k(1),&k(2),&k(3),&k(4),&k(5),&k(6));
 
     // latitude
     double lat_input = 39.32;
@@ -91,9 +91,9 @@ int main(int argc, char **argv)
 
     SerialPort serial(hz);
     
-    AttConsumerThread* att_thread = new AttConsumerThread(serial.att_queue,k,R0*R_align,lat,hz);
+    AttConsumerThread* att_thread = new AttConsumerThread(serial.att_queue,k.head(3),R0*R_align,lat,hz);
 
-    BiasConsumerThread* bias_thread = new BiasConsumerThread(att_thread,serial.bias_queue,R_align,k.block<4,1>(3,0),lat);
+    BiasConsumerThread* bias_thread = new BiasConsumerThread(att_thread,serial.bias_queue,R_align,k.tail(4),lat);
 
     LogConsumerThread* log_thread = new LogConsumerThread(bias_thread,serial.log_queue,log_location.c_str());
     
