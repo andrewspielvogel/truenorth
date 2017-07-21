@@ -41,7 +41,10 @@ class AttConsumerThread : public Thread
    * @param hz Sampling rate.
    * 
    */
- AttConsumerThread(wqueue<GyroData>& queue, Eigen::VectorXd k, Eigen::Matrix3d R_align, float lat, float hz) : m_queue_(queue), att_(k,R_align,lat,hz) {} 
+ AttConsumerThread(wqueue<GyroData>& queue, Eigen::VectorXd k, Eigen::Matrix3d R_align, float lat, float hz) : m_queue_(queue), att_(k,R_align,lat,hz)
+  {
+  R_ni = R_align;
+  } 
 
 
   /**
@@ -59,7 +62,7 @@ class AttConsumerThread : public Thread
       GyroData item = m_queue_.remove();
       
 
-      //w_b <<-1.18/100000.0,4.78/100000.0,-2.51/100000.0;
+      w_b <<3.32/1000000.0,8.35/1000000.0,-2.51/100000.0;
       //a_b << 0.017,0.0025,0.000;
       att_.step(item.ang-w_b,item.acc-a_b,item.diff);
 

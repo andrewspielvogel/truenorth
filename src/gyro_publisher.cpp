@@ -162,7 +162,6 @@ int main(int argc, char **argv)
       // fill data_msg with data packet
       pthread_mutex_lock(&mutex_bias);
       pthread_mutex_lock(&mutex_att);
-
       
       for (int i=0;i<3;i++)
       {
@@ -171,8 +170,9 @@ int main(int argc, char **argv)
 	data_msg.kvh.imu.mag.at(i) = serial.data.mag(i);
 	data_msg.att.at(i) = 180*rot2rph((att_thread->R_ni)*R_align.transpose())(i)/M_PI;
 	data_msg.bias.ang.at(i) = bias_thread->bias.w_b(i);
-	data_msg.bias.acc.at(i) = bias_thread->bias.a_hat(i);
-	data_msg.bias.z.at(i) = bias_thread->bias.m_hat(i);
+	data_msg.bias.acc.at(i) = bias_thread->bias.m_b(i);
+	Eigen::Vector3d mag_v = R_align*(bias_thread->bias.m_hat-bias_thread->bias.m_b);
+	data_msg.bias.z.at(i)   = mag_v(i);//bias_thread->bias.m_hat(i);
       }
       pthread_mutex_unlock(&mutex_att);
       pthread_mutex_unlock(&mutex_bias);

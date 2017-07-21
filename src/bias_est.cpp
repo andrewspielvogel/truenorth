@@ -29,7 +29,6 @@ BiasEst::BiasEst(Eigen::VectorXd k, float lat)
   kz_ = k(3);
   km_ = k(2);
   
-
   float earth_rate = 15.04*M_PI/180.0/3600.0;
   float earth_radius = 6371.0*1000.0;
   float g_0 = 9.81;
@@ -69,8 +68,11 @@ void BiasEst::step(Eigen::Matrix3d Rni, Eigen::Vector3d ang,Eigen::Vector3d acc,
   
   w_b = w_b + kw_*dt*unskew(Q_tilde);
   Rni_hat_ = Rni_hat_*Rni_hat_twist.exp();
-  a_b = rot2rph(Rni_hat_);
-  m_b = rot2rph(R_tilde);
+
+
+  Eigen::Vector3d dmag = m_hat - mag;
+  m_hat = m_hat + dt*(-skew(ang)*(mag - m_b)-km_*dmag);
+  m_b   = m_b   + dt*kz_*(skew(ang)*dmag);
 
 }
 

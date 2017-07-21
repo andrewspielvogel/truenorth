@@ -46,7 +46,13 @@ class BiasConsumerThread : public Thread
    * @param lat Latitude.
    * 
    */
- BiasConsumerThread(AttConsumerThread* & att_thread,wqueue<GyroData>& queue, Eigen::Matrix3d R_align, Eigen::VectorXd k, float lat) : m_queue_(queue),bias(k,lat), att_thread_(att_thread) {R_align_ = R_align; Rni_ <<1,0,0,0,1,0,0,0,1; Rni<<1,0,0,0,1,0,0,0,1; start_ = 0;}
+ BiasConsumerThread(AttConsumerThread* & att_thread,wqueue<GyroData>& queue, Eigen::Matrix3d R_align, Eigen::VectorXd k, float lat) : m_queue_(queue),bias(k,lat), att_thread_(att_thread)
+  {
+    R_align_ = R_align;
+    Rni_ <<1,0,0,0,1,0,0,0,1;
+    Rni<<1,0,0,0,1,0,0,0,1;
+    start_ = 0;
+  }
 
   /**
    * @brief Callback function for subscribing to PHINS topic.
@@ -79,7 +85,7 @@ class BiasConsumerThread : public Thread
     {
       GyroData item = m_queue_.remove();
 
-      /*
+      
       pthread_mutex_lock(&mutex_phins);
       Rni = Rni_;
       pthread_mutex_unlock(&mutex_phins);
@@ -95,17 +101,17 @@ class BiasConsumerThread : public Thread
       }
 
 
-      */
-
-      pthread_mutex_lock(&mutex_att);
-      Rni = att_thread_->R_ni;
-      pthread_mutex_unlock(&mutex_att);
       
-      pthread_mutex_lock(&mutex_bias);
 
-      bias.step(Rni,item.ang,item.acc,item.mag,item.diff);
-	
-      pthread_mutex_unlock(&mutex_bias);
+      /* pthread_mutex_lock(&mutex_att); */
+      /* Rni = att_thread_->R_ni; */
+      /* pthread_mutex_unlock(&mutex_att); */
+      
+      /* pthread_mutex_lock(&mutex_bias); */
+
+      /* bias.step(Rni,item.ang,item.acc,item.mag,item.diff); */
+ 
+      /* pthread_mutex_unlock(&mutex_bias); */
       
     }
     return NULL;
