@@ -171,7 +171,7 @@ int main(int argc, char **argv)
 	data_msg.att.at(i) = 180*rot2rph((att_thread->R_ni)*R_align.transpose())(i)/M_PI;
 	data_msg.bias.ang.at(i) = bias_thread->bias.w_b(i);
 	data_msg.bias.acc.at(i) = bias_thread->bias.m_b(i);
-	data_msg.bias.z.at(i)   = bias_thread->bias.m_hat(i);
+	data_msg.bias.z.at(i)   = (R_align*bias_thread->bias.m_hat)(i);
       }
       pthread_mutex_unlock(&mutex_att);
       pthread_mutex_unlock(&mutex_bias);

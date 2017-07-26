@@ -1,6 +1,4 @@
-function data = resample_phins(phins_file,outfile)
-
-data = csvread(phins_file,0,1);
+function data = resample_phins(data)
 
 att = zeros(3,size(data,1));
 for i=1:size(data,1)
@@ -16,5 +14,3 @@ for i=1:size(data,1)
     data(i,20:28) = reshape(R',1,9);
     
 end
-
-% csvwrite(outfile,data);

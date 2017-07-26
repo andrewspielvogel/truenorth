@@ -70,6 +70,9 @@ void BiasEst::step(Eigen::Matrix3d Rni, Eigen::Vector3d ang,Eigen::Vector3d acc,
   Rni_hat_ = Rni_hat_*Rni_hat_twist.exp();
 
 
+  // Eigen::Vector3d dmag = m_hat - acc;
+  // m_hat = m_hat + dt*(-skew(ang)*(acc - m_b)-km_*dmag);
+  // m_b   = m_b   + dt*kz_*(skew(ang)*dmag);
   Eigen::Vector3d dmag = m_hat - mag;
   m_hat = m_hat + dt*(-skew(ang)*(mag - m_b)-km_*dmag);
   m_b   = m_b   + dt*kz_*(skew(ang)*dmag);
