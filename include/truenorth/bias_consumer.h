@@ -65,12 +65,14 @@ class BiasConsumerThread : public Thread
     double r = (msg->att.at(0))*M_PI/180;
     double p = (msg->att.at(1))*M_PI/180;
     double h = (msg->att.at(2))*M_PI/180;
+    Eigen::Vector3d rpy_phins(r,p,h);
+
     pthread_mutex_lock(&mutex_phins);
 
-    Rni_ << cos(h)*cos(p),cos(h)*sin(p)*sin(r) - sin(h)*cos(r),cos(h)*sin(p)*cos(r) + sin(h)*sin(r),
-      sin(h)*cos(p),sin(h)*sin(p)*sin(r) + cos(h)*cos(r),sin(h)*sin(p)*cos(r) - cos(h)*sin(r),
-      -sin(p),cos(p)*sin(r),cos(p)*cos(r);
+    Rni_ = rpy2rot(rpy_phins);
+
     pthread_mutex_unlock(&mutex_phins);
+
     start_ = 1;
 
   }
@@ -85,11 +87,12 @@ class BiasConsumerThread : public Thread
     {
       GyroData item = m_queue_.remove();
 
-      
       pthread_mutex_lock(&mutex_phins);
+
       Rni = Rni_;
+
       pthread_mutex_unlock(&mutex_phins);
-      
+   
       if (start_)
       {
 	pthread_mutex_lock(&mutex_bias);

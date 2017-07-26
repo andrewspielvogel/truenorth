@@ -62,7 +62,7 @@ class AttConsumerThread : public Thread
       GyroData item = m_queue_.remove();
       
 
-      w_b <<3.32/1000000.0,8.35/1000000.0,-2.51/100000.0;
+      //w_b <<4.15/1000000.0,6.14/1000000.0,-2.61/100000.0;
       //a_b << 0.017,0.0025,0.000;
       att_.step(item.ang-w_b,item.acc-a_b,item.diff);
 

@@ -53,7 +53,6 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, int hz)
 
   wearth_n_ = R_en.transpose()*w_e;
   east_est_n = R_en.transpose()*e_e;
-
 }
 
 AttEst::~AttEst(void)
