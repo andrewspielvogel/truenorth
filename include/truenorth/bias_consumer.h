@@ -87,34 +87,34 @@ class BiasConsumerThread : public Thread
     {
       GyroData item = m_queue_.remove();
 
-      pthread_mutex_lock(&mutex_phins);
+      /* pthread_mutex_lock(&mutex_phins); */
 
-      Rni = Rni_;
+      /* Rni = Rni_; */
 
-      pthread_mutex_unlock(&mutex_phins);
+      /* pthread_mutex_unlock(&mutex_phins); */
    
-      if (start_)
-      {
-	pthread_mutex_lock(&mutex_bias);
+      /* if (start_) */
+      /* { */
+      /* 	pthread_mutex_lock(&mutex_bias); */
 
-	bias.step(Rni*R_align_,item.ang,item.acc,item.mag,item.diff);
+      /* 	bias.step(Rni*R_align_,item.ang,item.acc,item.mag,item.diff); */
 	
-	pthread_mutex_unlock(&mutex_bias);
+      /* 	pthread_mutex_unlock(&mutex_bias); */
 
-      }
+      /* } */
 
 
       
 
-      /* pthread_mutex_lock(&mutex_att); */
-      /* Rni = att_thread_->R_ni; */
-      /* pthread_mutex_unlock(&mutex_att); */
+      pthread_mutex_lock(&mutex_att);
+      Rni = att_thread_->R_ni;
+      pthread_mutex_unlock(&mutex_att);
       
-      /* pthread_mutex_lock(&mutex_bias); */
+      pthread_mutex_lock(&mutex_bias);
 
-      /* bias.step(Rni,item.ang,item.acc,item.mag,item.diff); */
+      bias.step(Rni,item.ang,item.acc,item.mag,item.diff);
  
-      /* pthread_mutex_unlock(&mutex_bias); */
+      pthread_mutex_unlock(&mutex_bias);
       
     }
     return NULL;

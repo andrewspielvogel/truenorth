@@ -11,17 +11,17 @@
 int main(int argc, char* argv[])
 {
 
-  int hz = 10;
+  int hz = 1000;
   float lat = 39.32*M_PI/180;
 
 
   Eigen::VectorXd k(4);
-  k<<10,.1,0.10,10;
+  k<<10,.1,0,0;
 
   std::string out_file_name = "/home/spiels/log/processedbias2.csv";
-  std::string in_file_name = "/home/spiels/log/data2.KVH";
+  std::string in_file_name = "/home/spiels/log/2017_8_1_14_12.KVH";
 
-  Eigen::Vector3d rpy(M_PI,0,M_PI/4.0);
+  Eigen::Vector3d rpy(0.0,0,0.0);
 
   printf("RUNNING BIAS ESTIMATION ON CSV FILE: %s\n",in_file_name.c_str());
   printf("WRITING TO FILE: %s\n",out_file_name.c_str());

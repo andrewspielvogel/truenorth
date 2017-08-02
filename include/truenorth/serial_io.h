@@ -88,7 +88,6 @@ protected:
     int state_; /**< State of data read in. */
     int data_cnt_; /**< Track number of bytes read in. */
 
-    FILE *fp_;
     
 private:
     SerialPort(const SerialPort &p);
@@ -103,13 +102,11 @@ public:
 
     /**
      * Constructor.
-     * @param k Estimation gains. 
+     * @param hz Sampling hz. 
      * @parblock The elements in order are: Local level estimation gain, heading estimation gain,
      * linear accleration estimation gain, linear acceleration bias estimation gain, angular 
      * velocity bias estimation gain, and z bias constant estimation gain.
      * @endparblock
-     * @param align Initial estimation of attitude rotation.
-     * @param log_location_ Location of IMU data log file.
      */
     SerialPort(int hz);
 

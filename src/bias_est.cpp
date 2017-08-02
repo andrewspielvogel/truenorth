@@ -73,10 +73,23 @@ void BiasEst::step(Eigen::Matrix3d Rni, Eigen::Vector3d ang,Eigen::Vector3d acc,
   // Eigen::Vector3d dmag = m_hat - acc;
   // m_hat = m_hat + dt*(-skew(ang)*(acc - m_b)-km_*dmag);
   // m_b   = m_b   + dt*kz_*(skew(ang)*dmag);
-  Eigen::Vector3d dmag = m_hat - mag;
-  m_hat = m_hat + dt*(-skew(ang)*(mag - m_b)-km_*dmag);
-  m_b   = m_b   + dt*kz_*(skew(ang)*dmag);
+  Eigen::Vector3d rpy(0,0,M_PI);
+  Eigen::Matrix3d Rmag = rpy2rot(rpy);
 
+  Eigen::Matrix3d T;
+  T <<3.2323,-0.0042,0.6014,-0.0042,3.5385,0.2644,0.6014,0.2644,2.3107;
+  Eigen::Vector3d C(-0.0109,0.0136,-0.0253);
+
+
+      
+  mag = 0.51390*T*(mag-C);
+  mag = Rmag*mag;
+
+
+  Eigen::Vector3d dmag = m_hat - mag;
+  m_hat = m_hat + dt*((-skew(ang)*(m_hat - m_b))-km_*dmag);
+  m_b   = m_b   + dt*kz_*(skew(ang)*dmag);
+  a_b = mag;
 }
 
 // void BiasEst::step(Eigen::Matrix3d Rni, Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag, float dt)
