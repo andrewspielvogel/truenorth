@@ -158,16 +158,13 @@ int main(int argc, char **argv)
       {
 	ROS_WARN("Logging queue exceeds %d - Size: :%d",queue_warn_size,serial.log_queue.size());
       }
+
+
       
       // fill data_msg with data packet
       pthread_mutex_lock(&mutex_bias);
       pthread_mutex_lock(&mutex_att);
-      Eigen::Matrix3d T;
-      T <<5.94978,-0.0988,2.4356,-0.0988,5.2837,-0.0754,2.4256,-0.0754,8.9883;
-      Eigen::Vector3d C(0.0414,0.0367,-0.3779);
 
-      
-      Eigen::Vector3d mag_proj = T*(serial.data.mag - C); 
       
       for (int i=0;i<3;i++)
       {
@@ -176,8 +173,8 @@ int main(int argc, char **argv)
 	data_msg.kvh.imu.mag.at(i) = serial.data.mag(i);
 	data_msg.att.at(i) = 180*rot2rph((att_thread->R_ni)*R_align.transpose())(i)/M_PI;
 	data_msg.bias.ang.at(i) = bias_thread->bias.w_b(i);
-	data_msg.bias.acc.at(i) = atan2(mag_proj(1),mag_proj(0))*180.0/M_PI;//bias_thread->bias.m_b(i);
-	data_msg.bias.z.at(i)   = (bias_thread->bias.m_b)(i);
+	data_msg.bias.acc.at(i) = bias_thread->bias.a_b(i);
+	data_msg.bias.z.at(i)   = bias_thread->bias.z(i);
       }
       pthread_mutex_unlock(&mutex_att);
       pthread_mutex_unlock(&mutex_bias);

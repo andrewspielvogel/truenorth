@@ -71,15 +71,16 @@ class LogConsumerThread : public Thread
       GyroData data = m_queue_.remove();
 
 
-      
+      Eigen::Vector3d rph_phins;
       pthread_mutex_lock(&mutex_phins);
       Rni_ = bias_thread_->Rni_;
+      rph_phins = bias_thread_->rph_phins;
       pthread_mutex_unlock(&mutex_phins);
 
-      fprintf(fp_,"IMU_RAW, %.40f,%.40f,%.40f, %.35f,%.35f,%.35f, %.30f,%.30f,%.30f, %f, %d, %.30f,%.30f, %d, %d, %d, %d, %d, %d,%f,%f,%f,%f,%f,%f,%f,%f,%f \n",
+      fprintf(fp_,"IMU_RAW, %.40f,%.40f,%.40f, %.35f,%.35f,%.35f, %.30f,%.30f,%.30f, %f, %d, %.30f,%.30f, %d, %d, %d, %d, %d, %d,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f \n",
       	      data.ang(0),data.ang(1),data.ang(2),data.acc(0),data.acc(1),data.acc(2),data.mag(0),data.mag(1),data.mag(2),data.temp,
       	      data.seq_num,data.timestamp,data.comp_timestamp,(int) data.status.at(0),(int) data.status.at(1),(int) data.status.at(2),
-      	      (int) data.status.at(3),(int) data.status.at(4),(int) data.status.at(5),Rni_(0,0),Rni_(0,1),Rni_(0,2),Rni_(1,0),Rni_(1,1),Rni_(1,2),Rni_(2,0),Rni_(2,1),Rni_(2,2));
+      	      (int) data.status.at(3),(int) data.status.at(4),(int) data.status.at(5),Rni_(0,0),Rni_(0,1),Rni_(0,2),Rni_(1,0),Rni_(1,1),Rni_(1,2),Rni_(2,0),Rni_(2,1),Rni_(2,2),rph_phins(0),rph_phins(1),rph_phins(2));
     }
     return NULL;
   }

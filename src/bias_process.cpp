@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
 
 
   Eigen::VectorXd k(4);
-  k<<10,.1,0,0;
+  k<<0.1,.001,0,0;
 
   std::string out_file_name = "/home/spiels/log/processedbias2.csv";
   std::string in_file_name = "/home/spiels/log/2017_8_1_14_12.KVH";

@@ -52,7 +52,7 @@ class AttConsumerThread : public Thread
    */
   void* run() {
 
-    Eigen::Vector3d w_b(0,0,0);
+    Eigen::Vector3d w_b(6.190/1000000.0,1.35/100000.0,-1.917/100000.0);
     Eigen::Vector3d a_b(0,0,0);
 
     // Remove 1 item at a time and process it. Blocks if no items are 
@@ -62,8 +62,6 @@ class AttConsumerThread : public Thread
       GyroData item = m_queue_.remove();
       
 
-      //w_b <<4.15/1000000.0,6.14/1000000.0,-2.61/100000.0;
-      //a_b << 0.017,0.0025,0.000;
       att_.step(item.ang-w_b,item.acc-a_b,item.diff);
 
       pthread_mutex_lock(&mutex_att);
