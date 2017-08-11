@@ -21,8 +21,8 @@ t = 0:dt:t_end;
 r = 6371*1000;
 
 % noise
-w_sig = 6.32 * 10^(-3)*pi/180;  % measured 1775, units are rad/sec
-a_sig = 0.0037;            % measured 1775, units are g, not m/s^2
+w_sig = 0*6.32 * 10^(-3)*pi/180;  % measured 1775, units are rad/sec
+a_sig = 0*0.0037;            % measured 1775, units are g, not m/s^2
 m_sig = 0.002;
 
 num = size(t,2);
@@ -72,6 +72,9 @@ for i=1:num
     samp.acc_z(:,i) = samp.Rzi{i}*samp.acc(:,i);
     samp.acc_v(:,i) = samp.Rsi{i}'*Rsn*get_a(t(i));  
     samp.e_v(:,i) = skew(w_veh)*samp.acc(:,i);
+    samp.E(:,i) =  samp.Rni{i}(:,2);
+    
+
 
     % print progress
     if ~mod(t(i),30)
@@ -117,8 +120,8 @@ if t>30*60
     w=[0;0;0];
 else
     
-w = [cos(t)/20;0;cos(t/5)/40];
-%w = [cos(t/5)/20;0;0];
+%w = [0;1;0];
+w = [cos(t/15)/100;sin(t/7)/60;-cos(t/20)/40];
 %w = [sin(t/5)/70+cos(t/11)/40;cos(t/3)/50-sin(t/8)/20;sin(t/9)/30-cos(t/5)/50];
 
 end

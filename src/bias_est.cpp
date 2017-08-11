@@ -58,67 +58,48 @@ BiasEst::~BiasEst(void)
 {
 }
 
-// void BiasEst::step(Eigen::Matrix3d Rni, Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag, float dt)
-// {
-
-  
-//   Eigen::Matrix3d T;
-//   T << 2.3225,-0.0043,0.4247,-0.0043,2.6217,0.1550,0.4247,0.1550,1.6315;
-//   Eigen::Vector3d cent(-0.0751,0.0676,0.0412);
-
-//   float A = 0.99;
-//   m_hat = m_hat*A + (1.0-A)*T*(mag-cent);
-
-//   float angle = M_PI+atan2(m_hat(1),m_hat(0));
-
-//   if (angle>M_PI) {angle = angle - 2.0*M_PI;}
-      
-//   Eigen::Vector3d rph = rot2rph(Rni);
-//   rph(2) = angle;
-//   //Rni = rpy2rot(rph);
-
-  
-//   Eigen::Matrix3d R_tilde = Rni.transpose()*Rni_hat_;
-//   Eigen::Matrix3d Q_tilde = R_tilde.log();
-//   Eigen::Matrix3d Rni_hat_twist = (skew(ang-w_b) - Rni_hat_.transpose()*skew(w_n_)*Rni_hat_ - kg_*Q_tilde)*dt;
-
-//   Eigen::Matrix3d Kw_;
-//   Kw_ << kw_,0,0,0,kw_,0,0,0,kw_/50.0;
-//   w_b = w_b + kw_*dt*unskew(Q_tilde);
-//   Rni_hat_ = Rni_hat_*Rni_hat_twist.exp();
-
-//   a_b = rot2rph(Rni_hat_)*180/M_PI;
-//   rph(2) = rph(2) - M_PI/4.0;
-//   z = rph*180/M_PI;
-
-// }
-
 void BiasEst::step(Eigen::Matrix3d Rni, Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag, float dt)
 {
 
-  Eigen::Vector3d da_dt = (acc - prev_acc_)/dt;
-  prev_acc_ = acc;
-  Eigen::Vector3d da = a_hat - acc + Rni.transpose()*a_n_;
-  Eigen::Vector3d n_(1,0,0);
-  mag = Rni.transpose()*n_;
-  Eigen::Vector3d dm = m_hat - mag;
+  
+  
+  Eigen::Matrix3d R_tilde = Rni.transpose()*Rni_hat_;
+  Eigen::Matrix3d Q_tilde = R_tilde.log();
+  Eigen::Matrix3d Rni_hat_twist = (skew(ang-w_b) - Rni_hat_.transpose()*skew(w_n_)*Rni_hat_ - kg_*Q_tilde)*dt;
+
+  Eigen::Matrix3d Kw_;
+  w_b = w_b + kw_*dt*unskew(Q_tilde);
+  Rni_hat_ = Rni_hat_*Rni_hat_twist.exp();
+
+
+}
+
+// void BiasEst::step(Eigen::Matrix3d Rni, Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag, float dt)
+// {
+
+//   Eigen::Vector3d da_dt = (acc - prev_acc_)/dt;
+//   prev_acc_ = acc;
+//   Eigen::Vector3d da = a_hat - acc + Rni.transpose()*a_n_;
+//   Eigen::Vector3d n_(1,0,0);
+//   mag = Rni.transpose()*n_;
+//   Eigen::Vector3d dm = m_hat - mag;
   
 
-  Eigen::Vector3d a_dot = skew(ang-w_b)*Rni.transpose()*a_n_ - Rni.transpose()*e_n_ + da_dt - kg_*da;
-  Eigen::Vector3d w_b_dot = kw_*(skew(Rni.transpose()*a_n_)*da - skew(mag)*dm);
+//   Eigen::Vector3d a_dot = skew(ang-w_b)*Rni.transpose()*a_n_ - Rni.transpose()*e_n_ + da_dt - kg_*da;
+//   Eigen::Vector3d w_b_dot = kw_*(skew(Rni.transpose()*a_n_)*da - skew(mag)*dm);
 
-  Eigen::Vector3d m_dot = -skew(ang - Rni.transpose()*w_n_ - w_b)*mag - km_*dm;
+//   Eigen::Vector3d m_dot = -skew(ang - Rni.transpose()*w_n_ - w_b)*mag - km_*dm;
 
   
-  a_hat = a_hat + a_dot*dt;
-  w_b   = w_b   + w_b_dot*dt;
-  m_hat = m_hat + m_dot*dt;
+//   a_hat = a_hat + a_dot*dt;
+//   w_b   = w_b   + w_b_dot*dt;
+//   m_hat = m_hat + m_dot*dt;
 
-  float AA = 0.99;
-  a_b = a_b*AA + (1.0-AA)*a_hat;
+//   float AA = 0.99;
+//   a_b = a_b*AA + (1.0-AA)*a_hat;
  
 
- }
+//  }
 
 
 

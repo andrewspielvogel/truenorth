@@ -33,7 +33,7 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, int hz)
   lat_ = lat;
 
   // initialize usefull vectors
-  double earthrate = 15.04*M_PI/180.0/3600.0;
+  double earthrate = 7.292150/100000.0;
   Eigen::Matrix3d R_en = get_R_en(lat_);
 
   Eigen::Vector3d g_e(cos(lat_),0,sin(lat_));
@@ -53,6 +53,7 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, int hz)
 
   wearth_n_ = R_en.transpose()*w_e;
   east_est_n = R_en.transpose()*e_e;
+
 }
 
 AttEst::~AttEst(void)
@@ -67,20 +68,21 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float dt)
     return;
   }
 
-  east_est_n = kf_*east_est_n + (1.0-kf_)*(R_ni*(ang.cross(R_ni.transpose()*a_n) + (R_ni.transpose()*a_n-prev_acc_)/dt));
+
+  //east_est_n = R_ni*(ang.cross(acc) + (acc-prev_acc_)/dt);
+  east_est_n = R_ni*(ang.cross(R_ni.transpose()*a_n) + (R_ni.transpose()*a_n - prev_acc_)/dt);
+  prev_acc_ = R_ni.transpose()*a_n;
+  //  prev_acc_ = acc;
+
   
   // Define local level (g_error_) and heading (h_error_) error terms
   g_error_ = R_ni.transpose()*(kg_*(R_ni*acc).cross(a_n));
-  h_error_ = (east_est_n.normalized().cross(e_n_));
 
-
-  h_error_ = P_*h_error_;
-  
-  // save current gravity vector for doing calculating heading error
-  prev_acc_ = R_ni.transpose()*a_n;
+  h_error_ = east_est_n.cross(e_n_);
 
   // update R_ni
-  R_ni = R_ni*((skew(g_error_ + R_ni.transpose()*kw_*h_error_ + ang - R_ni.transpose()*wearth_n_)*dt).exp());
+
+  R_ni =  R_ni*((skew(g_error_ + kw_*R_ni.transpose()*P_*h_error_ + ang - R_ni.transpose()*wearth_n_)*dt).exp());
 
 
 

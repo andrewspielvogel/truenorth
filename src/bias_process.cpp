@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
   k<<0.1,.001,0,0;
 
   std::string out_file_name = "/home/spiels/log/processedbias2.csv";
-  std::string in_file_name = "/home/spiels/log/2017_8_1_14_12.KVH";
+  std::string in_file_name = "/home/spiels/log/ICRA2018/2017_8_8_9_38.KVH";
 
   Eigen::Vector3d rpy(0.0,0,0.0);
 
