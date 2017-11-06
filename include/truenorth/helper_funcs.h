@@ -124,7 +124,7 @@ inline Eigen::Vector3d rot2rph(Eigen::Matrix3d R)
 inline Eigen::Matrix3d rpy2rot(Eigen::Vector3d rpy)
 {
 
-  return Rz(rpy(2))*Rz(rpy(1))*Rx(rpy(0));
+  return Rz(rpy(2))*Ry(rpy(1))*Rx(rpy(0));
   
 }
 
