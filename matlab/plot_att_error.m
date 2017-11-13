@@ -45,6 +45,6 @@ plot(t,data(:,4)*180/pi-phins(:,3)*180/pi);grid on;xlim([t(1),t(end)]);
 %plot(data(:,1),dot(data(:,17:19),(data(:,8:10)+data(:,11:13)),2));grid on;legend({'$\dot{V}_{a_g}(t)$','$\dot{V}_e(t)$','$\dot{V}(t)$'},'Interpreter','latex');xlabel('Time [s]');
 figure;plot(t,data(:,4)*180/pi-phins(:,3)*180/pi);grid on;title('Heading Error');xlabel('Time [s]');ylabel('Heading Error');
 figure;plot(t,data(:,11:13)-wEn);grid on;title('w_E_n Error');xlabel('Time [s]');ylabel('w_E_n Error');
-figure;plot(t,data(:,8:10));grid on;title('Angular-Rate Bias');xlabel('Time [s]');
+figure;plot(t,data(:,8:10));grid on;title('Gyro Bias');xlabel('Time [s]');
 figure;plot(t,data(:,11:13),t,wEn);grid on;
-figure;plot(t,data(:,14:16));grid on;title('a_b');
+figure;plot(t,data(:,14:16));grid on;title('Acc Bias');

@@ -33,12 +33,14 @@ int main(int argc, char* argv[])
   //rpy_align<<0,0,0;
 
   // initial guess of attitude (in roll, pitch, heading)
-  Eigen::Vector3d rpy_R0(M_PI/180.0*0,M_PI/180.0,0*M_PI/180.0);
+  Eigen::Vector3d rpy_R0(M_PI/180.0*0,M_PI/180.0,5*M_PI/180.0);
 
   // estimator gains
   Eigen::VectorXd k(6);
   //k << 1,100,0.025,0.005,0.0005,0.1; //g,w,kf
-  k << 1,100,.1,0.00025,0.0003,0.25;
+  //  k << 1,100,.005,0.00001,0.00005,0.25;
+
+  k << 1,100,.005,0.00001,0.00005,0.25;
 
 
   Eigen::Matrix3d R_align = rpy2rot(rpy_align);
