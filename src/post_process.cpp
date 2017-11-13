@@ -38,9 +38,8 @@ int main(int argc, char* argv[])
   // estimator gains
   Eigen::VectorXd k(6);
   //k << 1,100,0.025,0.005,0.0005,0.1; //g,w,kf
-  //  k << 1,100,.005,0.00001,0.00005,0.25;
-
   k << 1,100,.005,0.00001,0.00005,0.25;
+
 
 
   Eigen::Matrix3d R_align = rpy2rot(rpy_align);
@@ -66,13 +65,7 @@ int main(int argc, char* argv[])
   int samp_processed = 0;
   Eigen::Vector3d att_euler_ang;
 
-  Eigen::Vector3d w_b(0.0605/10000.0,0.1234/10000.0,-0.195/10000.0);
-  Eigen::Vector3d a_b(0.0054,-0.0003,0.0013);
-  w_b<<0.0,0.0,0.0;
-  a_b<<0,0,0;
-  //w_b <<0.000005,0.000008,0.000005;
-  //a_b << 0.0009,0.0016,-0.0001;
-  Eigen::Vector3d phins_rpy;
+    Eigen::Vector3d phins_rpy;
 
   Eigen::Matrix3d R_en = get_R_en(lat);
   double earthrate = 7.292150/100000.0;
@@ -90,9 +83,7 @@ int main(int argc, char* argv[])
 
     Eigen::Matrix3d R_phins = rpy2rot(phins_rpy);
 
-    att.step(gyro_data.ang-w_b,gyro_data.acc-a_b,((float) 1)/(float)hz);
-
-    //att.step(gyro_data.ang - R_align.transpose()*R_phins.transpose()*w_E_n,gyro_data.acc-a_b,((float) 1)/(float)hz);
+    att.step(gyro_data.ang,gyro_data.acc,((float) 1)/(float)hz);
 
     att_euler_ang = rot2rph(att.R_ni*R_align.transpose());
 
@@ -100,7 +91,7 @@ int main(int argc, char* argv[])
     Eigen::Matrix3d R_tilde = R_phins.transpose()*att.R_ni*R_align.transpose();
     Eigen::Vector3d q_tilde = R_align.transpose()*R_phins.transpose()*w_E_n;//unskew(R_tilde.log());
     
-    fprintf(outfile,"ATT_PRO,%f,%f,%f,%f,%f,%f,%f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",gyro_data.timestamp,att_euler_ang(0),att_euler_ang(1),att_euler_ang(2),phins_rpy(0),phins_rpy(1),phins_rpy(2),att.w_b(0),att.w_b(1),att.w_b(2),att.w_E_north(0),att.w_E_north(1),att.w_E_north(2),att.a_b(0),att.a_b(1),att.a_b(2),q_tilde(0),q_tilde(1),q_tilde(2),att.acc_hat_ab(0),att.acc_hat_ab(1),att.acc_hat_ab(2));
+    fprintf(outfile,"ATT_PRO,%f,%f,%f,%f,%f,%f,%f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",gyro_data.timestamp,att_euler_ang(0),att_euler_ang(1),att_euler_ang(2),phins_rpy(0),phins_rpy(1),phins_rpy(2),att.w_b(0),att.w_b(1),att.w_b(2),att.w_E_north(0),att.w_E_north(1),att.w_E_north(2),att.a_b(0),att.a_b(1),att.a_b(2),q_tilde(0),q_tilde(1),q_tilde(2),att.acc_hat(0),att.acc_hat(1),att.acc_hat(2));
 
     //fprintf(outfile,"ATT_PRO,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",gyro_data.timestamp,att_euler_ang(0),att_euler_ang(1),att_euler_ang(2),att.g_error_(0),att.g_error_(1),att.g_error_(2),att.h_error_(0),att.h_error_(1),att.h_error_(2),att.east_est_n(0),att.east_est_n(1),att.east_est_n(2));
     
