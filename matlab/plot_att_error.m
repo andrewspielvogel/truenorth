@@ -1,4 +1,4 @@
-function out = plot_att_error(data,hz)
+function out = plot_att_error(data,hz,save_figs)
 
 
 phins = resample2(data(1:hz/10:end-hz/10,1),data(hz/10:hz/10:end,5:7),data(:,1),'linear');
@@ -26,7 +26,7 @@ legend("KVH","PHINS",'Location','south','Orientation','horizontal');
 subplot(3,2,2);
 hold on;
 title("Roll Error");
-ylabel("Degrees");
+ylabel("Degrees");  
 plot(t,data(:,2)*180/pi-phins(:,1)*180/pi);grid on;ylim([-2,2]);xlim([t(1),t(end)]);
 subplot(3,2,4);
 hold on;
@@ -39,12 +39,25 @@ title("Heading Error");
 ylabel("Degrees");
 xlabel("Time [s]");
 plot(t,data(:,4)*180/pi-phins(:,3)*180/pi);grid on;xlim([t(1),t(end)]);
-%figure;plot(data(:,1),dot(data(:,17:19),data(:,17:19),2)/2);grid on;title('V(t)');xlabel('Time [s]');ylabel('V(t)');
-%figure;hold on;plot(data(:,1),dot(data(:,17:19),data(:,8:10),2));grid on;
-%plot(data(:,1),dot(data(:,17:19),data(:,11:13),2));grid on;
-%plot(data(:,1),dot(data(:,17:19),(data(:,8:10)+data(:,11:13)),2));grid on;legend({'$\dot{V}_{a_g}(t)$','$\dot{V}_e(t)$','$\dot{V}(t)$'},'Interpreter','latex');xlabel('Time [s]');
+if save_figs
+    print('truenorth_notes/errors','-depsc');
+end
+
+
 figure;plot(t,data(:,4)*180/pi-phins(:,3)*180/pi);grid on;title('Heading Error');xlabel('Time [s]');ylabel('Heading Error');
-figure;plot(t,data(:,11:13)-wEn);grid on;title('w_E_n Error');xlabel('Time [s]');ylabel('w_E_n Error');
-figure;plot(t,data(:,8:10));grid on;title('Gyro Bias');xlabel('Time [s]');
-figure;plot(t,data(:,11:13),t,wEn);grid on;
-figure;plot(t,data(:,14:16));grid on;title('Acc Bias');
+figure;plot(t,data(:,11:13)-wEn);grid on;title('w_E_n Error');xlabel('Time [s]');ylabel('w_E_n Error');legend('x','y','z');
+if save_figs
+    print('truenorth_notes/w_E_n_errors','-depsc');
+end
+
+figure;plot(t,data(:,8:10));grid on;title('Gyro Bias');xlabel('Time [s]');legend('x','y','z');
+if save_figs
+    print('truenorth_notes/w_b','-depsc');
+end
+
+figure;plot(t,data(:,11:13),t,wEn);grid on;legend('x','y','z');
+figure;plot(t,data(:,14:16));grid on;title('Acc Bias');legend('x','y','z');
+if save_figs
+    print('truenorth_notes/a_b','-depsc');
+end 
+

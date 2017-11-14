@@ -106,8 +106,9 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float dt)
   I << 1,0,0,0,1,0,0,0,1;
 
     
-  P_ = R_ni.transpose()*a_n.normalized()*a_n.normalized().transpose()*R_ni;
-
+  //P_ = R_ni.transpose()*a_n.normalized()*a_n.normalized().transpose()*R_ni;
+  P_ = (acc_hat - a_b).normalized()*(acc_hat - a_b).normalized().transpose();
+  
   Eigen::Vector3d e(0,1,0);
   
   // Define local level (g_error_) and heading (h_error_) error terms
@@ -128,13 +129,10 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, float dt)
 
   acc_hat   = acc_hat   + dt*dacc_hat;
   w_E_north = w_E_north + dt*dw_E_north;
-  acc_hat = acc_hat.normalized()*a_n.norm();
-  //w_E_north = w_E_n_mag_*(w_E_north.normalized());
-  w_E_north = w_E_n_mag_*(((I-P_)*w_E_north).normalized());
-  //w_E_north = (I-P_)*w_E_north;
   w_b       = w_b       + dt*dw_b;
   a_b       = a_b       + dt*da_b;
-  
+  acc_hat   = acc_hat.normalized()*a_n.norm();
+  w_E_north = w_E_n_mag_*(((I-P_)*w_E_north).normalized());
   
   
 
