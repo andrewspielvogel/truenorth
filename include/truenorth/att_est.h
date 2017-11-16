@@ -55,6 +55,7 @@ public:
   Eigen::Vector3d w_b;
   Eigen::Vector3d a_b;
   Eigen::Vector3d w_E_n;
+
   
 
  private:
@@ -72,6 +73,8 @@ public:
   float kb_;
   float kab_;
   float ka2_;
+
+  int start_;
   
   float gamma_;
   float w_E_n_mag_;
