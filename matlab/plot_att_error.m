@@ -1,7 +1,7 @@
 function out = plot_att_error(data,hz,save_figs)
 
 
-phins = resample2(data(1:hz/10:end-hz/10,1),data(hz/10:hz/10:end,5:7),data(:,1),'linear');
+phins = data(:,5:7);%resample2(data(1:hz/10:end-hz/10,1),data(hz/10:hz/10:end,5:7),data(:,1),'linear');
 wEn = data(:,17:19);%resample2(data(1:hz/10:end-hz/10,1),data(hz/10:hz/10:end,17:19),data(:,1),'linear');
 t = data(:,1) - data(1,1);
 figure;
