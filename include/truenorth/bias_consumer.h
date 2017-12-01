@@ -63,7 +63,7 @@ class BiasConsumerThread : public Thread
    */
   void callback(const phins::phins_msg::ConstPtr &msg)
   {
-  
+
     double r = (msg->att.at(0))*M_PI/180;
     double p = (msg->att.at(1))*M_PI/180;
     double h = (msg->att.at(2))*M_PI/180;

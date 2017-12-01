@@ -16,6 +16,6 @@
 
         </node>
 
-	<node pkg="rosbag" type="record" args="-o /home/spiels/log/ /truenorth/gyro_data /phins/phins_data" name="record" output="screen"/>
+	<node pkg="rosbag" type="record" args="-o /home/spiels/log/ gyro_data phins_data" name="record" output="screen"/>
 
 </launch>

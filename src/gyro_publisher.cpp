@@ -19,6 +19,7 @@
 #include <truenorth/att_consumer.h>
 #include <truenorth/bias_consumer.h>
 #include <truenorth/log_consumer.h>
+#include <truenorth/parse_params.h>
 #include <truenorth/thread.h>
 #include <boost/bind.hpp>
 
@@ -27,75 +28,34 @@
 int main(int argc, char **argv)
 {
 
+  
     // initialize node
     ros::init(argc, argv, "truenorth");
 
     // must initialize with "~" for param passing
-    ros::NodeHandle n("~");
+    ros::NodeHandle n;
 
 
-    /******************************************************
+    /************************************************************************
      * Load in params
-     ******************************************************/
+     ************************************************************************/
 
-    // topic publish rate in Hz
-    int rate = 10; // default
-    n.getParam("rate",rate);
-    ros::Rate loop_rate(rate);
+    estimator_params params = load_params(n);
 
-    // port name
-    std::string port = "/dev/ttyUSB0"; // default
-    n.getParam("port",port);
-
-    // log file location
-    std::string log_location = "/var/log/KVH/"; // default
-    n.getParam("log_loc",log_location);
-
-    // baud rate
-    int baud = 921600;
-    n.getParam("baud",baud);
-
-    Eigen::Vector3d rpy;
-
-    // instrument alignment matrix
-    std::string instr_align = "0,0,0";  // default
-    n.getParam("instr_align",instr_align);
-    sscanf(instr_align.c_str(),"%lf,%lf,%lf",&rpy(0),&rpy(1),&rpy(2));
-    Eigen::MatrixXd R_align = rpy2rot(rpy);
-
-    // Rni(t0) matrix
-    std::string R0_ = "0,0,0";  // default
-    n.getParam("R0",R0_);
-    sscanf(R0_.c_str(),"%lf,%lf,%lf",&rpy(0),&rpy(1),&rpy(2));
-    Eigen::Matrix3d R0 = rpy2rot(rpy);
+    ros::Rate loop_rate(params.rate);
     
-    // estimation gains
-    std::string gains = "0.01,0.02,0.0,1.0,0.01,0.0,0.0";  // default
-    n.getParam("gains",gains);
-    Eigen::VectorXd k(7);
-    sscanf(gains.c_str(),"%lf,%lf,%lf,%lf,%lf,%lf,%lf",&k(0),&k(1),&k(2),&k(3),&k(4),&k(5),&k(6));
-
-    // latitude
-    double lat_input = 39.32;
-    n.getParam("latitude",lat_input);
-    float lat  = (float) lat_input;
-    lat = lat*M_PI/180;
-
-    // sample rate
-    int hz = 1000; // default
-    n.getParam("hz",hz);
 
     /***********************************************************************
      * INITIALIZE SERIAL PORT, INITIALIZE ATT/BIAS ESTIMATION AND LOGGING THREADS
      ***********************************************************************/
 
-    SerialPort serial(hz);
-    
-    AttConsumerThread* att_thread = new AttConsumerThread(serial.att_queue,k.head(3),R0*R_align,lat,hz);
+    SerialPort serial(params.hz);
 
-    BiasConsumerThread* bias_thread = new BiasConsumerThread(att_thread,serial.bias_queue,R_align,k.tail(4),lat);
+    AttConsumerThread* att_thread   = new AttConsumerThread(serial.att_queue,params.k.head(6),params.R0*params.R_align,params.lat,params.hz);
 
-    LogConsumerThread* log_thread = new LogConsumerThread(bias_thread,serial.log_queue,log_location.c_str());
+    BiasConsumerThread* bias_thread = new BiasConsumerThread(att_thread,serial.bias_queue,params.R_align,params.k.tail(4),params.lat);
+
+    LogConsumerThread* log_thread   = new LogConsumerThread(bias_thread,serial.log_queue,params.log_location.c_str());
     
 
 
@@ -106,7 +66,7 @@ int main(int argc, char **argv)
     ros::Publisher chatter = n.advertise<truenorth::gyro_sensor_data>("gyro_data",1000);
 
     // init phins sub
-    ros::Subscriber sub    = n.subscribe("/phins/phins_data",1,&BiasConsumerThread::callback, bias_thread);
+    ros::Subscriber sub    = n.subscribe("phins_data",1,&BiasConsumerThread::callback, bias_thread);
 
 
    
@@ -118,18 +78,21 @@ int main(int argc, char **argv)
     log_thread->start();
     att_thread->start();
 
-    
     // connect to serial port
-    bool connected =  serial.start(port.c_str(),baud);
+    bool connected =  serial.start(params.port.c_str(),params.baud);
 
     if (connected==false)
     {
-	ROS_ERROR("port not opened");
-	return 0;
+	ROS_ERROR("port not opened... shutting down program");
+	/*bias_thread->detach();
+	att_thread->detach();
+	log_thread->detach();
+	serial.stop();
+	return 0;*/
     }
     else 
     {
-	ROS_INFO("connected to port: %s",port.c_str());
+	ROS_INFO("connected to port: %s",params.port.c_str());
     }
 
 
@@ -139,7 +102,7 @@ int main(int argc, char **argv)
 
     // initialize data_msg
     truenorth::gyro_sensor_data data_msg;
-    
+
     // main loop
     while (ros::ok())
     {
@@ -159,7 +122,6 @@ int main(int argc, char **argv)
 	ROS_WARN("Logging queue exceeds %d - Size: :%d",queue_warn_size,serial.log_queue.size());
       }
 
-
       
       // fill data_msg with data packet
       pthread_mutex_lock(&mutex_bias);
@@ -171,7 +133,7 @@ int main(int argc, char **argv)
 	data_msg.kvh.imu.ang.at(i) = serial.data.ang(i);
 	data_msg.kvh.imu.acc.at(i) = serial.data.acc(i);
 	data_msg.kvh.imu.mag.at(i) = serial.data.mag(i);
-	data_msg.att.at(i) = 180*rot2rph((att_thread->R_ni)*R_align.transpose())(i)/M_PI;
+	data_msg.att.at(i) = 180*rot2rph((att_thread->R_ni)*params.R_align.transpose())(i)/M_PI;
 	data_msg.bias.ang.at(i) = bias_thread->bias.w_b(i);
 	data_msg.bias.acc.at(i) = bias_thread->bias.a_b(i);
 	data_msg.bias.z.at(i)   = bias_thread->bias.z(i);

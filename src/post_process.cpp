@@ -24,22 +24,23 @@ int main(int argc, char* argv[])
   float lat = 39.32*M_PI/180.0;
 
   // input, output files
-  std::string out_file_name = "/home/spiels/log/test.csv";
+  std::string out_file_name = "/home/spiels/log/run2.csv";
+  std::string in_file_name = "/home/spiels/log/RSS/2017_11_17_15_53.KVH";
   //std::string in_file_name = "/home/spiels/log/ICRA2018/run1/2017_8_16_11_31.KVH";
-  std::string in_file_name = "/home/spiels/log/data_test.KVH";//RSS/2017_11_6_12_37.KVH";//ICRA2018/run1/2017_8_16_11_31.KVH";
+  //std::string in_file_name = "/home/spiels/log/data_test.KVH";//RSS/2017_11_6_12_37.KVH";//ICRA2018/run1/2017_8_16_11_31.KVH";
 
   // alignment (roll,pitch,heading) from vehicle to instrument
   Eigen::Vector3d rpy_align(M_PI,0,M_PI/4.0);
   rpy_align<<0,0,0;
-
   // initial guess of attitude (in roll, pitch, heading)
-  Eigen::Vector3d rpy_R0(M_PI/180.0*0,0*M_PI/180.0,5*M_PI/180.0);
-
+  Eigen::Vector3d rpy_R0(M_PI/180.0*0,0*M_PI/180.0,0*M_PI/180.0);
+  rpy_R0 << M_PI,0,5*M_PI/180.0;
   // estimator gains
   Eigen::VectorXd k(6);
-  k << 100,500,0.05,0.0005,0.005,0.5; //g,w,kf
-  //k << 1,150,.005,0.00001,0.00005,0.25;
+  //k << 10000,10000,0.05,0.00001,0,0; //g,w,kf
+  k << 100,1000,.005,.000005,0.0000,0.01;//0.0001,0.025;
 
+  //k << 1000,1500,.005,0.000005,0.00001,0.01;//0.0001,0.025;
 
 
   Eigen::Matrix3d R_align = rpy2rot(rpy_align);

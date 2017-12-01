@@ -45,7 +45,23 @@ SerialPort::SerialPort(int hz): data(hz)
 {
 
   data.timestamp = 0.0;
-
+  data.ang << 0,0,0;
+  data.acc << 0,0,0;
+  data.mag << 0,0,0;
+  for(int i=0;i<7;i++)
+  {
+    
+    if (i!=3)
+    {
+      data.status.push_back(0);
+    }
+  }
+  data.temp = 0.0;
+  data.comp_timestamp = 0.0;
+  data.diff = 0.0;
+  data.t_start = 0.0;
+  data.hz = 0;
+  
 };
 
 
