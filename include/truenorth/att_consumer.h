@@ -25,11 +25,12 @@ class AttConsumerThread : public Thread
 
  private:
   wqueue<GyroData>& m_queue_; /**< Queue.*/
-  AttEst att_; /**< Attitude estimation class.*/
 
  
  public:
   Eigen::Matrix3d R_ni; /**< Attitude Estimate. */
+  AttEst att; /**< Attitude estimation class.*/
+
 
   /**
    * @brief Constructor.
@@ -41,7 +42,7 @@ class AttConsumerThread : public Thread
    * @param hz Sampling rate.
    * 
    */
- AttConsumerThread(wqueue<GyroData>& queue, Eigen::VectorXd k, Eigen::Matrix3d R_align, float lat, float hz) : m_queue_(queue), att_(k,R_align,lat,hz)
+ AttConsumerThread(wqueue<GyroData>& queue, Eigen::VectorXd k, Eigen::Matrix3d R_align, float lat, float hz) : m_queue_(queue), att(k,R_align,lat,hz)
   {
   R_ni = R_align;
   } 
@@ -53,7 +54,7 @@ class AttConsumerThread : public Thread
   void* run() {
 
     Eigen::Vector3d w_b(6.190/1000000.0,1.35/100000.0,-1.917/100000.0);
-    Eigen::Vector3d a_b(0,0,0);
+    Eigen::Vector3d a_b(0.009,0.0016,-0.001);
 
     // Remove 1 item at a time and process it. Blocks if no items are 
     // available to process.
@@ -62,10 +63,10 @@ class AttConsumerThread : public Thread
       GyroData item = m_queue_.remove();
       
 
-      att_.step(item.ang-w_b,item.acc-a_b,item.diff);
+      att.step(item.ang,item.acc,item.diff);
 
       pthread_mutex_lock(&mutex_att);
-      R_ni = att_.R_ni;
+      R_ni = att.R_ni;
       pthread_mutex_unlock(&mutex_att);
       
     }

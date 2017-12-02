@@ -25,8 +25,8 @@ int main(int argc, char* argv[])
 
   // input, output files
   std::string out_file_name = "/home/spiels/log/run2.csv";
-  std::string in_file_name = "/home/spiels/log/RSS/2017_11_17_15_53.KVH";
-  //std::string in_file_name = "/home/spiels/log/ICRA2018/run1/2017_8_16_11_31.KVH";
+  //std::string in_file_name = "/home/spiels/log/RSS/2017_11_17_15_53.KVH";
+  std::string in_file_name = "/home/spiels/log/ICRA2018/run1/2017_8_16_11_31.KVH";
   //std::string in_file_name = "/home/spiels/log/data_test.KVH";//RSS/2017_11_6_12_37.KVH";//ICRA2018/run1/2017_8_16_11_31.KVH";
 
   // alignment (roll,pitch,heading) from vehicle to instrument
