@@ -8,101 +8,206 @@
 #include <string>
 #include <math.h>
 
+struct config_params {
+  
+  int hz;
+  float lat;
+  std::string o_file;
+  std::string i_file;
+  std::string last_mod;
+  Eigen::Vector3d rpy_align;
+  Eigen::Vector3d rpy_Ro;
+  Eigen::VectorXd k;
+  
+};
+
+config_params load_params(char* config_file)
+{
+
+  printf("LOADING CONFIG FILE: %s\n",config_file);
+  
+  config_params params;
+  std::ifstream infile(config_file);
+  std::string line;
+
+  /**********************************
+   *  LOAD IN LINE FROM CONFIG FILE
+   **********************************/
+  while (std::getline(infile, line))
+  {
+
+    char field[128] = "";
+    char data[128]  = "";
+
+    /*********************************
+     *          PARSE LINE
+     *********************************/
+    sscanf(line.c_str(),"%s = %s",field,data);
+    
+    if((std::string(field))=="hz")
+    {
+
+      sscanf(data,"%d",&params.hz);
+
+    }
+    else if((std::string(field))=="lat")
+    {
+
+      sscanf(data,"%f",&params.lat);
+      params.lat = params.lat*M_PI/180.0;
+
+    }
+    else if((std::string(field))=="o_file")
+    {
+
+      char str[128];
+      sscanf(data,"%s",str);
+      params.o_file = std::string(str);
+      params.o_file.erase(remove(params.o_file.begin(),params.o_file.end(), '\"' ),params.o_file.end());
+
+    }
+    else if((std::string(field))=="i_file")
+    {
+	
+      char str[128];
+      sscanf(data,"%s",str);
+      params.i_file = std::string(str);
+      params.i_file.erase(remove(params.i_file.begin(),params.i_file.end(), '\"' ),params.i_file.end());
+      
+    }
+    else if((std::string(field))=="rpy_align")
+    {
+
+      sscanf(data,"[%lf,%lf,%lf]",&params.rpy_align(0),&params.rpy_align(1),&params.rpy_align(2));
+
+    }
+    else if((std::string(field))=="rpy_Ro")
+    {
+
+      sscanf(data,"[%lf,%lf,%lf]",&params.rpy_Ro(0),&params.rpy_Ro(1),&params.rpy_Ro(2));
+
+    }
+    else if((std::string(field))=="k")
+    {
+
+      Eigen::VectorXd k(6);
+      params.k = k;
+      sscanf(data,"[%lf,%lf,%lf,%lf,%lf,%lf]",&params.k(0),&params.k(1),&params.k(2),&params.k(3),&params.k(4),&params.k(5));
+
+    }
+    else if ((std::string(field))=="last_mod")
+    {
+
+      char str[128];
+      sscanf(data,"%s",str);
+      params.last_mod = std::string(str);
+      params.last_mod.erase(remove(params.last_mod.begin(),params.last_mod.end(), '\"' ),params.last_mod.end());
+	
+    }
+    
+  }
+
+  return params;
+
+}
+
+void print_loaded_params(config_params params)
+{
+
+  printf("***********************************\n");
+  printf("           LOADED PARAMS \n");
+  printf("***********************************\n");
+  printf(" last_mod: %s\n",params.last_mod.c_str());
+  printf("       hz: %d (s^-1)\n",params.hz);
+  printf("      lat: %.10f (rad)\n",params.lat);
+  printf("   o_file: %s\n",params.o_file.c_str());
+  printf("   i_file: %s\n",params.i_file.c_str());
+  printf("rpy_align: [%lf,%lf,%lf] (rad)\n",
+	 params.rpy_align(0),params.rpy_align(1),params.rpy_align(2));
+  printf("   rpy_Ro: [%lf,%lf,%lf] (rad)\n",
+	 params.rpy_Ro(0),params.rpy_Ro(1),params.rpy_Ro(2));
+  printf("        k: [%lf,%lf,%lf,%lf,%lf,%lf]\n",
+	 params.k(0),params.k(1),params.k(2),params.k(3),params.k(4),params.k(5));
+
+}
+
+
 int main(int argc, char* argv[])
 {
 
+  /**************************************************
+   *         CHECK FOR CORRECT ARGUMENTS
+   **************************************************/
+  if (argc != 2)
+  {
+
+    printf("USAGE: post_process CONFIG_FILE.m\n");
+    return 1;
+    
+  }  
+  
   /***************************************************
    *
-   * INPUTS
+   * LOAD CONFIG FILE
    *
    ***************************************************/
 
-  // sampling hz
-  int hz = 5000;
-
-  // location latitude
-  float lat = 39.32*M_PI/180.0;
-
-  // input, output files
-  std::string out_file_name = "/home/spiels/log/run2.csv";
-  //std::string in_file_name = "/home/spiels/log/RSS/2017_11_17_15_53.KVH";
-  std::string in_file_name = "/home/spiels/log/ICRA2018/run1/2017_8_16_11_31.KVH";
-  //std::string in_file_name = "/home/spiels/log/data_test.KVH";//RSS/2017_11_6_12_37.KVH";//ICRA2018/run1/2017_8_16_11_31.KVH";
-
-  // alignment (roll,pitch,heading) from vehicle to instrument
-  Eigen::Vector3d rpy_align(M_PI,0,M_PI/4.0);
-  rpy_align<<0,0,0;
-  // initial guess of attitude (in roll, pitch, heading)
-  Eigen::Vector3d rpy_R0(M_PI/180.0*0,0*M_PI/180.0,0*M_PI/180.0);
-  rpy_R0 << M_PI,0,5*M_PI/180.0;
-  // estimator gains
-  Eigen::VectorXd k(6);
-  //k << 10000,10000,0.05,0.00001,0,0; //g,w,kf
-  k << 100,1000,.005,.000005,0.0000,0.01;//0.0001,0.025;
-
-  //k << 1000,1500,.005,0.000005,0.00001,0.01;//0.0001,0.025;
+  const config_params params = load_params(argv[1]);
+  print_loaded_params(params);
+   
+  const Eigen::Matrix3d R_align = rpy2rot(params.rpy_align);
+  const Eigen::Matrix3d R0 = rpy2rot(params.rpy_Ro);
 
 
-  Eigen::Matrix3d R_align = rpy2rot(rpy_align);
-  Eigen::Matrix3d R0 = rpy2rot(rpy_R0);
-
-  // initialize estimator
-  AttEst att(k, R0*R_align,lat,hz);
-  GyroData gyro_data(hz);
+  /***************************************************
+   *
+   * INITIALIZE ESTIMATOR
+   *   
+   ***************************************************/
+  
+  AttEst att(params.k, R0*R_align,params.lat,params.hz);
+  GyroData gyro_data(params.hz);
   Eigen::Matrix3d Rni_phins;
   char msg_type[32];
 
+  printf("***********************************\n");
+  printf("    RUNNING ATTITUDE ESTIMATION\n");
+  printf("***********************************\n");
 
-  printf("RUNNING ATTITUDE ESTIMATION ON CSV FILE: %s\n",in_file_name.c_str());
-  printf("WRITING TO FILE: %s\n",out_file_name.c_str());
-
-  
-  std::ifstream infile(in_file_name.c_str());
+  std::ifstream infile(params.i_file.c_str());
   FILE *outfile;
-  outfile = fopen(out_file_name.c_str(),"w");
+  outfile = fopen(params.o_file.c_str(),"w");
 
-  
   std::string line;
   int samp_processed = 0;
   Eigen::Vector3d att_euler_ang;
+  Eigen::Vector3d phins_rpy;
 
-    Eigen::Vector3d phins_rpy;
-
-  Eigen::Matrix3d R_en = get_R_en(lat);
-  double earthrate = 7.292150/100000.0;
-  Eigen::Vector3d w_E(0,0,earthrate);
-  Eigen::Vector3d w_E_n = R_en.transpose()*w_E;
-  w_E_n(2) = 0.0;
+  fprintf(outfile,"PARAMS,%s,%d,%.10f,%s,%s,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",params.last_mod.c_str(),params.hz,params.lat,params.o_file.c_str(),params.i_file.c_str(),params.rpy_align(0),params.rpy_align(1),params.rpy_align(2),params.rpy_Ro(0),params.rpy_Ro(1),params.rpy_Ro(2),params.k(0),params.k(1),params.k(2),params.k(3),params.k(4),params.k(5));
 
   while (std::getline(infile, line))
   {
 
-
     sscanf(line.c_str(),"%[^,],%lf,%lf,%lf,%lf,%lf,%lf, %lf,%lf,%lf, %f, %d, %lf,%lf, %*d, %*d, %*d, %*d, %*d, %*d,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf \n",msg_type,&gyro_data.ang(0),&gyro_data.ang(1),&gyro_data.ang(2),&gyro_data.acc(0),&gyro_data.acc(1),&gyro_data.acc(2),&gyro_data.mag(0),&gyro_data.mag(1),&gyro_data.mag(2),&gyro_data.temp,&gyro_data.seq_num,&gyro_data.timestamp,&gyro_data.comp_timestamp,&Rni_phins(0,0),&Rni_phins(0,1),&Rni_phins(0,2),&Rni_phins(1,0),&Rni_phins(1,1),&Rni_phins(1,2),&Rni_phins(2,0),&Rni_phins(2,1),&Rni_phins(2,2),&phins_rpy(0),&phins_rpy(1),&phins_rpy(2));
 
-    //sscanf(line.c_str(),"%[^,],%lf,%lf,%lf,%lf,%lf,%lf, %lf,%lf,%lf, %f, %d, %lf, %*d, %*d, %*d, %*d, %*d, %*d \n",msg_type,&gyro_data.ang(0),&gyro_data.ang(1),&gyro_data.ang(2),&gyro_data.acc(0),&gyro_data.acc(1),&gyro_data.acc(2),&gyro_data.mag(0),&gyro_data.mag(1),&gyro_data.mag(2),&gyro_data.temp,&gyro_data.seq_num,&gyro_data.timestamp);
+    const Eigen::Matrix3d R_phins = rpy2rot(phins_rpy);
 
-    Eigen::Matrix3d R_phins = rpy2rot(phins_rpy);
-
-    att.step(gyro_data.ang,gyro_data.acc,((float) 1)/(float)hz);
+    att.step(gyro_data.ang,gyro_data.acc,((float) 1)/(float)params.hz);
 
     att_euler_ang = rot2rph(att.R_ni*R_align.transpose());
 
-    Eigen::Vector3d e(0,1,0);
-    Eigen::Matrix3d R_tilde = R_phins.transpose()*att.R_ni*R_align.transpose();
-    Eigen::Vector3d q_tilde = R_align.transpose()*R_phins.transpose()*w_E_n;//unskew(R_tilde.log());
+    const Eigen::Matrix3d R_tilde = R_phins.transpose()*att.R_ni*R_align.transpose();
+    const Eigen::Vector3d q_tilde = unskew(R_tilde.log());
     
     fprintf(outfile,"ATT_PRO,%f,%f,%f,%f,%f,%f,%f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",gyro_data.timestamp,att_euler_ang(0),att_euler_ang(1),att_euler_ang(2),phins_rpy(0),phins_rpy(1),phins_rpy(2),att.w_b(0),att.w_b(1),att.w_b(2),att.w_E_north(0),att.w_E_north(1),att.w_E_north(2),att.a_b(0),att.a_b(1),att.a_b(2),q_tilde(0),q_tilde(1),q_tilde(2),att.acc_hat(0),att.acc_hat(1),att.acc_hat(2));
-
-    //fprintf(outfile,"ATT_PRO,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",gyro_data.timestamp,att_euler_ang(0),att_euler_ang(1),att_euler_ang(2),att.g_error_(0),att.g_error_(1),att.g_error_(2),att.h_error_(0),att.h_error_(1),att.h_error_(2),att.east_est_n(0),att.east_est_n(1),att.east_est_n(2));
-    
+ 
     samp_processed++;
 
-    if ((samp_processed) % (hz*60) == 0) {
+    if ((samp_processed) % (params.hz*60) == 0) {
       
-      int seconds = samp_processed/hz;
-      int hours   = seconds/3600;
-      int minutes = (seconds - hours*3600)/60;
+      int seconds = samp_processed/params.hz;
+      const int hours   = seconds/3600;
+      const int minutes = (seconds - hours*3600)/60;
       seconds = seconds - hours*3600 - minutes*60;
       printf("%02d:%02d:%02d OF DATA PROCESSED\n",hours,minutes,seconds); 
 

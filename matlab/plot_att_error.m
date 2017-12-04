@@ -55,7 +55,7 @@ if save_figs
     print('truenorth_notes/w_b','-depsc');
 end
 
-figure;plot(t,data(:,11:13));grid on;legend('x','y','z');
+figure;plot(t,data(:,11:13),t,wEn);grid on;legend('x','y','z');
 figure;plot(t,data(:,14:16));grid on;title('Acc Bias');legend('x','y','z');
 if save_figs
     print('truenorth_notes/a_b','-depsc');
