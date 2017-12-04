@@ -6,14 +6,19 @@ process_att(){
 
     rosrun truenorth post_process $3
 
-    python ../python/plot_att.py -i $2 -o $4
+    python ../python/plot_att.py -i $2 -o $4 -e $5
 
 }
 
-KVH=/home/spiels/log/ICRA2018/run1/2017_8_16_11_31.KVH
-CSV=~/log/processed/yo.csv
-CONFIG=~/log/configs/yo.m
-PDF=~/log/pdfs/yo.pdf
+DIR=RSS
+LOG=2017_11_17_15_53
+EXP=exp1
 
 
-process_att $KVH $CSV $CONFIG $PDF
+KVH=/home/spiels/log/$DIR/$LOG.KVH
+CSV=~/log/processed/$EXP.csv
+CONFIG=~/log/configs/$EXP.m
+PDF=~/log/pdfs/$EXP.pdf
+
+
+process_att $KVH $CSV $CONFIG $PDF $EXP

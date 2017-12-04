@@ -8,8 +8,8 @@ def main(argv):
     o_file = ''
     i_file = ''
     c_file = ''
-    rpy_align = '[0,0,0]'
-    rpy_Ro = '[3.14,0,0]'
+    rpy_align = '[3.14,0,0.785]'
+    rpy_Ro = '[0,0,0]'
     k = '[100,1000,0.005,0.00001,0.000005,0.01]'
     
     try:
@@ -32,9 +32,9 @@ def main(argv):
             print "-k , Attitude estimator gains. [k_level,k_north,k_g,k_w_E,k_wb,k_ab]"
             sys.exit()
         elif opt in ("-i","--ifile"):
-            i_file = arg
+            i_file = "\"" + arg + "\""
         elif opt in ("-o","--ofile"):
-            o_file = arg
+            o_file = "\"" + arg + "\""
         elif opt in ("-c","--cfile"):
             c_file = arg
         elif opt in ("-z","--hz"):
@@ -53,7 +53,7 @@ def main(argv):
     print "GENERATING CONFIG FILE: " + c_file
     
     file = open(c_file,"w")
-    file.write("last_mod = " + now.isoformat() + "\n")
+    file.write("last_mod = " + "\"" + now.isoformat() + "\"" + "\n")
     file.write("hz = " + hz + "\n")
     file.write("lat = " + lat + "\n")
     file.write("o_file = " + o_file + "\n")
