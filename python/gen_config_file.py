@@ -8,12 +8,12 @@ def main(argv):
     o_file = ''
     i_file = ''
     c_file = ''
-    rpy_align = '[3.14,0,0.785]'
-    rpy_Ro = '[0,0,0]'
-    k = '[100,1000,0.005,0.00001,0.000005,0.01]'
+    rpy_align = '[3.14,0,0.785398]'
+    rpy_Ro = '[0,0,-0.7]'
+    k = '[1,100,0.05,0.0002,0.0002,0.2]'
     
     try:
-        opts,args = getopt.getopt(argv,"hi:o:c:laRkz",["ifile=","help","ofile=","hz","lat","cfile=","rpy_align","rpy_Ro"])
+        opts,args = getopt.getopt(argv,"hi:o:c:l:a:R:k:z:",["ifile=","help","ofile=","hz=","lat=","cfile=","rpy_align=","rpy_Ro="])
     except getopt.GetoptError:
         print "USAGE:"
         print 'gen_config_file.py -i <KVHfile> -o <estimatoroutputfile> -c <configfile_generated>'

@@ -43,7 +43,7 @@ public:
    * @param acc Linear acceleration measurement.
    * @param dt Time between last two measurements.
    */
-  void step(Eigen::Vector3d ang,Eigen::Vector3d acc, float dt);
+  void step(Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag, float dt, float t);
 
   
   Eigen::Matrix3d R_ni; /**< Estimation of NED to instrument rotation. */

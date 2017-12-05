@@ -179,9 +179,12 @@ int main(int argc, char* argv[])
   outfile = fopen(params.o_file.c_str(),"w");
 
   std::string line;
-  int samp_processed = 0;
+  float time_start = 0.0;
+  bool start = false;
   Eigen::Vector3d att_euler_ang;
   Eigen::Vector3d phins_rpy;
+  int hours = 0;
+  int minutes = 0;
 
   fprintf(outfile,"PARAMS,%s,%d,%.10f,%s,%s,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",params.last_mod.c_str(),params.hz,params.lat,params.o_file.c_str(),params.i_file.c_str(),params.rpy_align(0),params.rpy_align(1),params.rpy_align(2),params.rpy_Ro(0),params.rpy_Ro(1),params.rpy_Ro(2),params.k(0),params.k(1),params.k(2),params.k(3),params.k(4),params.k(5));
 
@@ -190,26 +193,30 @@ int main(int argc, char* argv[])
 
     sscanf(line.c_str(),"%[^,],%lf,%lf,%lf,%lf,%lf,%lf, %lf,%lf,%lf, %f, %d, %lf,%lf, %*d, %*d, %*d, %*d, %*d, %*d,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf \n",msg_type,&gyro_data.ang(0),&gyro_data.ang(1),&gyro_data.ang(2),&gyro_data.acc(0),&gyro_data.acc(1),&gyro_data.acc(2),&gyro_data.mag(0),&gyro_data.mag(1),&gyro_data.mag(2),&gyro_data.temp,&gyro_data.seq_num,&gyro_data.timestamp,&gyro_data.comp_timestamp,&Rni_phins(0,0),&Rni_phins(0,1),&Rni_phins(0,2),&Rni_phins(1,0),&Rni_phins(1,1),&Rni_phins(1,2),&Rni_phins(2,0),&Rni_phins(2,1),&Rni_phins(2,2),&phins_rpy(0),&phins_rpy(1),&phins_rpy(2));
 
+    if (!start)
+    {
+
+      start = true;
+      time_start = gyro_data.timestamp;
+      
+    }
+    float time = gyro_data.timestamp - time_start;
     const Eigen::Matrix3d R_phins = rpy2rot(phins_rpy);
 
-    att.step(gyro_data.ang,gyro_data.acc,((float) 1)/(float)params.hz);
+    att.step(gyro_data.ang,gyro_data.acc,gyro_data.mag,((float) 1)/(float)params.hz,gyro_data.timestamp);
 
     att_euler_ang = rot2rph(att.R_ni*R_align.transpose());
 
     const Eigen::Matrix3d R_tilde = R_phins.transpose()*att.R_ni*R_align.transpose();
     const Eigen::Vector3d q_tilde = unskew(R_tilde.log());
     
-    fprintf(outfile,"ATT_PRO,%f,%f,%f,%f,%f,%f,%f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",gyro_data.timestamp,att_euler_ang(0),att_euler_ang(1),att_euler_ang(2),phins_rpy(0),phins_rpy(1),phins_rpy(2),att.w_b(0),att.w_b(1),att.w_b(2),att.w_E_north(0),att.w_E_north(1),att.w_E_north(2),att.a_b(0),att.a_b(1),att.a_b(2),q_tilde(0),q_tilde(1),q_tilde(2),att.acc_hat(0),att.acc_hat(1),att.acc_hat(2));
+    fprintf(outfile,"ATT_PRO,%f,%f,%f,%f,%f,%f,%f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",gyro_data.timestamp,att_euler_ang(0),att_euler_ang(1),att_euler_ang(2),phins_rpy(0),phins_rpy(1),phins_rpy(2),att.w_b(0),att.w_b(1),att.w_b(2),att.w_E_north(0),att.w_E_north(1),att.w_E_north(2),att.a_b(0),att.a_b(1),att.a_b(2),q_tilde(0),q_tilde(1),q_tilde(2),att.acc_hat(0),att.acc_hat(1),att.acc_hat(2),gyro_data.acc(0),gyro_data.acc(1),gyro_data.acc(2),gyro_data.ang(0),gyro_data.ang(1),gyro_data.ang(2),gyro_data.mag(0),gyro_data.mag(1),gyro_data.mag(2));
  
-    samp_processed++;
-
-    if ((samp_processed) % (params.hz*60) == 0) {
+    if ((((int)time) % (60) == 0) && ((int)time/60 != minutes)) {
       
-      int seconds = samp_processed/params.hz;
-      const int hours   = seconds/3600;
-      const int minutes = (seconds - hours*3600)/60;
-      seconds = seconds - hours*3600 - minutes*60;
-      printf("%02d:%02d:%02d OF DATA PROCESSED\n",hours,minutes,seconds); 
+      hours   = ((int) time)/3600;
+      minutes = ((int) time - hours*3600)/60;
+      printf("%02d:%02d:00 OF DATA PROCESSED\n",hours,minutes); 
 
     }
 
