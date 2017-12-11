@@ -10,7 +10,7 @@ def main(argv):
     c_file = ''
     rpy_align = '[3.14,0,0.785398]'
     rpy_Ro = '[0,0,-0.7]'
-    k = '[1,100,0.05,0.0002,0.0002,0.2]'
+    k = '[1,100,0.05,0.005,0.002,0.15]'
     
     try:
         opts,args = getopt.getopt(argv,"hi:o:c:l:a:R:k:z:",["ifile=","help","ofile=","hz=","lat=","cfile=","rpy_align=","rpy_Ro="])
