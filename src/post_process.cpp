@@ -185,6 +185,7 @@ int main(int argc, char* argv[])
   Eigen::Vector3d phins_rpy;
   int hours = 0;
   int minutes = 0;
+  
 
   fprintf(outfile,"PARAMS,%s,%d,%.10f,%s,%s,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",params.last_mod.c_str(),params.hz,params.lat,params.o_file.c_str(),params.i_file.c_str(),params.rpy_align(0),params.rpy_align(1),params.rpy_align(2),params.rpy_Ro(0),params.rpy_Ro(1),params.rpy_Ro(2),params.k(0),params.k(1),params.k(2),params.k(3),params.k(4),params.k(5));
 
