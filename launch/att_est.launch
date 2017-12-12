@@ -9,9 +9,9 @@
 	       <param name="port" value="/dev/ttyUSB1" type="str" />
 	       <param name="baud" value="4147200" type="int" />
 	       <param name="latitude" value="39.32" type="double" />
-	       <param name="instr_align" value="3.14,0,0.7854" type="string" />
+	       <param name="instr_align" value="0,0,0" type="string" />
 	       <param name="R0" value="0,0,0" type="string" />
-	       <param name="gains" value="1,150,0.005,0.00001,0.00005,0.25,0.0" type="string" />
+	       <param name="gains" value="1,150,0.005,0.00001,0.00001,0.15,0.0" type="string" />
 	       <param name="log_loc" value="/home/spiels/log/imu_data/" type="string" />
 
         </node>
