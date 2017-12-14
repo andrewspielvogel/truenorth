@@ -60,10 +60,10 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, int hz)
   wearth_n_ = R_en.transpose()*w_E;
   east_est_n = R_en.transpose()*e_e;
 
-  a_b << 0,0,0;//-0.0045,-0.0055,0;
+  a_b << -0.002,-0.005,0.0045;
   w_E_n(2) = 0;
   w_E_north = R_ni.transpose()*w_E_n;
-  w_b << 0.0605/10000.0,0.1234/10000.0,-0.195/10000.0;
+  w_b << 0.0605/10000.0,0.1234/10000.0,-0.04/10000.0;
   //w_b <<  -4/100000.0,7/100000.0,0.0;
   acc_hat = R_ni.transpose()*a_n;
   acc_hat_ab = R_ni.transpose()*a_n;
