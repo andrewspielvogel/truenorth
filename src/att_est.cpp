@@ -60,10 +60,10 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, int hz)
   wearth_n_ = R_en.transpose()*w_E;
   east_est_n = R_en.transpose()*e_e;
 
-  a_b << 0,0,0;//-0.0045,-0.0055,0;
+  a_b << 0,0,0;
   w_E_n(2) = 0;
   w_E_north = R_ni.transpose()*w_E_n;
-  w_b << 0.0605/10000.0,0.1234/10000.0,-0.195/10000.0;
+  w_b << -0.000035,0.000015,-0.00001;//0.0605/10000.0,0.1234/10000.0,-0.06/10000.0;
   //w_b <<  -4/100000.0,7/100000.0,0.0;
   acc_hat = R_ni.transpose()*a_n;
   acc_hat_ab = R_ni.transpose()*a_n;
@@ -131,8 +131,8 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag,f
   w_b       = w_b       + dt*dw_b;
   a_b       = a_b       + dt*da_b;
   acc_hat   = acc_hat.normalized()*a_n.norm()*a_n.norm();
-  //w_E_north = w_E_n_mag_*(((I-P_)*w_E_north).normalized());
-  w_E_north = w_E_n_mag_*(w_E_north.normalized());
+  w_E_north = w_E_n_mag_*(((I-P_)*w_E_north).normalized());
+  //w_E_north = w_E_n_mag_*(w_E_north.normalized());
   
   
 
