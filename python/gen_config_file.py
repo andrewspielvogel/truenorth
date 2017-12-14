@@ -8,8 +8,8 @@ def main(argv):
     o_file = ''
     i_file = ''
     c_file = ''
-    rpy_align = '[3.14,0,0.785398]'
-    rpy_Ro = '[0,0,-0.7]'
+    rpy_align = '[0,0,0]'
+    rpy_Ro = '[0,0,0]'
     k = '[1,100,0.05,0.005,0.002,0.15]'
     
     try:
