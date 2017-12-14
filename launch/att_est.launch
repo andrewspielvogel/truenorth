@@ -12,7 +12,8 @@
 	       <param name="port" value="/dev/ttyUSB1" type="str" />
 	       <param name="baud" value="4147200" type="int" />
 	       <param name="latitude" value="39.32" type="double" />
-	       <param name="instr_align" value="1.5708,0,-1.57080" type="string" />
+	       <!--param name="instr_align" value="1.5708,0,-1.57080" type="string" /-->
+	       <param name="instr_align" value="0,0,0" type="string" />
 	       <param name="R0" value="0,0,0" type="string" />
 	       <param name="gains" value="1,100,0.005,0.01,0.0000,0.1,0.0" type="string" />
 	       <param name="log_loc" value="/home/spiels/log/imu_data/" type="string" />

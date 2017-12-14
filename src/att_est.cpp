@@ -92,6 +92,10 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag,f
     start_ += 1;
     w_E_north = (I - acc_hat.normalized()*acc_hat.normalized().transpose())*mag.normalized()*w_E_n.norm();
 
+    R_ni.transpose().block<3,1>(0,0) = w_E_north.normalized();
+    R_ni.transpose().block<3,1>(0,2) = -acc_hat.normalized();
+    R_ni.transpose().block<3,1>(0,1) = (skew(-acc_hat)*w_E_north).normalized();
+
     return;
 
   }
