@@ -25,13 +25,16 @@
 class AttNode
 {
 
+private:
+  ros::Publisher chatter_;
+  ros::Subscriber sub_;
+  
 public:
   SerialPort* serial;
   AttConsumerThread* att_thread;
   LogConsumerThread* log_thread;
-  ros::Publisher chatter;
-  ros::Subscriber sub;
   estimator_params params;
+  
   AttNode(ros::NodeHandle n){
 
     params = load_params(n);
@@ -40,12 +43,13 @@ public:
 
 
     log_thread   = new LogConsumerThread(serial->log_queue,params.log_location.c_str());
-    chatter = n.advertise<truenorth::gyro_sensor_data>("gyro_data",1000);
+    chatter_ = n.advertise<truenorth::gyro_sensor_data>("gyro_data",1000);
 
     // init phins sub
-    sub    = n.subscribe("phins_data",1,&LogConsumerThread::phins_callback, log_thread);
+    sub_ = n.subscribe("phins_data",1,&LogConsumerThread::phins_callback, log_thread);
 
   }
+  
   void timerCallback(const ros::TimerEvent&)
   {
 
@@ -99,7 +103,7 @@ public:
     data_msg.kvh.seq_num = serial->data.seq_num;
 
     // publish packet
-    chatter.publish(data_msg);
+    chatter_.publish(data_msg);
   
   }
  

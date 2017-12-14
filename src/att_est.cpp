@@ -92,6 +92,7 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag,f
 
     acc_hat = acc - a_b;
     start_ += 1;
+    w_E_north = (I - acc_hat.normalized()*acc_hat.normalized().transpose())*mag.normalized()*w_E_n.norm();
 
     return;
 
