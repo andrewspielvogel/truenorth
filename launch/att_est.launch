@@ -1,7 +1,10 @@
 <launch>
 
 	<node pkg="phins" type="phins_publisher" name="phins" />
-	
+
+	      <param name="port" value="23454" type="int" />
+	      <param name="rate" value="10" type="int" />
+
         <node pkg="truenorth" type="gyro_publisher" name="truenorth" output="screen">
 
                <param name="rate" value="10" type="int" />
@@ -9,9 +12,9 @@
 	       <param name="port" value="/dev/ttyUSB1" type="str" />
 	       <param name="baud" value="4147200" type="int" />
 	       <param name="latitude" value="39.32" type="double" />
-	       <param name="instr_align" value="0,0,0" type="string" />
+	       <param name="instr_align" value="1.5708,0,-1.57080" type="string" />
 	       <param name="R0" value="0,0,0" type="string" />
-	       <param name="gains" value="1,150,0.005,0.00001,0.00001,0.15,0.0" type="string" />
+	       <param name="gains" value="1,100,0.005,0.01,0.0000,0.1,0.0" type="string" />
 	       <param name="log_loc" value="/home/spiels/log/imu_data/" type="string" />
 
         </node>

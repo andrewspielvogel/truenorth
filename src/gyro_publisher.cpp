@@ -134,10 +134,10 @@ int main(int argc, char **argv)
 	data_msg.kvh.imu.acc.at(i) = serial.data.acc(i);
 	data_msg.kvh.imu.mag.at(i) = serial.data.mag(i);
 
-	data_msg.att.at(i) = 180*rot2rph((att_thread->R_ni)*params.R_align.transpose())(i)/M_PI;
-	data_msg.bias.ang.at(i) = bias_thread->bias.w_b(i);
-	data_msg.bias.acc.at(i) = bias_thread->bias.a_b(i);
-	data_msg.bias.z.at(i)   = bias_thread->bias.z(i);
+	data_msg.att.at(i) = 180.0*rot2rph((att_thread->R_ni)*params.R_align.transpose())(i)/M_PI;
+	data_msg.bias.ang.at(i) = att_thread->att.w_b(i);
+	data_msg.bias.acc.at(i) = att_thread->att.a_b(i);
+	data_msg.bias.z.at(i)   = 180.0*rot2rph((att_thread->R_ni)*params.R_align.transpose())(i)/M_PI-bias_thread->rph_phins(i)*180.0/M_PI;//att_thread->att.w_E_north(i);
 
       }
       pthread_mutex_unlock(&mutex_att);
