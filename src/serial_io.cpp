@@ -161,7 +161,6 @@ void SerialPort::parse_data_( char *data_raw)
 
   // log data
   att_queue.add(data);
-  bias_queue.add(data);
   log_queue.add(data);
   
 }
