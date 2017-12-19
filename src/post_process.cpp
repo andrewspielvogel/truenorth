@@ -223,14 +223,15 @@ int main(int argc, char* argv[])
       
       hours   = ((int) time)/3600;
       minutes = ((int) time - hours*3600)/60;
-      printf("%02d:%02d:00 OF DATA PROCESSED\n",hours,minutes); 
-
+      char buffer [256];
+      int n = sprintf(buffer,"%02d:%02d:00 OF DATA PROCESSED",hours,minutes);
+      std::cout<<"\r"<<buffer<<std::flush;
     }
 
     cnt++;
 
   }
-  
+  printf("\n");
   infile.close();
   fclose(outfile);
 

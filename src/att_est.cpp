@@ -44,7 +44,7 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, int hz)
   Eigen::Vector3d w_E(0,0,earthrate);
   Eigen::Vector3d a_e = g_e + skew(w_E)*skew(w_E)*g_e*6371.0*1000.0/9.81;
 
-  a_n = R_en.transpose()*a_e;
+  a_n  = R_en.transpose()*a_e;
   P_   = a_n.normalized()*a_n.normalized().transpose();
   R_ni = R_align;
 
@@ -57,7 +57,7 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, int hz)
   wearth_n_ = R_en.transpose()*w_E;
 
   a_b << 0,0,0;
-  w_b << -0.000035,0.000015,-0.00001;//0.0605/10000.0,0.1234/10000.0,-0.06/10000.0;
+  w_b << 0,0,0;//-0.000035,0.000015,-0.00001;//0.0605/10000.0,0.1234/10000.0,-0.06/10000.0;
 
   w_E_north = R_ni.transpose()*w_E_n;
 
@@ -96,6 +96,7 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag,f
     R_ni.transpose().block<3,1>(0,2) = -acc_hat.normalized();
     R_ni.transpose().block<3,1>(0,1) = (skew(-acc_hat)*w_E_north).normalized();
 
+
     return;
 
   }
@@ -105,13 +106,11 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag,f
   float scale = 1.0;
   float ka = -atan(t-delay)*scale/M_PI + scale/2.0 + ka_;
   
-
-
-
+  w_E_north << 0,0,0;
   /**************************************************************
    * Sensor Bias and North Vector Estimator
    **************************************************************/
-  Eigen::Vector3d dacc_hat   = -skew(ang - w_b - w_E_north)*(acc_hat-a_b) - ka*(acc_hat - acc);
+  Eigen::Vector3d dacc_hat   = -skew(ang - w_b - w_E_north)*acc_hat + skew(ang)*a_b - ka*(acc_hat - acc);
   Eigen::Vector3d dw_E_north = -skew(ang + gamma_*acc)*w_E_north - kE_*skew(acc)*acc_hat;
   Eigen::Vector3d dw_b       = -kb_*skew(acc)*acc_hat;
   Eigen::Vector3d da_b       = kab_*skew(ang)*(acc_hat-acc);
@@ -123,8 +122,8 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag,f
   w_E_north = w_E_north + dt*dw_E_north;
   w_b       = w_b       + dt*dw_b;
   a_b       = a_b       + dt*da_b;
-  acc_hat   = acc_hat.normalized()*a_n.norm()*a_n.norm();
-  w_E_north = w_E_n.norm()*(((I-P_)*w_E_north).normalized());
+  //acc_hat   = acc_hat.normalized()*a_n.norm();
+  w_E_north <<0,0,0;//= w_E_n.norm()*(((I-P_)*w_E_north).normalized());
   //w_E_north = w_E_n.norm()*(w_E_north.normalized());
   
   
@@ -140,7 +139,7 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag,f
   
   // Define local level (g_error_) and heading (h_error_) error terms
   g_error_ = kg_*skew(acc_hat-a_b)*R_ni.transpose()*a_n;
-  h_error_ = P_*kw_*skew(w_E_north.normalized())*R_ni.transpose()*w_E_n;
+  h_error_ << 0,0,0;//= P_*kw_*skew(w_E_north.normalized())*R_ni.transpose()*w_E_n;
 
   R_ni =  R_ni*((skew(g_error_ + h_error_ + ang - R_ni.transpose()*wearth_n_)*dt).exp());
 
