@@ -12,16 +12,8 @@
 
 #include <math.h>  
 #include <Eigen/Core>
-#include <Eigen/Geometry>
-#include <Eigen/Dense>
 #include <unsupported/Eigen/MatrixFunctions>
-#include <stdlib.h>
-#include <boost/tokenizer.hpp>
-#include <boost/foreach.hpp>
-#include <string>
-#include <iostream>
-#include <fstream>
-#include <stdio.h>
+
 
 
 /**
@@ -128,29 +120,6 @@ inline Eigen::Matrix3d rpy2rot(Eigen::Vector3d rpy)
   
 }
 
-/**
- * @brief Parse param strings.
- * @param param_str parameter string parsed.
- */
-inline Eigen::MatrixXd parse_string(std::string param_str)
-{
-
-  boost::char_separator<char> sep(",");
-  boost::tokenizer<boost::char_separator<char> > align_tokens(param_str,sep);    
-
-  Eigen::MatrixXd parsed_mat(9,1);
-  int i = 0;
-  BOOST_FOREACH (const std::string& t, align_tokens)
-  {
-
-    parsed_mat(i) = strtod(t.c_str(),NULL);  
-    i++;
-
-  }
-  
-  return parsed_mat;
-
-}
 
 
 /**
@@ -219,51 +188,6 @@ inline Eigen::Matrix3d get_R_sn(float lat, float t)
 
 }
 
-/**
- * @brief CSV to Matrix
- * 
- * Converts CSV file to Eigen double Matrix
- * @param file File name
- * @param rows Number of rows to load
- * @param cols Number of cols to load
- *
- */
-inline Eigen::MatrixXd readCSV(std::string file, int rows, int cols) {
 
-  std::ifstream in(file.c_str());
-  
-  std::string line;
-
-  int row = 0;
-
-  Eigen::MatrixXd data(rows, cols);
-
-  if (in.is_open()) {
-
-    while (std::getline(in, line)) {
-
-      char *ptr = (char *) line.c_str();
-
-      char*pEnd = ptr;
-
-      for (int col = 0; col < cols; col++) {
-	
-	while(!isdigit(pEnd[0]) && pEnd[0] != '-'){
-	  pEnd = pEnd +1;
-	}
-
-      double num = strtod(pEnd,&pEnd);
-      data(row,col) = num;
-      }
-
-      row++;
-      if (!(row < rows))
-	break;
-    }
-
-    in.close();
-  }
-  return data;
-}
 
 #endif

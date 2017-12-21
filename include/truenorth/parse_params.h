@@ -17,7 +17,11 @@
 #include <math.h>
 
 
-
+/**
+ *
+ * @brief Struct for loaded estimator parameters.
+ * 
+ */
 struct estimator_params {
 
   int rate;
@@ -36,6 +40,13 @@ struct estimator_params {
 
 } ;
 
+/**
+ *
+ * @brief Load in parameters from launch file.
+ * 
+ * @param n ROS NodeHandle
+ * 
+ */
 estimator_params load_params(ros::NodeHandle n) {
 
 

@@ -20,7 +20,6 @@ class AttEst
 public:
   Eigen::Vector3d g_error_; /**< Local level error term. */
   Eigen::Vector3d h_error_; /**< Heading error term. */
-  Eigen::Vector3d east_est_n; /**< \f${}^Nw_E \times {}^Na_g\f$ vector estimation. */
 
 
   /**
@@ -41,7 +40,9 @@ public:
    *
    * @param ang Angular velocity measurement.
    * @param acc Linear acceleration measurement.
+   * @param mag Magnetometer measurement.
    * @param dt Time between last two measurements.
+   * @param t Time.
    */
   void step(Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag, float dt, float t);
 
@@ -50,7 +51,6 @@ public:
   Eigen::Vector3d a_n; /**< Linear Acceleration in the NED frame.*/
   
   Eigen::Vector3d acc_hat;
-  Eigen::Vector3d acc_hat_ab;
   Eigen::Vector3d w_E_north;
   Eigen::Vector3d w_b;
   Eigen::Vector3d a_b;
@@ -61,7 +61,6 @@ public:
  private:
 
 
-  Eigen::Vector3d prev_acc_; /**< Previous acceleration. */
   float lat_; /**< Latitude. */
 
   int hz_; /**< Sampling hz. */
@@ -72,14 +71,12 @@ public:
   float kE_;
   float kb_;
   float kab_;
-  float ka2_;
 
   int start_;
   
   float gamma_;
   float w_E_n_mag_;
 
-  Eigen::Vector3d e_n_; /**< East Direction in the NED frame.*/
   Eigen::Vector3d wearth_n_; /**< Earth's angular velocity in the NED frame. */
   Eigen::Matrix3d P_; /**< Projection matrix onto a_n_ vector. */
 

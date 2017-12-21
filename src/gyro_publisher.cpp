@@ -22,34 +22,53 @@
 #include <truenorth/thread.h>
 #include <boost/bind.hpp>
 
+
+/**
+ *
+ * @brief Class for launching attitude estimation rosnode.
+ * 
+ */
 class AttNode
 {
 
 private:
-  ros::Publisher chatter_;
-  ros::Subscriber sub_;
+  ros::Publisher chatter_; /**< Node publisher. */
+  ros::Subscriber sub_; /**< Node subscriber to PHINS topic. */
   
 public:
-  SerialPort* serial;
-  AttConsumerThread* att_thread;
-  LogConsumerThread* log_thread;
-  estimator_params params;
-  
+  SerialPort* serial; /**< Serial port object for reading IMU data. */
+  AttConsumerThread* att_thread; /**< Attitude estimation thread. */
+  LogConsumerThread* log_thread; /**< Logging thread. */
+  estimator_params params; /**< Node parameters. */
+
+
+  /**
+   *
+   * @brief Constructor.
+   * 
+   * @param n ROS NodeHandle
+   * 
+   */
   AttNode(ros::NodeHandle n){
 
-    params = load_params(n);
-    serial = new SerialPort(params.hz);
+    params       = load_params(n);
+    serial       = new SerialPort(params.hz);
     att_thread   = new AttConsumerThread(serial->att_queue,params.k.head(6),params.R0*params.R_align,params.lat,params.hz);
 
 
     log_thread   = new LogConsumerThread(serial->log_queue,params.log_location.c_str());
-    chatter_ = n.advertise<truenorth::gyro_sensor_data>("gyro_data",1000);
+    chatter_     = n.advertise<truenorth::gyro_sensor_data>("gyro_data",1000);
 
     // init phins sub
     sub_ = n.subscribe("phins_data",1,&LogConsumerThread::phins_callback, log_thread);
 
   }
-  
+
+  /**
+   *
+   * @brief Publishing callback function.
+   * 
+   */
   void timerCallback(const ros::TimerEvent&)
   {
 
@@ -64,14 +83,10 @@ public:
     {
       ROS_WARN("Att queue exceeds %d - Size: :%d",queue_warn_size,serial->att_queue.size());
     }
-    if (serial->bias_queue.size()>queue_warn_size)
-      {
-	ROS_WARN("Bias Estimation queue exceeds %d - Size: :%d",queue_warn_size,serial->bias_queue.size());
-      }
     if (serial->log_queue.size()>queue_warn_size)
-      {
-	ROS_WARN("Logging queue exceeds %d - Size: :%d",queue_warn_size,serial->log_queue.size());
-      }
+    {
+      ROS_WARN("Logging queue exceeds %d - Size: :%d",queue_warn_size,serial->log_queue.size());
+    }
 
       
     // fill data_msg with data packet
@@ -125,8 +140,7 @@ int main(int argc, char **argv)
      **********************************************************************/
     AttNode att_est(n);
     
-
-   
+  
     /***********************************************************************
      * START ATT AND LOGGING THREADS
      ***********************************************************************/
@@ -143,11 +157,6 @@ int main(int argc, char **argv)
     if (connected==false)
     {
 	ROS_ERROR("port not opened... shutting down program");
-	/*bias_thread->detach();
-	att_thread->detach();
-	log_thread->detach();
-	serial.stop();
-	return 0;*/
     }
     else 
     {

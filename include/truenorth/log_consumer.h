@@ -25,8 +25,7 @@ class LogConsumerThread : public Thread
  private:
   FILE *fp_; /**< Log file. */
   wqueue<GyroData> &m_queue_; /**< Queue.*/
-  Eigen::Matrix3d Rni_; /**< KVH attitude (from PHINS). */
-  Eigen::Vector3d rph_phins_;
+  Eigen::Vector3d rph_phins_; /**< PHINS attitude. */
 
  
  public:
