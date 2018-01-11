@@ -55,11 +55,12 @@ public:
   Eigen::Vector3d w_b;
   Eigen::Vector3d a_b;
   Eigen::Vector3d w_E_n;
-
+  Eigen::Vector3d da_b;
   
 
  private:
 
+  float t_start_;
 
   float lat_; /**< Latitude. */
 
