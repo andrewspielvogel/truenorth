@@ -113,25 +113,27 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag,f
 
 
 
-  float delay = 1000.0;
-  float scale = 0.00001;
-  float kE = kE_;//-atan(t-t_start_-delay)*scale/M_PI + scale/2.0 + kE_;
+  float delay = 2000.0;
+  float scale = 0.00005;
+  float kE = -atan(t-t_start_-delay)*scale/M_PI + scale/2.0 + kE_;
 
-  
+  scale = 0.01;
+  float kw = -atan(t-t_start_-delay)*scale/M_PI + scale/2.0 + kw_;
   
   /**************************************************************
    * Sensor Bias and North Vector Estimator
    **************************************************************/
 
-  
+  float kf = 1;
+  float g_mag = 9.81;
   Eigen::Matrix3d kab;
   kab << kab_,0,0,0,0*kab_,0,0,0,kab_;
   
   Eigen::Vector3d dacc_hat   = -skew(ang - w_b - w_E_north)*acc_hat + skew(ang)*a_b - ka_*(acc_hat - acc);
   Eigen::Vector3d dw_E_north = -skew(ang + gamma_*acc)*w_E_north - kE*skew(acc)*acc_hat;
   Eigen::Vector3d dw_b       = -kb_*skew(acc)*acc_hat;
-  Eigen::Vector3d da_b       = kab_*(I-acc.normalized()*acc.normalized().transpose())*skew(ang)*(acc_hat-acc);
-  //Eigen::Vector3d da_b       = kab*skew(ang)*(acc_hat-acc);
+  //Eigen::Vector3d da_b       = kab_*skew(ang)*(acc_hat-acc) - kf*ang.normalized()*((acc_hat-a_b).norm()-g_mag);
+  Eigen::Vector3d da_b       = kab*skew(ang)*(acc_hat-acc);
 
 
   

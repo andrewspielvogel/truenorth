@@ -27,18 +27,22 @@ HZ=5000
 
 
 K=[1,.01,1,0.00005,0.0001,0.1]
-EXP=exp131
+K=[0.1,0.01,1,0.000025,0.00005,0.5]
+#K=[0.1,0.1,1.0,0.000025,0.00005,0.5] #this one works well
+#K=[1,0,1,0,0,0.1]
+EXP=exp13
 
 
 
 rpy_Ro=[0,0,0]
-LOG=2017_12_21_13_9
-#process_att $EXP $K $DIR $LOG $HZ $rpy_Ro &
+LOG=2018_1_12_10_36
+#LOG=2017_12_21_13_9
+process_att $EXP $K $DIR $LOG $HZ $rpy_Ro 
 
 
 LOG=2017_12_21_14_20
 rpy_Ro=[0,0,1.5]
-process_att $EXP $K $DIR $LOG $HZ $rpy_Ro &
+#process_att $EXP $K $DIR $LOG $HZ $rpy_Ro 
 
 
 DIR=WHOI
