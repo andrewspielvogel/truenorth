@@ -29,20 +29,22 @@ HZ=5000
 K=[1,.01,1,0.00005,0.0001,0.1]
 K=[0.1,0.001,1,0.00005,0.00005,0.25]
 K=[0.1,0.1,1.0,0.000025,0.0001,0.5] #this one works well
-K=[1,10,0.01,0.0000001,0.0000005,.5] #thissss converges
-EXP=exp62
+K=[1,100,0.01,0.0000001,0.00000025,0.5] #thissss converges
+#K=[1,10,0.01,0.0000002,0.000001,0.5]
+EXP=exp64
+EXP=exp144
 
 
-
-rpy_Ro=[0,0,0.25]
+rpy_Ro=[0,0,0]
 LOG=2018_1_12_10_36
-#LOG=2017_12_21_13_9
+LOG=2017_12_21_13_9
 process_att $EXP $K $DIR $LOG $HZ $rpy_Ro 
 
 
 LOG=2017_12_21_14_20
-rpy_Ro=[0,0,1.5]
-#process_att $EXP $K $DIR $LOG $HZ $rpy_Ro 
+LOG=2018_1_12_10_36
+#rpy_Ro=[0,0,1.5]
+process_att $EXP $K $DIR $LOG $HZ $rpy_Ro 
 
 
 DIR=WHOI
