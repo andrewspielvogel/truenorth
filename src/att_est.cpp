@@ -115,10 +115,10 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag,f
 
   float delay = 2000.0;
   float scale = 0.00005;
-  float kE = -atan(t-t_start_-delay)*scale/M_PI + scale/2.0 + kE_;
+  //float kE = kE_;//-atan(t-t_start_-delay)*scale/M_PI + scale/2.0 + kE_;
 
   scale = 0.01;
-  float kw = -atan(t-t_start_-delay)*scale/M_PI + scale/2.0 + kw_;
+  float kw = kw_;//-atan(t-t_start_-delay)*scale/M_PI + scale/2.0 + kw_;
   
   /**************************************************************
    * Sensor Bias and North Vector Estimator
@@ -128,6 +128,9 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag,f
   float g_mag = 9.81;
   Eigen::Matrix3d kab;
   kab << kab_,0,0,0,0*kab_,0,0,0,kab_;
+
+  Eigen::Matrix3d kE;
+  kE << kE_,0,0,0,10*kE_,0,0,0,kE_;
   
   Eigen::Vector3d dacc_hat   = -skew(ang - w_b - w_E_north)*acc_hat + skew(ang)*a_b - ka_*(acc_hat - acc);
   Eigen::Vector3d dw_E_north = -skew(ang + gamma_*acc)*w_E_north - kE*skew(acc)*acc_hat;
@@ -136,12 +139,13 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag,f
   Eigen::Vector3d da_b       = kab*skew(ang)*(acc_hat-acc);
 
 
+  P_ = (acc_hat-a_b).normalized()*(acc_hat-a_b).normalized().transpose();
   
   acc_hat   = acc_hat   + dt*dacc_hat;
   w_E_north = w_E_north + dt*dw_E_north;
   w_b       = w_b       + dt*dw_b;
   a_b       = a_b       + dt*da_b;
-  w_E_north = w_E_n.norm()*(((I-P_)*w_E_north).normalized());
+  //w_E_north = w_E_n.norm()*(((I-P_)*w_E_north).normalized());
   //w_E_north = w_E_north.normalized()*w_E_n.norm();
   
 
