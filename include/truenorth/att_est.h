@@ -56,6 +56,8 @@ public:
   Eigen::Vector3d a_b;
   Eigen::Vector3d w_E_n;
   Eigen::Vector3d da_b;
+  double kf_;
+  double kfw_;
   
 
  private:

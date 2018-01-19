@@ -13,11 +13,11 @@ process_att(){
     CONFIG=~/log/$3/$4/configs/$1.m
     PDF=~/log/$3/$4/pdfs/$1.pdf
     
-    python $TRUENORTH/python/gen_config_file.py -i $KVH -o $CSV -c $CONFIG -k $2 -z $5 -R $6
+    python $TRUENORTH/python/gen_config_file.py -i $KVH -o $CSV -c $CONFIG -k $2 -z $5 -R $6 -a $7
 
     rosrun truenorth post_process $CONFIG
 
-    python $TRUENORTH/python/plot_att.py -i $CSV -o $PDF -e $1
+    python $TRUENORTH/python/plot_att.py -i $CSV -o $PDF -e $4 #$1
 
 }
 
@@ -26,39 +26,70 @@ DIR=RSS2018
 HZ=5000
 
 
-K=[1,.01,1,0.00005,0.0001,0.1]
-K=[0.1,0.001,1,0.00005,0.00005,0.25]
+
 K=[0.1,0.1,1.0,0.000025,0.0001,0.5] #this one works well
-K=[1,100,0.01,0.0000001,0.00000025,0.5] #thissss converges
-#K=[1,10,0.01,0.0000002,0.000001,0.5]
-EXP=exp64
-EXP=exp144
+K=[1,100,0.01,0.0000001,0.00000025,0.1] #thissss converges
+K=[0.1,0.1,0.01,0.000005,0.000005,0.1]
+#K=[0.1,0.1,1,0.0001,0.0001,0.1]
+#K=[0.1,0.1,1,0.0001,0.0001,0.1]
+K=[0.1,0.1,0.01,0.0000001,0.0000001,0.5] ## save
+K=[0.1,0.1,0.01,0.0000001,0.0000005,0.5]
+rpy_align=[1.5708,0,-1.5708]
+EXP=exp43
 
 
-rpy_Ro=[0,0,0]
-LOG=2018_1_12_10_36
+rpy_Ro=[0,0,0.2]
 LOG=2017_12_21_13_9
-process_att $EXP $K $DIR $LOG $HZ $rpy_Ro 
+process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
 
-
-LOG=2017_12_21_14_20
 LOG=2018_1_12_10_36
-#rpy_Ro=[0,0,1.5]
-process_att $EXP $K $DIR $LOG $HZ $rpy_Ro 
+process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
+
+LOG=2018_1_15_14_37
+#process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
+
+
+LOG=2018_1_15_15_44
+#process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
+
+
 
 
 DIR=WHOI
 LOG=sl29_0_stripped
 EXP=exp0
-rpy_Ro=[0,0,0]
+rpy_Ro=[0,0,0.3]
 #process_att $EXP $K $DIR $LOG $HZ $rpy_Ro
 
 
 
 DIR=sim
 #K=[10,100,0.1,.00001,.001,10]
-LOG=exp1
-EXP=exp1b
+EXP=exp3
 HZ=1000
+rpy_align=[0,0,0]
 
-#process_att $EXP $K $DIR $LOG $HZ $rpy_Ro &
+
+LOG=exp1
+#process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
+
+LOG=exp2
+#process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
+
+LOG=exp3
+#process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
+
+LOG=exp4
+#process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
+
+LOG=exp5
+#process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
+
+LOG=exp6
+#process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
+
+LOG=exp7
+#process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
+
+LOG=exp8
+process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align

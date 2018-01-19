@@ -13,6 +13,7 @@
 #include <unsupported/Eigen/MatrixFunctions>
 #include <truenorth/helper_funcs.h>
 #include <truenorth/att_est.h>
+#include <tgmath.h>
 
 
 
@@ -33,12 +34,14 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, int hz)
   kb_ = k(4);
   kab_= k(5);
 
+  kfw_ = kb_;
+  
   printf("USING GAINS:\n");
   printf("kg: %f\n",kg_);
   printf("kw: %f\n",kw_);
   printf("ka: %f\n",ka_);
-  printf("kE: %f\n",kE_);
-  printf("kb: %f\n",kb_);
+  printf("kE: %.10f\n",kE_);
+  printf("kb: %.10f\n",kb_);
   printf("kab: %f\n",kab_);
   
   hz_ = hz;
@@ -71,6 +74,7 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, int hz)
 
   acc_hat = R_ni.transpose()*a_n;
   start_ = 0;
+  kf_ = 0.0025;
 
 }
 
@@ -113,11 +117,13 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag,f
 
 
 
-  float delay = 2000.0;
-  float scale = 0.00005;
-  //float kE = kE_;//-atan(t-t_start_-delay)*scale/M_PI + scale/2.0 + kE_;
+  float delay = 500.0;
+  float scale = 0.00001;
+  float kE = kE_;//-atan(t-t_start_-delay)*scale/M_PI + scale/2.0 + kE_;
+  //kb_=kE;
 
-  scale = 0.01;
+  delay = 1000.0;
+  scale = 1;
   float kw = kw_;//-atan(t-t_start_-delay)*scale/M_PI + scale/2.0 + kw_;
   
   /**************************************************************
@@ -127,19 +133,48 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag,f
   float kf = 1;
   float g_mag = 9.81;
   Eigen::Matrix3d kab;
-  kab << kab_,0,0,0,0*kab_,0,0,0,kab_;
+  float ka_b;
+  float kwb;
+  if (ang.norm()<0.001){
+    ka_b = kab_/0.001;
+  }
+  else{
+  ka_b = kab_/ang.norm();
+  }
 
-  Eigen::Matrix3d kE;
-  kE << kE_,0,0,0,10*kE_,0,0,0,kE_;
+  if (ang.norm()<0.001){
+    kE = kE_;
+  }
+  else{
+  kE = kE_/ang.norm();
+  }
+  if (ang.norm()<0.001){
+    kwb = kb_;
+  }
+  else{
+  kwb = kb_/ang.norm();
+  }
+  ka_b = kab_;
+  kE=kE_;
+  kwb=kb_;
+  kab << ka_b,0,0,0,0,0,0,0,ka_b;
+  //kab << ka_b,0,0,0,ka_b,0,0,0,0;
+
+
+  kfw_ = kfw_ -0.000000002*ang.norm()*dt;
+  if (kfw_ < 0.0000002){kfw_ = 0.0000002;}
   
   Eigen::Vector3d dacc_hat   = -skew(ang - w_b - w_E_north)*acc_hat + skew(ang)*a_b - ka_*(acc_hat - acc);
-  Eigen::Vector3d dw_E_north = -skew(ang + gamma_*acc)*w_E_north - kE*skew(acc)*acc_hat;
-  Eigen::Vector3d dw_b       = -kb_*skew(acc)*acc_hat;
+  Eigen::Vector3d dw_E_north = -skew(ang - gamma_*acc)*w_E_north - kE_*skew(acc)*acc_hat;
+  Eigen::Vector3d dw_b       = -kfw_*skew(acc)*acc_hat;
   //Eigen::Vector3d da_b       = kab_*skew(ang)*(acc_hat-acc) - kf*ang.normalized()*((acc_hat-a_b).norm()-g_mag);
-  Eigen::Vector3d da_b       = kab*skew(ang)*(acc_hat-acc);
+  
+  Eigen::Vector3d da_b       = kab_*skew(ang)*(acc_hat-acc) + kf_*acc_hat.normalized()*((acc_hat-a_b).norm()-9.81);
 
 
   P_ = (acc_hat-a_b).normalized()*(acc_hat-a_b).normalized().transpose();
+  P_ = R_ni.transpose()*a_n.normalized()*a_n.normalized().transpose()*R_ni;
+
   
   acc_hat   = acc_hat   + dt*dacc_hat;
   w_E_north = w_E_north + dt*dw_E_north;
@@ -161,13 +196,12 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag,f
    * Attitude Estimator
    **************************************************************/
     
-  P_ = R_ni.transpose()*a_n.normalized()*a_n.normalized().transpose()*R_ni;
   
   
   // Define local level (g_error_) and heading (h_error_) error terms
   //g_error_ = kg_*skew(acc_hat-a_b)*R_ni.transpose()*a_n;
   g_error_ = kg_*skew((acc_hat-a_b).normalized())*R_ni.transpose()*a_n.normalized();
-  h_error_ = P_*kw_*skew(w_E_north.normalized())*R_ni.transpose()*w_E_n.normalized();
+  h_error_ = P_*kw*skew(w_E_north.normalized())*R_ni.transpose()*w_E_n.normalized();
   //h_error_ = kw_*skew(w_E_north.normalized())*R_ni.transpose()*w_E_n.normalized();
 
   R_ni =  R_ni*((skew(g_error_ + h_error_ + ang - R_ni.transpose()*wearth_n_)*dt).exp());
