@@ -33,9 +33,9 @@ K=[0.1,0.1,0.01,0.000005,0.000005,0.1]
 #K=[0.1,0.1,1,0.0001,0.0001,0.1]
 #K=[0.1,0.1,1,0.0001,0.0001,0.1]
 K=[0.1,0.1,0.01,0.0000001,0.0000001,0.5] ## save
-K=[0.1,0.1,0.01,0.0000001,0.0000005,0.5]
+K=[0.1,0.001,0.01,0.000001,0.000001,1]
 rpy_align=[1.5708,0,-1.5708]
-EXP=exp43
+EXP=exp58
 
 
 rpy_Ro=[0,0,0.2]
@@ -43,14 +43,14 @@ LOG=2017_12_21_13_9
 process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
 
 LOG=2018_1_12_10_36
-process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
+#process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
 
 LOG=2018_1_15_14_37
-#process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
+process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
 
 
 LOG=2018_1_15_15_44
-#process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
+process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
 
 
 
@@ -65,7 +65,7 @@ rpy_Ro=[0,0,0.3]
 
 DIR=sim
 #K=[10,100,0.1,.00001,.001,10]
-EXP=exp3
+EXP=exp1
 HZ=1000
 rpy_align=[0,0,0]
 
@@ -89,7 +89,7 @@ LOG=exp6
 #process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
 
 LOG=exp7
-#process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
+process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
 
 LOG=exp8
-process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
+#process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align

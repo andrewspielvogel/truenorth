@@ -94,10 +94,11 @@ def main(argv):
     plt.axis([0,t[-1], -190, 190])
     plt.grid(True)
     pp.savefig(plt.figure(1))
+    plt.savefig('att.eps', format='eps', dpi=1000)
     plt.close("all")
 
     delay = 11;
-    #delay = 1;
+    delay = 1;
     plt.figure(2)
     plt.suptitle('Estimated Attitude Error')
     plt.subplot(311)
@@ -118,6 +119,7 @@ def main(argv):
     plt.xlabel('Seconds (s)')
     plt.axis([0,t[-1], -10, 10])
     plt.grid(True)
+    plt.savefig('error.eps', format='eps', dpi=1000)
     pp.savefig(plt.figure(2))
     plt.close("all")
 
@@ -144,6 +146,7 @@ def main(argv):
     #plt.axis([0,t[-1], -1./100000., 1./100000.])
     plt.ticklabel_format(axis='y', style='sci', scilimits=(-2, 2))
     plt.grid(True)
+    plt.savefig('ang_bias.eps', format='eps', dpi=1000)
     pp.savefig(plt.figure(3))
     plt.close("all")
 
@@ -170,6 +173,7 @@ def main(argv):
     #plt.axis([0,t[-1], -1./100., 1./100.])
     plt.ticklabel_format(axis='y', style='sci', scilimits=(-2, 2))
     plt.grid(True)
+    plt.savefig('acc_bias.eps', format='eps', dpi=1000)
     pp.savefig(plt.figure(4))
     plt.close("all")
 
