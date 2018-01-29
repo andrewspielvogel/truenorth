@@ -58,7 +58,8 @@ public:
   Eigen::Vector3d da_b;
   double kf_;
   double kfw_;
-  
+  float kw_; /**< East vector estimation gain. */
+
 
  private:
 
@@ -69,7 +70,6 @@ public:
   int hz_; /**< Sampling hz. */
 
   float kg_; /**< Gravity vector estimation gain. */        
-  float kw_; /**< East vector estimation gain. */
   float ka_; /**< . */
   float kE_;
   float kb_;

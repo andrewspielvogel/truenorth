@@ -233,7 +233,7 @@ int main(int argc, char* argv[])
       hours   = ((int) time)/3600;
       minutes = ((int) time - hours*3600)/60;
       char buffer [256];
-      int n = sprintf(buffer,"%02d:%02d:00 OF DATA PROCESSED... kfw: %.12f",hours,minutes,att.kfw_);
+      int n = sprintf(buffer,"%02d:%02d:00 OF DATA PROCESSED... kfw: %.12f  kw: %f",hours,minutes,att.kfw_,att.kw_);
       std::cout<<"\r"<<buffer<<std::flush;
     }
 

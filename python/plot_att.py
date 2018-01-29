@@ -78,14 +78,14 @@ def main(argv):
     plt.plot(t,data[:,5]*180.0/math.pi,label="PHINS")
     plt.ylabel('Roll (degrees)')
     plt.xlabel('Seconds (s)')
-    plt.axis([0,t[-1], -5, 5])
+    plt.axis([0,t[-1], -25, 25])
     plt.grid(True)
     plt.legend(bbox_to_anchor=(0., 1., 1., 1.), loc=3,ncol=2, mode="expand", borderaxespad=0.25, fontsize=12)
     plt.subplot(312)
     plt.plot(t,data[:,3]*180.0/math.pi,t,data[:,6]*180.0/math.pi)
     plt.ylabel('Pitch (degrees)')
     plt.xlabel('Seconds (s)')
-    plt.axis([0,t[-1], -5, 5])
+    plt.axis([0,t[-1], -25, 25])
     plt.grid(True)
     plt.subplot(313)
     plt.plot(t,data[:,4]*180.0/math.pi,t,data[:,7]*180.0/math.pi)
@@ -97,8 +97,8 @@ def main(argv):
     plt.savefig('att.eps', format='eps', dpi=1000)
     plt.close("all")
 
-    delay = 11;
-    delay = 1;
+    delay = 13;
+    #delay = 1;
     plt.figure(2)
     plt.suptitle('Estimated Attitude Error')
     plt.subplot(311)
@@ -117,7 +117,7 @@ def main(argv):
     plt.plot(t[0:-delay],data[0:-delay,4]*180.0/math.pi-data[(delay-1):-1,7]*180.0/math.pi)
     plt.ylabel('Heading (degrees)')
     plt.xlabel('Seconds (s)')
-    plt.axis([0,t[-1], -10, 10])
+    plt.axis([0,t[-1], -20, 20])
     plt.grid(True)
     plt.savefig('error.eps', format='eps', dpi=1000)
     pp.savefig(plt.figure(2))

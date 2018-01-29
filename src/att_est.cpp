@@ -116,29 +116,25 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag,f
   }
 
 
-
-  float delay = 500.0;
-  float scale = 0.00001;
-  float kE = kE_;//-atan(t-t_start_-delay)*scale/M_PI + scale/2.0 + kE_;
-
-  delay = 2000.0;
-  scale = 1;
-  float kw = -atan(t-t_start_-delay)*scale/M_PI + scale/2.0 + kw_;
+  float kw_min = 0.0025;
+  kw_ = kw_ - 0.0005*dt;
+  if (kw_ < kw_min){kw_ = kw_min;}
   
   /**************************************************************
    * Sensor Bias and North Vector Estimator
    **************************************************************/
 
-  float g_mag = 9.81;
+  float g_mag = a_n.norm()*9.81;
 
-  double kfw_min = 0.0000001;
+  double kfw_min = 0.0000005;
   kfw_ = kfw_ -0.000000003*ang.norm()*dt;
   if (kfw_ < kfw_min){kfw_ = kfw_min;}
+
   
   Eigen::Vector3d dacc_hat   = -skew(ang - w_b - w_E_north)*acc_hat + skew(ang)*a_b - ka_*(acc_hat - acc);
   Eigen::Vector3d dw_E_north = -skew(ang - gamma_*acc)*w_E_north - kE_*skew(acc)*acc_hat;
   Eigen::Vector3d dw_b       = -kfw_*skew(acc)*acc_hat;  
-  Eigen::Vector3d da_b       = kab_*skew(ang)*(acc_hat-acc) + kf_*acc_hat.normalized()*((acc_hat-a_b).norm()-g_mag);
+  Eigen::Vector3d da_b       = kab_*skew(ang)*(acc_hat-acc) + kf_*(acc_hat-a_b).normalized()*((acc_hat-a_b).norm()-g_mag);
 
 
   acc_hat   = acc_hat   + dt*dacc_hat;
@@ -154,9 +150,9 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag,f
   P_ = R_ni.transpose()*a_n.normalized()*a_n.normalized().transpose()*R_ni;
   
   // Define local level (g_error_) and heading (h_error_) error terms
-  g_error_ = kg_*skew((acc_hat-a_b).normalized())*R_ni.transpose()*a_n.normalized();
-  h_error_ = P_*kw*skew(w_E_north.normalized())*R_ni.transpose()*w_E_n.normalized();
+  g_error_ = kg_*skew((acc-a_b).normalized())*R_ni.transpose()*a_n.normalized();
+  h_error_ = P_*kw_*skew(w_E_north.normalized())*R_ni.transpose()*w_E_n.normalized();
 
-  R_ni =  R_ni*((skew(g_error_ + h_error_ + ang - R_ni.transpose()*wearth_n_)*dt).exp());
+  R_ni =  R_ni*((skew(g_error_ + h_error_ + ang - w_b - R_ni.transpose()*wearth_n_)*dt).exp());
   
 }
