@@ -58,7 +58,7 @@ AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat, int hz)
   a_n  = R_en.transpose()*a_e;
   P_   = a_n.normalized()*a_n.normalized().transpose();
   R_ni = R_align;
-
+  
   w_E_n = R_en.transpose()*w_E;
   w_E_n(2) = 0;
 
@@ -130,12 +130,13 @@ void AttEst::step(Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag,f
   kfw_ = kfw_ -0.000000003*ang.norm()*dt;
   if (kfw_ < kfw_min){kfw_ = kfw_min;}
 
+
   
   Eigen::Vector3d dacc_hat   = -skew(ang - w_b - w_E_north)*acc_hat + skew(ang)*a_b - ka_*(acc_hat - acc);
   Eigen::Vector3d dw_E_north = -skew(ang - gamma_*acc)*w_E_north - kE_*skew(acc)*acc_hat;
   Eigen::Vector3d dw_b       = -kfw_*skew(acc)*acc_hat;  
-  Eigen::Vector3d da_b       = kab_*skew(ang)*(acc_hat-acc) + kf_*(acc_hat-a_b).normalized()*((acc_hat-a_b).norm()-g_mag);
-
+  // Eigen::Vector3d da_b       = kab_*skew(ang)*(acc_hat-acc) + kf_*(acc_hat-a_b).normalized()*((acc_hat-a_b).norm()-g_mag);
+  Eigen::Vector3d da_b       = kab_*skew(ang)*(acc_hat-acc) + kf_*ang.normalized()*((acc_hat-a_b).norm()-g_mag)*((acc_hat-a_b).dot(ang)/fabs((acc_hat-a_b).dot(ang)));
 
   acc_hat   = acc_hat   + dt*dacc_hat;
   w_E_north = w_E_north + dt*dw_E_north;

@@ -88,3 +88,8 @@ set_target_properties(bias_process PROPERTIES COMPILE_FLAGS "-O3")
 add_executable(ekf_process src/ekf_process.cpp src/EKF.cpp src/gyro_data.cpp)
 target_link_libraries(ekf_process ${catkin_LIBRARIES})
 #set_target_properties(ekf_process PROPERTIES COMPILE_FLAGS "-O3")
+
+
+add_executable(mems_process src/mems_process.cpp src/mems_bias.cpp src/gyro_data.cpp)
+target_link_libraries(mems_process ${catkin_LIBRARIES})
+set_target_properties(mems_process PROPERTIES COMPILE_FLAGS "-O3")

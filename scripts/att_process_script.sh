@@ -13,9 +13,9 @@ process_att(){
     CONFIG=~/log/$3/$4/configs/$1.m
     PDF=~/log/$3/$4/pdfs/$1.pdf
     
-    python $TRUENORTH/python/gen_config_file.py -i $KVH -o $CSV -c $CONFIG -k $2 -z $5 -R $6 -a $7
+    #python $TRUENORTH/python/gen_config_file.py -i $KVH -o $CSV -c $CONFIG -k $2 -z $5 -R $6 -a $7
 
-    rosrun truenorth post_process $CONFIG
+    #rosrun truenorth post_process $CONFIG
 
     python $TRUENORTH/python/plot_att.py -i $CSV -o $PDF -e $4 #$1
 
@@ -61,7 +61,7 @@ LOG=2018_1_15_15_44
 DIR=WHOI
 LOG=sl29_0_stripped
 EXP=exp0
-rpy_Ro=[0,0,0.3]
+rpy_Ro=[0,0,0.2]
 #process_att $EXP $K $DIR $LOG $HZ $rpy_Ro
 
 
@@ -104,4 +104,7 @@ LOG=exp10
 #process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
 
 LOG=exp11
+#process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
+
+LOG=exp12
 #process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
