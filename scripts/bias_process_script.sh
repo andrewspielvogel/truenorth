@@ -21,17 +21,20 @@ process_bias(){
 
 
 
-DIR=sim_MEMS
-K=[1,1,1,1,1,0.1,1]
+DIR=sim_MEMS/true
+K=[100,100,1,1,100,1,100]
 EXP=exp1
 HZ=1000
 
 
 LOG=exp1
-process_bias $EXP $K $DIR $LOG $HZ
+#process_bias $EXP $K $DIR $LOG $HZ
 
 LOG=exp2
-process_bias $EXP $K $DIR $LOG $HZ
+#process_bias $EXP $K $DIR $LOG $HZ
 
 LOG=exp3
+#process_bias $EXP $K $DIR $LOG $HZ
+
+LOG=exp4
 process_bias $EXP $K $DIR $LOG $HZ

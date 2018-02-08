@@ -185,7 +185,7 @@ int main(int argc, char* argv[])
 
     Eigen::Vector3d rph_mems = rot2rph(bias.Rni);
 
-    if ((cnt % (params.hz/100)) == 0)
+    if (1)//(cnt % (params.hz/100)) == 0)
     {
       fprintf(outfile,"BIAS_PRO,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",gyro_data.timestamp,bias.acc_hat(0),bias.acc_hat(1),bias.acc_hat(2),bias.mag_hat(0),bias.mag_hat(1),bias.mag_hat(2),bias.a_b(0),bias.a_b(1),bias.a_b(2),bias.w_b(0),bias.w_b(1),bias.w_b(2),bias.m_b(0),bias.m_b(1),bias.m_b(2),rph_mems(0),rph_mems(1),rph_mems(2));
     }

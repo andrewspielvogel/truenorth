@@ -13,6 +13,7 @@
 #include <unsupported/Eigen/MatrixFunctions>
 #include <truenorth/mems_bias.h>
 #include <truenorth/helper_funcs.h>
+#include <iostream>
 
 
 /*
@@ -49,7 +50,6 @@ MEMSBias::MEMSBias(Eigen::VectorXd k, int hz)
 
   Rni << 1,0,0,0,1,0,0,0,1;
 
-
   // initialize usefull vectors
   double earthrate = 7.292150/100000.0;
   Eigen::Matrix3d R_en = get_R_en(lat_);
@@ -63,6 +63,8 @@ MEMSBias::MEMSBias(Eigen::VectorXd k, int hz)
 
   m_n_  = m_n;
 
+  start_= 0;
+
 }
 
 MEMSBias::~MEMSBias(void)
@@ -72,11 +74,24 @@ MEMSBias::~MEMSBias(void)
 void MEMSBias::step(Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag,float dt, float t)
 {
 
+
+
+      
   if (!start_)
     {
 
       acc_hat = acc;
       mag_hat = mag;
+
+      Eigen::Matrix3d I;
+      I << 1,0,0,0,1,0,0,0,1;
+      Eigen::Vector3d north = ((I - (acc_hat-a_b).normalized()*((acc_hat-a_b).normalized().transpose()))*(mag_hat-m_b)).normalized();
+
+      Rni.block<1,3>(0,0) = north.transpose();
+      Rni.block<1,3>(1,0) = north.cross(acc_hat-a_b).normalized().transpose();
+      Rni.block<1,3>(2,0) = -(acc_hat-a_b).normalized().transpose();
+      
+      start_ = 1;
       
     }
 
@@ -85,10 +100,10 @@ void MEMSBias::step(Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag
    * Sensor Bias Estimator
    **************************************************************/
   Eigen::Matrix3d kab;
-  kab << kab_,0,0,0,kab_,0,0,0,10*kab_;
+  kab << kab_,0,0,0,kab_,0,0,0,kab_;
 
   Eigen::Matrix3d kmb;
-  kmb << kmb_,0,0,0,kmb_,0,0,0,10*kmb_;
+  kmb << kmb_,0,0,0,kmb_,0,0,0,kmb_;
 
   
   Eigen::Vector3d da          = acc_hat - acc;
@@ -117,7 +132,7 @@ void MEMSBias::step(Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag
   
   // Define local level (g_error_) and heading (h_error_) error terms
   Eigen::Vector3d g_error = kg_*skew((acc_hat-a_b).normalized())*Rni.transpose()*a_n_.normalized();
-  Eigen::Vector3d h_error = P*kn_*skew((mag_hat-m_b).normalized())*Rni.transpose()*m_n_.normalized();
+  Eigen::Vector3d h_error = (P*kn_*skew(mag_hat-m_b)*Rni.transpose()*m_n_).normalized();
 
   Rni =  Rni*((skew(g_error + h_error + ang - w_b)*dt).exp());
 
