@@ -1,116 +1,91 @@
-function samp = gen_samples(hz,time,lat_deg)
+function samp = gen_samples(lat,hz,t_end,bias)
 
-lat    = lat_deg*pi/180;
-t      = 0:1/hz:time;
-samp.hz = hz;
+dt = 1/hz;
+t= 0:dt:t_end;
+num = size(t,2);
 
-% init variables
-num_samples = size(t,2);
-g = 9.81;
-r_e  = 6371*1000*[cos(lat);0;sin(lat)];
-g_e  = g*r_e/norm(r_e);
-w_se = [0;0;15*pi/(3600*180)];
+lat = lat*pi/180;
 
-% define instrument angular pos, and derivative in ned frame and the x,v,a of the
-% instrument in ned frame
-w_veh_pos = 1*pi/180*[zeros(1,num_samples);zeros(1,num_samples);sin(t*pi/5)];
-w_veh_dot = 1*pi/180*pi/5*[zeros(1,num_samples);zeros(1,num_samples);cos(t*pi/5)];
+Rni{num} = eye(3);
+Rni{1} = eye(3);
 
-a_n  = 0*[zeros(1,num_samples);zeros(1,num_samples);-sin(t)];
-v_n  = 0*[zeros(1,num_samples);zeros(1,num_samples);cos(t)];
-x_n  = 0*[zeros(1,num_samples);zeros(1,num_samples);sin(t)];
+ang = zeros(3,num);
+acc = zeros(3,num);
+samp.E = zeros(3,num);
 
 
-% generate R_se (space to Earth frame) matrices for ts
-R_se = cellfun(@(A) expm(skew(w_se)*A),num2cell(t),'UniformOutput',false);
+T = [0.991,-0.002,-0.005;0,0.996,0.018;0,0,1.014];
 
-% generate R_en (earth to NED frame) based on lat
-R_en = [-sin(lat),0,-cos(lat);0,1,0;cos(lat),0,-sin(lat)];
+% noise
+w_sig = 0.005; %6.32 * 10^(-3)*pi/180;  % measured 1775, units are rad/sec
+a_sig = 0.00065; %0.0037;            % measured 1775, units are g, not m/s^2
+m_sig = 0.001; %0.002; % units are gauss
 
-% generate R_ni (NED to instrument) matrices based on w_ni (right now w_ni is zero---NEED to update code
-% for non-constant w_ni
-R_ni = cellfun(@(A) expm(skew(A)),num2cell(w_veh_pos,1),'UniformOutput',false);
+% generate a_n
+r = 6371*1000;
+Ren = [-sin(lat),0,-cos(lat);0,1,0;cos(lat),0,-sin(lat)];
+a_e = [cos(lat);0;sin(lat)] - (15.04*pi/180/3600)^2*cos(lat)*[r;0;0]/9.81;
+a_n = Ren'*a_e;
 
-% generate w_ni (instrument ang vel w/respect to NED)
-w_in = cellfun(@(A,B) park_jacob(unskew(logm(A)))*B,R_ni,num2cell(w_veh_dot,1),'UniformOutput',false);
-w_ni = cellfun(@(A,b) A*b,R_ni,w_in,'UniformOutput',false);
+m_n = [0.205796;-0.040654;0.468785];
 
-% generate R_sn (Space to NED frame) matrices
-R_sn = cellfun(@(A) A*R_en,R_se,'UniformOutput',false);
+w_E_e = [0;0;1]*15.04*pi/180/3600;
+w_E_n = Ren'*w_E_e;
 
-% generate R_si (Space to Instrument frame) matrices
-R_si = cellfun(@(A,B) A*B,R_sn,R_ni,'UniformOutput',false);
+fileID = fopen('/home/spiels/log/sim_MEMS/true/exp4.KVH','w');
 
-% generate w pure signal in instrument frame --- w_pure = R_in*w_ni+R_is*w_se
-w_i_pure = cellfun(@(A,B) A'*B,R_ni,w_ni,'UniformOutput',false);
-w_pure   = cellfun(@(A,B) A+B'*w_se,w_i_pure,R_si,'UniformOutput',false);
+for i=1:num
 
-% noise sigmas CHECK THIS
-w_sig_spec = (2/(10000*sqrt(1/hz)))*pi/180;  % units are rad/sec
-a_sig_spec = 0.12*sqrt(3)/(1000*sqrt(1/hz)); % units are g, not m/s^2
 
-w_sig = 8.4178 * 10^(-5);  % measured 1775, units are rad/sec
-a_sig = 0.0023;            % measured 1775, units are g, not m/s^2
+    % get w_v, Rsn
+    w_veh = get_w(t(i));
 
-% bias sigmas 
-% w_bias_sig = (.1/3600)*pi/180;
-% a_bias_sig = .05/1000;
-w_bias_sig = 0;
-a_bias_sig = 0;
+    if i~=num
+        
+        Rni{i + 1} = Rni{i}*expm(skew(w_veh)*dt);
+    end
 
-% generate acc component in star frame due to instrument a in ned frame --- R_sn*a_n
-a_veh  = cellfun(@(A,B) A*B,R_sn,num2cell(a_n,1),'UniformOutput',false);
+    ang(:,i) = w_veh + Rni{i}'*w_E_n + bias.ang + w_sig*randn(3,1);
+    acc(:,i) = Rni{i}'*a_n + bias.acc + a_sig*randn(3,1);
+    samp.acc_nv(:,i) = acc(:,i);
+    samp.E(:,i) = Rni{i}'*[0;1;0];
+    samp.D(:,i) = Rni{i}'*a_n;
+    samp.att(:,i) = rot2rph(Rni{i});
+    samp.w_E(:,i) = Rni{i}'*w_E_n;
+    samp.w_E_n(:,i) = Rni{i}'*[w_E_n(1);0;0];
+    %T=eye(3);
+    %samp.mag(:,i) = T*Rni{i}'*m_n + m_sig*randn(3,1) + bias.mag;
+    samp.mag(:,i) = Rni{i}'*m_n + m_sig*randn(3,1) + bias.mag;
+    
+    % print progress
+    if ~mod(t(i),30)
+        str = sprintf('Made %i:%i0 of data at %i hz',floor(t(i)/60),mod(t(i),60)/10,hz);
+        disp(str);
+    end
+    R = Rni{i};
+    rpy_phins = samp.att(:,i);%rot2rph(R);
+    %fprintf(fileID,'IMU_RAW, %.40f,%.40f,%.40f, %.35f,%.35f,%.35f,%f,%f,%f, 0, 0, %.30f,0,1,1,1,1,1,1, %f,%f,%f,%f,%f,%f,%f,%f,%f,%.40f,%.40f,%.40f \n',ang(1,i),ang(2,i),ang(3,i),acc(1,i),acc(2,i),acc(3,i),samp.mag(1,i),samp.mag(2,i),samp.mag(3,i),t(i),R(1,1),R(1,2),R(1,3),R(2,1),R(2,2),R(2,3),R(3,1),R(3,2),R(3,3),rpy_phins(1),rpy_phins(2),rpy_phins(3));
+    fprintf(fileID,'IMU_RAW, %.40f,%.40f,%.40f, %.35f,%.35f,%.35f,%f,%f,%f, 0,%d,%.5f,0,1,1,1,1,1,1,%f,%f,%f \n',ang(1,i),ang(2,i),ang(3,i),acc(1,i),acc(2,i),acc(3,i),samp.mag(1,i),samp.mag(2,i),samp.mag(3,i),mod(i,128),t(i),rpy_phins(1),rpy_phins(2),rpy_phins(3));
 
-% generate acc component in star frame due to cent acc --- 2*skew(w_se)*R_sn*v_n
-a_cent = cellfun(@(A,B) 2*skew(w_se)*A*B,R_sn,num2cell(v_n,1),'UniformOutput',false);
+end
 
-% generate acc component in star frame due to cor ---
-% skew(w_se)^2*(R_se*r_e+R_sn*x_n
-a_cor1 = cellfun(@(A,B) skew(w_se)*skew(w_se)*(A*B),R_sn,num2cell(x_n,1),'UniformOutput',false);
-a_cor  = cellfun(@(A,B) skew(w_se)*skew(w_se)*A*r_e+B,R_se,a_cor1,'UniformOutput',false);
+samp.t = t;
+samp.acc = acc;
+samp.ang = ang;
+samp.Rni = Rni;
+samp.bias = bias;
 
-% generate pure acc signal in instrument frame --- R_is*(a_veh+a_cent+a_cor+R_se*g_e)
-a_tot1 = cellfun(@(A,B) A+B,a_veh,a_cent,'UniformOutput',false);
-a_tot2 = cellfun(@(A,B) A+B,a_tot1,a_cor,'UniformOutput',false);
-a_tot  = cellfun(@(A,B) A+B*g_e,a_tot2,R_se,'UniformOutput',false);
-a_pure = cellfun(@(A,B) A'*B,R_si,a_tot,'UniformOutput',false);
 
-% generate noise
-w_noise = w_bias_sig*randn(num_samples,3) + w_sig*randn(num_samples,3);
-a_noise = a_bias_sig*randn(num_samples,3) + a_sig*randn(num_samples,3);
+function w = get_w(t)
 
-% store working variables in output structure
-samp.num_samples = num_samples;
-samp.g = g;
-samp.r_e = r_e;
-samp.g_e = g_e;
-samp.w_se = w_se;
+w = [cos(t/2)/20;sin(t/5)/15;-cos(t/30)/10]*0;
 
-samp.w_sig = w_sig;
-samp.a_sig = a_sig;
+w = [cos(t/50)/25;-sin(t/9)/7*0;cos(t/10)/6]; %exp1
+w = [cos(t/50)/25*0;-sin(t/9)/7*0;cos(t/10)/6]; %exp2
+w = [cos(t/50)/100;-sin(t/9)/7*0;cos(t/10)/6]; %exp3
 
-samp.w_veh_pos = w_veh_pos;
-samp.w_veh_dot = w_veh_dot;
-samp.w_ni = w_ni;
-samp.w_noise  = w_noise;
-samp.a_noise  = a_noise;
-samp.w_i_pure = w_i_pure;
-samp.w_pure   = w_pure;
-% samp.g_s    = g_s;
-samp.a_veh    = a_veh;
-samp.a_cor1   = a_cor1;
-samp.a_cor    = a_cor;
-samp.a_cent   = a_cent;
-samp.a_pure   = a_pure;
-samp.a_tot    = a_tot;
-samp.a_tot2   = a_tot2;
-samp.R_se     = R_se;
-samp.R_sn     = R_sn;
-samp.R_en     = R_en;
-samp.R_ni     = R_ni;
-samp.R_si     = R_si;
-samp.t        = t';
+w = [cos(t/50)/25;-sin(t/25)/10;cos(t/10)/5]; %exp4 sim2
 
-% generate samples
-samp.ang = cell2mat(w_pure)'   + w_noise;
-samp.acc = cell2mat(a_pure)' *(1.0/g) + a_noise;
+%w = [cos(t/20)/55;-sin(t/5)/30;cos(t/6)/2]; %exp5 sim1
+
+

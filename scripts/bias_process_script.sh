@@ -22,9 +22,13 @@ process_bias(){
 
 
 DIR=sim_MEMS/true
-K=[100,100,1,1,100,1,100]
+K=[0.1,1,1,1,1,0.1,50]
+K=[0.1,1,1,1,0.25,0.01,10]
+K=[1,1,1,1,0.5,0.05,10]
+
 EXP=exp1
-HZ=1000
+HZ=100
+K=[0.05,0.05,1,1,0.1,0.025,0.5]
 
 
 LOG=exp1
@@ -38,3 +42,17 @@ LOG=exp3
 
 LOG=exp4
 process_bias $EXP $K $DIR $LOG $HZ
+
+LOG=exp5
+process_bias $EXP $K $DIR $LOG $HZ
+
+LOG=exp6
+#process_bias $EXP $K $DIR $LOG $HZ
+
+K=[0.05,0.05,1,1,0.1,0.025,0.5]
+DIR=IROS2018
+EXP=exp1
+LOG=20180222_1908
+process_bias $EXP $K $DIR $LOG $HZ
+
+

@@ -100,17 +100,20 @@ void MEMSBias::step(Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag
    * Sensor Bias Estimator
    **************************************************************/
   Eigen::Matrix3d kab;
-  kab << kab_,0,0,0,kab_,0,0,0,kab_;
+  kab << kab_,0,0,0,kab_,0,0,0,20*kab_;//10*kab_;
 
   Eigen::Matrix3d kmb;
-  kmb << kmb_,0,0,0,kmb_,0,0,0,kmb_;
+  kmb << kmb_,0,0,0,kmb_,0,0,0,10*kmb_;
+
+  Eigen::Matrix3d kwb;
+  kwb << kwb_,0,0,0,kwb_,0,0,0,5*kwb_;//2*kwb_;
 
   
   Eigen::Vector3d da          = acc_hat - acc;
   Eigen::Vector3d dm          = mag_hat - mag;
   Eigen::Vector3d acc_hat_dot = -skew(ang)*(acc_hat - a_b) + skew(w_b)*acc_hat - ka_*da;
   Eigen::Vector3d mag_hat_dot = -skew(ang - w_b)*mag_hat + skew(ang)*m_b - km_*dm;
-  Eigen::Vector3d w_b_dot     = -kwb_*(skew(acc)*da + skew(mag)*dm);
+  Eigen::Vector3d w_b_dot     = -kwb*(skew(acc)*da + skew(mag)*dm);
   Eigen::Vector3d a_b_dot     = kab*skew(ang)*da;
   Eigen::Vector3d m_b_dot     = kmb*skew(ang)*dm;
 
@@ -127,13 +130,27 @@ void MEMSBias::step(Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag
   /**************************************************************
    * Attitude Estimator
    **************************************************************/
-    
+  
   Eigen::Matrix3d P = Rni.transpose()*a_n_.normalized()*a_n_.normalized().transpose()*Rni;
+
+  Eigen::Vector3d e3(0,0,1);
+  Eigen::Vector3d e1(1,0,0);
+
+  Eigen::Matrix3d I;
+  I << 1,0,0,0,1,0,0,0,1;
+
+  P = Rni.transpose()*e3.normalized()*e3.normalized().transpose()*Rni;
   
   // Define local level (g_error_) and heading (h_error_) error terms
-  Eigen::Vector3d g_error = kg_*skew((acc_hat-a_b).normalized())*Rni.transpose()*a_n_.normalized();
-  Eigen::Vector3d h_error = (P*kn_*skew(mag_hat-m_b)*Rni.transpose()*m_n_).normalized();
+  //Eigen::Vector3d g_error = kg_*skew((acc_hat-a_b).normalized())*Rni.transpose()*a_n_.normalized();
+  //Eigen::Vector3d h_error = P*kn_*skew((mag_hat-m_b).normalized())*Rni.transpose()*(m_n_.normalized());
 
+  Eigen::Vector3d g_error = kg_*skew((acc_hat-a_b).normalized())*Rni.transpose()*(-e3);
+  Eigen::Vector3d h_error = kn_*skew(((I-P)*(mag_hat-m_b)).normalized())*Rni.transpose()*e1;
+
+  //Eigen::Vector3d g_error = kg_*skew((acc_hat).normalized())*Rni.transpose()*(-e3);
+  //Eigen::Vector3d h_error = kn_*skew(((I-P)*(mag_hat)).normalized())*Rni.transpose()*e1;
+  
   Rni =  Rni*((skew(g_error + h_error + ang - w_b)*dt).exp());
 
   
