@@ -10,6 +10,7 @@
 #define ATT_EST_H
 
 #include <Eigen/Core>
+#include <truenorth/so3_att.h>
 
 
 /**
@@ -18,9 +19,6 @@
 class AttEst
 {
 public:
-  Eigen::Vector3d g_error_; /**< Local level error term. */
-  Eigen::Vector3d h_error_; /**< Heading error term. */
-
 
   /**
    * @brief Constructor.
@@ -30,7 +28,7 @@ public:
    * @param lat Latitude.
    * @param hz Sampling hz.
    */
-  AttEst(Eigen::VectorXd k,Eigen::Matrix3d R0, float lat, int hz);
+  AttEst(Eigen::VectorXd k,Eigen::Matrix3d R0, float lat);
 
   
   virtual ~AttEst(void); /**< Destructor. */
@@ -44,7 +42,7 @@ public:
    * @param dt Time between last two measurements.
    * @param t Time.
    */
-  void step(Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag, float dt, float t);
+  void step(Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag, float dt);
 
   
   Eigen::Matrix3d R_ni; /**< Estimation of NED to instrument rotation. */
@@ -54,22 +52,18 @@ public:
   Eigen::Vector3d w_E_north;
   Eigen::Vector3d w_b;
   Eigen::Vector3d a_b;
-  Eigen::Vector3d w_E_n;
   Eigen::Vector3d da_b;
-  double kf_;
-  double kfw_;
-  float kw_; /**< East vector estimation gain. */
 
 
  private:
 
-  float t_start_;
+  SO3Att att_;
 
   float lat_; /**< Latitude. */
 
-  int hz_; /**< Sampling hz. */
 
-  float kg_; /**< Gravity vector estimation gain. */        
+  float kg_; /**< Gravity vector estimation gain. */
+  float kw_; /**< East vector estimation gain. */
   float ka_; /**< . */
   float kE_;
   float kb_;
@@ -78,10 +72,6 @@ public:
   int start_;
   
   float gamma_;
-  float w_E_n_mag_;
-
-  Eigen::Vector3d wearth_n_; /**< Earth's angular velocity in the NED frame. */
-  Eigen::Matrix3d P_; /**< Projection matrix onto a_n_ vector. */
 
 
 

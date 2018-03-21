@@ -1,13 +1,10 @@
-#include <sstream>
 #include <fstream>
 #include <Eigen/Core>
-#include <Eigen/Dense>
 #include <truenorth/helper_funcs.h>
 #include <truenorth/att_est.h>
 #include <truenorth/gyro_data.h>
 #include <string>
 #include <iostream>
-#include <math.h>
 
 /**
  *
@@ -171,7 +168,7 @@ int main(int argc, char* argv[])
    *   
    ***************************************************/
   
-  AttEst att(params.k, R0*R_align,params.lat,params.hz);
+  AttEst att(params.k, R0*R_align,params.lat);
   GyroData gyro_data(params.hz);
   Eigen::Matrix3d Rni_phins;
   char msg_type[32];
@@ -215,7 +212,7 @@ int main(int argc, char* argv[])
     const Eigen::Matrix3d R_phins = rpy2rot(phins_rpy);
 
 
-    att.step(gyro_data.ang,gyro_data.acc,gyro_data.mag,((float) 1)/(float)params.hz,gyro_data.timestamp);
+    att.step(gyro_data.ang,9.81*gyro_data.acc,gyro_data.mag,((float) 1)/(float)params.hz);
 
     att_euler_ang = rot2rph(att.R_ni*R_align.transpose());
     //att_euler_ang = rot2rph(att.R_ni);
@@ -233,7 +230,7 @@ int main(int argc, char* argv[])
       hours   = ((int) time)/3600;
       minutes = ((int) time - hours*3600)/60;
       char buffer [256];
-      int n = sprintf(buffer,"%02d:%02d:00 OF DATA PROCESSED... kfw: %.12f  kw: %f",hours,minutes,att.kfw_,att.kw_);
+      int n = sprintf(buffer,"%02d:%02d:00 OF DATA PROCESSED...",hours,minutes);
       std::cout<<"\r"<<buffer<<std::flush;
     }
 

@@ -139,13 +139,14 @@ void MEMSBias::step(Eigen::Vector3d ang,Eigen::Vector3d acc, Eigen::Vector3d mag
   Eigen::Matrix3d I;
   I << 1,0,0,0,1,0,0,0,1;
 
-  P = Rni.transpose()*e3.normalized()*e3.normalized().transpose()*Rni;
+  //P = Rni.transpose()*e3.normalized()*e3.normalized().transpose()*Rni;
   
   // Define local level (g_error_) and heading (h_error_) error terms
   //Eigen::Vector3d g_error = kg_*skew((acc_hat-a_b).normalized())*Rni.transpose()*a_n_.normalized();
   //Eigen::Vector3d h_error = P*kn_*skew((mag_hat-m_b).normalized())*Rni.transpose()*(m_n_.normalized());
 
-  Eigen::Vector3d g_error = kg_*skew((acc_hat-a_b).normalized())*Rni.transpose()*(-e3);
+  Eigen::Vector3d g_error = kg_*skew((acc_hat-a_b).normalized())*Rni.transpose()*(a_n_);
+  //Eigen::Vector3d g_error = kg_*skew((acc_hat-a_b).normalized())*Rni.transpose()*(-e3);
   Eigen::Vector3d h_error = kn_*skew(((I-P)*(mag_hat-m_b)).normalized())*Rni.transpose()*e1;
 
   //Eigen::Vector3d g_error = kg_*skew((acc_hat).normalized())*Rni.transpose()*(-e3);

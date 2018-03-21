@@ -17,9 +17,14 @@ samp.E = zeros(3,num);
 T = [0.991,-0.002,-0.005;0,0.996,0.018;0,0,1.014];
 
 % noise
-w_sig = 0.005; %6.32 * 10^(-3)*pi/180;  % measured 1775, units are rad/sec
-a_sig = 0.00065; %0.0037;            % measured 1775, units are g, not m/s^2
-m_sig = 0.001; %0.002; % units are gauss
+% w_sig = 0.005; %6.32 * 10^(-3)*pi/180;  % measured 1775, units are rad/sec
+% a_sig = 0.00065; %0.0037;            % measured 1775, units are g, not m/s^2
+% m_sig = 0.001; %0.002; % units are gauss
+
+
+w_sig = 6.32 * 10^(-3)*pi/180;  % measured 1775, units are rad/sec
+a_sig = 0.0037;            % measured 1775, units are g, not m/s^2
+m_sig = 0.002; % units are gauss
 
 % generate a_n
 r = 6371*1000;
@@ -32,7 +37,7 @@ m_n = [0.205796;-0.040654;0.468785];
 w_E_e = [0;0;1]*15.04*pi/180/3600;
 w_E_n = Ren'*w_E_e;
 
-fileID = fopen('/home/spiels/log/sim_MEMS/true/exp4.KVH','w');
+fileID = fopen('/home/spiels/log/tn/noise/exp5.KVH','w');
 
 for i=1:num
 
@@ -78,14 +83,23 @@ samp.bias = bias;
 
 function w = get_w(t)
 
-w = [cos(t/2)/20;sin(t/5)/15;-cos(t/30)/10]*0;
+%%%% IROS2018
 
-w = [cos(t/50)/25;-sin(t/9)/7*0;cos(t/10)/6]; %exp1
-w = [cos(t/50)/25*0;-sin(t/9)/7*0;cos(t/10)/6]; %exp2
-w = [cos(t/50)/100;-sin(t/9)/7*0;cos(t/10)/6]; %exp3
+% w = [cos(t/2)/20;sin(t/5)/15;-cos(t/30)/10]*0;
+% 
+% w = [cos(t/50)/25;-sin(t/9)/7*0;cos(t/10)/6]; %exp1
+% w = [cos(t/50)/25*0;-sin(t/9)/7*0;cos(t/10)/6]; %exp2
+% w = [cos(t/50)/100;-sin(t/9)/7*0;cos(t/10)/6]; %exp3
+% 
+% w = [cos(t/50)/25;-sin(t/25)/10;cos(t/10)/5]; %exp4 sim2
+% 
+% %w = [cos(t/20)/55;-sin(t/5)/30;cos(t/6)/2]; %exp5 sim1
 
-w = [cos(t/50)/25;-sin(t/25)/10;cos(t/10)/5]; %exp4 sim2
+w = [cos(t/20)/55;-sin(t/5)/30;cos(t/6)/2];
+w = [cos(t/50)/25;-sin(t/25)/10;cos(t/10)/5];
+w = [0;0;cos(t/10)/3];
 
-%w = [cos(t/20)/55;-sin(t/5)/30;cos(t/6)/2]; %exp5 sim1
 
-
+if t>1500
+    %w=[0;0;sin(t/20)/10];
+end
