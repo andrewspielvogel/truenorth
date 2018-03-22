@@ -396,25 +396,6 @@ def main(argv):
     plt.close("all")
 
 
-    plt.figure(14)
-    plt.suptitle('da_b')
-    plt.subplot(311)
-    plt.plot(t,data[:,32])
-    plt.ylabel('x')
-    plt.xlabel('Seconds (s)')
-    plt.grid(True)
-    plt.subplot(312)
-    plt.plot(t,data[:,33])
-    plt.ylabel('y')
-    plt.xlabel('Seconds (s)')
-    plt.grid(True)
-    plt.subplot(313)
-    plt.plot(t,data[:,34])
-    plt.ylabel('z')
-    plt.xlabel('Seconds (s)')
-    plt.grid(True)
-    #pp.savefig(plt.figure(14))
-    plt.close("all")
 
     pp.close()
 

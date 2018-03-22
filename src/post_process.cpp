@@ -212,18 +212,18 @@ int main(int argc, char* argv[])
     const Eigen::Matrix3d R_phins = rpy2rot(phins_rpy);
 
 
-    att.step(gyro_data.ang,9.81*gyro_data.acc,gyro_data.mag,((float) 1)/(float)params.hz);
+    att.step(gyro_data.ang,9.81*gyro_data.acc,((float) 1)/(float)params.hz);
 
-    att_euler_ang = rot2rph(att.R_ni*R_align.transpose());
+    att_euler_ang = rot2rph(att.att.R_ni*R_align.transpose());
     //att_euler_ang = rot2rph(att.R_ni);
 
-    const Eigen::Matrix3d R_tilde = R_phins.transpose()*att.R_ni*R_align.transpose();
+    const Eigen::Matrix3d R_tilde = R_phins.transpose()*att.att.R_ni*R_align.transpose();
     //const Eigen::Matrix3d R_tilde = R_phins.transpose()*att.R_ni;
     const Eigen::Vector3d q_tilde = rot2rph(R_tilde);
 
     if ((cnt % (params.hz/100)) == 0)
     {
-      fprintf(outfile,"ATT_PRO,%f,%f,%f,%f,%f,%f,%f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",gyro_data.timestamp,att_euler_ang(0),att_euler_ang(1),att_euler_ang(2),phins_rpy(0),phins_rpy(1),phins_rpy(2),att.w_b(0),att.w_b(1),att.w_b(2),att.w_E_north(0),att.w_E_north(1),att.w_E_north(2),att.a_b(0),att.a_b(1),att.a_b(2),q_tilde(0),q_tilde(1),q_tilde(2),att.acc_hat(0),att.acc_hat(1),att.acc_hat(2),gyro_data.acc(0),gyro_data.acc(1),gyro_data.acc(2),gyro_data.ang(0),gyro_data.ang(1),gyro_data.ang(2),gyro_data.mag(0),gyro_data.mag(1),gyro_data.mag(2),att.da_b(0),att.da_b(1),att.da_b(2));
+      fprintf(outfile,"ATT_PRO,%f,%f,%f,%f,%f,%f,%f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",gyro_data.timestamp,att_euler_ang(0),att_euler_ang(1),att_euler_ang(2),phins_rpy(0),phins_rpy(1),phins_rpy(2),att.bias.w_b(0),att.bias.w_b(1),att.bias.w_b(2),att.bias.w_E_north(0),att.bias.w_E_north(1),att.bias.w_E_north(2),att.bias.a_b(0),att.bias.a_b(1),att.bias.a_b(2),q_tilde(0),q_tilde(1),q_tilde(2),att.bias.acc_hat(0),att.bias.acc_hat(1),att.bias.acc_hat(2),gyro_data.acc(0),gyro_data.acc(1),gyro_data.acc(2),gyro_data.ang(0),gyro_data.ang(1),gyro_data.ang(2),gyro_data.mag(0),gyro_data.mag(1),gyro_data.mag(2));
     }
     if ((((int)time) % (60) == 0) && ((int)time/60 != minutes)) {
       
