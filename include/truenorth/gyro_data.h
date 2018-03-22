@@ -17,6 +17,7 @@
  * @brief Gyro data class.
  * 
  * Class for storing an IMU data packet.
+ *
  */
 class GyroData
 {

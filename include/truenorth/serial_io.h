@@ -76,10 +76,10 @@ typedef boost::shared_ptr<boost::asio::serial_port> serial_port_ptr; /**< Serial
  */
 class SerialPort
 {
-protected:
+private:
     boost::asio::io_service io_service_; /**< Boost io service. */
     serial_port_ptr port_; /**< Boost serial port class. */
-    boost::mutex mutex_;
+    boost::mutex mutex_; /**< Serial Port mutex. */
 
     char read_buf_raw_[SERIAL_PORT_READ_BUF_SIZE]; /**< Read in buffer. */
     char data_buf_raw_[DATA_BUF_SIZE]; /**< Data packet buffer. */
@@ -89,7 +89,6 @@ protected:
     int data_cnt_; /**< Track number of bytes read in. */
 
     
-private:
     SerialPort(const SerialPort &p);
     SerialPort &operator=(const SerialPort &p);
 
@@ -101,12 +100,10 @@ public:
     wqueue<GyroData> log_queue; /**< Queue for logging IMU data. */
 
     /**
+     *
      * Constructor.
      * @param hz Sampling hz. 
-     * @parblock The elements in order are: Local level estimation gain, heading estimation gain,
-     * linear accleration estimation gain, linear acceleration bias estimation gain, angular 
-     * velocity bias estimation gain, and z bias constant estimation gain.
-     * @endparblock
+     *
      */
     SerialPort(int hz);
 
@@ -118,13 +115,14 @@ public:
      * Open serial port and start attitude estimation.
      * @param com_port_name Serial port to open.
      * @param baud_rate Baud rate of serial port.
+     *
      */
     virtual bool start(const char *com_port_name, int baud_rate=9600);
 
     /**
-     * Close serial port.
      *
      * Close serial port and stop attitude estimation.
+     *
      */
     virtual void stop();
 
@@ -137,14 +135,16 @@ protected:
      * Function looks for data packet start sequence, reads in data packets, and does crc checking.
      * @param err_code Boost system error code.
      * @param bytes_transferred Number of bytes received in asynchronous read.
+     *
      */
     virtual void on_receive_(const boost::system::error_code& ec, size_t bytes_transferred);
 
     /**
-     * Parses IMU data packet.
      *
      * Parses IMU data packet into GyroData struct.
+     *
      * @param data_raw IMU data packet to be parsed.
+     *
      */
     void parse_data_(char *data_raw);
 

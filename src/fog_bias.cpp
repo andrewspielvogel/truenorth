@@ -28,11 +28,10 @@ FOGBias::FOGBias(Eigen::VectorXd k, Eigen::Matrix3d R0, float lat)
   kb_ = k(2);
   kab_= k(3);
   
-  lat_ = lat;
 
-  Eigen::Vector3d g_e(cos(lat_),0,sin(lat_));
+  Eigen::Vector3d g_e(cos(lat),0,sin(lat));
   Eigen::Vector3d w_E(0,0,7.292150/100000.0);
-  Eigen::Vector3d w_E_n = get_R_en(lat_).transpose()*w_E;
+  Eigen::Vector3d w_E_n = get_R_en(lat).transpose()*w_E;
   Eigen::Vector3d a_e = g_e + skew(w_E)*skew(w_E)*g_e*6371.0*1000.0/9.81;
 
   gamma_ = fabs(w_E_n(2))/a_e.norm();
@@ -42,7 +41,7 @@ FOGBias::FOGBias(Eigen::VectorXd k, Eigen::Matrix3d R0, float lat)
 
   w_E_north = R0.transpose().block<3,2>(0,0)*w_E_n.block<2,1>(0,0);
 
-  acc_hat = R0.transpose()*get_R_en(lat_)*a_e;
+  acc_hat = R0.transpose()*get_R_en(lat)*a_e;
   start_ = 0;
 
 
@@ -61,7 +60,7 @@ void FOGBias::step(Eigen::Vector3d ang,Eigen::Vector3d acc,float dt)
   }
 
   // wait until you have a full mag reading to give an initial guess of the heading
-  if (start_<4)
+  if (start_<1)
   {
 
     acc_hat = acc - a_b;

@@ -22,7 +22,8 @@ public:
   /**
    * @brief Constructor.
    *
-   * @param k Estimation gains and rolling mean window size (k(0): kg, k(1): kw, k(2): kf).
+   * @param k Estimation gains and rolling mean window size (k(0): ka, k(1): kE, k(2): kwb, k(3): kab).
+   * @param R0 Initial guess of instrument's attitude.
    * @param lat Latitude.
    */
   FOGBias(Eigen::VectorXd k, Eigen::Matrix3d R0, float lat);
@@ -39,24 +40,22 @@ public:
    */
   void step(Eigen::Vector3d ang,Eigen::Vector3d acc, float dt);
   
-  Eigen::Vector3d acc_hat;
-  Eigen::Vector3d w_E_north;
-  Eigen::Vector3d w_b;
-  Eigen::Vector3d a_b;
+  Eigen::Vector3d acc_hat; /**< Estimated linear acceleration vector. */
+  Eigen::Vector3d w_E_north; /**< Estimated North vector. */
+  Eigen::Vector3d w_b; /**< Estimated angular rate bias. */
+  Eigen::Vector3d a_b; /**< Estimated linear acceleration bias. */
 
 
  private:
 
-  float lat_; /**< Latitude. */
+  float ka_; /**< Linear acceleration gain. */
+  float kE_; /**< North gain. */
+  float kb_; /**< Angular rate bias gain. */
+  float kab_; /**< Linear acceleration bias gain. */
 
-  float ka_; /**< . */
-  float kE_;
-  float kb_;
-  float kab_;
-
-  int start_;
+  int start_; /**< Start estimator after initializing estimated linear acceleration. */
   
-  float gamma_;
+  float gamma_; /**< Magnitude of \f$\frac{\|{}^Nw_{E_d}\|}{\|{}^Na_g\|}\f$. */
 
 
 

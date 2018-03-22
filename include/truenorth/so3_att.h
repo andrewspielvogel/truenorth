@@ -22,10 +22,9 @@ public:
   /**
    * @brief Constructor.
    *
-   * @param k Estimation gains and rolling mean window size (k(0): kg, k(1): kw, k(2): kf).
+   * @param k Estimation gains and rolling mean window size (k(0): kg, k(1): kn).
    * @param R0 Initial NED 2 Instrument Alignment estimation.
    * @param lat Latitude.
-   * @param hz Sampling hz.
    */
   SO3Att(Eigen::VectorXd k,Eigen::Matrix3d R0, float lat);
 
@@ -36,10 +35,9 @@ public:
    * @brief Cycle estimation once.
    *
    * @param ang Angular velocity measurement.
-   * @param acc Linear acceleration measurement.
-   * @param mag Magnetometer measurement.
+   * @param g Gravity vector measurement.
+   * @param north North vector measurement.
    * @param dt Time between last two measurements.
-   * @param t Time.
    */
   void step(Eigen::Vector3d ang,Eigen::Vector3d g, Eigen::Vector3d north, float d);
   
@@ -52,15 +50,12 @@ public:
   Eigen::Vector3d g_error_; /**< Local level error term. */
   Eigen::Vector3d h_error_; /**< Heading error term. */
 
-  float lat_; /**< Latitude. */
-
-
   float kg_; /**< Gravity vector estimation gain. */
   float kn_; /**< North vector estimation gain. */
 
-  Eigen::Matrix3d P_; /**< Projection matrix onto a_n_ vector. */
-  Eigen::Vector3d w_E_n_;
-  Eigen::Vector3d a_n_;
+  Eigen::Matrix3d P_; /**< Projection matrix: \f${}^N_i\hat{R}^T(t){}^N\bar{a}_g{}^N\bar{a}^T_g{}^N_i\hat{R}(t)\f$. */
+  Eigen::Vector3d w_E_n_; /**< \f${}^Nw_E\f$ vector. */
+  Eigen::Vector3d a_n_; /**< \f${}^Na_g\f$ Vector. */
 
 };
 

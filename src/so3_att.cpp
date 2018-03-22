@@ -28,17 +28,15 @@ SO3Att::SO3Att(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat)
   kg_ = k(0);
   kn_ = k(1);
 
-  lat_ = lat;
-
   // initialize usefull vectors
-  Eigen::Vector3d g_e(cos(lat_),0,sin(lat_));
+  Eigen::Vector3d g_e(cos(lat),0,sin(lat));
   Eigen::Vector3d w_E(0,0,7.292150/100000.0);
   Eigen::Vector3d a_e = g_e + skew(w_E)*skew(w_E)*g_e*6371.0*1000.0/9.81;
 
   R_ni = R_align;
   
-  w_E_n_ = get_R_en(lat_).transpose()*w_E;
-  a_n_  = get_R_en(lat_).transpose()*a_e;
+  w_E_n_ = get_R_en(lat).transpose()*w_E;
+  a_n_  = get_R_en(lat).transpose()*a_e;
 
   P_ = R_ni.transpose()*a_n_.normalized()*a_n_.normalized().transpose()*R_ni;
 

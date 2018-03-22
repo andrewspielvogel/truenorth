@@ -24,7 +24,7 @@ public:
   /**
    * @brief Constructor.
    *
-   * @param k Estimation gains and rolling mean window size (k(0): kg, k(1): kw, k(2): kf).
+   * @param k Estimation gains and rolling mean window size (k(0): kg, k(1): kn, k(2): ka, k(3): KE, k(4): kwb, k(5): kab).
    * @param R0 Initial NED 2 Instrument Alignment estimation.
    * @param lat Latitude.
    */
@@ -38,14 +38,13 @@ public:
    *
    * @param ang Angular velocity measurement.
    * @param acc Linear acceleration measurement.
-   * @param mag Magnetometer measurement.
    * @param dt Time between last two measurements.
    */
   void step(Eigen::Vector3d ang,Eigen::Vector3d acc, float dt);
 
   
-  SO3Att att;
-  FOGBias bias;
+  SO3Att att; /**< Attitude estimation object. */
+  FOGBias bias; /**< Bias estimation object. */
   
 
 };
