@@ -40,13 +40,13 @@ void AttEst::step(Eigen::Vector3d ang, Eigen::Vector3d acc, float dt)
 
   
   /**************************************************************
-   * Sensor Bias and North Vector Estimator
+   * Step Sensor Bias and North Vector Estimator
    **************************************************************/
 
   bias.step(ang, acc, dt);
   
   /**************************************************************
-   * Attitude Estimator
+   * Step Attitude Estimator
    **************************************************************/
 
   att.step(ang-bias.w_b, bias.acc_hat-bias.a_b, bias.w_E_north, dt);

@@ -57,7 +57,7 @@ public:
   
   float gamma_; /**< Magnitude of \f$\frac{\|{}^Nw_{E_d}\|}{\|{}^Na_g\|}\f$. */
 
-
+  Eigen::Vector3d w_E_n;
 
 };
 

@@ -53,7 +53,7 @@ public:
 
     params       = load_params(n);
     serial       = new SerialPort(params.hz);
-    att_thread   = new AttConsumerThread(serial->att_queue,params.k.head(6),params.R0*params.R_align,params.lat,params.hz);
+    att_thread   = new AttConsumerThread(serial->att_queue,params.k.head(6),params.R0*params.R_align,params.lat);
 
 
     log_thread   = new LogConsumerThread(serial->log_queue,params.log_location.c_str());
@@ -100,9 +100,9 @@ public:
 	data_msg.kvh.imu.mag.at(i) = serial->data.mag(i);
 
 	data_msg.att.at(i) = 180.0*rot2rph((att_thread->R_ni)*params.R_align.transpose())(i)/M_PI;
-	data_msg.bias.ang.at(i) = att_thread->att.w_b(i);
-	data_msg.bias.acc.at(i) = att_thread->att.a_b(i);
-	data_msg.bias.z.at(i)   = att_thread->att.w_E_north(i);
+	data_msg.bias.ang.at(i) = att_thread->att.bias.w_b(i);
+	data_msg.bias.acc.at(i) = att_thread->att.bias.a_b(i);
+	data_msg.bias.z.at(i)   = att_thread->att.bias.w_E_north(i);
 
       }
     pthread_mutex_unlock(&mutex_att);

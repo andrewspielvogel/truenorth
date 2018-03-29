@@ -195,7 +195,7 @@ def main(argv):
     plt.plot(t,data[:,19]*180.0/math.pi)
     plt.ylabel('z (degrees)')
     plt.xlabel('Seconds (s)')
-    #plt.axis([0,t[-1], -5., 5.])
+    plt.axis([0,t[-1], -5., 5.])
     plt.grid(True)
     pp.savefig(plt.figure(5))
     plt.close("all")

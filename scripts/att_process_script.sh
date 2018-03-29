@@ -60,7 +60,7 @@ LOG=2018_1_15_15_44
 
 DIR=tn/true
 K=[1,0.005,1,0.001,0.00005,0.5]
-K=[1,0.01,1,0.001,0.00001,0.5]
+K=[1,0.0025,1,0.001,0.00005,0.5]
 
 EXP=exp1
 HZ=1000
@@ -77,7 +77,7 @@ LOG=exp2
 #process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
 
 DIR=tn/noise
-EXP=exp9
+EXP=exp11
 
 
 
