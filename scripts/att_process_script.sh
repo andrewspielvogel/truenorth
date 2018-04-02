@@ -88,4 +88,19 @@ LOG=exp4
 #process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
 
 LOG=exp5
+#process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
+
+
+DIR=exp/2018_3_29
+K=[1,0.005,1,0.001,0.00005,0.5]
+K=[0.1,0.005,1,0.0001,0.000001,0.1]
+
+LOG=2018_3_29_13_26
+HZ=5000
+rpy_align=[1.5708,0,-1.5708]
+rpy_Ro=[0,0,0.1]
+
+EXP=exp19
 process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
+
+#exp11 is ok
