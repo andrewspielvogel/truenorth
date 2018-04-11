@@ -97,7 +97,7 @@ def main(argv):
     plt.savefig('att.eps', format='eps', dpi=1000)
     plt.close("all")
 
-    delay = 13;
+    delay = 15;
     #delay = 1;
     plt.figure(2)
     plt.suptitle('Estimated Attitude Error')
@@ -105,13 +105,13 @@ def main(argv):
     plt.plot(t[0:-delay],data[0:-delay,2]*180.0/math.pi-data[(delay-1):-1,5]*180.0/math.pi)
     plt.ylabel('Roll (degrees)')
     plt.xlabel('Seconds (s)')
-    plt.axis([0,t[-1], -5, 5])
+    plt.axis([0,t[-1], -2, 2])
     plt.grid(True)
     plt.subplot(312)
     plt.plot(t[0:-delay],data[0:-delay,3]*180.0/math.pi-data[(delay-1):-1,6]*180.0/math.pi)
     plt.ylabel('Pitch (degrees)')
     plt.xlabel('Seconds (s)')
-    plt.axis([0,t[-1], -5, 5])
+    plt.axis([0,t[-1], -2, 2])
     plt.grid(True)
     plt.subplot(313)
     plt.plot(t[0:-delay],data[0:-delay,4]*180.0/math.pi-data[(delay-1):-1,7]*180.0/math.pi)
@@ -195,7 +195,7 @@ def main(argv):
     plt.plot(t,data[:,19]*180.0/math.pi)
     plt.ylabel('z (degrees)')
     plt.xlabel('Seconds (s)')
-    plt.axis([0,t[-1], -15., 15.])
+    #plt.axis([0,t[-1], -15., 15.])
     plt.grid(True)
     pp.savefig(plt.figure(5))
     plt.close("all")

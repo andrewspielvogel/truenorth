@@ -36,8 +36,9 @@ FOGBias::FOGBias(Eigen::VectorXd k, Eigen::Matrix3d R0, float lat)
 
   gamma_ = fabs(w_E_n(2))/a_e.norm();
 
-  a_b <<-0.01,0,0;
-  w_b <<0.00001,0,0;
+  a_b <<-0.0085,0,0.002;
+  //w_b <<0.0000101,0,0.0000037;
+  w_b <<0,0,0;//0.000009,0,-0.000004;
 
   w_E_north = R0.transpose().block<3,2>(0,0)*w_E_n.block<2,1>(0,0);
 
@@ -79,22 +80,26 @@ void FOGBias::step(Eigen::Vector3d ang,Eigen::Vector3d acc,float dt)
 
 
   Eigen::Matrix3d Kab;
-  Kab<<kab_,0,0,0,0*kab_,0,0,0,10*kab_;
+  Kab<<kab_,0,0,0,kab_,0,0,0,kab_;
 
   Eigen::Matrix3d Kwb;
-  Kwb<<kb_,0,0,0,kb_,0,0,0,5*kb_;
+  Kwb<<kb_,0,0,0,kb_,0,0,0,kb_;
   
   Eigen::Vector3d dacc_hat   = -skew(ang - w_b - w_E_north)*acc_hat + skew(ang)*a_b - ka_*(acc_hat - acc);
-  //Eigen::Vector3d dw_E_north = -skew(ang - gamma_*acc)*w_E_north - kE_*skew(acc)*acc_hat;
-  Eigen::Vector3d dw_E_north = -skew(ang - gamma_*acc)*w_E_north - (Eigen::MatrixXd::Identity(3,3) - w_E_north.normalized()*w_E_north.normalized().transpose())*kE_*skew(acc)*acc_hat;// - w_E_north.normalized()*(w_E_north.norm() - w_E_n(0));
-  //Eigen::Vector3d dw_E_north = -skew(ang - gamma_*acc)*w_E_north - kE_*skew(acc)*acc_hat - w_E_north.normalized()*(w_E_north.norm() - w_E_n(0));
-  Eigen::Vector3d dw_b       = -Kwb*skew(acc)*acc_hat;  
+  //Eigen::Vector3d dw_E_north = -skew(ang - gamma_*acc)*w_E_north - kE_*skew(acc)*(acc_hat-acc);
+  
+  Eigen::Vector3d dw_E_north = -skew(ang - gamma_*acc)*w_E_north - kE_*(Eigen::MatrixXd::Identity(3,3) - w_E_north.normalized()*w_E_north.normalized().transpose())*skew(acc)*acc_hat;
+
+
+  Eigen::Vector3d dw_b       = -Kwb*skew(acc)*(acc_hat-acc);  
   Eigen::Vector3d da_b       = Kab*skew(ang)*(acc_hat-acc);
 
   acc_hat   = acc_hat   + dt*dacc_hat;
   w_E_north = w_E_north + dt*dw_E_north;  
   w_b       = w_b       + dt*dw_b;
   a_b       = a_b       + dt*da_b;
+
+  w_E_north = w_E_north.normalized()*fabs(w_E_n(0));
 
   
 }

@@ -101,6 +101,27 @@ rpy_align=[1.5708,0,-1.5708]
 rpy_Ro=[0,0,0.1]
 
 EXP=exp19
-process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
+#process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
 
 #exp11 is ok
+
+
+DIR=exp/2018_4_2
+K=[1,0.0025,1,0.0025,0.0001,0.5]
+
+
+LOG=2018_4_2_13_3
+HZ=5000
+rpy_align=[1.5708,0,-1.5708]
+rpy_Ro=[0,0,-0.2]
+
+EXP=exp18
+#process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align 
+
+K=[1,0.005,1,0.001,0.000001,0.1]
+K=[0.01,0.001,0.1,0.00005,0.0000025,0.01]
+
+
+EXP=exp123
+process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align 
+#51
