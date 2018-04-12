@@ -38,7 +38,7 @@ FOGBias::FOGBias(Eigen::VectorXd k, Eigen::Matrix3d R0, float lat)
 
   a_b <<-0.0085,0,0.002;
   //w_b <<0.0000101,0,0.0000037;
-  w_b <<0,0,0;//0.000009,0,-0.000004;
+  w_b <<0.000009,0,-0.000004;
 
   w_E_north = R0.transpose().block<3,2>(0,0)*w_E_n.block<2,1>(0,0);
 
