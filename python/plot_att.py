@@ -220,7 +220,7 @@ def main(argv):
     plt.xlabel('Seconds (s)')
     #plt.axis([0,t[-1], -0.2, 0.2])
     plt.grid(True)
-    #pp.savefig(plt.figure(6))
+    pp.savefig(plt.figure(6))
     plt.close("all")
 
     plt.figure(12)
@@ -250,7 +250,7 @@ def main(argv):
     plt.ylabel('MAG')
     #plt.axis([0,t[-1], -0.2, 0.2])
     plt.grid(True)
-    #pp.savefig(plt.figure(12))
+    pp.savefig(plt.figure(12))
     plt.close("all")
 
     plt.figure(7)
@@ -273,7 +273,7 @@ def main(argv):
     plt.xlabel('Seconds (s)')
     #plt.axis([0,t[-1], -0.2, 0.2])
     plt.grid(True)
-    #pp.savefig(plt.figure(7))
+    pp.savefig(plt.figure(7))
     plt.close("all")
 
     plt.figure(8)
@@ -293,7 +293,7 @@ def main(argv):
     plt.ylabel('z (rad/s)')
     plt.xlabel('Seconds (s)')
     plt.grid(True)
-    #pp.savefig(plt.figure(8))
+    pp.savefig(plt.figure(8))
     plt.close("all")
 
     
@@ -314,7 +314,7 @@ def main(argv):
     plt.ylabel('z')
     plt.xlabel('Seconds (s)')
     plt.grid(True)
-    #pp.savefig(plt.figure(9))
+    pp.savefig(plt.figure(9))
     plt.close("all")
 
     plt.figure(10)
