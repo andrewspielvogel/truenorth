@@ -36,7 +36,7 @@ FOGBias::FOGBias(Eigen::VectorXd k, Eigen::Matrix3d R0, float lat)
 
   gamma_ = fabs(w_E_n(2))/a_e.norm();
 
-  a_b <<-0.0085,0,0;
+  a_b <<-0.0095,0,0;
   w_b <<0.000009,0,-0.000002;
   //w_b <<0,0,0;
 

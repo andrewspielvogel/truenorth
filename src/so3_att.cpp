@@ -60,7 +60,9 @@ void SO3Att::step(Eigen::Vector3d ang,Eigen::Vector3d g, Eigen::Vector3d north, 
   /**************************************************************
    * Attitude Estimator
    **************************************************************/
+  //kn_ = kn_ - 0.00005*dt;
 
+  //if (kn_ < 0.00025) { kn_ = 0.00025;}
   
   P_ = R_ni.transpose()*a_n_.normalized()*a_n_.normalized().transpose()*R_ni;
 
