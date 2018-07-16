@@ -2,7 +2,7 @@
 #include <fstream>
 #include <Eigen/Core>
 #include <Eigen/Dense>
-#include <truenorth/helper_funcs.h>
+#include <helper_funcs/helper_funcs.h>
 #include <string>
 #include <iostream>
 

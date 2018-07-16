@@ -12,7 +12,7 @@
 #include <Eigen/Dense>
 #include <unsupported/Eigen/MatrixFunctions>
 #include <truenorth/mems_bias.h>
-#include <truenorth/helper_funcs.h>
+#include <helper_funcs/helper_funcs.h>
 #include <iostream>
 
 

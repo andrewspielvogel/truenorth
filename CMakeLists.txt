@@ -12,6 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   message_generation
   rosbag
+  helper_funcs
 )
 
 ## Generate messages in the 'msg' folder
@@ -42,7 +43,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES truenorth
-  CATKIN_DEPENDS message_runtime roscpp std_msgs rosbag
+  CATKIN_DEPENDS message_runtime roscpp std_msgs rosbag helper_funcs
 #  DEPENDS system_lib
 )
 
@@ -69,7 +70,7 @@ target_link_libraries(truenorth ${catkin_LIBRARIES})
 
 add_executable(gyro_publisher src/gyro_publisher.cpp src/serial_io.cpp src/gyro_data.cpp src/att_est.cpp src/thread.cpp src/so3_att.cpp src/fog_bias.cpp)
 target_link_libraries(gyro_publisher ${catkin_LIBRARIES})
-add_dependencies(gyro_publisher truenorth_generate_messages_cpp)
+add_dependencies(gyro_publisher truenorth_generate_messages_cpp helper_funcs)
 set_target_properties(gyro_publisher PROPERTIES COMPILE_FLAGS "-O3")
 
 #add_executable(data_2_csv src/data_2_csv.cpp)
@@ -78,20 +79,24 @@ set_target_properties(gyro_publisher PROPERTIES COMPILE_FLAGS "-O3")
 
 add_executable(post_process src/post_process.cpp src/att_est.cpp src/bias_est.cpp src/gyro_data.cpp src/so3_att.cpp src/fog_bias.cpp)
 target_link_libraries(post_process ${catkin_LIBRARIES})
+add_dependencies(post_process helper_funcs)
 set_target_properties(post_process PROPERTIES COMPILE_FLAGS "-O3")
 
 
 add_executable(bias_process src/bias_process.cpp src/bias_est.cpp src/gyro_data.cpp)
 target_link_libraries(bias_process ${catkin_LIBRARIES})
+add_dependencies(bias_process helper_funcs)
 set_target_properties(bias_process PROPERTIES COMPILE_FLAGS "-O3")
 
 add_executable(ekf_process src/ekf_process.cpp src/EKF.cpp src/gyro_data.cpp)
 target_link_libraries(ekf_process ${catkin_LIBRARIES})
+add_dependencies(ekf_process helper_funcs)
 #set_target_properties(ekf_process PROPERTIES COMPILE_FLAGS "-O3")
 
 
 add_executable(mems_process src/mems_process.cpp src/mems_bias.cpp src/gyro_data.cpp)
 target_link_libraries(mems_process ${catkin_LIBRARIES})
+add_dependencies(mems_process helper_funcs)
 set_target_properties(mems_process PROPERTIES COMPILE_FLAGS "-O3")
 
 add_executable(convert_ms_log src/convert_ms_log.cpp)

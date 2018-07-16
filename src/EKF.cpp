@@ -10,7 +10,7 @@
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 #include <Eigen/Dense>
-#include <truenorth/helper_funcs.h>
+#include <helper_funcs/helper_funcs.h>
 #include <truenorth/EKF.h>
 
 

@@ -8,7 +8,7 @@
 
 #include <math.h>
 #include <Eigen/Core>
-#include <truenorth/helper_funcs.h>
+#include <helper_funcs/helper_funcs.h>
 #include <truenorth/fog_bias.h>
 
 

@@ -2,7 +2,7 @@
 #include <fstream>
 #include <Eigen/Core>
 #include <Eigen/Dense>
-#include <truenorth/helper_funcs.h>
+#include <helper_funcs/helper_funcs.h>
 #include <truenorth/EKF.h>
 #include <truenorth/gyro_data.h>
 #include <string>

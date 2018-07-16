@@ -1,6 +1,6 @@
 #include <fstream>
 #include <Eigen/Core>
-#include <truenorth/helper_funcs.h>
+#include <helper_funcs/helper_funcs.h>
 #include <truenorth/att_est.h>
 #include <truenorth/gyro_data.h>
 #include <string>

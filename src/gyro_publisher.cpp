@@ -10,7 +10,7 @@
 #include <truenorth/serial_io.h>
 #include <truenorth/gyro_sensor_data.h>
 #include <phins/phins_msg.h>
-#include <truenorth/helper_funcs.h>
+#include <helper_funcs/helper_funcs.h>
 #include <Eigen/Core>
 #include <string>
 #include <math.h>
