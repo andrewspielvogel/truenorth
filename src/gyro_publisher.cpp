@@ -51,8 +51,7 @@ public:
 
     params       = load_params(n);
     serial       = new SerialPort(params.hz);
-    att_thread   = new AttConsumerThread(serial->att_queue,params.k.head(6),params.R0*params.R_align,params.lat);
-
+    att_thread   = new AttConsumerThread(serial->att_queue,params);
 
     log_thread   = new LogConsumerThread(serial->log_queue);
     chatter_     = n.advertise<truenorth::gyro_sensor_data>("gyro_data",1000);

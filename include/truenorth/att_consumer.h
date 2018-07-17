@@ -16,6 +16,7 @@
 #include <ros/ros.h>
 #include <Eigen/Core>
 #include "bias_est.h"
+#include "parse_params.h"
 
 /**
  * @brief Class for consumer thread doing attitude estimation.
@@ -25,6 +26,7 @@ class AttConsumerThread : public Thread
 
  private:
   wqueue<GyroData>& m_queue_; /**< Queue.*/
+  estimator_params params_;
 
  
  public:
@@ -42,9 +44,10 @@ class AttConsumerThread : public Thread
    * @param hz Sampling rate.
    * 
    */
- AttConsumerThread(wqueue<GyroData>& queue, Eigen::VectorXd k, Eigen::Matrix3d R_align, float lat) : m_queue_(queue), att(k,R_align,lat)
+ AttConsumerThread(wqueue<GyroData>& queue, estimator_params params) : m_queue_(queue), att(params.k.head(6),params.R0*params.R_align,params.lat)
   {
-  R_ni = R_align;
+  R_ni = params.R0*params.R_align;
+  params_ = params;
   } 
 
 

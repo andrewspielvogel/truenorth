@@ -1,9 +1,11 @@
 <launch>
 
-	<node pkg="phins" type="phins_publisher" name="phins" />
+	<node pkg="phins" type="phins_publisher" name="phins" >
 
 	      <param name="port" value="23454" type="int" />
 	      <param name="rate" value="10" type="int" />
+
+	</node>
 
         <node pkg="truenorth" type="gyro_publisher" name="truenorth" output="screen">
 
