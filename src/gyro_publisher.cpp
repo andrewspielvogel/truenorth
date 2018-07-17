@@ -9,7 +9,6 @@
 #include <ros/ros.h>
 #include <truenorth/serial_io.h>
 #include <truenorth/gyro_sensor_data.h>
-#include <phins/phins_msg.h>
 #include <helper_funcs/helper_funcs.h>
 #include <Eigen/Core>
 #include <string>
@@ -33,7 +32,6 @@ class AttNode
 
 private:
   ros::Publisher chatter_; /**< Node publisher. */
-  ros::Subscriber sub_; /**< Node subscriber to PHINS topic. */
   
 public:
   SerialPort* serial; /**< Serial port object for reading IMU data. */
@@ -56,11 +54,8 @@ public:
     att_thread   = new AttConsumerThread(serial->att_queue,params.k.head(6),params.R0*params.R_align,params.lat);
 
 
-    log_thread   = new LogConsumerThread(serial->log_queue,params.log_location.c_str());
+    log_thread   = new LogConsumerThread(serial->log_queue);
     chatter_     = n.advertise<truenorth::gyro_sensor_data>("gyro_data",1000);
-
-    // init phins sub
-    sub_ = n.subscribe("phins_data",1,&LogConsumerThread::phins_callback, log_thread);
 
   }
 
