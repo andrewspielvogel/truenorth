@@ -326,7 +326,7 @@ void SerialPort::on_receive_(const boost::system::error_code& ec, size_t bytes_t
 	for (int j = 1; j < DATA_BUF_SIZE; ++j)
 	  {
 
-	    sprintf(buffer,"%02X",((unsigned char *) data_buf_raw_)[j]);
+	    sprintf(buffer,"%s%02X",buffer,((unsigned char *) data_buf_raw_)[j]);
 
 	  }
 
