@@ -19,6 +19,7 @@
 #include <Eigen/Geometry>
 #include <stdint.h>
 #include <pthread.h>
+#include <helper_funcs/log.h>
 
 static pthread_mutex_t mutex_data;
 
@@ -317,6 +318,20 @@ void SerialPort::on_receive_(const boost::system::error_code& ec, size_t bytes_t
 	std::bitset<32> crc_sent(crc_1.to_string() + crc_2.to_string() + crc_3.to_string() + crc_4.to_string());
 	unsigned int crc_sent_sum = (unsigned int) crc_sent.to_ulong();
 
+	
+	char buffer[512];
+
+	sprintf(buffer,"%02X",data_buf_raw_[0]);
+
+	for (int j = 1; j < DATA_BUF_SIZE; ++j)
+	  {
+
+	    sprintf(buffer,"%02X",data_buf_raw_[j]);
+
+	  }
+
+	log_this_now_dsl_format(LOG_FID_KVH_BINARY_FORMAT,(char *) LOG_FID_KVH_BINARY_SUFFIX,buffer);
+	
 	// check that calculated and sent checksums are the same     
 	if (crc_sent_sum == crc_calc_sum) 
 	{	
@@ -329,6 +344,7 @@ void SerialPort::on_receive_(const boost::system::error_code& ec, size_t bytes_t
 	{
 	  ROS_WARN("corrupted package");
 	}
+	
       }
     }
     else 
