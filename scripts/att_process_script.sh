@@ -4,20 +4,21 @@ process_att(){
 
     TRUENORTH="$(rospack find truenorth)"
 
-    mkdir -p $3/$4/configs
-    mkdir -p $3/$4/processed
-    mkdir -p $3/$4/pdfs
+    mkdir -p $3/kvh/$4/configs
+    mkdir -p $3/kvh/$4/processed
+    mkdir -p $3/kvh/$4/pdfs
     
-    KVH=$3/$4.KVH
-    CSV=$3/$4/processed/$1.csv
-    CONFIG=$3/$4/configs/$1.m
-    PDF=$3/$4/pdfs/$1.pdf
+    KVH=$3/kvh/$4.KVH
+    CSV=$3/kvh/$4/processed/$1.csv
+    CONFIG=$3/kvh/$4/configs/$1.m
+    PDF=$3/kvh/$4/pdfs/$1.pdf
+    PHINS=$3/phins/$4.INS
     
     python $TRUENORTH/python/gen_config_file.py -i $KVH -o $CSV -c $CONFIG -k $2 -z $5 -R $6 -a $7
 
     rosrun truenorth post_process $CONFIG
 
-    python $TRUENORTH/python/plot_att.py -i $CSV -o $PDF -e $4 #$1
+    python $TRUENORTH/python/plot_att.py -i $CSV -o $PDF -e $4 -p $PHINS
 
 }
 
@@ -30,8 +31,8 @@ K=[0.1,0.1,0.1,0.0001,0.0000025,0.05]
 
 EXP=exp1
 
-DIR=/log/kvh
-LOG=2018_07_18_13_26
+DIR=/log
+LOG=2018_07_18_18_11
 HZ=5000
 rpy_align=[1.5708,0,-1.5708]
 rpy_Ro=[0,0,1.57]
