@@ -14,6 +14,7 @@
 #include <ros/ros.h>
 #include <Eigen/Core>
 #include <helper_funcs/log.h>
+#include <helper_funcs/time_util.h>
 
 static pthread_mutex_t mutex_phins; 
 
