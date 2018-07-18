@@ -1,6 +1,6 @@
 Rosnode for true-north seeking gyrocompass. Tested on Ubuntu 16.04
 
-##Installation:
+## Installation:
 
 - Install ROS. Instructions [here](http://wiki.ros.org/kinetic/Installation).
 - Setup ROS workspace. Instructions [here](http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment).
@@ -24,7 +24,7 @@ sudo mkdir /var/log/KVH
 sudo chmod a+rwx /var/log/KVH
 ```
 
-##Launch File Params
+## Launch File Params
 
 rate : Rostopic broadcast rate - Rate (hz) of publishing on gyro_data topic. Default is 10 hz.
 
