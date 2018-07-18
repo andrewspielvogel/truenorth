@@ -48,6 +48,7 @@ public:
 
  private:
 
+  float cnt_;
   float ka_; /**< Linear acceleration gain. */
   float kE_; /**< North gain. */
   float kb_; /**< Angular rate bias gain. */

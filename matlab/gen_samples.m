@@ -36,8 +36,8 @@ m_n = [0.205796;-0.040654;0.468785];
 
 w_E_e = [0;0;1]*15.04*pi/180/3600;
 w_E_n = Ren'*w_E_e;
-
-fileID = fopen('/home/spiels/log/tn/noise/exp5.KVH','w');
+w_E_n
+fileID = fopen('/home/spiels/log/tn/noise/exp2.KVH','w');
 
 for i=1:num
 
@@ -51,7 +51,7 @@ for i=1:num
     end
 
     ang(:,i) = w_veh + Rni{i}'*w_E_n + bias.ang + w_sig*randn(3,1);
-    acc(:,i) = Rni{i}'*a_n + bias.acc + a_sig*randn(3,1);
+    acc(:,i) = Rni{i}'*a_n + bias.acc + a_sig*randn(3,1);%+skew(w_veh)*[0.1;0;0];
     samp.acc_nv(:,i) = acc(:,i);
     samp.E(:,i) = Rni{i}'*[0;1;0];
     samp.D(:,i) = Rni{i}'*a_n;
@@ -97,7 +97,7 @@ function w = get_w(t)
 
 w = [cos(t/20)/55;-sin(t/5)/30;cos(t/6)/2];
 w = [cos(t/50)/25;-sin(t/25)/10;cos(t/10)/5];
-w = [0;0;cos(t/10)/3];
+w = [0;0;cos(t/120)/30];
 
 
 if t>1500
