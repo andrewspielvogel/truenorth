@@ -2,27 +2,10 @@
 #include <Eigen/Core>
 #include <helper_funcs/helper_funcs.h>
 #include <truenorth/att_est.h>
-#include <truenorth/gyro_data.h>
+#include <helper_funcs/gyro_data.h>
 #include <string>
 #include <iostream>
 
-/**
- *
- * @brief Struct for storing parameters for attitude post processing.
- * 
- */
-struct config_params {
-  
-  int hz;
-  float lat;
-  std::string o_file;
-  std::string i_file;
-  std::string last_mod;
-  Eigen::Vector3d rpy_align;
-  Eigen::Vector3d rpy_Ro;
-  Eigen::VectorXd k;
-  
-};
 
 config_params load_params(char* config_file)
 {
@@ -81,14 +64,17 @@ config_params load_params(char* config_file)
     else if((std::string(field))=="rpy_align")
     {
 
-      sscanf(data,"[%lf,%lf,%lf]",&params.rpy_align(0),&params.rpy_align(1),&params.rpy_align(2));
+      Eigen::Vector3d rpy_align;
+      sscanf(data,"[%lf,%lf,%lf]",&rpy_align(0),&rpy_align(1),&rpy_align(2));
+      params.R_align = rpy2rot(rpy_align);
 
     }
     else if((std::string(field))=="rpy_Ro")
     {
 
-      sscanf(data,"[%lf,%lf,%lf]",&params.rpy_Ro(0),&params.rpy_Ro(1),&params.rpy_Ro(2));
-
+      Eigen::Vector3d rpy_r0;
+      sscanf(data,"[%lf,%lf,%lf]",&rpy_r0(0),&rpy_r0(1),&rpy_r0(2));
+      params.R0 = rpy2rot(rpy_r0);
     }
     else if((std::string(field))=="k")
     {
@@ -125,12 +111,10 @@ void print_loaded_params(config_params params)
   printf("      lat: %.10f (rad)\n",params.lat);
   printf("   o_file: %s\n",params.o_file.c_str());
   printf("   i_file: %s\n",params.i_file.c_str());
-  printf("rpy_align: [%lf,%lf,%lf] (rad)\n",
-	 params.rpy_align(0),params.rpy_align(1),params.rpy_align(2));
-  printf("   rpy_Ro: [%lf,%lf,%lf] (rad)\n",
-	 params.rpy_Ro(0),params.rpy_Ro(1),params.rpy_Ro(2));
   printf("        k: [%f,%f,%lf,%.10f,%.10f,%lf]\n",
 	 params.k(0),params.k(1),params.k(2),params.k(3),params.k(4),params.k(5));
+  std::cout<<"R0 = \n"<< params.R0 <<"\n";
+  std::cout<<"R_align = \n"<< params.R_align <<"\n";
 
 }
 
@@ -157,9 +141,6 @@ int main(int argc, char* argv[])
 
   const config_params params = load_params(argv[1]);
   print_loaded_params(params);
-   
-  const Eigen::Matrix3d R_align = rpy2rot(params.rpy_align);
-  const Eigen::Matrix3d R0 = rpy2rot(params.rpy_Ro);
 
 
   /***************************************************
@@ -168,7 +149,7 @@ int main(int argc, char* argv[])
    *   
    ***************************************************/
   
-  AttEst att(params.k, R0*R_align,params.lat);
+  AttEst att(params.k, params.R0*params.R_align,params.lat);
   GyroData gyro_data(params.hz);
 
   printf("***********************************\n");
@@ -188,8 +169,10 @@ int main(int argc, char* argv[])
 
   int cnt = 1;
   
-
-  fprintf(outfile,"PARAMS,%s,%d,%.10f,%s,%s,%f,%f,%f,%f,%f,%f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f\n",params.last_mod.c_str(),params.hz,params.lat,params.o_file.c_str(),params.i_file.c_str(),params.rpy_align(0),params.rpy_align(1),params.rpy_align(2),params.rpy_Ro(0),params.rpy_Ro(1),params.rpy_Ro(2),params.k(0),params.k(1),params.k(2),params.k(3),params.k(4),params.k(5));
+  Eigen::Vector3d rpy_align = rot2rph(params.R_align);
+  Eigen::Vector3d rpy_Ro    = rot2rph(params.R0);
+  
+  fprintf(outfile,"PARAMS,%s,%d,%.10f,%s,%s,%f,%f,%f,%f,%f,%f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f\n",params.last_mod.c_str(),params.hz,params.lat,params.o_file.c_str(),params.i_file.c_str(),rpy_align(0),rpy_align(1),rpy_align(2),rpy_Ro(0),rpy_Ro(1),rpy_Ro(2),params.k(0),params.k(1),params.k(2),params.k(3),params.k(4),params.k(5));
 
   while (std::getline(infile, line))
   {
@@ -221,7 +204,7 @@ int main(int argc, char* argv[])
 
     att.step(gyro_data.ang,9.81*gyro_data.acc,((float) 1)/(float)params.hz);
 
-    att_euler_ang = rot2rph(att.att.R_ni*R_align.transpose());
+    att_euler_ang = rot2rph(att.att.R_ni*params.R_align.transpose());
     //att_euler_ang = rot2rph(att.R_ni);
 
 

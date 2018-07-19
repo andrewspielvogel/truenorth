@@ -34,8 +34,8 @@ EXP=exp1
 DIR=/log
 LOG=2018_07_18_18_11
 HZ=5000
-rpy_align=[1.5708,0,-1.5708]
-rpy_Ro=[0,0,1.57]
+rpy_align=[0,0,0]
+rpy_Ro=[0,0,0]
 
 process_att $EXP $K $DIR $LOG $HZ $rpy_Ro $rpy_align
 

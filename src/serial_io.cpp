@@ -10,7 +10,7 @@
  */
 
 #include <truenorth/serial_io.h>
-#include <truenorth/gyro_data.h>
+#include <helper_funcs/gyro_data.h>
 #include "ros/ros.h"
 #include <boost/crc.hpp>
 #include <boost/thread.hpp>

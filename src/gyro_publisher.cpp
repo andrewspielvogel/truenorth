@@ -14,7 +14,7 @@
 #include <string>
 #include <math.h>
 #include <truenorth/wqueue.h>
-#include <truenorth/gyro_data.h>
+#include <helper_funcs/gyro_data.h>
 #include <truenorth/att_consumer.h>
 #include <truenorth/log_consumer.h>
 #include <truenorth/parse_params.h>

@@ -17,7 +17,7 @@
 #include <boost/thread.hpp>
 #include <boost/asio/read.hpp>
 #include <Eigen/Core>
-#include <truenorth/gyro_data.h>
+#include <helper_funcs/gyro_data.h>
 #include <truenorth/wqueue.h>
 #include <truenorth/thread.h>
 #include <string>

@@ -63,12 +63,12 @@ include_directories( include
 
 
 ## Declare a cpp library
-add_library(truenorth src/serial_io.cpp src/gyro_data.cpp src/att_est.cpp src/bias_est.cpp)
+add_library(truenorth src/serial_io.cpp src/att_est.cpp src/bias_est.cpp)
 target_link_libraries(truenorth ${catkin_LIBRARIES})
 
 
 
-add_executable(gyro_publisher src/gyro_publisher.cpp src/serial_io.cpp src/gyro_data.cpp src/att_est.cpp src/thread.cpp src/so3_att.cpp src/fog_bias.cpp)
+add_executable(gyro_publisher src/gyro_publisher.cpp src/serial_io.cpp src/att_est.cpp src/thread.cpp src/so3_att.cpp src/fog_bias.cpp)
 target_link_libraries(gyro_publisher ${catkin_LIBRARIES})
 add_dependencies(gyro_publisher truenorth_generate_messages_cpp helper_funcs)
 set_target_properties(gyro_publisher PROPERTIES COMPILE_FLAGS "-O3")
@@ -77,20 +77,20 @@ set_target_properties(gyro_publisher PROPERTIES COMPILE_FLAGS "-O3")
 #target_link_libraries(data_2_csv ${catkin_LIBRARIES})
 #add_dependencies(data_2_csv truenorth_generate_messages_cpp)
 
-add_executable(post_process src/post_process.cpp src/att_est.cpp src/bias_est.cpp src/gyro_data.cpp src/so3_att.cpp src/fog_bias.cpp)
+add_executable(post_process src/post_process.cpp src/att_est.cpp src/bias_est.cpp src/so3_att.cpp src/fog_bias.cpp)
 target_link_libraries(post_process ${catkin_LIBRARIES})
 add_dependencies(post_process helper_funcs)
 set_target_properties(post_process PROPERTIES COMPILE_FLAGS "-O3")
 
 
-add_executable(bias_process src/bias_process.cpp src/bias_est.cpp src/gyro_data.cpp)
-target_link_libraries(bias_process ${catkin_LIBRARIES})
-add_dependencies(bias_process helper_funcs)
-set_target_properties(bias_process PROPERTIES COMPILE_FLAGS "-O3")
+#add_executable(bias_process src/bias_process.cpp src/bias_est.cpp src/gyro_data.cpp)
+#target_link_libraries(bias_process ${catkin_LIBRARIES})
+#add_dependencies(bias_process helper_funcs)
+#set_target_properties(bias_process PROPERTIES COMPILE_FLAGS "-O3")
 
-add_executable(ekf_process src/ekf_process.cpp src/EKF.cpp src/gyro_data.cpp)
-target_link_libraries(ekf_process ${catkin_LIBRARIES})
-add_dependencies(ekf_process helper_funcs)
+#add_executable(ekf_process src/ekf_process.cpp src/EKF.cpp src/gyro_data.cpp)
+#target_link_libraries(ekf_process ${catkin_LIBRARIES})
+#add_dependencies(ekf_process helper_funcs)
 #set_target_properties(ekf_process PROPERTIES COMPILE_FLAGS "-O3")
 
 
@@ -99,6 +99,6 @@ add_dependencies(ekf_process helper_funcs)
 #add_dependencies(mems_process helper_funcs)
 #set_target_properties(mems_process PROPERTIES COMPILE_FLAGS "-O3")
 
-add_executable(convert_ms_log src/convert_ms_log.cpp)
-target_link_libraries(convert_ms_log ${catkin_LIBRARIES})
-set_target_properties(convert_ms_log PROPERTIES COMPILE_FLAGS "-O3")
+#add_executable(convert_ms_log src/convert_ms_log.cpp)
+#target_link_libraries(convert_ms_log ${catkin_LIBRARIES})
+#set_target_properties(convert_ms_log PROPERTIES COMPILE_FLAGS "-O3")
