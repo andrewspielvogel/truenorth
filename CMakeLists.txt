@@ -94,10 +94,10 @@ add_dependencies(ekf_process helper_funcs)
 #set_target_properties(ekf_process PROPERTIES COMPILE_FLAGS "-O3")
 
 
-add_executable(mems_process src/mems_process.cpp src/mems_bias.cpp src/gyro_data.cpp)
-target_link_libraries(mems_process ${catkin_LIBRARIES})
-add_dependencies(mems_process helper_funcs)
-set_target_properties(mems_process PROPERTIES COMPILE_FLAGS "-O3")
+#add_executable(mems_process src/mems_process.cpp src/mems_bias.cpp src/gyro_data.cpp)
+#target_link_libraries(mems_process ${catkin_LIBRARIES})
+#add_dependencies(mems_process helper_funcs)
+#set_target_properties(mems_process PROPERTIES COMPILE_FLAGS "-O3")
 
 add_executable(convert_ms_log src/convert_ms_log.cpp)
 target_link_libraries(convert_ms_log ${catkin_LIBRARIES})
