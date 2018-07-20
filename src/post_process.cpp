@@ -208,7 +208,7 @@ int main(int argc, char* argv[])
     //att_euler_ang = rot2rph(att.R_ni);
 
 
-    if ((cnt % (params.hz/10)) == 0)
+    if (1)//(cnt % (params.hz/10)) == 0)
     {
       fprintf(outfile,"ATT_PRO,%d,%02d,%02d,%02d,%02d,%02f,%f,%f,%f,%f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%d,%d,%d,%d,%d,%d,%d\n",year,month,day,hour,minute,second,gyro_data.timestamp,att_euler_ang(0),att_euler_ang(1),att_euler_ang(2),att.bias.w_b(0),att.bias.w_b(1),att.bias.w_b(2),att.bias.w_E_north(0),att.bias.w_E_north(1),att.bias.w_E_north(2),att.bias.a_b(0),att.bias.a_b(1),att.bias.a_b(2),att.bias.acc_hat(0),att.bias.acc_hat(1),att.bias.acc_hat(2),gyro_data.acc(0),gyro_data.acc(1),gyro_data.acc(2),gyro_data.ang(0),gyro_data.ang(1),gyro_data.ang(2),gyro_data.mag(0),gyro_data.mag(1),gyro_data.mag(2),gyro_data.temp,gyro_data.seq_num,status(0),status(1),status(2),status(3),status(4),status(5));
     }
