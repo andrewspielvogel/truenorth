@@ -15,7 +15,6 @@
 #include "thread.h"
 #include <ros/ros.h>
 #include <Eigen/Core>
-#include "bias_est.h"
 #include "parse_params.h"
 
 /**

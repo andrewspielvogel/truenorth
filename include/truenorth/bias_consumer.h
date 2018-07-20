@@ -105,19 +105,6 @@ class BiasConsumerThread : public Thread
       	pthread_mutex_unlock(&mutex_bias);
 
       }
-
-
-      
-
-      /* pthread_mutex_lock(&mutex_att); */
-      /* Rni = att_thread_->R_ni; */
-      /* pthread_mutex_unlock(&mutex_att); */
-      
-      /* pthread_mutex_lock(&mutex_bias); */
-
-      /* bias.step(Rni,item.ang,item.acc,item.mag,item.diff); */
- 
-      /* pthread_mutex_unlock(&mutex_bias); */
       
     }
     return NULL;
