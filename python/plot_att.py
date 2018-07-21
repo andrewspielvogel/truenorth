@@ -45,7 +45,7 @@ def plot_comp(plt,t,data,title,units,step):
 
 def main(argv):
 
-    plot_samp_skip = 100
+    plot_samp_skip = 10
 
     o_file = ''
     i_file = ''
@@ -119,10 +119,10 @@ def main(argv):
                  "\n           KVH File: " + str(params.as_matrix()[0][5]) +
                  "\nAlignment(rpy): " + str(params.as_matrix()[0][6:9]) +
                  "\n            Ro(rpy): " + str(params.as_matrix()[0][9:12]) +
-                 "\nk_acc: [" + str(params.as_matrix()[0][12:15]) +
-                 "\nk_ang_bias: [" + str(params.as_matrix()[0][15:18]) +
-                 "\nk_acc_bias: [" + str(params.as_matrix()[0][18:21]) +
-                 "\nk_E_n: [" + str(params.as_matrix()[0][21:24]) + "\n")
+                 "\nk_acc: " + str(params.as_matrix()[0][12:15]) +
+                 "\nk_ang_bias: " + str(params.as_matrix()[0][15:18]) +
+                 "\nk_acc_bias: " + str(params.as_matrix()[0][18:21]) +
+                 "\nk_E_n: " + str(params.as_matrix()[0][21:24]) + "\n")
         pp.savefig(plt.figure(0))
         plt.close("all")
 
