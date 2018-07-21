@@ -17,16 +17,18 @@
  *
  */
 
-AttEst::AttEst(Eigen::VectorXd k,Eigen::Matrix3d R_align, float lat) : bias(k.tail(4),R_align,lat), att(k.head(2),R_align,lat)
+AttEst::AttEst(config_params params) : bias(params), att(params)
 {
   
-  printf("USING GAINS:\n");
-  printf("kg: %f\n",k(0));
-  printf("kn: %f\n",k(1));
-  printf("ka: %f\n",k(2));
-  printf("kE: %.10f\n",k(3));
-  printf("kb: %.10f\n",k(4));
-  printf("kab: %f\n",k(5));
+  printf("*************************\nATTITUDE ESTIMATOR USING GAINS:\n*************************\n");
+  printf("        r0: [%f,%f,%f] (rpy)\n",rot2rph(params.R0)(0),rot2rph(params.R0)(1),rot2rph(params.R0)(2));
+  printf("   r_align: [%f,%f,%f] (rpy)\n",rot2rph(params.R_align)(0),rot2rph(params.R_align)(1),rot2rph(params.R_align)(2));
+  printf("     k_acc: [%f,%f,%f] (diag)\n",params.K_acc(0,0),params.K_acc(1,1),params.K_acc(2,2));
+  printf("k_ang_bias: [%f,%f,%f] (diag)\n",params.K_ang_bias(0,0),params.K_ang_bias(1,1),params.K_ang_bias(2,2));
+  printf("k_acc_bias: [%f,%f,%f] (diag)\n",params.K_acc_bias(0,0),params.K_acc_bias(1,1),params.K_acc_bias(2,2));
+  printf("     k_E_n: [%f,%f,%f] (diag)\n",params.K_E_n(0,0),params.K_E_n(1,1),params.K_E_n(2,2));
+  printf("       k_g: [%f,%f,%f] (diag)\n",params.K_g(0,0),params.K_g(1,1),params.K_g(2,2));
+  printf("   k_north: [%f,%f,%f] (diag)\n",params.K_north(0,0),params.K_north(1,1),params.K_north(2,2));
   
 }
 

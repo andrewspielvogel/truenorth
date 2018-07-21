@@ -15,7 +15,7 @@
 #include "thread.h"
 #include <ros/ros.h>
 #include <Eigen/Core>
-#include "parse_params.h"
+#include <helper_funcs/helper_funcs.h>
 
 /**
  * @brief Class for consumer thread doing attitude estimation.
@@ -25,7 +25,6 @@ class AttConsumerThread : public Thread
 
  private:
   wqueue<GyroData>& m_queue_; /**< Queue.*/
-  estimator_params params_;
 
  
  public:
@@ -43,10 +42,9 @@ class AttConsumerThread : public Thread
    * @param hz Sampling rate.
    * 
    */
- AttConsumerThread(wqueue<GyroData>& queue, estimator_params params) : m_queue_(queue), att(params.k.head(6),params.R0*params.R_align,params.lat)
+ AttConsumerThread(wqueue<GyroData>& queue, config_params params) : m_queue_(queue), att(params)
   {
   R_ni = params.R0*params.R_align;
-  params_ = params;
   } 
 
 

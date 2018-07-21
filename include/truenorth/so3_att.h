@@ -10,6 +10,7 @@
 #define SO3_ATT_H
 
 #include <Eigen/Core>
+#include <helper_funcs/helper_funcs.h>
 
 
 /**
@@ -26,7 +27,7 @@ public:
    * @param R0 Initial NED 2 Instrument Alignment estimation.
    * @param lat Latitude.
    */
-  SO3Att(Eigen::VectorXd k,Eigen::Matrix3d R0, float lat);
+  SO3Att(config_params params);
 
   
   virtual ~SO3Att(void); /**< Destructor. */
@@ -42,16 +43,13 @@ public:
   void step(Eigen::Vector3d ang,Eigen::Vector3d g, Eigen::Vector3d north, float d);
   
   Eigen::Matrix3d R_ni; /**< Estimation of NED to instrument rotation. */
- 
+  config_params params;
 
 
  private:
   
   Eigen::Vector3d g_error_; /**< Local level error term. */
   Eigen::Vector3d h_error_; /**< Heading error term. */
-
-  float kg_; /**< Gravity vector estimation gain. */
-  float kn_; /**< North vector estimation gain. */
 
   Eigen::Matrix3d P_; /**< Projection matrix: \f${}^N_i\hat{R}^T(t){}^N\bar{a}_g{}^N\bar{a}^T_g{}^N_i\hat{R}(t)\f$. */
   Eigen::Vector3d w_E_n_; /**< \f${}^Nw_E\f$ vector. */

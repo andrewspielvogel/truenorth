@@ -26,7 +26,7 @@ public:
    * @param R0 Initial guess of instrument's attitude.
    * @param lat Latitude.
    */
-  FOGBias(Eigen::VectorXd k, Eigen::Matrix3d R0, float lat);
+  FOGBias(config_params params);
 
   
   virtual ~FOGBias(void); /**< Destructor. */
@@ -44,15 +44,12 @@ public:
   Eigen::Vector3d w_E_north; /**< Estimated North vector. */
   Eigen::Vector3d w_b; /**< Estimated angular rate bias. */
   Eigen::Vector3d a_b; /**< Estimated linear acceleration bias. */
+  config_params params;
 
 
  private:
 
   float cnt_;
-  float ka_; /**< Linear acceleration gain. */
-  float kE_; /**< North gain. */
-  float kb_; /**< Angular rate bias gain. */
-  float kab_; /**< Linear acceleration bias gain. */
 
   int start_; /**< Start estimator after initializing estimated linear acceleration. */
   

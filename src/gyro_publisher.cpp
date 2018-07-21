@@ -17,7 +17,6 @@
 #include <helper_funcs/gyro_data.h>
 #include <truenorth/att_consumer.h>
 #include <truenorth/log_consumer.h>
-#include <truenorth/parse_params.h>
 #include <truenorth/thread.h>
 #include <boost/bind.hpp>
 
@@ -37,7 +36,7 @@ public:
   SerialPort* serial; /**< Serial port object for reading IMU data. */
   AttConsumerThread* att_thread; /**< Attitude estimation thread. */
   LogConsumerThread* log_thread; /**< Logging thread. */
-  estimator_params params; /**< Node parameters. */
+  config_params params; /**< Node parameters. */
 
 
   /**
@@ -49,7 +48,65 @@ public:
    */
   AttNode(ros::NodeHandle n){
 
-    params       = load_params(n);
+    ROS_INFO("Loading estimator params.");
+
+    std::string k_g;
+    std::string k_north;
+    std::string k_acc;
+    std::string k_acc_bias;
+    std::string k_ang_bias;
+    std::string k_E_n;
+    std::string ang_bias;
+    std::string acc_bias;
+    
+    std::string lat;
+    
+    std::string r0;
+    std::string r_align;
+
+    Eigen::Vector3d rpy;
+    Eigen::Vector3d vec;
+
+    n.param<std::string>("k_g",k_g, "1,1,1");
+    n.param<std::string>("k_north",k_north, "1,1,1");
+    n.param<std::string>("k_acc",k_acc,"1,1,1");
+    n.param<std::string>("k_acc_bias","1,1,1");
+    n.param<std::string>("k_ang_bias","1,1,1");
+    n.param<std::string>("k_E_n","1,1,1");
+    n.param<std::string>("r0",r0,"0,0,0");
+    n.param<std::string>("r_align",r_align,"0,0,0");
+    n.param<std::string>("ang_bias",ang_bias,"0.000009,0,-0.000002");
+    n.param<std::string>("acc_bias",acc_bias,"-0.095,0,0");
+
+    n.param<std::string>("lat",lat,"39.32");
+    n.param<int>("hz",params.hz,1000);
+    n.param<int>("rate",params.rate,10);
+    n.param<int>("baud",params.baud,4147200);
+    n.param<std::string>("port",params.port,"/dev/ttyUSB0");
+    n.param<std::string>("log_loc",params.log_location,"/log/kvh");
+    
+    params.K_g          = stringToDiag(k_g);
+    params.K_north      = stringToDiag(k_north);
+    params.K_acc        = stringToDiag(k_acc);
+    params.K_acc_bias   = stringToDiag(k_acc_bias);
+    params.K_ang_bias   = stringToDiag(k_ang_bias);
+    params.K_E_n        = stringToDiag(k_E_n);
+
+    sscanf(ang_bias.c_str(),"%lf,%lf,%lf",&vec(0),&vec(1),&vec(2));
+    params.ang_bias     = vec;
+
+    sscanf(acc_bias.c_str(),"%lf,%lf,%lf",&vec(0),&vec(1),&vec(2));
+    params.acc_bias     = vec;
+    
+    sscanf(r0.c_str(),"%lf,%lf,%lf",&rpy(0),&rpy(1),&rpy(2));
+    params.R0           = rpy2rot(rpy);
+
+    sscanf(r_align.c_str(),"%lf,%lf,%lf",&rpy(0),&rpy(1),&rpy(2));
+    params.R_align      = rpy2rot(rpy);
+    
+    params.lat          = std::stod(lat);
+
+
     serial       = new SerialPort(params.hz);
     att_thread   = new AttConsumerThread(serial->att_queue,params);
 

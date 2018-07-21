@@ -28,7 +28,7 @@ public:
    * @param R0 Initial NED 2 Instrument Alignment estimation.
    * @param lat Latitude.
    */
-  AttEst(Eigen::VectorXd k,Eigen::Matrix3d R0, float lat);
+  AttEst(config_params params);
 
   
   virtual ~AttEst(void); /**< Destructor. */
@@ -42,7 +42,7 @@ public:
    */
   void step(Eigen::Vector3d ang,Eigen::Vector3d acc, float dt);
 
-  
+  config_params params;
   SO3Att att; /**< Attitude estimation object. */
   FOGBias bias; /**< Bias estimation object. */
   

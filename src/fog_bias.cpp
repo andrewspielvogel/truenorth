@@ -19,30 +19,25 @@
  *
  */
 
-FOGBias::FOGBias(Eigen::VectorXd k, Eigen::Matrix3d R0, float lat)
+FOGBias::FOGBias(config_params parameters)
 {
   
-  // estimator gains
-  ka_ = k(0);
-  kE_ = k(1);
-  kb_ = k(2);
-  kab_= k(3);
+  params = parameters;
   
 
-  Eigen::Vector3d g_e(cos(lat),0,sin(lat));
+  Eigen::Vector3d g_e(cos(params.lat),0,sin(params.lat));
   Eigen::Vector3d w_E(0,0,7.292150/100000.0);
-  w_E_n = get_R_en(lat).transpose()*w_E;
+  w_E_n = get_R_en(params.lat).transpose()*w_E;
   Eigen::Vector3d a_e = g_e + skew(w_E)*skew(w_E)*g_e*6371.0*1000.0/9.81;
 
   gamma_ = fabs(w_E_n(2))/a_e.norm();
 
-  a_b <<-0.0095,0,0;
-  w_b <<0.000009,0,-0.000002;
-  //w_b <<0,0,0;
+  a_b = params.acc_bias;
+  w_b = params.ang_bias;
 
-  w_E_north = R0.transpose().block<3,2>(0,0)*w_E_n.block<2,1>(0,0);
+  w_E_north = params.R0.transpose().block<3,2>(0,0)*w_E_n.block<2,1>(0,0);
 
-  acc_hat = R0.transpose()*get_R_en(lat)*a_e;
+  acc_hat = params.R0.transpose()*get_R_en(params.lat)*a_e;
   start_ = 0;
 
 
@@ -78,21 +73,14 @@ void FOGBias::step(Eigen::Vector3d ang,Eigen::Vector3d acc,float dt)
    **************************************************************/
 
 
-
-  Eigen::Matrix3d Kab;
-  Kab<<kab_,0,0,0,kab_,0,0,0,kab_;
-
-  Eigen::Matrix3d Kwb;
-  Kwb<<kb_,0,0,0,kb_,0,0,0,kb_;
-
   Eigen::Vector3d da = acc_hat - acc;
   
-  Eigen::Vector3d dacc_hat   = -skew(ang - w_b - w_E_north)*acc_hat + skew(ang)*a_b - ka_*da;
-  Eigen::Vector3d dw_E_north = -skew(ang - gamma_*acc)*w_E_north - kE_*(Eigen::MatrixXd::Identity(3,3)-w_E_north.normalized()*w_E_north.normalized().transpose())*skew(acc)*da;
+  Eigen::Vector3d dacc_hat   = -skew(ang - w_b - w_E_north)*acc_hat + skew(ang)*a_b - params.K_acc*da;
+  Eigen::Vector3d dw_E_north = -skew(ang - gamma_*acc)*w_E_north - params.K_E_n*(Eigen::MatrixXd::Identity(3,3)-w_E_north.normalized()*w_E_north.normalized().transpose())*skew(acc)*da;
   //Eigen::Vector3d dw_E_north = -skew(ang - gamma_*acc)*w_E_north - kE_*skew(acc)*da;
 
-  Eigen::Vector3d dw_b       = -Kwb*skew(acc)*da;  
-  Eigen::Vector3d da_b       = Kab*(Eigen::MatrixXd::Identity(3,3)-acc.normalized()*acc.normalized().transpose())*skew(ang)*da;
+  Eigen::Vector3d dw_b       = -params.K_ang_bias*skew(acc)*da;  
+  Eigen::Vector3d da_b       = params.K_acc_bias*(Eigen::MatrixXd::Identity(3,3)-acc.normalized()*acc.normalized().transpose())*skew(ang)*da;
 
   acc_hat   = acc_hat   + dt*dacc_hat;
   w_E_north = w_E_north + dt*dw_E_north;  

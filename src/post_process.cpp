@@ -1,122 +1,12 @@
-#include <fstream>
 #include <Eigen/Core>
 #include <helper_funcs/helper_funcs.h>
 #include <truenorth/att_est.h>
 #include <helper_funcs/gyro_data.h>
 #include <string>
 #include <iostream>
+#include <fstream>
 
 
-config_params load_params(char* config_file)
-{
-
-  printf("LOADING CONFIG FILE: %s\n",config_file);
-  
-  config_params params;
-  std::ifstream infile(config_file);
-  std::string line;
-
-  /**********************************
-   *  LOAD IN LINE FROM CONFIG FILE
-   **********************************/
-  while (std::getline(infile, line))
-  {
-
-    char field[128] = "";
-    char data[128]  = "";
-
-    /*********************************
-     *          PARSE LINE
-     *********************************/
-    sscanf(line.c_str(),"%s = %s",field,data);
-    
-    if((std::string(field))=="hz")
-    {
-
-      sscanf(data,"%d",&params.hz);
-
-    }
-    else if((std::string(field))=="lat")
-    {
-
-      sscanf(data,"%f",&params.lat);
-      params.lat = params.lat*M_PI/180.0;
-
-    }
-    else if((std::string(field))=="o_file")
-    {
-
-      char str[128];
-      sscanf(data,"%s",str);
-      params.o_file = std::string(str);
-      params.o_file.erase(remove(params.o_file.begin(),params.o_file.end(), '\"' ),params.o_file.end());
-
-    }
-    else if((std::string(field))=="i_file")
-    {
-	
-      char str[128];
-      sscanf(data,"%s",str);
-      params.i_file = std::string(str);
-      params.i_file.erase(remove(params.i_file.begin(),params.i_file.end(), '\"' ),params.i_file.end());
-      
-    }
-    else if((std::string(field))=="rpy_align")
-    {
-
-      Eigen::Vector3d rpy_align;
-      sscanf(data,"[%lf,%lf,%lf]",&rpy_align(0),&rpy_align(1),&rpy_align(2));
-      params.R_align = rpy2rot(rpy_align);
-
-    }
-    else if((std::string(field))=="rpy_Ro")
-    {
-
-      Eigen::Vector3d rpy_r0;
-      sscanf(data,"[%lf,%lf,%lf]",&rpy_r0(0),&rpy_r0(1),&rpy_r0(2));
-      params.R0 = rpy2rot(rpy_r0);
-    }
-    else if((std::string(field))=="k")
-    {
-
-      Eigen::VectorXd k(6);
-      params.k = k;
-      sscanf(data,"[%lf,%lf,%lf,%lf,%lf,%lf]",&params.k(0),&params.k(1),&params.k(2),&params.k(3),&params.k(4),&params.k(5));
-
-    }
-    else if ((std::string(field))=="last_mod")
-    {
-
-      char str[128];
-      sscanf(data,"%s",str);
-      params.last_mod = std::string(str);
-      params.last_mod.erase(remove(params.last_mod.begin(),params.last_mod.end(), '\"' ),params.last_mod.end());
-	
-    }
-    
-  }
-
-  return params;
-
-}
-
-void print_loaded_params(config_params params)
-{
-
-  printf("***********************************\n");
-  printf("           LOADED PARAMS \n");
-  printf("***********************************\n");
-  printf(" last_mod: %s\n",params.last_mod.c_str());
-  printf("       hz: %d (s^-1)\n",params.hz);
-  printf("      lat: %.10f (rad)\n",params.lat);
-  printf("   o_file: %s\n",params.o_file.c_str());
-  printf("   i_file: %s\n",params.i_file.c_str());
-  printf("        k: [%f,%f,%lf,%.10f,%.10f,%lf]\n",
-	 params.k(0),params.k(1),params.k(2),params.k(3),params.k(4),params.k(5));
-  std::cout<<"R0 = \n"<< params.R0 <<"\n";
-  std::cout<<"R_align = \n"<< params.R_align <<"\n";
-
-}
 
 
 int main(int argc, char* argv[])
@@ -149,7 +39,8 @@ int main(int argc, char* argv[])
    *   
    ***************************************************/
   
-  AttEst att(params.k, params.R0*params.R_align,params.lat);
+  //AttEst att(params.k, params.R0*params.R_align,params.lat);
+  AttEst att(params);
   GyroData gyro_data(params.hz);
 
   printf("***********************************\n");
@@ -172,7 +63,7 @@ int main(int argc, char* argv[])
   Eigen::Vector3d rpy_align = rot2rph(params.R_align);
   Eigen::Vector3d rpy_Ro    = rot2rph(params.R0);
   
-  fprintf(outfile,"PARAMS,%s,%d,%.10f,%s,%s,%f,%f,%f,%f,%f,%f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f\n",params.last_mod.c_str(),params.hz,params.lat,params.o_file.c_str(),params.i_file.c_str(),rpy_align(0),rpy_align(1),rpy_align(2),rpy_Ro(0),rpy_Ro(1),rpy_Ro(2),params.k(0),params.k(1),params.k(2),params.k(3),params.k(4),params.k(5));
+  fprintf(outfile,"PARAMS,%s,%d,%.10f,%s,%s,%f,%f,%f,%f,%f,%f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f\n",params.last_mod.c_str(),params.hz,params.lat,params.o_file.c_str(),params.i_file.c_str(),rpy_align(0),rpy_align(1),rpy_align(2),rpy_Ro(0),rpy_Ro(1),rpy_Ro(2),params.K_acc(0,0),params.K_acc(1,1),params.K_acc(2,2),params.K_ang_bias(0,0),params.K_ang_bias(1,1),params.K_ang_bias(2,2),params.K_acc_bias(0,0),params.K_acc_bias(1,1),params.K_acc_bias(2,2),params.K_E_n(0,0),params.K_E_n(1,1),params.K_E_n(2,2));
 
   while (std::getline(infile, line))
   {

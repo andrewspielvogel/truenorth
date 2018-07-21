@@ -8,13 +8,17 @@ def main(argv):
     o_file = ''
     i_file = ''
     c_file = ''
-    #rpy_align = '[1.5708,0,-1.5272]'
-    rpy_align = '[1.5708,0,-1.5708]'
-    rpy_Ro = '[0,0,0]'
-    k = '[1,100,0.05,0.005,0.002,0.15]'
+    rpy_align = '[0,0,0]'
+    rpy_r0 = '[0,0,0]'
+    k_acc = '[0.1,0.1,0.1]'
+    k_acc_bias = '[0.01,0.01,0.1]'
+    k_ang_bias = '[0.0001,0.0001,0.01]'
+    k_g = '[1,1,1]'
+    k_north = '[1,1,1]'
+    k_E_n = '[0.005,0.005,0.005]'
     
     try:
-        opts,args = getopt.getopt(argv,"hi:o:c:l:a:R:k:z:",["ifile=","help","ofile=","hz=","lat=","cfile=","rpy_align=","rpy_Ro="])
+        opts,args = getopt.getopt(argv,"hi:o:c:l:a:R:k:z:",["ifile=","help","ofile=","hz=","lat=","cfile=","rpy_align=","rpy_Ro=","k_acc=","k_acc_bias","k_ang_bias","k_g","k_north","k_E_n"])
     except getopt.GetoptError:
         print "USAGE:"
         print 'gen_config_file.py -i <KVHfile> -o <estimatoroutputfile> -c <configfile_generated>'
@@ -30,7 +34,10 @@ def main(argv):
             print "-l , --lat   : Latitude (degrees)."
             print "-a , --rpy_align : [roll, pitch, yaw] (radians)."
             print "-R , --rpy_Ro    : [roll, pitch, yaw] (radians)."
-            print "-k , Attitude estimator gains. [k_level,k_north,k_g,k_w_E,k_wb,k_ab]"
+            print "--k_acc (diag)."
+            print "--k_acc_bias (diag)."
+            print "--k_ang_bias (diag)."
+            print "--k_E_n (diag)."
             sys.exit()
         elif opt in ("-i","--ifile"):
             i_file = "\"" + arg + "\""
@@ -48,6 +55,14 @@ def main(argv):
             rpy_Ro = arg
         elif opt in ("-k"):
             k = arg
+        elif opt in ("--k_acc"):
+            k_acc = arg
+        elif opt in ("--k_acc_bias"):
+            k_acc_bias = arg
+        elif opt in ("--k_ang_bias"):
+            k_ang_bias = arg
+        elif opt in ("--k_E_n"):
+            k_E_n = arg
 
     now = datetime.datetime.now()
 
@@ -61,7 +76,10 @@ def main(argv):
     file.write("i_file = " + i_file + "\n")
     file.write("rpy_align = " + rpy_align + "\n")
     file.write("rpy_Ro = " + rpy_Ro + "\n")
-    file.write("k = " + k + "\n")
+    file.write("k_acc = " + k_acc + "\n")
+    file.write("k_acc_bias = " + k_acc_bias + "\n")
+    file.write("k_ang_bias = " + k_ang_bias + "\n")
+    file.write("k_E_n = " + k_E_n + "\n")
     file.close()
 
 
