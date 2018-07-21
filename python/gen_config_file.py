@@ -9,16 +9,18 @@ def main(argv):
     i_file = ''
     c_file = ''
     rpy_align = '[0,0,0]'
-    rpy_r0 = '[0,0,0]'
+    rpy_ro = '[0,0,0]'
     k_acc = '[0.1,0.1,0.1]'
     k_acc_bias = '[0.01,0.01,0.1]'
     k_ang_bias = '[0.0001,0.0001,0.01]'
     k_g = '[1,1,1]'
     k_north = '[1,1,1]'
     k_E_n = '[0.005,0.005,0.005]'
+    acc_bias = '[0,0,0]'
+    ang_bias = '[0,0,0]'
     
     try:
-        opts,args = getopt.getopt(argv,"hi:o:c:l:a:R:k:z:",["ifile=","help","ofile=","hz=","lat=","cfile=","rpy_align=","rpy_Ro=","k_acc=","k_acc_bias","k_ang_bias","k_g","k_north","k_E_n"])
+        opts,args = getopt.getopt(argv,"hi:o:c:l:z:",["ifile=","help","ofile=","hz=","lat=","cfile=","rpy_align=","rpy_ro=","k_acc=","k_acc_bias=","k_ang_bias=","k_g=","k_north=","k_E_n=","acc_bias=","ang_bias="])
     except getopt.GetoptError:
         print "USAGE:"
         print 'gen_config_file.py -i <KVHfile> -o <estimatoroutputfile> -c <configfile_generated>'
@@ -32,12 +34,16 @@ def main(argv):
             print "-c , --cfile : .m file to save attitude estimator config file."
             print "-z , --hz    : Sampling frequency (s^-1)."
             print "-l , --lat   : Latitude (degrees)."
-            print "-a , --rpy_align : [roll, pitch, yaw] (radians)."
-            print "-R , --rpy_Ro    : [roll, pitch, yaw] (radians)."
+            print "--rpy_align : [roll, pitch, yaw] (radians)."
+            print "--rpy_ro    : [roll, pitch, yaw] (radians)."
             print "--k_acc (diag)."
             print "--k_acc_bias (diag)."
             print "--k_ang_bias (diag)."
             print "--k_E_n (diag)."
+            print "--k_g (diag)."
+            print "--k_north (diag)."
+            print "--acc_bias : Initial condition."
+            print "--ang_bias : Initial condition."
             sys.exit()
         elif opt in ("-i","--ifile"):
             i_file = "\"" + arg + "\""
@@ -49,12 +55,10 @@ def main(argv):
             hz = arg
         elif opt in ("-l","--lat"):
             lat = arg
-        elif opt in ("-a","--rpy_align"):
+        elif opt in ("--rpy_align"):
             rpy_align = arg
-        elif opt in ("-R","--rpy_Ro"):
-            rpy_Ro = arg
-        elif opt in ("-k"):
-            k = arg
+        elif opt in ("--rpy_ro"):
+            rpy_ro = arg
         elif opt in ("--k_acc"):
             k_acc = arg
         elif opt in ("--k_acc_bias"):
@@ -63,6 +67,14 @@ def main(argv):
             k_ang_bias = arg
         elif opt in ("--k_E_n"):
             k_E_n = arg
+        elif opt in ("--acc_bias"):
+            acc_bias = arg
+        elif opt in ("--ang_bias"):
+            ang_bias = arg
+        elif opt in ("--k_g"):
+            k_g = arg
+        elif opt in ("--k_north"):
+            k_north = arg
 
     now = datetime.datetime.now()
 
@@ -75,11 +87,15 @@ def main(argv):
     file.write("o_file = " + o_file + "\n")
     file.write("i_file = " + i_file + "\n")
     file.write("rpy_align = " + rpy_align + "\n")
-    file.write("rpy_Ro = " + rpy_Ro + "\n")
+    file.write("rpy_ro = " + rpy_ro + "\n")
     file.write("k_acc = " + k_acc + "\n")
     file.write("k_acc_bias = " + k_acc_bias + "\n")
     file.write("k_ang_bias = " + k_ang_bias + "\n")
     file.write("k_E_n = " + k_E_n + "\n")
+    file.write("acc_bias = " + acc_bias + "\n")
+    file.write("ang_bias = " + ang_bias + "\n")
+    file.write("k_g = " + k_g + "\n")
+    file.write("k_north = " + k_north + "\n")
     file.close()
 
 
