@@ -16,38 +16,69 @@ git clone https://github.com/andrewspielvogel/truenorth.git
 ```
 catkin_make
 ```
-- Create a location for the log file storage or to use default make a KVH log directory in `/var/log/` and give proper permissions
+- Create a location for the log file storage or to use default make a KVH log directory in `/log` and give proper permissions
 ```
-sudo mkdir /var/log/KVH
-```
-```
-sudo chmod a+rwx /var/log/KVH
+sudo mkdir /log   
+sudo chown USER.USER /log
+chmod +rwx /log           
+mkdir /log/kvh
+mkdir /log/microstrain
 ```
 
 ## Launch File Params
 
-rate : Rostopic broadcast rate - Rate (hz) of publishing on gyro_data topic. Default is 10 hz.
+rate : Rostopic broadcast rate - Rate (hz) of publishing on gyro_data topic. Default: 10
 
-hz : Sampling hz. Default is 1000 hz.
+hz : Sampling hz. Default: 5000
 
-port : Serial port to connect to. Default is /dev/ttyUSB0.
+port : Serial port to connect to. Default: "/dev/ttyUSB0"
 
-baud : Sensor baud rate. Default is 921600.
+baud : Sensor baud rate. Default: 921600
 
-latitude : Latitude. Default 39.32 degrees.
+lat : Latitude (degrees). Default: 39.32
 
-instr_align : Instrument frame to vehicle frame rotation. Default is identity. (Input in launch file as a comma separated string of 9 doubles.)
+r_align : Instrument frame to vehicle frame rotation (In RPY Euler Angles). Default: "[0,0,0]"
 
-gains : Gains for sensor bias and attitude estimation. (Input in launch file as a comma separated string of 5 doubles.) Order is "acc,b_acc,b_ang,b_z,R_bar,kg,kw,east_cutoff frequency". Default is 1.0,0.005,0.005,0.005,1.0,1.0,0.05,0.005.
+r0 : Initial vehicle estimate of vehicle attitude (In RPY Euler Angles). Default: "[0,0,0]"
 
-log_loc : Directory for writing log files to. Default is /var/log/KVH.
+ang_bias : Initial estimate of the angular rate bias (rad/s). Default: [0,0,0]"
+
+acc_bias : Initial estimate of the acceleration bias (m/s^2). Default: [0,0,0]"
+
+k_g: Diagonal of the gravity (local level) gain matrix for the attitude estimator. 
+
+k_north: Diagonal of the north gain matrix of the attitude estimator. 
+
+k_acc: Diagonal of the acceleration gain matrix of the bias estimator.
+
+k_acc_bias: Diagonal of the acceleration bias gain matrix of the bias estimator.
+
+k_ang_bias: Diagonal of the angular rate bias gain matrix of the bias estimator.
+
+k_E_n: Diagonal of the Earth rate gain matrix of the bias estimator.
+
 
 ## Using the Node
 
-- Start node
+- Start Node via two different launch files:
 ```
 roslaunch truenorth truenorth.launch
 ```
+launches only the KVH attitude estimator.
+```
+roslaunch truenorth kvh_ms.launch
+```
+launches the KVH attitude estimator, Microstrain attitude estimator, and PHINS.
+
+
+## Log Files
+Data logged in two log files. 
+
+KVH IMU hex data logged to /log/kvh/YEAR_MONTH_DAY_HOUR_MINUTE.BKVH
+
+KVH IMU data and attitude logged to /log/kvh/YEAR_MONTH_DAY_HOUR_MINUTE.BKVH
+
+
 
 ## Generate Documentation
 
