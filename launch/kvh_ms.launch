@@ -1,92 +1,11 @@
 <launch>
-    <!-- Node Settings -->
-    <arg name="output" default="screen"/>
-    <arg name="imu" default="ms"/>
 
-    <!-- IMU Settings -->
-    <arg name="device" default="/dev/ttyS0" />
+	<include file="$(find imu_3dm_gx4)/launch/imu.launch" />
 
-    <!-- Verbose logging -->
-    <arg name="verbose" default="false"/>
+	<include file="$(find mems_bias)/launch/mems_bias.launch" />
 
-    <!-- Frame ID for messages -->
-    <arg name="frame_id" default="$(arg imu)"/>
+	<include file="$(find att_so3)/launch/att.launch" />
 
-    <!-- Baudrate of serial comms (see manual for allowed values) -->
-    <arg name="baudrate" default="921600"/>
-
-    <!-- Data rate in Hz -->
-    <arg name="imu_rate" default="1000"/>
-    <arg name="filter_rate" default="100"/>
-
-    <!-- Enable/Disable the magnetometer -->
-    <arg name="enable_magnetometer" default="true"/>
-
-    <!-- Enable/Disable the filter -->
-    <arg name="enable_filter" default="true"/>
-
-    <!-- Enable/Disable filter updates -->
-    <arg name="enable_accel_update" default="true"/>
-    <arg name="enable_mag_update" default="true"/>
-
-    <node pkg="imu_3dm_gx4" name="$(arg imu)" type="imu_3dm_gx4" output="$(arg output)">
-        <param name="device" type="string" value="$(arg device)" />
-        <param name="verbose" type="bool" value="$(arg verbose)"/>
-        <param name="baudrate" type="int" value="$(arg baudrate)" />
-        <param name="frame_id" type="string" value="$(arg frame_id)"/>
-        <param name="imu_rate" type="int" value="$(arg imu_rate)" />
-        <param name="filter_rate" type="int" value="$(arg filter_rate)"/>
-        <param name="enable_magnetometer" type="bool" value="$(arg enable_magnetometer)"/>
-        <param name="enable_filter" type="bool" value="$(arg enable_filter)"/>
-        <param name="enable_accel_update" type="bool" value="$(arg enable_accel_update)"/>
-        <param name="enable_mag_update" type="bool" value="$(arg enable_mag_update)"/>
-    </node>
-
-
-    <node pkg="mems_bias" type="mems_bias_publisher" name="$(arg frame_id)_bias" output="$(arg output)">
-
-          <param name="k_acc" value="0.1,0.1,0.1" type="string" />
-	  <param name="k_mag" value="1,1,1" type="string" />
-	  <param name="k_acc_bias" value="0.01,0.01,0.1" type="string" />
-	  <param name="k_ang_bias" value="0.0001,0.0001,0.01" type="string" />
-	  <param name="k_mag_bias" value="1,1,1" type="string" />
-	  <param name="frame_id" type="string" value="$(arg frame_id)"/>
-
-
-    </node>
-
-    <node pkg="att_so3" type="att_so3_publisher" name="$(arg frame_id)_att" output="$(arg output)">
-
-          <param name="k_g" value="1,1,1" type="string" />
-	  <param name="k_north" value="1,1,1" type="string" />
-	  <param name="r0" value="0,0,0" type="string" />
-	  <param name="lat" value="39.32" type="string" />
-  	  <param name="frame_id" type="string" value="$(arg frame_id)"/>
-
-
-    </node>
-
-
-        <node pkg="truenorth" type="gyro_publisher" name="truenorth" output="screen">
-
-               <param name="rate" value="10" type="int" />
-	       <param name="hz" value="5000" type="int" />
-	       <param name="port" value="/dev/ttyUSB1" type="str" />
-	       <param name="baud" value="4147200" type="int" />
-	       <param name="latitude" value="39.32" type="double" />
-	       <param name="instr_align" value="1.57080,0,-1.57080" type="string" />
-	       <!--param name="instr_align" value="0,0,0" type="string" /-->
-	       <param name="R0" value="0,0,0" type="string" />
-	       <param name="gains" value="1,0.005,0.1,0.0001,0.0000005,0.01,0.0" type="string" />
-	       <param name="log_loc" value="/home/spiels/log/imu_data/" type="string" />
-
-        </node>
-
-	<node pkg="phins" type="phins_publisher" name="phins" output="screen" >
-
-	      <param name="port" value="23454" type="int" />
-	      <param name="rate" value="10" type="int" />
-
-	</node>
+	<include file="$(find truenorth)/launch/att_est.launch" />
 
 </launch>
