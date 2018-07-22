@@ -1,5 +1,7 @@
 <launch>
 
+	<include file="$(find phins)/launch/phins.launch" />
+
 	<include file="$(find imu_3dm_gx4)/launch/imu.launch" />
 
 	<include file="$(find mems_bias)/launch/mems_bias.launch" />

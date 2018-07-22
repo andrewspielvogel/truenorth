@@ -15,9 +15,9 @@ process_att(){
     PHINS=$2/phins/$3.INS
 
     
-    python $TRUENORTH/python/gen_config_file.py -i $KVH -o $CSV -c $CONFIG -z $4 --rpy_ro $5 --rpy_align $6 --k_acc $7 --k_E_n $8 --k_acc_bias $9 --k_ang_bias ${10} --acc_bias ${11} --ang_bias ${12} --k_g ${13} --k_north ${14}
+    #python $TRUENORTH/python/gen_config_file.py -i $KVH -o $CSV -c $CONFIG -z $4 --rpy_ro $5 --rpy_align $6 --k_acc $7 --k_E_n $8 --k_acc_bias $9 --k_ang_bias ${10} --acc_bias ${11} --ang_bias ${12} --k_g ${13} --k_north ${14}
 
-    rosrun truenorth post_process $CONFIG
+    #rosrun truenorth post_process $CONFIG
 
     python $TRUENORTH/python/plot_att.py -i $CSV -o $PDF -e $3 -p $PHINS
 
@@ -28,7 +28,7 @@ process_att(){
 EXP=exp1
 
 DIR=/log
-LOG=2018_07_18_18_11
+LOG=2018_07_22_17_01
 HZ=5000
 rpy_align=[-1.57,0,1.57]
 rpy_ro=[0,0,0]
