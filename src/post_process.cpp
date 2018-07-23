@@ -57,6 +57,7 @@ int main(int argc, char* argv[])
   Eigen::Vector3d att_euler_ang;
   int hours = 0;
   int minutes = 0;
+  int seconds = 0;
 
   int cnt = 1;
   
@@ -76,21 +77,21 @@ int main(int argc, char* argv[])
     int minute;
     float second;
 
-    float rov_time;
-    float ros_time;
+    double rov_time;
+    double ros_time;
 
     Eigen::VectorXi status(6);
-    sscanf(line.c_str(),"%s %d/%d/%d %d:%d:%f %f %f %lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%f,%d,%lf,%lf,%d,%d,%d,%d,%d,%d\n",msg_type,&year,&month,&day,&hour,&minute,&second,&rov_time,&ros_time,&gyro_data.ang(0),&gyro_data.ang(1),&gyro_data.ang(2),&gyro_data.acc(0),&gyro_data.acc(1),&gyro_data.acc(2),&gyro_data.mag(0),&gyro_data.mag(1),&gyro_data.mag(2),&gyro_data.temp,&gyro_data.seq_num,&gyro_data.timestamp,&gyro_data.comp_timestamp,&status(0),&status(1),&status(2),&status(3),&status(4),&status(5));
+    sscanf(line.c_str(),"%s %d/%d/%d %d:%d:%f %lf %lf %lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%f,%d,%lf,%lf,%d,%d,%d,%d,%d,%d\n",msg_type,&year,&month,&day,&hour,&minute,&second,&rov_time,&ros_time,&gyro_data.ang(0),&gyro_data.ang(1),&gyro_data.ang(2),&gyro_data.acc(0),&gyro_data.acc(1),&gyro_data.acc(2),&gyro_data.mag(0),&gyro_data.mag(1),&gyro_data.mag(2),&gyro_data.temp,&gyro_data.seq_num,&gyro_data.timestamp,&gyro_data.comp_timestamp,&status(0),&status(1),&status(2),&status(3),&status(4),&status(5));
 
     
     if (!start)
     {
 
       start = true;
-      time_start = gyro_data.timestamp;
+      time_start = rov_time;
       
     }
-    float time = gyro_data.timestamp - time_start;
+    float time = rov_time - time_start;
 
 
     att.step(gyro_data.ang,9.81*gyro_data.acc,((float) 1)/(float)params.hz);
@@ -98,18 +99,22 @@ int main(int argc, char* argv[])
     att_euler_ang = rot2rph(att.att.R_ni*params.R_align.transpose());
     //att_euler_ang = rot2rph(att.R_ni);
 
-
     if (1)//(cnt % (params.hz/10)) == 0)
     {
-      fprintf(outfile,"ATT_PRO,%d,%02d,%02d,%02d,%02d,%02f,%f,%f,%f,%f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%d,%d,%d,%d,%d,%d,%d\n",year,month,day,hour,minute,second,gyro_data.timestamp,att_euler_ang(0),att_euler_ang(1),att_euler_ang(2),att.bias.w_b(0),att.bias.w_b(1),att.bias.w_b(2),att.bias.w_E_north(0),att.bias.w_E_north(1),att.bias.w_E_north(2),att.bias.a_b(0),att.bias.a_b(1),att.bias.a_b(2),att.bias.acc_hat(0),att.bias.acc_hat(1),att.bias.acc_hat(2),gyro_data.acc(0),gyro_data.acc(1),gyro_data.acc(2),gyro_data.ang(0),gyro_data.ang(1),gyro_data.ang(2),gyro_data.mag(0),gyro_data.mag(1),gyro_data.mag(2),gyro_data.temp,gyro_data.seq_num,status(0),status(1),status(2),status(3),status(4),status(5));
+      fprintf(outfile,"ATT_PRO,%d,%02d,%02d,%02d,%02d,%02f,%f,%f,%f,%f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%d,%d,%d,%d,%d,%d,%d\n",year,month,day,hour,minute,second,rov_time,att_euler_ang(0),att_euler_ang(1),att_euler_ang(2),att.bias.w_b(0),att.bias.w_b(1),att.bias.w_b(2),att.bias.w_E_north(0),att.bias.w_E_north(1),att.bias.w_E_north(2),att.bias.a_b(0),att.bias.a_b(1),att.bias.a_b(2),att.bias.acc_hat(0),att.bias.acc_hat(1),att.bias.acc_hat(2),gyro_data.acc(0),gyro_data.acc(1),gyro_data.acc(2),gyro_data.ang(0),gyro_data.ang(1),gyro_data.ang(2),gyro_data.mag(0),gyro_data.mag(1),gyro_data.mag(2),gyro_data.temp,gyro_data.seq_num,status(0),status(1),status(2),status(3),status(4),status(5));
     }
-    if ((((int)time) % (60) == 0) && ((int)time/60 != minutes)) {
+
+    if ((((int)time) % (30) == 0)) {
       
       hours   = ((int) time)/3600;
       minutes = ((int) time - hours*3600)/60;
-      char buffer [256];
-      int n = sprintf(buffer,"%02d:%02d:00 OF DATA PROCESSED...",hours,minutes);
-      std::cout<<"\r"<<buffer<<std::flush;
+      int seconds_ = ((int) time - hours*3600 - minutes*60);
+      if (seconds_ != seconds) {
+	seconds = seconds_;
+	char buffer [256];
+	int n = sprintf(buffer,"%02d:%02d:%02d OF DATA PROCESSED",hours,minutes,seconds);
+	std::cout<<"\r"<<buffer<<"\n";//std::flush;
+      }
     }
 
     cnt++;
