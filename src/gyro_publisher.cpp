@@ -105,10 +105,10 @@ public:
     sscanf(acc_bias.c_str(),"[%lf,%lf,%lf]",&vec(0),&vec(1),&vec(2));
     params.acc_bias     = vec;
     
-    sscanf(r0.c_str(),"%[lf,%lf,%lf]",&rpy(0),&rpy(1),&rpy(2));
+    sscanf(r0.c_str(),"[%lf,%lf,%lf]",&rpy(0),&rpy(1),&rpy(2));
     params.R0           = rpy2rot(rpy);
 
-    sscanf(r_align.c_str(),"%[lf,%lf,%lf]",&rpy(0),&rpy(1),&rpy(2));
+    sscanf(r_align.c_str(),"[%lf,%lf,%lf]",&rpy(0),&rpy(1),&rpy(2));
     params.R_align      = rpy2rot(rpy);
     
     params.lat          = std::stod(lat);
