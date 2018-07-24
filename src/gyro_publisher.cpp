@@ -118,8 +118,8 @@ public:
 
     log_thread   = new LogConsumerThread(serial->log_queue);
     chatter_      = n.advertise<dscl_msgs::KvhImu>("imu",1);
-    chatter_bias_ = n.advertise<dscl_msgs::ImuBias>("bias",1);
-    chatter_att_  = n.advertise<geometry_msgs::Vector3Stamped>("rpy",1);
+    chatter_bias_ = n.advertise<dscl_msgs::ImuBias>("bias",10);
+    chatter_att_  = n.advertise<geometry_msgs::Vector3Stamped>("rpy",10);
 
   }
 
@@ -168,7 +168,7 @@ public:
     att.vector.x = rph(0);
     att.vector.y = rph(1);
     att.vector.z = rph(2);
-    
+
     imu_bias.ang.x = att_thread->att.bias.w_b(0);
     imu_bias.ang.y = att_thread->att.bias.w_b(1);
     imu_bias.ang.z = att_thread->att.bias.w_b(2);
