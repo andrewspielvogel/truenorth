@@ -17,31 +17,7 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
 )
 
-## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   imu.msg
-#   imu_bias.msg
-#   kvh_imu.msg
-#   gyro_sensor_data.msg
-# )
 
-
-## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs
-# )
-
-###################################
-## catkin specific configuration ##
-###################################
-## The catkin_package macro generates cmake config files for your package
-## Declare things to be passed to dependent projects
-## INCLUDE_DIRS: uncomment this if you package contains header files
-## LIBRARIES: libraries you create in this project that dependent projects also need
-## CATKIN_DEPENDS: catkin_packages dependent projects also need
-## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
  # LIBRARIES truenorth
@@ -72,7 +48,7 @@ include_directories( include
 
 add_executable(gyro_publisher src/gyro_publisher.cpp src/serial_io.cpp src/att_est.cpp src/thread.cpp src/so3_att.cpp src/fog_bias.cpp)
 target_link_libraries(gyro_publisher ${catkin_LIBRARIES})
-add_dependencies(gyro_publisher truenorth_generate_messages_cpp helper_funcs geometry_msgs dscl_msgs)
+add_dependencies(gyro_publisher dscl_msgs_generate_messages_cpp helper_funcs geometry_msgs_generate_messages_cpp)
 set_target_properties(gyro_publisher PROPERTIES COMPILE_FLAGS "-O3")
 
 add_executable(post_process src/post_process.cpp src/att_est.cpp src/so3_att.cpp src/fog_bias.cpp)
