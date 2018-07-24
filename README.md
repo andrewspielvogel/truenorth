@@ -22,6 +22,7 @@ sudo mkdir /log
 sudo chown USER.USER /log
 chmod +rwx /log           
 mkdir /log/kvh
+mkdir /log/phins
 mkdir /log/microstrain
 ```
 
