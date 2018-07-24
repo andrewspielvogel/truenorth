@@ -70,6 +70,23 @@ roslaunch truenorth kvh_ms.launch
 ```
 launches the KVH attitude estimator, Microstrain attitude estimator, and PHINS.
 
+## Topic
+Topics published:
+
+- KVH IMU Data topic (dscl_msgs::KvhImu)
+```
+/truenorth/imu
+```
+
+- KVH IMU Bias topic (dscl_msgs::ImuBias)
+```
+/truenorth/bias
+```
+
+- Attitude (geometry_msgs::Vector3Stamped)
+```
+/truenorth/rpy
+```
 
 ## Log Files
 Data logged in two log files. 
