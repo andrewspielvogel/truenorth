@@ -9,7 +9,9 @@
 
 #include <ros/ros.h>
 #include <truenorth/serial_io.h>
-#include <truenorth/gyro_sensor_data.h>
+#include <geometry_msgs/Vector3Stamped.h>
+#include <dscl_msgs/KvhImu.h>
+#include <dscl_msgs/ImuBias.h>
 #include <helper_funcs/helper_funcs.h>
 #include <Eigen/Core>
 #include <string>
@@ -31,7 +33,10 @@ class AttNode
 {
 
 private:
-  ros::Publisher chatter_; /**< Node publisher. */
+  ros::Publisher chatter_; /**< IMU data publisher. */
+  ros::Publisher chatter_bias_; /**< IMU bias publisher. */
+  ros::Publisher chatter_att_; /**< IMU attitude publisher. */
+
   
 public:
   SerialPort* serial; /**< Serial port object for reading IMU data. */
@@ -112,7 +117,9 @@ public:
     att_thread   = new AttConsumerThread(serial->att_queue,params);
 
     log_thread   = new LogConsumerThread(serial->log_queue);
-    chatter_     = n.advertise<truenorth::gyro_sensor_data>("gyro_data",1000);
+    chatter_      = n.advertise<dscl_msgs::KvhImu>("imu",1);
+    chatter_bias_ = n.advertise<dscl_msgs::ImuBias>("bias",1);
+    chatter_att_  = n.advertise<geometry_msgs::Vector3Stamped>("rpy",1);
 
   }
 
@@ -126,7 +133,9 @@ public:
 
 
     // initialize data_msg
-    truenorth::gyro_sensor_data data_msg;
+    dscl_msgs::KvhImu imu_data;
+    dscl_msgs::ImuBias imu_bias;
+    geometry_msgs::Vector3Stamped att;
 
 
     // warn if queues are growing large
@@ -145,32 +154,51 @@ public:
     pthread_mutex_lock(&mutex_att);
 
       
-    for (int i=0;i<3;i++)
-      {
-	data_msg.kvh.imu.ang.at(i) = serial->data.ang(i);
-	data_msg.kvh.imu.acc.at(i) = serial->data.acc(i);
-	data_msg.kvh.imu.mag.at(i) = serial->data.mag(i);
+    imu_data.imu.ang.x = serial->data.ang(0);
+    imu_data.imu.ang.y = serial->data.ang(1);
+    imu_data.imu.ang.z = serial->data.ang(2);
+    imu_data.imu.acc.x = serial->data.acc(0);
+    imu_data.imu.acc.y = serial->data.acc(1);
+    imu_data.imu.acc.z = serial->data.acc(2);
+    imu_data.imu.mag.x = serial->data.mag(0);
+    imu_data.imu.mag.y = serial->data.mag(1);
+    imu_data.imu.mag.z = serial->data.mag(2);
 
-	data_msg.att.at(i) = 180.0*rot2rph((att_thread->R_ni)*params.R_align.transpose())(i)/M_PI;
-	data_msg.bias.ang.at(i) = att_thread->att.bias.w_b(i);
-	data_msg.bias.acc.at(i) = att_thread->att.bias.a_b(i);
-	data_msg.bias.z.at(i)   = att_thread->att.bias.w_E_north(i);
-
-      }
+    Eigen::Vector3d rph = 180.0*rot2rph((att_thread->R_ni)*params.R_align.transpose())/M_PI;
+    att.vector.x = rph(0);
+    att.vector.y = rph(1);
+    att.vector.z = rph(2);
+    
+    imu_bias.ang.x = att_thread->att.bias.w_b(0);
+    imu_bias.ang.y = att_thread->att.bias.w_b(1);
+    imu_bias.ang.z = att_thread->att.bias.w_b(2);
+    imu_bias.acc.x = att_thread->att.bias.a_b(0);
+    imu_bias.acc.y = att_thread->att.bias.a_b(1);
+    imu_bias.acc.z = att_thread->att.bias.a_b(2);
+    imu_bias.mag.x = -1;
+    imu_bias.mag.y = -1;
+    imu_bias.mag.z = -1;
+      
     pthread_mutex_unlock(&mutex_att);
 
 
     for (int i=0;i<6;i++)
       {
-	data_msg.kvh.status.at(i) = serial->data.status.at(i);
+        imu_data.status.at(i) = serial->data.status.at(i);
       }
 	
-    data_msg.kvh.temp = serial->data.temp;
-    data_msg.kvh.stamp = serial->data.timestamp;
-    data_msg.kvh.seq_num = serial->data.seq_num;
+    imu_data.temp = serial->data.temp;
+    imu_data.stamp = serial->data.timestamp;
+    imu_data.seq_num = serial->data.seq_num;
+
+    imu_data.header.stamp = ros::Time::now();
+    att.header.stamp      = ros::Time::now();
+    imu_bias.header.stamp = ros::Time::now();
 
     // publish packet
-    chatter_.publish(data_msg);
+    chatter_.publish(imu_data);
+    chatter_bias_.publish(imu_bias);
+    chatter_att_.publish(att);
   
   }
  
@@ -184,7 +212,7 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "truenorth");
 
     // must initialize with "~" for param passing
-    ros::NodeHandle n;
+    ros::NodeHandle n("~");
 
 
     /**********************************************************************

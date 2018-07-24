@@ -18,6 +18,10 @@
   <build_depend>rosbag</build_depend>
   <build_depend>eigen</build_depend>
   <build_depend>helper_funcs</build_depend>
+  <build_depend>dscl_msgs</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <run_depend>geometry_msgs</run_depend>
+  <run_depend>dscl_msgs</run_depend>
   <run_depend>helper_funcs</run_depend>
   <run_depend>eigen</run_depend>
   <run_depend>rosbag</run_depend>
