@@ -111,7 +111,7 @@ def main(argv):
     if params.as_matrix()[0][0]=='PARAMS':
         plt.figure(0)
         plt.axis('off')
-        plt.text(0.5,0.7,"CONFIG PARAMS USED:\n",ha='center',va='center')
+        plt.text(0.25,0.8,"CONFIG PARAMS USED:\n",ha='center',va='center')
         plt.text(0.05,0.2,"  Date Modified: " + str(params.as_matrix()[0][1]) +
                  "\n                    Hz: " + str(params.as_matrix()[0][2]) +
                  "\n                  LAT: " + str(params.as_matrix()[0][3]) +
@@ -122,7 +122,9 @@ def main(argv):
                  "\nk_acc: " + str(params.as_matrix()[0][12:15]) +
                  "\nk_ang_bias: " + str(params.as_matrix()[0][15:18]) +
                  "\nk_acc_bias: " + str(params.as_matrix()[0][18:21]) +
-                 "\nk_E_n: " + str(params.as_matrix()[0][21:24]) + "\n")
+                 "\nk_E_n: " + str(params.as_matrix()[0][21:24]) +
+                 "\nk_b: " + str(params.as_matrix()[0][24:27]) +
+                 "\nk_north: " + str(params.as_matrix()[0][27:30]) + "\n")
         pp.savefig(plt.figure(0))
         plt.close("all")
 
