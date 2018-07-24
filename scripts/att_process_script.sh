@@ -25,23 +25,23 @@ process_att(){
 
 
 
-EXP=exp1
+EXP=exp17
 
 DIR=/log
 LOG=2018_07_23_16_00
 HZ=5000
 rpy_align=[-1.57,0,1.57]
-rpy_ro=[0,0,0]
+rpy_ro=[0,0,-2.2]
 k_acc=[0.1,0.1,0.1]
-k_acc_bias=[0.1,0.0,0.1]
+k_acc_bias=[0.05,0.0,0.05]
 #k_acc_bias=[0,0,0]
-k_ang_bias=[0.00001,0.0000,0.00001]
+k_ang_bias=[0.000025,0.000025,0.000025]
 #k_ang_bias=[0,0,0]
-k_E_n=[0.00001,0.0000,0.00001]
+k_E_n=[0.0000025,0.0000025,0.0000025]
 acc_bias=[0,0,0]
 ang_bias=[0,0,0]
 k_g=[0.1,0.1,0.1]
-k_north=[0.01,0.01,0.01]
+k_north=[0.025,0.025,0.025]
 
 process_att $EXP $DIR $LOG $HZ $rpy_ro $rpy_align $k_acc $k_E_n $k_acc_bias $k_ang_bias $acc_bias $ang_bias $k_g $k_north
 
