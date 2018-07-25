@@ -94,7 +94,7 @@ Data logged in two log files.
 
 KVH IMU hex data logged to /log/kvh/YEAR_MONTH_DAY_HOUR_MINUTE.BKVH
 
-KVH IMU data and attitude logged to /log/kvh/YEAR_MONTH_DAY_HOUR_MINUTE.BKVH
+KVH IMU data and attitude logged to /log/kvh/YEAR_MONTH_DAY_HOUR_MINUTE.KVH
 
 
 
