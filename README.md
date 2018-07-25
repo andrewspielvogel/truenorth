@@ -38,9 +38,9 @@ baud : Sensor baud rate. Default: 921600
 
 lat : Latitude (degrees). Default: 39.32
 
-r_align : Instrument frame to vehicle frame rotation (In RPY Euler Angles). Default: "[0,0,0]"
+r_align : Instrument frame to vehicle frame rotation (In RPY Euler Angles in Radians). Default: "[0,0,0]"
 
-r0 : Initial vehicle estimate of vehicle attitude (In RPY Euler Angles). Default: "[0,0,0]"
+r0 : Initial vehicle estimate of vehicle attitude (In RPY Euler Angles in Radians). Default: "[0,0,0]"
 
 ang_bias : Initial estimate of the angular rate bias (rad/s). Default: [0,0,0]"
 
