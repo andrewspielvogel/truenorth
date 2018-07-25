@@ -8,11 +8,15 @@ Rosnode for true-north seeking gyrocompass. Tested on Ubuntu 16.04
 ```
 sudo apt-get install libeigen3-dev
 ```
-- Clone tryenorth, dscl_msgs, and helper_funcs repositories into the src folder of ROS workspace.
+- Clone truenorth abd 5 additional repositories into the src folder of ROS workspace.
 ```
 git clone git@github.com:andrewspielvogel/truenorth.git
 git clone git@github.com:andrewspielvogel/dscl_msgs.git
 git clone git@github.com:andrewspielvogel/helper_funcs.git
+git clone git@github.com:andrewspielvogel/imu_3dm_gx4.git
+git clone git@github.com:andrewspielvogel/att_so3.git
+git clone git@github.com:andrewspielvogel/mems_bias.git
+
 ```
 - Make you workspace. `cd` into the top level of your ROS workspace and run:
 ```
