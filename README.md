@@ -8,9 +8,15 @@ Rosnode for true-north seeking gyrocompass. Tested on Ubuntu 16.04
 ```
 sudo apt-get install libeigen3-dev
 ```
-- Clone node into src folder of ROS workspace.
+- Clone truenorth abd 5 additional repositories into the src folder of ROS workspace.
 ```
-git clone https://github.com/andrewspielvogel/truenorth.git
+git clone git@github.com:andrewspielvogel/truenorth.git
+git clone git@github.com:andrewspielvogel/dscl_msgs.git
+git clone git@github.com:andrewspielvogel/helper_funcs.git
+git clone git@github.com:andrewspielvogel/imu_3dm_gx4.git
+git clone git@github.com:andrewspielvogel/att_so3.git
+git clone git@github.com:andrewspielvogel/mems_bias.git
+
 ```
 - Make you workspace. `cd` into the top level of your ROS workspace and run:
 ```
@@ -38,9 +44,9 @@ baud : Sensor baud rate. Default: 921600
 
 lat : Latitude (degrees). Default: 39.32
 
-r_align : Instrument frame to vehicle frame rotation (In RPY Euler Angles). Default: "[0,0,0]"
+r_align : Instrument frame to vehicle frame rotation (In RPY Euler Angles in Radians). Default: "[0,0,0]"
 
-r0 : Initial vehicle estimate of vehicle attitude (In RPY Euler Angles). Default: "[0,0,0]"
+r0 : Initial vehicle estimate of vehicle attitude (In RPY Euler Angles in Radians). Default: "[0,0,0]"
 
 ang_bias : Initial estimate of the angular rate bias (rad/s). Default: [0,0,0]"
 
@@ -92,9 +98,9 @@ Topics published:
 ## Log Files
 Data logged in two log files. 
 
-KVH IMU hex data logged to /log/kvh/YEAR_MONTH_DAY_HOUR_MINUTE.BKVH
+KVH IMU hex-encoded data logged to /log/kvh/YEAR_MONTH_DAY_HOUR_MINUTE.BKVH
 
-KVH IMU data and attitude logged to /log/kvh/YEAR_MONTH_DAY_HOUR_MINUTE.BKVH
+KVH IMU ASCII data and attitude logged to /log/kvh/YEAR_MONTH_DAY_HOUR_MINUTE.KVH
 
 
 
