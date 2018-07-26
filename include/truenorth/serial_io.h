@@ -96,7 +96,6 @@ private:
 public:
     GyroData data; /**< Class for storing IMU data. */
     wqueue<GyroData> att_queue; /**< Queue for attitude estimation. */
-    wqueue<GyroData> bias_queue; /**< Queue for bias estimation. */
     wqueue<GyroData> log_queue; /**< Queue for logging IMU data. */
 
     /**

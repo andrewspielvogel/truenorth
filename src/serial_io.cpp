@@ -320,7 +320,7 @@ void SerialPort::on_receive_(const boost::system::error_code& ec, size_t bytes_t
 	unsigned int crc_sent_sum = (unsigned int) crc_sent.to_ulong();
 
 	
-	char buffer[512];
+	char buffer[1024];
 
 	sprintf(buffer,"%f %f %02X",rov_get_time(), ros::Time::now().toSec(),((unsigned char *) data_buf_raw_)[0]);
 

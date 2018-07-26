@@ -179,8 +179,6 @@ public:
     imu_bias.mag.y = -1;
     imu_bias.mag.z = -1;
       
-    pthread_mutex_unlock(&mutex_att);
-
 
     for (int i=0;i<6;i++)
       {
@@ -191,9 +189,13 @@ public:
     imu_data.stamp = serial->data.timestamp;
     imu_data.seq_num = serial->data.seq_num;
 
-    imu_data.header.stamp = ros::Time::now();
-    att.header.stamp      = ros::Time::now();
-    imu_bias.header.stamp = ros::Time::now();
+    pthread_mutex_unlock(&mutex_att);
+
+    ros::Time time = ros::Time::now();
+    
+    imu_data.header.stamp = time;
+    att.header.stamp      = time;
+    imu_bias.header.stamp = time;
 
     // publish packet
     chatter_.publish(imu_data);

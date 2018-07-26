@@ -59,11 +59,12 @@ class AttConsumerThread : public Thread
     {
       GyroData item = m_queue_.remove();
       
+      pthread_mutex_lock(&mutex_att);
 
       att.step(item.ang,item.acc,item.diff);
 
-      pthread_mutex_lock(&mutex_att);
       R_ni = att.att.R_ni;
+      
       pthread_mutex_unlock(&mutex_att);
       
     }
