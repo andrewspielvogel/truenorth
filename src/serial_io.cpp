@@ -302,7 +302,7 @@ void SerialPort::on_receive_(const boost::system::error_code& ec, size_t bytes_t
       if (data_cnt_>DATA_BUF_SIZE-5)
       {
 
-	float timestamp = ros::Time::now().toSec();
+	double timestamp = ros::Time::now().toSec();
 
 	// do crc checksum on data
 	boost::crc_optimal<32, 0x04C11DB7, 0xFFFFFFFF,0,false,false> checksum_agent;
