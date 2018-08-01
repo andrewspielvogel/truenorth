@@ -13,49 +13,53 @@ echo usage: tconnect_full.sh 0    // to launch and connect to window 0
 echo ----------------------------------------------------------------------
 
 
-# launch truenorth package, gyro_publisher node, and ROSCORE
+# launch ROSCORE
 echo 
-echo launching roscore and  truenorth package, gyro_publisher node
-tmux new-session -s truenorth -n KVH -d 'roslaunch truenorth att_est.launch --screen'
+echo launching ROSCORE in window 0
+tmux new-session -s truenorth -n ROSCORE -d 'roslaunch --core --screen'
 tmux set-option -t truenorth:0 remain-on-exit
 
-echo sleeping 5 seconds
+echo sleeping 5 seconds...
 sleep 5
 echo ...done sleeping, launching all else
 
-# launch phins package, phins node
-echo launching phins package, phins node
-tmux new-window -t truenorth:1 -n PHINS 'roslaunch phins phins.launch --screen'
+echo launching truenorth package, gyro_publisher node in window 1
+tmux new-window -t truenorth:1 -n KVH -d 'roslaunch truenorth att_est.launch --screen'
 tmux set-option -t truenorth:1 remain-on-exit
 
-# launch imu_3dm_gx4 package, imu_3dm_gx4 node
-echo launching imu_3dm_gx4 package, imu_3dm_gx4 node
-tmux new-window -t truenorth:2 -n 3DM_GX5 'roslaunch imu_3dm_gx4 imu.launch --screen'
+# launch phins package, phins node
+echo launching phins package, phins node in window 2
+tmux new-window -t truenorth:2 -n PHINS 'roslaunch phins phins.launch --screen'
 tmux set-option -t truenorth:2 remain-on-exit
 
-# launch roslaunch mems_bias  package, mems_bias_publisher node
-echo launching roslaunch mems_bias  package, mems_bias_publisher node
-tmux new-window -t truenorth:3 -n MEMS_BIAS 'roslaunch mems_bias mems_bias.launch --screen'
+# launch imu_3dm_gx4 package, imu_3dm_gx4 node
+echo launching imu_3dm_gx4 package, imu_3dm_gx4 node in window 3
+tmux new-window -t truenorth:3 -n 3DM_GX5 'roslaunch imu_3dm_gx4 imu.launch --screen'
 tmux set-option -t truenorth:3 remain-on-exit
 
-# launch roslaunch att_so3 package, att_so3_publisher node
-echo launching roslaunch att_so3 package, att_so3_publisher node
-tmux new-window -t truenorth:4 -n MEMS_ATT 'roslaunch att_so3 att.launch --screen'
+# launch roslaunch mems_bias  package, mems_bias_publisher node
+echo launching roslaunch mems_bias  package, mems_bias_publisher node in window 4
+tmux new-window -t truenorth:4 -n MEMS_BIAS 'roslaunch mems_bias mems_bias.launch --screen'
 tmux set-option -t truenorth:4 remain-on-exit
 
-# launch CPU and motherboard temp and fan sensor monotoring
-echo launching CPU and motherboard temp and fan sensor monotoring
-tmux new-window -t truenorth:5 -n CPU_TEMP 'roslaunch truenorth truenorth_cpu_monitor.launch  --screen'
+# launch roslaunch att_so3 package, att_so3_publisher node
+echo launching roslaunch att_so3 package, att_so3_publisher node in window 5
+tmux new-window -t truenorth:5 -n MEMS_ATT 'roslaunch att_so3 att.launch --screen'
 tmux set-option -t truenorth:5 remain-on-exit
+
+# launch CPU and motherboard temp and fan sensor monotoring
+echo launching CPU and motherboard temp and fan sensor monotoring in window 6
+tmux new-window -t truenorth:6 -n CPU_TEMP 'roslaunch truenorth truenorth_cpu_monitor.launch  --screen'
+tmux set-option -t truenorth:6 remain-on-exit
 
 # launch CPU load monitoring
 # tmux new-window -t truenorth:5 -n CPU_LOAD 'rosrun libsensors_monitor libsensors_monitor'
 # tmux set-option -t truenorth:5 remain-on-exit
 
 # launch rosbag record
-echo launching rosbag record
-tmux new-window -t truenorth:6 -n ROSBAG 'roslaunch truenorth truenorth_rosbag.launch --screen'
-tmux set-option -t truenorth:6 remain-on-exit
+echo launching rosbag record in window 7
+tmux new-window -t truenorth:7 -n ROSBAG 'roslaunch truenorth truenorth_rosbag.launch --screen'
+tmux set-option -t truenorth:7 remain-on-exit
 
 # list windows
 echo 
