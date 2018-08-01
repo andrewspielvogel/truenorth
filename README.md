@@ -23,14 +23,14 @@ git clone git@git.lcsr.jhu.edu:dscl/phins.git
 cd to your catkin workspace directory
 mkdir -p kvh_catkin_ws/src
 cd kvh_catkin_ws
-get the wstool file with:
+get the wstool file with (replace "llw" with your user name on github):
 wget --http-user llw --ask-password https://raw.githubusercontent.com/andrewspielvogel/truenorth/master/scripts/truenorth-on-shore.rosinstall
 clone all the repositories with:
 wstool init src truenorth-on-shore.rosinstall
 
 check workspace dependencies with
 resdep update
-rosdep check --from-paths src --ignore-sr
+rosdep check --from-paths src --ignore-src
 
 install workspace dependencies with
 
