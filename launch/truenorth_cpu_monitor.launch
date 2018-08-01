@@ -1,5 +1,8 @@
 <launch>
 
-  <node name="libsensors_monitor" pkg="libsensors_monitor" type="libsensors_monitor" output="screen" respawn="true"/>
+        <param name="reference_host" type="str" value="192.168.0.111" />
+	<include file="$(find system_monitor)/launch/system_monitor.launch" />
+
+	<node name="libsensors_monitor" pkg="libsensors_monitor" type="libsensors_monitor" output="screen" respawn="true" />
 
 </launch>
