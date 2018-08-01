@@ -1,6 +1,6 @@
 Rosnode for true-north seeking gyrocompass. Tested on Ubuntu 16.04
 
-## Installation:
+## Installation ON SHORE:
 
 - Install ROS. Instructions [here](http://wiki.ros.org/kinetic/Installation).
 - Setup ROS workspace. Instructions [here](http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment).
@@ -8,7 +8,7 @@ Rosnode for true-north seeking gyrocompass. Tested on Ubuntu 16.04
 ```
 sudo apt-get install libeigen3-dev
 ```
-- Clone truenorth abd 5 additional repositories into the src folder of ROS workspace.
+- Clone truenorth and 5 additional repositories into the src folder of ROS workspace.
 ```
 git clone git@github.com:andrewspielvogel/truenorth.git
 git clone git@github.com:andrewspielvogel/dscl_msgs.git
@@ -16,6 +16,18 @@ git clone git@github.com:andrewspielvogel/helper_funcs.git
 git clone git@github.com:andrewspielvogel/imu_3dm_gx4.git
 git clone git@github.com:andrewspielvogel/att_so3.git
 git clone git@github.com:andrewspielvogel/mems_bias.git
+git clone git@git.lcsr.jhu.edu:dscl/phins.git
+
+- Alternatively, use wstool
+ cd to your catkin workspace directory
+ 
+ get the wstool file with:
+ 
+      wget --http-user llw --ask-password https://github.com/andrewspielvogel/truenorth/blob/master/scripts/truenorth-on-shore.rosinstall
+ 
+ clone all the repositories with:
+ 
+      wstool init src truenorth-on-shore.rosinstall
 
 ```
 - Make you workspace. `cd` into the top level of your ROS workspace and run:
