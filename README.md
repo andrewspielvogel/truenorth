@@ -22,7 +22,7 @@ git clone git@git.lcsr.jhu.edu:dscl/phins.git
 ...
 cd to your catkin workspace directory
 get the wstool file with:
-wget --http-user llw --ask-password https://github.com/andrewspielvogel/truenorth/blob/master/scripts/truenorth-on-shore.rosinstall
+wget --http-user llw --ask-password https://raw.githubusercontent.com/andrewspielvogel/truenorth/master/scripts/truenorth-on-shore.rosinstall
 clone all the repositories with:
 wstool init src truenorth-on-shore.rosinstall
 ```
