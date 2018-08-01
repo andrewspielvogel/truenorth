@@ -17,8 +17,9 @@ git clone git@github.com:andrewspielvogel/imu_3dm_gx4.git
 git clone git@github.com:andrewspielvogel/att_so3.git
 git clone git@github.com:andrewspielvogel/mems_bias.git
 git clone git@git.lcsr.jhu.edu:dscl/phins.git
-
-- Alternatively, use wstool
+...
+- Alternatively, use wstool to install
+ ...
  cd to your catkin workspace directory
  
  get the wstool file with:
