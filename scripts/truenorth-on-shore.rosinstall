@@ -27,7 +27,7 @@
     uri: git@github.com:andrewspielvogel/truenorth.git
 
 - git:
-    local-name: linux_peripheral_interfaces.git
+    local-name: linux_peripheral_interfaces
     uri: https://github.com/ros-drivers/linux_peripheral_interfaces.git
 
 
