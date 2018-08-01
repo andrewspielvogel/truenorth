@@ -21,10 +21,20 @@ git clone git@git.lcsr.jhu.edu:dscl/phins.git
 - Alternatively, use wstool to install:
 ...
 cd to your catkin workspace directory
+mkdir -p kvh_catkin_ws/src
+cd kvh_catkin_ws
 get the wstool file with:
 wget --http-user llw --ask-password https://raw.githubusercontent.com/andrewspielvogel/truenorth/master/scripts/truenorth-on-shore.rosinstall
 clone all the repositories with:
 wstool init src truenorth-on-shore.rosinstall
+
+check workspace dependencies with
+resdep update
+rosdep check --from-paths src --ignore-sr
+
+install workspace dependencies with
+
+rosdep install --from-paths src --ignore-src
 ```
 - Make you workspace. `cd` into the top level of your ROS workspace and run:
 ```
