@@ -54,7 +54,7 @@ tmux set-option -t truenorth:5 remain-on-exit
 
 # launch rosbag record
 echo launching rosbag record
-tmux new-window -t truenorth:6 -n ROSBAG 'roslaunch truenorth truenorth_rosbag.launch  --screen'
+tmux new-window -t truenorth:6 -n ROSBAG 'roslaunch truenorth truenorth_rosbag.launch --screen'
 tmux set-option -t truenorth:6 remain-on-exit
 
 # list windows
@@ -83,6 +83,7 @@ echo
 # check to see if we have an argument 
 if [ "$#" -ne 0 ]; then
     echo connecting to window $1 in 5 seconds
+    sleep 5
     tmux select-window -t truenorth:$1
     tmux attach-session -t truenorth
 fi
