@@ -81,7 +81,8 @@ echo "NOTE: ^b p  previous window"
 echo 
 # optional integer command line argument to this shell to select active screen
 # check to see if we have an argument 
-if [ "$#" -ne 0 ]; then
+if [ "$#" -ne 0 ]
+then
     echo connecting to window $1 in 5 seconds
     sleep 5
     tmux select-window -t truenorth:$1
