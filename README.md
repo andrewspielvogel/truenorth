@@ -1,10 +1,9 @@
 Rosnode for true-north seeking gyrocompass. Tested on Ubuntu 16.04
 
 ## Installation ON SHORE:
-
 - Install ROS. Instructions [here](http://wiki.ros.org/kinetic/Installation).
 - Setup ROS workspace. Instructions [here](http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment).
-- Install eigen3 HOW TO DO THIS?
+- Install eigen3 HOW 
 ```
 sudo apt-get install libeigen3-dev
 ```
@@ -18,7 +17,7 @@ git clone git@github.com:andrewspielvogel/att_so3.git
 git clone git@github.com:andrewspielvogel/mems_bias.git
 git clone git@git.lcsr.jhu.edu:dscl/phins.git
 ```
-- Alternatively, use wstool to install:
+- Alternatively, use wstool to install the source
 ```
 cd to your catkin workspace directory
 mkdir -p kvh_catkin_ws/src
