@@ -1,0 +1,29 @@
+cpu_monitor:
+  check_core_temps: true
+  cpu_load_warn:  0.9
+  cpu_load_error: 1.0
+  cpu_load1_warn: 0.9
+  cpu_load5_warn: 0.8
+  cpu_temp_warn: 85.0
+  cpu_temp_error: 90.0
+hdd_monitor:
+  no_hdd_temp: true
+  no_hdd_temp_warn: false
+  hdd_level_warn: 0.90
+  hdd_level_error: 0.99
+  hdd_temp_warn: 55.0
+  hdd_temp_error: 70.0
+mem_monitor:
+  mem_level_warn: 0.90
+  mem_level_error: 0.99
+ntp_monitor_meinberg:
+  reference_host: 192.168.0.111
+  offset_tolerance: 10000.0
+  error_offset_tolerance: 100000.0
+ntp_monitor_ntpjhuedu:
+  reference_host: ntp.jhu.edu
+  offset_tolerance: 10000.0
+  error_offset_tolerance: 100000. 0 
+net_monitor:
+  net_level_warn: 0.95
+  net_capacity: 128.0
