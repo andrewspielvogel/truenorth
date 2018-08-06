@@ -154,7 +154,6 @@ void SerialPort::parse_data_( char *data_raw)
 
   }
   data.timestamp += data.diff;
-  data.comp_timestamp = ros::Time::now().toSec();
 
 
   // store data
@@ -303,6 +302,9 @@ void SerialPort::on_receive_(const boost::system::error_code& ec, size_t bytes_t
       if (data_cnt_>DATA_BUF_SIZE-5)
       {
 
+
+	double timestamp = ros::Time::now().toSec();
+
 	// do crc checksum on data
 	boost::crc_optimal<32, 0x04C11DB7, 0xFFFFFFFF,0,false,false> checksum_agent;
 	checksum_agent.process_bytes(data_buf_raw_,DATA_BUF_SIZE-4);
@@ -320,15 +322,15 @@ void SerialPort::on_receive_(const boost::system::error_code& ec, size_t bytes_t
 	unsigned int crc_sent_sum = (unsigned int) crc_sent.to_ulong();
 
 	
+        // 2018-08-04 LLW revised to keep track of buf_len and use it to append to buffer
 	char buffer[1024];
+	int  buf_len = 0;
 
-	sprintf(buffer,"%f %f %02X",rov_get_time(), ros::Time::now().toSec(),((unsigned char *) data_buf_raw_)[0]);
+	buf_len = sprintf(buffer,"%f %f %02X",rov_get_time(), ros::Time::now().toSec(),((unsigned char *) data_buf_raw_)[0]);
 
 	for (int j = 1; j < DATA_BUF_SIZE; ++j)
 	  {
-
-	    sprintf(buffer,"%s%02X",buffer,((unsigned char *) data_buf_raw_)[j]);
-
+	    buf_len += sprintf(&(buffer[buf_len]),"%02X",((unsigned char *) data_buf_raw_)[j]);
 	  }
 
 	log_this_now_dsl_format(LOG_FID_KVH_BINARY_FORMAT,(char *) LOG_FID_KVH_BINARY_SUFFIX,buffer);
@@ -338,6 +340,7 @@ void SerialPort::on_receive_(const boost::system::error_code& ec, size_t bytes_t
 	{	
 		   
 	  // parse data
+	  data.comp_timestamp = timestamp;
 	  parse_data_(data_buf_raw_);
 			    
 	}

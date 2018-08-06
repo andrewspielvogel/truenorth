@@ -1,14 +1,13 @@
 Rosnode for true-north seeking gyrocompass. Tested on Ubuntu 16.04
 
-## Installation:
-
+## Installation ON SHORE:
 - Install ROS. Instructions [here](http://wiki.ros.org/kinetic/Installation).
 - Setup ROS workspace. Instructions [here](http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment).
-- Install eigen3
+- Install eigen3 HOW 
 ```
 sudo apt-get install libeigen3-dev
 ```
-- Clone truenorth abd 5 additional repositories into the src folder of ROS workspace.
+- Clone truenorth and 5 additional repositories into the src folder of ROS workspace.
 ```
 git clone git@github.com:andrewspielvogel/truenorth.git
 git clone git@github.com:andrewspielvogel/dscl_msgs.git
@@ -16,7 +15,25 @@ git clone git@github.com:andrewspielvogel/helper_funcs.git
 git clone git@github.com:andrewspielvogel/imu_3dm_gx4.git
 git clone git@github.com:andrewspielvogel/att_so3.git
 git clone git@github.com:andrewspielvogel/mems_bias.git
+git clone git@git.lcsr.jhu.edu:dscl/phins.git
+```
+- Alternatively, use wstool to install the source
+```
+cd to your catkin workspace directory
+mkdir -p kvh_catkin_ws/src
+cd kvh_catkin_ws
+get the wstool file with (replace "llw" with your user name on github):
+wget --http-user llw --ask-password https://raw.githubusercontent.com/andrewspielvogel/truenorth/master/scripts/truenorth-on-shore.rosinstall
+clone all the repositories with:
+wstool init src truenorth-on-shore.rosinstall
 
+check workspace dependencies with
+resdep update
+rosdep check --from-paths src --ignore-src
+
+install workspace dependencies with
+
+rosdep install --from-paths src --ignore-src
 ```
 - Make you workspace. `cd` into the top level of your ROS workspace and run:
 ```

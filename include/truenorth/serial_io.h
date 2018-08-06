@@ -28,6 +28,8 @@ typedef unsigned char	cc_t;
 typedef unsigned int	speed_t;
 typedef unsigned int	tcflag_t;
 
+// 2018-08-01 LLW undef to supress compiler warning
+#undef  NCCS
 #define NCCS 19
 #define BOTHER 0010000
 

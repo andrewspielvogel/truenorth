@@ -1,0 +1,5 @@
+<launch>
+
+  <node name="rosbag" pkg="rosbag" type="record" args="-a -o /log/bag/truenorth" output="screen" respawn="true"/>
+
+</launch>

@@ -1,0 +1,7 @@
+<launch>
+
+    <include file="$(find truenorth)/launch/ros_system_monitor.launch" />
+
+    <node name="libsensors_monitor" pkg="libsensors_monitor" type="libsensors_monitor" output="screen" respawn="true" />
+
+</launch>

@@ -1,0 +1,43 @@
+- git:
+    local-name: att_so3
+    uri: git@github.com:andrewspielvogel/att_so3.git
+
+- git:
+    local-name: dscl_msgs
+    uri: git@github.com:andrewspielvogel/dscl_msgs.git
+
+- git:
+    local-name: helper_funcs
+    uri: git@github.com:andrewspielvogel/helper_funcs.git
+
+- git:
+    local-name: imu_3dm_gx4
+    uri: git@github.com:andrewspielvogel/imu_3dm_gx4.git
+
+- git:
+    local-name: mems_bias
+    uri: git@github.com:andrewspielvogel/mems_bias.git
+
+- git:
+    local-name: phins
+    uri: git@git.lcsr.jhu.edu:dscl/phins.git
+
+- git:
+    local-name: truenorth
+    uri: git@github.com:andrewspielvogel/truenorth.git
+
+- git:
+    local-name: linux_peripheral_interfaces
+    uri: https://github.com/ros-drivers/linux_peripheral_interfaces.git
+    
+- git:
+    local-name: ros-system-monitor
+    uri: git@github.com:ethz-asl/ros-system-monitor.git
+
+
+
+
+
+
+
+

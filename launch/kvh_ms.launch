@@ -10,4 +10,8 @@
 
 	<include file="$(find truenorth)/launch/att_est.launch" />
 
+	<node name="record_hr" pkg="rosbag" type="record" args="-a --split --duration=60m -o /log/bag/" output="screen"/>
+
+	<node name="record_all" pkg="rosbag" type="record" args="-a -o /log/bag/" output="screen"/>
+
 </launch>

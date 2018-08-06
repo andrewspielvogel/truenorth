@@ -13,6 +13,7 @@
 #include <dscl_msgs/KvhImu.h>
 #include <dscl_msgs/ImuBias.h>
 #include <helper_funcs/helper_funcs.h>
+#include <helper_funcs/log.h>
 #include <Eigen/Core>
 #include <string>
 #include <math.h>
@@ -259,5 +260,6 @@ int main(int argc, char **argv)
     att_est.att_thread->detach();
     att_est.log_thread->detach();
     att_est.serial->stop();
+    log_flush_and_close_log_files();
     return 0;
 }

@@ -1,0 +1,27 @@
+<launch>
+
+  <arg name="machine_name" default="$(optenv HOSTNAME localhost)"/>
+  <arg name="config_file" default="$(find truenorth)/config/system_monitor.yaml"/>
+  <arg name="output" default="log"/>
+
+  <rosparam command="load" file="$(arg config_file)"
+    ns="system_monitor/$(arg machine_name)"/>
+
+  <group ns="system_monitor/$(arg machine_name)">
+    <node name="cpu_monitor" pkg="system_monitor" type="cpu_monitor.py"
+      output="$(arg output)" respawn="true"/>
+    <node name="hdd_monitor" pkg="system_monitor" type="hdd_monitor.py"
+      output="$(arg output)" respawn="true"/>
+    <node name="mem_monitor" pkg="system_monitor" type="mem_monitor.py"
+      output="$(arg output)" respawn="true"/>
+    <node name="net_monitor" pkg="system_monitor" type="net_monitor.py"
+      output="$(arg output)" respawn="true"/>      
+    <node name="ntp_monitor_meinberg" pkg="system_monitor" type="ntp_monitor.py"
+      output="$(arg output)" respawn="true"/>
+    <node name="ntp_monitor_ntpjhuedu" pkg="system_monitor" type="ntp_monitor.py"
+      output="$(arg output)" respawn="true"/>      
+  </group>
+  
+
+</launch>
+

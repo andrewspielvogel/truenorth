@@ -1,0 +1,18 @@
+<launch>
+
+  <include file="$(find truenorth)/launch/att_est.launch" />
+
+  <include file="$(find phins)/launch/phins.launch" />
+
+  <include file="$(find imu_3dm_gx4)/launch/imu.launch" />
+
+  <include file="$(find mems_bias)/launch/mems_bias.launch" />
+
+  <include file="$(find att_so3)/launch/att.launch" />
+
+  <include file="$(find truenorth)/launch/truenorth_cpu_monitor.launch" />
+
+  <node name="rosbag" pkg="rosbag" type="record" args="-a -o /log/ros/truenorth" output="screen" respawn="true"/>
+
+</launch>
+
