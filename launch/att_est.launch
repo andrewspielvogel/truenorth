@@ -11,12 +11,12 @@
 	       <param name="r0" value="[0,0,0]" type="string" />
 	       <param name="ang_bias" value="[0,0,0]" type="string" />
 	       <param name="acc_bias" value="[0,0,0]" type="string" />
-	       <param name="k_g" value="[0.1,0.1,0.1]" type="string" />
-	       <param name="k_north" value="[0.1,0.1,0.1]" type="string"/>
-	       <param name="k_acc" value="[1,1,1]" type="string"/>
-	       <param name="k_acc_bias" value="[0.1,0.1,0.1]" type="string" />
-	       <param name="k_ang_bias" value="[0.00001,0.00001,0.00001]" type="string" />
-	       <param name="k_E_n" value="[0.00001,0.00001,0.00001]" type="string" />
+	       <param name="k_g" value="[0.05,0.0001,0.05]" type="string" />
+	       <param name="k_north" value="[0.0001,0.01,0.0001]" type="string"/>
+	       <param name="k_acc" value="[0.1,0.1,0.1]" type="string"/>
+	       <param name="k_acc_bias" value="[0,0,0]" type="string" />
+	       <param name="k_ang_bias" value="[0,0,0]" type="string" />
+	       <param name="k_E_n" value="[0.0001,0.000001,0.0001]" type="string" />
 	       
         </node> 
 
