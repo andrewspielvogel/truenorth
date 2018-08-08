@@ -123,7 +123,7 @@ def main(argv):
                  "\nk_ang_bias: " + str(params.as_matrix()[0][15:18]) +
                  "\nk_acc_bias: " + str(params.as_matrix()[0][18:21]) +
                  "\nk_E_n: " + str(params.as_matrix()[0][21:24]) +
-                 "\nk_b: " + str(params.as_matrix()[0][24:27]) +
+                 "\nk_g: " + str(params.as_matrix()[0][24:27]) +
                  "\nk_north: " + str(params.as_matrix()[0][27:30]) + "\n")
         pp.savefig(plt.figure(0))
         plt.close("all")
@@ -164,24 +164,35 @@ def main(argv):
         plt.figure(1)
 
         error = resampled_data-phins_data[:,12:15]*math.pi/180.0
-        plot_comp(plt,phins_t,np.unwrap(error)*180.0/math.pi,'Attitude Error','rad',1)
+        plot_comp(plt,phins_t,np.unwrap(error)*180.0/math.pi,'Attitude Error','degrees',1)
         plt.subplot(311)
-        plt.axis([t[0],t[-1], -1, 1])
+        plt.axis([t[0],t[-1], -0.5, 0.5])
+        plt.ylabel('roll (degrees)')
         plt.subplot(312)
-        plt.axis([t[0],t[-1], -1, 1])
+        plt.axis([t[0],t[-1], -0.5, 0.5])
+        plt.ylabel('pitch (degrees)')
         plt.subplot(313)
-        plt.axis([t[0],t[-1], -5, 5])
+        plt.axis([t[0],t[-1], -5,5])
+        plt.ylabel('heading (degrees)')
         pp.savefig(plt.figure(1))
         plt.close("all")
 
+    plt.figure(1)
+    plot_comp(plt,t,data[:,14:17],'Earth Rate North','rad/s',plot_samp_skip)
+    pp.savefig(plt.figure(1))
+    plt.close("all")
 
     plt.figure(1)
-    plot_comp(plt,t,data[:,11:14],'Angular Rate Bias','rad/s',plot_samp_skip)
+    plt.suptitle('Earth Rate North Norm',y=0.99)
+    plt.plot(t,np.sum(np.abs(data[:,14:17])**2,axis=1)**(1./2))
+    plt.ylabel('Norm')
+    plt.xlabel('Seconds (s)')
+    plt.grid(True)
     pp.savefig(plt.figure(1))
     plt.close("all")
     
     plt.figure(1)
-    plot_comp(plt,t,data[:,14:17],'Earth Rate North','rad/s',plot_samp_skip)
+    plot_comp(plt,t,data[:,11:14],'Angular Rate Bias','rad/s',plot_samp_skip)
     pp.savefig(plt.figure(1))
     plt.close("all")
 
@@ -193,21 +204,48 @@ def main(argv):
 
     plt.figure(1)
     plot_comp(plt,t,data[:,20:23],'Estimated Acceleration','m/s^2',plot_samp_skip)
+    plt.subplot(311)
+    plt.axis([t[0],t[-1], -1,1])
+    plt.subplot(312)
+    plt.axis([t[0],t[-1], 9,11])
+    plt.subplot(313)
+    plt.axis([t[0],t[-1], -1,1])
+    pp.savefig(plt.figure(1))
+    plt.close("all")
+
+    plt.figure(1)
+    plot_comp(plt,t,data[:,20:23]-data[:,23:26],'da','m/s^2',plot_samp_skip)
+    pp.savefig(plt.figure(1))
+    plt.close("all")
+
+    plt.figure(1)
+    plot_comp(plt,t,np.cross(data[:,23:26],data[:,20:23]-data[:,23:26]),'J(a)da','m/s^2',plot_samp_skip)
+    pp.savefig(plt.figure(1))
+    plt.close("all")
+
+    plt.figure(1)
+    plot_comp(plt,t,np.cross(data[:,26:29],data[:,20:23]-data[:,23:26]),'J(w)da','m/s^2',plot_samp_skip)
     pp.savefig(plt.figure(1))
     plt.close("all")
     
     plt.figure(1)
     plot_comp(plt,t,data[:,23:26],'Measure Acceleration','m/s^2',plot_samp_skip)
+    plt.subplot(311)
+    plt.axis([t[0],t[-1], -1,1])
+    plt.subplot(312)
+    plt.axis([t[0],t[-1], 9,11])
+    plt.subplot(313)
+    plt.axis([t[0],t[-1], -1,1])
     pp.savefig(plt.figure(1))
     plt.close("all")
-    
+     
     plt.figure(1)
     plot_comp(plt,t,data[:,26:29],'Measured Angular Rate','rad/s',plot_samp_skip)
     pp.savefig(plt.figure(1))
     plt.close("all")
 
     plt.figure(1)
-    plot_comp(plt,t,data[:,29:32],'Measured Mag','',plot_samp_skip)
+    plot_comp(plt,t,data[:,29:32],'Measured Mag','gaus',plot_samp_skip)
     pp.savefig(plt.figure(1))
     plt.close("all")
     
@@ -232,19 +270,19 @@ def main(argv):
     if phins_exists:
 
         plt.figure(1)
-        plot_comp(plt,phins_t,phins_data[:,6:9],'PHINS Angular Rate','rad/s',1)
+        plot_comp(plt,phins_t,phins_data[:,6:9],'PHINS Angular Rate','degrees/s',1)
         pp.savefig(plt.figure(1))
         plt.close("all")
 
         plt.figure(1)
-        plot_comp(plt,t,data[:,29:32],'PHINS Acceleration','m/s^2',1)
+        plot_comp(plt,phins_t,phins_data[:,9:12]*9.81,'PHINS Acceleration','m/s^2',1)
         pp.savefig(plt.figure(1))
         plt.close("all")
         
         plt.figure(1)
         plt.suptitle('Heave',y=0.99)
         plt.plot(phins_t,phins_data[:,15])
-        plt.ylabel('Heave')
+        plt.ylabel('Heave (m)')
         plt.xlabel('Seconds (s)')
         plt.grid(True)
         pp.savefig(plt.figure(1))
