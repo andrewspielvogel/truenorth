@@ -49,7 +49,7 @@ public:
 
  private:
 
-  float cnt_;
+  float t_;
 
   int start_; /**< Start estimator after initializing estimated linear acceleration. */
   

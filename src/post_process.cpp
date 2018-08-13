@@ -43,7 +43,6 @@ int main(int argc, char* argv[])
    *   
    ***************************************************/
   
-  //AttEst att(params.k, params.R0*params.R_align,params.lat);
   AttEst att(params);
   GyroData gyro_data(params.hz);
 

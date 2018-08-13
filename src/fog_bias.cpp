@@ -40,6 +40,7 @@ FOGBias::FOGBias(config_params parameters)
   acc_hat = params.R0.transpose()*get_R_en(params.lat)*a_e;
   start_ = 0;
 
+  t_ = 0;
 
 }
 
@@ -67,8 +68,8 @@ void FOGBias::step(Eigen::Vector3d ang,Eigen::Vector3d acc,float dt)
   }
 
 
+  t_ += dt;
 
-  
   /**************************************************************
    * Sensor Bias and North Vector Estimator
    **************************************************************/
@@ -79,7 +80,7 @@ void FOGBias::step(Eigen::Vector3d ang,Eigen::Vector3d acc,float dt)
 
   //Eigen::Vector3d dw_E_north = -skew(ang - gamma_*acc.normalized())*w_E_north - params.K_E_n*skew(acc)*da;
 
-  Eigen::Vector3d dw_E_north = -skew(ang - gamma_*acc.normalized())*w_E_north - params.K_E_n*skew(acc)*da - 0.5*(w_E_north.norm()-w_E_n(0))*w_E_north.normalized();
+  Eigen::Vector3d dw_E_north = -skew(ang - gamma_*acc.normalized())*w_E_north - params.K_E_n*skew(acc)*da - (w_E_north.norm()-w_E_n(0))*w_E_north.normalized();
 
 
   Eigen::Vector3d dw_b       = -params.K_ang_bias*skew(acc)*da;
@@ -87,8 +88,12 @@ void FOGBias::step(Eigen::Vector3d ang,Eigen::Vector3d acc,float dt)
 
 
   acc_hat   = acc_hat   + dt*dacc_hat;
-  w_E_north = w_E_north + dt*dw_E_north;  
-  w_b       = w_b       + dt*dw_b;
-  a_b       = a_b       + dt*da_b;
+  w_E_north = w_E_north + dt*dw_E_north;
 
+
+  if (t_ > 15.0*60.0){
+    w_b       = w_b       + dt*dw_b;
+    a_b       = a_b       + dt*da_b;
+  }
+  
 }

@@ -4,14 +4,14 @@ process_att(){
 
     TRUENORTH="$(rospack find truenorth)"
 
-    mkdir -p $2/configs
-    mkdir -p $2/processed
-    mkdir -p $2/pdfs
+    mkdir -p $2/kvh/configs
+    mkdir -p $2/kvh/processed
+    mkdir -p $2/kvh/pdfs
     
     KVH=$2/$3.KVH
-    CSV=$2/processed/$1.csv
-    CONFIG=$2/configs/$1.m
-    PDF=$2/pdfs/$1.pdf
+    CSV=$2/kvh/processed/$1.csv
+    CONFIG=$2/kvh/configs/$1.m
+    PDF=$2/kvh/pdfs/$1.pdf
     PHINS=$2/$3.INS
 
     
@@ -184,10 +184,7 @@ k_north=[0.0001,0.01,0.0001]
 
 
 
-EXP=exp24
-#16
-#28
-
+EXP=exp1
 DIR=/home/spiels/exp/dive3
 LOG=2018_08_07
 HZ=5000
@@ -203,7 +200,54 @@ ang_bias=[0,0,0]
 ang_bias=[0.00000005,0.000003,-0.00001]
 acc_bias=[-0.01,0,-0.005]
 k_g=[0.1,0.0001,0.1]
-k_north=[0.0001,0.05,0.0001]
+k_north=[0.0001,0.01,0.0001]
+
+#process_att $EXP $DIR $LOG $HZ $rpy_ro $rpy_align $k_acc $k_E_n $k_acc_bias $k_ang_bias $acc_bias $ang_bias $k_g $k_north
+
+
+EXP=exp3
+#14
+DIR=/home/spiels/exp/dive3
+LOG=2018_08_07
+HZ=5000
+rpy_align=[-1.5684,0.0016,1.5701]
+rpy_ro=[0,0,-0.2]
+k_acc=[.1,.1,.1]
+k_acc_bias=[0.05,0.05,0.05]
+#k_acc_bias=[0,0,0]
+k_ang_bias=[0.000001,0.000001,0.000001]
+#k_ang_bias=[0,0,0]
+k_E_n=[0.000005,0.000005,0.000005]
+ang_bias=[0,0,0]
+ang_bias=[0,0.000003,-0.00001]
+acc_bias=[-0.01,0,-0.005]
+k_g=[0.1,0.0001,0.1]
+k_north=[0.0001,0.01,0.0001]
+
+#process_att $EXP $DIR $LOG $HZ $rpy_ro $rpy_align $k_acc $k_E_n $k_acc_bias $k_ang_bias $acc_bias $ang_bias $k_g $k_north
+
+
+EXP=exp39
+#33
+#27
+#29
+#14
+DIR=/home/spiels/exp/dive5
+LOG=2018_08_08
+HZ=5000
+rpy_align=[-1.5684,0.0016,1.5701]
+rpy_ro=[0,0,-0.2]
+k_acc=[.1,.1,.1]
+k_acc_bias=[0.5,0.5,0.5]
+#k_acc_bias=[0,0,0]
+k_ang_bias=[0.0000025,0.0000025,0.0000025]
+#k_ang_bias=[0,0,0]
+k_E_n=[0.000005,0.000005,0.000005]
+ang_bias=[0,0,0]
+ang_bias=[0,0.000003,-0.00001]
+acc_bias=[-0.01,0,-0.005]
+k_g=[1,1,1]
+k_north=[1,1,1]
 
 process_att $EXP $DIR $LOG $HZ $rpy_ro $rpy_align $k_acc $k_E_n $k_acc_bias $k_ang_bias $acc_bias $ang_bias $k_g $k_north
 

@@ -55,6 +55,7 @@ public:
   Eigen::Vector3d w_E_n_; /**< \f${}^Nw_E\f$ vector. */
   Eigen::Vector3d a_n_; /**< \f${}^Na_g\f$ Vector. */
 
+
 };
 
 #endif

@@ -38,7 +38,6 @@ SO3Att::SO3Att(config_params parameters)
 
   P_ = R_ni.transpose()*a_n_.normalized()*a_n_.normalized().transpose()*R_ni;
 
-
 }
 
 SO3Att::~SO3Att(void)
@@ -62,9 +61,10 @@ void SO3Att::step(Eigen::Vector3d ang,Eigen::Vector3d g, Eigen::Vector3d north, 
   P_ = R_ni.transpose()*a_n_.normalized()*a_n_.normalized().transpose()*R_ni;
 
   // Define local level (g_error_) and heading (h_error_) error terms
-  g_error_ = params.K_g*skew((g).normalized())*R_ni.transpose()*a_n_.normalized();
-  h_error_ = P_*params.K_north*skew(north.normalized())*R_ni.transpose().block<3,1>(0,0);
+  g_error_ = skew(g.normalized())*R_ni.transpose()*a_n_.normalized();
+  h_error_ = P_*(skew(north.normalized())*R_ni.transpose().block<3,1>(0,0));
+
   
-  R_ni     =  R_ni*((skew(g_error_ + h_error_ + ang - R_ni.transpose()*w_E_n_)*dt).exp());
+  R_ni     =  R_ni*((skew(params.K_g*g_error_ + params.K_north*h_error_ + ang - R_ni.transpose()*w_E_n_)*dt).exp());
   
 }
