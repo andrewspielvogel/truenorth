@@ -34,6 +34,9 @@
     local-name: ros-system-monitor
     uri: git@github.com:ethz-asl/ros-system-monitor.git
 
+- git:
+    local-name: truenorth_live_docs
+    uri: git@llw.me.jhu.edu:DSCL/truenorth_live_docs.git
 
 
 
