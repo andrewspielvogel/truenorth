@@ -227,7 +227,7 @@ k_north=[0.0001,0.01,0.0001]
 #process_att $EXP $DIR $LOG $HZ $rpy_ro $rpy_align $k_acc $k_E_n $k_acc_bias $k_ang_bias $acc_bias $ang_bias $k_g $k_north
 
 
-EXP=exp39
+EXP=exp43
 #33
 #27
 #29

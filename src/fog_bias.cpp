@@ -80,6 +80,9 @@ void FOGBias::step(Eigen::Vector3d ang,Eigen::Vector3d acc,float dt)
 
   //Eigen::Vector3d dw_E_north = -skew(ang - gamma_*acc.normalized())*w_E_north - params.K_E_n*skew(acc)*da;
 
+
+
+  
   Eigen::Vector3d dw_E_north = -skew(ang - gamma_*acc.normalized())*w_E_north - params.K_E_n*skew(acc)*da - (w_E_north.norm()-w_E_n(0))*w_E_north.normalized();
 
 
