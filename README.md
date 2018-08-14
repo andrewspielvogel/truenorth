@@ -35,7 +35,6 @@ wstool init src truenorth-on-shore.rosinstall
 ```
 cd src
 git clone git@llw.me.jhu.edu:DSCL/truenorth.git
-
 clone all the repositories with:
 wstool init ../src truenorth/scripts/truenorth-shore-sea.rosinstall
 ```
