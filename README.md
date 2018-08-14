@@ -33,18 +33,23 @@ wstool init src truenorth-on-shore.rosinstall
 ```
 - Sea Server
 ```
-get the wstool file with:
-wget --http-user spiels --ask-password http://llw.me.jhu.edu/DSCL/truenorth/raw/master/scripts/truenorth-shore-sea.rosinstall
+cd src
+git clone git@llw.me.jhu.edu:DSCL/truenorth.git
+
 clone all the repositories with:
-wstool init src truenorth-shore-sea.rosinstall
+wstool init ../src truenorth/scripts/truenorth-shore-sea.rosinstall
 ```
 
-check workspace dependencies with
+- Check workspace dependencies with:
+
+```
+cd ..
 resdep update
 rosdep check --from-paths src --ignore-src
+```
 
-install workspace dependencies with
-
+- Install workspace dependencies with
+```
 rosdep install --from-paths src --ignore-src
 ```
 - Make you workspace. `cd` into the top level of your ROS workspace and run:
