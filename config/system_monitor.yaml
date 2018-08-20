@@ -17,11 +17,11 @@ mem_monitor:
   mem_level_warn: 0.90
   mem_level_error: 0.99
 ntp_monitor_meinberg:
-  reference_host: 192.168.0.111
+  reference_host: 192.168.100.210
   offset_tolerance: 10000.0
   error_offset_tolerance: 100000.0
-ntp_monitor_ntpjhuedu:
-  reference_host: ntp.jhu.edu
+ntp_monitor_sentry_main_stack:
+  reference_host: 192.168.100.100
   offset_tolerance: 10000.0
   error_offset_tolerance: 100000. 0 
 net_monitor:

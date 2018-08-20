@@ -16,9 +16,9 @@
       output="$(arg output)" respawn="true"/>
     <node name="net_monitor" pkg="system_monitor" type="net_monitor.py"
       output="$(arg output)" respawn="true"/>      
-    <node name="ntp_monitor_meinberg" pkg="system_monitor" type="ntp_monitor.py"
+    <node name="ntp_monitor_meinberg"          pkg="system_monitor" type="ntp_monitor.py"
       output="$(arg output)" respawn="true"/>
-    <node name="ntp_monitor_ntpjhuedu" pkg="system_monitor" type="ntp_monitor.py"
+    <node name="ntp_monitor_sentry_main_stack"  pkg="system_monitor" type="ntp_monitor.py"
       output="$(arg output)" respawn="true"/>      
   </group>
   
