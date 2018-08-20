@@ -1,3 +1,7 @@
 html/
 latex/
 *~
+hex2bin
+*.ascii
+*.binary
+throttle
