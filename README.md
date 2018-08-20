@@ -32,7 +32,7 @@ wget --http-user llw --ask-password https://raw.githubusercontent.com/andrewspie
 clone all the repositories with:
 wstool init src truenorth-on-shore.rosinstall
 ```
-- At Sea Server - Shipboard GIT server is at 192.168.100.212
+- At Sea Server Sentry 2018 Ops- JHU GIT server is on Sentry net at 192.168.100.212
 ```
 cd src
 git clone git@192.168.100.212:DSCL/truenorth.git
