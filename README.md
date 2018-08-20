@@ -37,7 +37,7 @@ wstool init src truenorth-on-shore.rosinstall
 cd src
 git clone git@192.168.100.212:DSCL/truenorth.git
 clone all the repositories with:
-wstool init ../src truenorth/scripts/truenorth-at-sea-sentry-2018.rosinstal
+wstool init ../src truenorth/scripts/truenorth-at-sea-sentry-2018.rosinstall
 ```
 
 - Check workspace dependencies with:
