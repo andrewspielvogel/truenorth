@@ -32,12 +32,12 @@ wget --http-user llw --ask-password https://raw.githubusercontent.com/andrewspie
 clone all the repositories with:
 wstool init src truenorth-on-shore.rosinstall
 ```
-- Sea Server
+- At Sea Server - Shipboard GIT server is at 192.168.100.212
 ```
 cd src
-git clone git@llw.me.jhu.edu:DSCL/truenorth.git
+git clone git@192.168.100.212:DSCL/truenorth.git
 clone all the repositories with:
-wstool init ../src truenorth/scripts/truenorth-shore-sea.rosinstall
+wstool init ../src truenorth/scripts/truenorth-at-sea-sentry-2018.rosinstal
 ```
 
 - Check workspace dependencies with:
