@@ -8,7 +8,7 @@
 
 #include <Eigen/Core>
 #include <truenorth/att_est.h>
-
+#include <iostream>
 
 
 /*
@@ -17,8 +17,10 @@
  *
  */
 
-AttEst::AttEst(config_params params) : bias(params), att(params)
+AttEst::AttEst(config_params parameters) : bias(parameters), att(parameters)
 {
+
+  params = parameters;
   
   printf("*************************\nATTITUDE ESTIMATOR USING GAINS:\n*************************\n");
   printf("        r0: [%f,%f,%f] (rpy)\n",rot2rph(params.R0)(0),rot2rph(params.R0)(1),rot2rph(params.R0)(2));
@@ -29,6 +31,7 @@ AttEst::AttEst(config_params params) : bias(params), att(params)
   printf("     k_E_n: [%f,%f,%f] (diag)\n",params.K_E_n(0,0),params.K_E_n(1,1),params.K_E_n(2,2));
   printf("       k_g: [%f,%f,%f] (diag)\n",params.K_g(0,0),params.K_g(1,1),params.K_g(2,2));
   printf("   k_north: [%f,%f,%f] (diag)\n",params.K_north(0,0),params.K_north(1,1),params.K_north(2,2));
+  printf("       lat: %f (degrees)\n",params.lat);
   
 }
 
@@ -45,6 +48,7 @@ void AttEst::step(Eigen::Vector3d ang, Eigen::Vector3d acc, float dt)
    * Step Sensor Bias and North Vector Estimator
    **************************************************************/
 
+  
   bias.step(ang, acc, dt);
   
   /**************************************************************
