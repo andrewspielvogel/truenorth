@@ -5,3 +5,5 @@ hex2bin
 *.ascii
 *.binary
 throttle
+spare_att_est.launch
+spare_tlaunch_full.sh
