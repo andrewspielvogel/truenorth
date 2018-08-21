@@ -47,14 +47,15 @@ echo launching roslaunch att_so3 package, att_so3_publisher node in window 5
 tmux new-window -t truenorth:5 -n MEMS_ATT 'roslaunch att_so3 att.launch --screen'
 tmux set-option -t truenorth:5 remain-on-exit
 
+# launch CPU load monitoring including ros_system_monitor and libsensors_monitor
+#tmux new-window -t truenorth:6 -n CPU_TEMP 'roslaunch truenorth truenorth_cpu_monitor.launch  --screen'
+#tmux set-option -t truenorth:6 remain-on-exit
+
+
 # launch CPU and motherboard temp and fan sensor monotoring
 echo launching CPU and motherboard temp and fan sensor monotoring in window 6
-tmux new-window -t truenorth:6 -n CPU_TEMP 'roslaunch truenorth truenorth_cpu_monitor.launch  --screen'
-tmux set-option -t truenorth:6 remain-on-exit
-
-# launch CPU load monitoring
-# tmux new-window -t truenorth:5 -n CPU_LOAD 'rosrun libsensors_monitor libsensors_monitor'
-# tmux set-option -t truenorth:5 remain-on-exit
+tmux new-window -t truenorth:6 -n CPU_LOAD 'rosrun libsensors_monitor libsensors_monitor'
+ tmux set-option -t truenorth:6 remain-on-exit
 
 # launch rosbag record
 echo launching rosbag record in window 7
