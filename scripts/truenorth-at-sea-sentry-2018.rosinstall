@@ -40,7 +40,9 @@
     local-name: truenorth_live_docs
     uri: git@192.168.100.212:DSCL/truenorth_live_docs.git
 
-
+- git:
+    local-name: jhu_sentry_monitor
+    uri: git@192.168.100.212:DSCL/jhu_sentry_monitor.git
 
 
 
