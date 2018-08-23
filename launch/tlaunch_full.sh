@@ -62,6 +62,11 @@ echo launching rosbag record in window 7
 tmux new-window -t truenorth:7 -n ROSBAG 'roslaunch truenorth truenorth_rosbag.launch --screen'
 tmux set-option -t truenorth:7 remain-on-exit
 
+# launch jhu sentry monitor node
+echo launching jhu_sentry_monitor record to populate sentry acomm queues in window 8
+tmux new-window -t truenorth:8 -n ACOMM_QUEUES 'roslaunch jhu_sentry_monitor jhu_sentry_monitor.launch --screen'
+tmux set-option -t truenorth:8 remain-on-exit
+
 # list windows
 echo 
 echo List of tmux windows from "tmux list-windows"

@@ -7,7 +7,7 @@
 	       <param name="port" value="/dev/ttyUSB1" type="str" />
 	       <param name="baud" value="4147200" type="int" />
 	       <param name="lat" value="32.4" type="double" />
-	       <param name="r_align" value="[-1.57080,0,1.57080]" type="string" />
+	       <param name="r_align" value="[-1.5798,0.0573,1.5712]" type="string" />
 	       <param name="r0" value="[0,0,0]" type="string" />
 	       <param name="ang_bias" value="[0,0,0]" type="string" />
 	       <param name="acc_bias" value="[0,0,0]" type="string" />
