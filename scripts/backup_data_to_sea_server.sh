@@ -21,7 +21,15 @@ SRC_IP='192.168.100.112'
 SRC_USER='spiels'
 SRC_DIR='/log/'
 
+###########################################
+# do --dry-run first and check all files
+###########################################
+# DRY RUN
 RSYNC_CMD="rsync -avh --dry-run --progress $SRC_USER@$SRC_IP:$SRC_DIR $DEST_DIR"
+# THE REAL THING
+# RSYNC_CMD="rsync -avh --progress $SRC_USER@$SRC_IP:$SRC_DIR $DEST_DIR"
+
+
 echo $RSYNC_CMD 
 
 $RSYNC_CMD
