@@ -14,9 +14,9 @@
 	       <param name="k_g" value="[0.01,0.01,0.01]" type="string" />
 	       <param name="k_north" value="[0.1,0.1,0.1]" type="string"/>
 	       <param name="k_acc" value="[0.1,0.1,0.1]" type="string"/>
-	       <param name="k_acc_bias" value="[0.5,0.5,0.5]" type="string" />
-	       <param name="k_ang_bias" value="[0.0000025,0.0000025,0.0000025]" type="string" />
-	       <param name="k_E_n" value="[0.000025,0.000025,0.000025]" type="string" />
+	       <param name="k_acc_bias" value="[0.25,0,0.25]" type="string" />
+	       <param name="k_ang_bias" value="[0.0000005,0.0000005,0.0000005]" type="string" />
+	       <param name="k_E_n" value="[0.0000025,0.0000025,0.0000025]" type="string" />
 	       
         </node> 
 
