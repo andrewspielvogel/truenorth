@@ -6,20 +6,31 @@ import datetime as dt
 import math
 
 time_fmt_str = "%d %b %Y %H:%M:%S"
+line_sep = '--------------------------------'
 
 def main():
 
   # parse args
-  parser = argparse.ArgumentParser()
+  parser = argparse.ArgumentParser(
+    description='Takes a dsl formatted ascii input file, a begin time, and either a end time'
+    + ' or a duration in seconds and produces a dsl formatted ascii output file that contains'
+    + ' only the lines from the input file that fall within the computed interval.')
 
-  # files
-  parser.add_argument('input')
-  parser.add_argument('output')
+  # files (required positional args)
+  parser.add_argument('input', help='input file path')
+  parser.add_argument('output', help='output file path')
 
-  # time slicing
-  parser.add_argument('--begin_time', nargs=6, type=int, required=True)
-  parser.add_argument('--end_time', nargs=6, type=int)
-  parser.add_argument('--duration', type=int)
+  # time slicing (optional args)
+  parser.add_argument('--begin_time', nargs=6, type=int,
+    metavar=('YEAR','MONTH','DAY','HOURS', 'MINUTES', 'SECONDS'),
+    help='formatted as: year(int) month(int) day(int) hour(int) minute(int) seconds(float)')
+
+  parser.add_argument('--end_time', nargs=6, type=int,
+    metavar=('YEAR', 'MONTH', 'DAY', 'HOURS', 'MINUTES', 'SECONDS'),
+    help='formatted as: year(int) month(int) day(int) hour(int) minute(int) seconds(float)')
+
+  parser.add_argument('--duration', type=int,
+    help='an amount in seconds')
 
   args = parser.parse_args();
 
@@ -28,21 +39,28 @@ def main():
   output_file = open(args.output, 'w')
 
   # determine start time
-  begin_time = dt.datetime(args.begin_time[0], args.begin_time[1], args.begin_time[2],
-    args.begin_time[3], args.begin_time[4], args.begin_time[5])
+  if args.begin_time != None:
+    begin_time = dt.datetime(args.begin_time[0], args.begin_time[1], args.begin_time[2],
+      args.begin_time[3], args.begin_time[4], args.begin_time[5])
+  else:
+    begin_time = dt.datetime(1900, 1, 1, 0, 0, 0, 0)
 
   # determine end time
-  print args.end_time, args.duration
   if args.end_time != None and args.duration != None:
     print "error: can't specify both end time and duration for a slice"
     return
   elif args.end_time != None:
     end_time = dt.datetime(args.end_time[0], args.end_time[1], args.end_time[2],
       args.end_time[3], args.end_time[4], args.end_time[5])
-  else: # duration is specified
+  elif args.duration != None:
     duration = dt.timedelta(seconds=args.duration)
     end_time = begin_time + duration
+  else:
+    end_time = dt.datetime(dt.MAXYEAR, 12, 31, 23, 59, 59, 999999)
 
+  print line_sep
+  print 'TSLICE'
+  print line_sep
   print 'slicing ', args.input
   print 'from', begin_time.strftime(time_fmt_str)
   print 'to', end_time.strftime(time_fmt_str)
@@ -84,10 +102,12 @@ def main():
 
     # sys.stdin.readline()
 
+  print line_sep
   print 'Summary:'
   print '# input lines =', num_input_lines
   print '# good lines =', num_good_lines
   print '# bad lines =', num_bad_lines
+  print line_sep
 
 
 if __name__=='__main__':
