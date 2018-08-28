@@ -82,12 +82,10 @@ void FOGBias::step(Eigen::Vector3d ang,Eigen::Vector3d acc,float dt)
   
   Eigen::Vector3d dacc_hat   = -skew(ang - w_b - w_E_north)*acc_hat + skew(ang)*a_b - params.K_acc*da;
 
-  //Eigen::Vector3d dw_E_north = -skew(ang - gamma_*acc.normalized())*w_E_north - params.K_E_n*skew(acc)*da;
-
   float min = 15.0;  
 
   
-  Eigen::Vector3d dw_E_north = -skew(ang - gamma_*acc.normalized())*w_E_north - params.K_E_n*skew(acc)*da - (w_E_north.norm()-w_E_n(0))*w_E_north.normalized();
+  Eigen::Vector3d dw_E_north = -skew(ang - gamma_*acc.normalized())*w_E_north - params.K_E_n*skew(acc)*da;// - (w_E_north.norm()-w_E_n(0))*w_E_north.normalized();
 
 
   Eigen::Vector3d dw_b       = -params.K_ang_bias*skew(acc)*da;
@@ -96,11 +94,11 @@ void FOGBias::step(Eigen::Vector3d ang,Eigen::Vector3d acc,float dt)
 
   acc_hat   = acc_hat   + dt*dacc_hat;
   w_E_north = w_E_north + dt*dw_E_north;
-
-
+  
   if (t_ > min*60.0){
     w_b       = w_b       + dt*dw_b;
     a_b       = a_b       + dt*da_b;
   }
+    
   
 }
