@@ -17,7 +17,7 @@ def time_since(time_axis, t0, time_interval):
     elif time_interval == 'days':
       time_axis[i] = secs / (60*60*24)
 
-  return time_axis[i]
+  return time_axis
 
 
 def taxis(unix_time_axis):
@@ -31,7 +31,7 @@ def taxis(unix_time_axis):
 
   time_axis = unix_time_axis
   l = len(unix_time_axis)
- 
+
   if delta_t <= 60*10:
     time_axis = time_since(unix_time_axis, min_midnight, 'seconds')
   elif delta_t <= 60*120:
