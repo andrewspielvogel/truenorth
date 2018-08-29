@@ -8,38 +8,40 @@ from numpy import genfromtxt
 from pandas import read_csv
 from matplotlib.backends.backend_pdf import PdfPages
 import getopt,sys
-
+from taxis import taxis
+from taxis import tlabel
+import copy
 
 def calc_bound(data):
     return max([(abs(data[:,0])).max(),(abs(data[:,1])).max(),(abs(data[:,2])).max()])
 
-def plot_comp(plt,t,data,title,units,step):
+def plot_comp(plt,time,data,title,units,step):
 
     y_height = calc_bound(data[:,0:3])
     
     if y_height==0.0:
         y_height = 1
 
-    t = t[0:-1:step]
+    t = copy.copy(time[0:-1:step])
+    label = tlabel(t);
+    t = taxis(t)
     data = data[0:-1:step]
     
     plt.suptitle(title,y=0.99)
     plt.subplot(311)
     plt.plot(t,data[:,0])
     plt.ylabel('X (' + units + ')')
-    plt.xlabel('Seconds (s)')
     plt.axis([t[0],t[-1], -y_height-y_height/10.0,y_height+y_height/10.0])
     plt.grid(True)
     plt.subplot(312)
     plt.plot(t,data[:,1])
     plt.ylabel('Y (' + units + ')')
-    plt.xlabel('Seconds (s)')
     plt.axis([t[0],t[-1], -y_height-y_height/10.0,y_height+y_height/10.0])
     plt.grid(True)
     plt.subplot(313)
     plt.plot(t,data[:,2])
     plt.ylabel('Z (' + units + ')')
-    plt.xlabel('Seconds (s)')
+    plt.xlabel(label)
     plt.axis([t[0],t[-1], -y_height-y_height/10.0,y_height+y_height/10.0])
     plt.grid(True)
 
@@ -132,30 +134,28 @@ def main(argv):
     plt.figure(1)
     plt.suptitle('Estimated Attitude',y=0.99)
     plt.subplot(311)
-    plt.plot(t,data[:,8]*180.0/math.pi,label="KVH")
+    plt.plot(taxis(t),data[:,8]*180.0/math.pi,label="KVH")
     if phins_exists:
-        plt.plot(phins_t,phins_data[:,12],label="PHINS")
+        plt.plot(taxis(phins_t),phins_data[:,12],label="PHINS")
     plt.ylabel('Roll (degrees)')
-    plt.xlabel('Seconds (s)')
-    plt.axis([t[0],t[-1], -10, 10])
+    plt.axis([taxis(t)[0],taxis(t)[-1], -10, 10])
     plt.grid(True)
     if phins_exists:
         plt.legend(bbox_to_anchor=(0., 1., 1., 1.), loc=3,ncol=2, mode="expand", borderaxespad=0.25, fontsize=12)
     plt.subplot(312)
-    plt.plot(t,data[:,9]*180.0/math.pi)
+    plt.plot(taxis(t),data[:,9]*180.0/math.pi)
     if phins_exists:
-        plt.plot(phins_t,phins_data[:,13])
+        plt.plot(taxis(phins_t),phins_data[:,13])
     plt.ylabel('Pitch (degrees)')
-    plt.xlabel('Seconds (s)')
-    plt.axis([t[0],t[-1], -10, 10])
+    plt.axis([taxis(t)[0],taxis(t)[-1], -10, 10])
     plt.grid(True)
     plt.subplot(313)
-    plt.plot(t,data[:,10]*180.0/math.pi)
+    plt.plot(taxis(t),data[:,10]*180.0/math.pi)
     if phins_exists:
-        plt.plot(phins_t,phins_data[:,14])
+        plt.plot(taxis(phins_t),phins_data[:,14])
     plt.ylabel('Heading (degrees)')
-    plt.xlabel('Seconds (s)')
-    plt.axis([t[0],t[-1], -180, 180])
+    plt.xlabel(tlabel(phins_t))
+    plt.axis([taxis(t)[0],taxis(t)[-1], -180, 180])
     plt.grid(True)
     pp.savefig(plt.figure(1))
     plt.close("all")
@@ -164,15 +164,16 @@ def main(argv):
         plt.figure(1)
 
         error = resampled_data-phins_data[:,12:15]*math.pi/180.0
-        plot_comp(plt,phins_t,np.unwrap(error)*180.0/math.pi,'Attitude Error','degrees',1)
+        rms =  math.sqrt(sum(np.sum(np.abs(np.unwrap(error)*180.0/math.pi)**2,axis=1))/np.size(error)/3)
+        plot_comp(plt,phins_t,np.unwrap(error)*180.0/math.pi,'Attitude Error -- RMS Error: %f degrees' % (rms),'degrees',1)
         plt.subplot(311)
-        plt.axis([t[0],t[-1], -1, 1])
+        plt.axis([taxis(t)[0],taxis(t)[-1], -1, 1])
         plt.ylabel('roll (degrees)')
         plt.subplot(312)
-        plt.axis([t[0],t[-1], -1, 1])
+        plt.axis([taxis(t)[0],taxis(t)[-1], -1, 1])
         plt.ylabel('pitch (degrees)')
         plt.subplot(313)
-        plt.axis([t[0],t[-1], -10,10])
+        plt.axis([taxis(t)[0],taxis(t)[-1], -5,5])
         plt.ylabel('heading (degrees)')
         pp.savefig(plt.figure(1))
         plt.close("all")
@@ -184,9 +185,9 @@ def main(argv):
 
     plt.figure(1)
     plt.suptitle('Earth Rate North Norm',y=0.99)
-    plt.plot(t,np.sum(np.abs(data[:,14:17])**2,axis=1)**(1./2))
+    plt.plot(taxis(t),np.sum(np.abs(data[:,14:17])**2,axis=1)**(1./2))
     plt.ylabel('Norm')
-    plt.xlabel('Seconds (s)')
+    plt.xlabel(tlabel(t))
     plt.grid(True)
     pp.savefig(plt.figure(1))
     plt.close("all")
@@ -205,11 +206,11 @@ def main(argv):
     plt.figure(1)
     plot_comp(plt,t,data[:,20:23],'Estimated Acceleration','m/s^2',plot_samp_skip)
     plt.subplot(311)
-    plt.axis([t[0],t[-1], -0.3,0.3])
+    plt.axis([taxis(t)[0],taxis(t)[-1], -2,2])
     plt.subplot(312)
-    plt.axis([t[0],t[-1], 9.4,9.8])
+    plt.axis([taxis(t)[0],taxis(t)[-1], 9,11])
     plt.subplot(313)
-    plt.axis([t[0],t[-1], 0.7,1.3])
+    plt.axis([taxis(t)[0],taxis(t)[-1], -2,2])
     pp.savefig(plt.figure(1))
     plt.close("all")
 
@@ -225,6 +226,12 @@ def main(argv):
 
     plt.figure(1)
     plot_comp(plt,t,np.cross(data[:,26:29],data[:,20:23]-data[:,23:26]),'J(w)da','m/s^2',plot_samp_skip)
+    pp.savefig(plt.figure(1))
+    plt.close("all")
+
+    plt.figure(1)
+    plot_comp(plt,t,np.cross(data[:,26:29],data[:,40:43]),'J(w)vel','m/s',plot_samp_skip)
+    #plot_comp(plt,t,data[:,40:43],'J(w)vel','m/s',plot_samp_skip)
     pp.savefig(plt.figure(1))
     plt.close("all")
     
@@ -246,10 +253,10 @@ def main(argv):
     plt.figure(1)
     y_height = max([abs(data[:,32].min()),abs(data[:,32].max())])
     plt.suptitle('Temp',y=0.99)
-    plt.plot(t,data[:,32])
+    plt.plot(taxis(t),data[:,32])
     plt.ylabel('Temp (C)')
-    plt.xlabel('Seconds (s)')
-    plt.axis([t[0],t[-1], 0,y_height+y_height/10.0])
+    plt.xlabel(tlabel(t))
+    plt.axis([taxis(t)[0],taxis(t)[-1], 0,y_height+y_height/10.0])
     plt.grid(True)
     pp.savefig(plt.figure(1))
     plt.close("all")
@@ -275,9 +282,9 @@ def main(argv):
         
         plt.figure(1)
         plt.suptitle('Heave',y=0.99)
-        plt.plot(phins_t,phins_data[:,15])
+        plt.plot(taxis(phins_t),phins_data[:,15])
         plt.ylabel('Heave (m)')
-        plt.xlabel('Seconds (s)')
+        plt.xlabel(tlabel(phins_t))
         plt.grid(True)
         pp.savefig(plt.figure(1))
         plt.close("all")

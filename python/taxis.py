@@ -1,8 +1,10 @@
 import datetime as dt
 import numpy as np
+import copy as copy
 
-def time_since(time_axis, t0, time_interval):
+def time_since(time_axis_input, t0, time_interval):
 
+  time_axis = copy.copy(time_axis_input)
   s = len(time_axis)
 
   for i in range(s):
