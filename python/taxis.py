@@ -43,3 +43,26 @@ def taxis(unix_time_axis):
 
   return time_axis
 
+
+def tlabel(unix_time):
+# Mar 23 2007 LLW Companion to taxis.
+#                 Gives unit label for labeling axis
+# Example:
+# plot(taxis(dvl.unix_time),dvl.position(:,1))
+# xlabel(tlabel(dvl.unix_time))
+
+  dt = np.max(unix_time) - np.min(unix_time)
+
+  ans = ''
+
+  if (dt < (60*10)):
+    ans =  'SECONDS'
+  elif (dt < (60*120)):
+    ans = 'MINUTES'
+  elif (dt <= (3*60*60*24)):
+    ans = 'HOURS'
+  else:
+    ans = 'DAYS'
+
+  return ans
+
