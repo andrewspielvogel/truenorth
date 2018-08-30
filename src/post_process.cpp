@@ -105,26 +105,26 @@ int main(int argc, char* argv[])
     acc = gyro_data.acc*9.81;
     ang = gyro_data.ang;
 
-    att.step(ang,acc-a_c,1.0/(float)params.hz);
+    att.step(ang,acc-skew(ang)*a_c,1.0/(float)params.hz);
+    //att.step(ang,acc,1.0/(float)params.hz);
 
     att_euler_ang = rot2rph(att.att.R_ni*params.R_align.transpose());
 
 
-    fprintf(outfile,"ATT_PRO,%d,%02d,%02d,%02d,%02d,%02f,%f,%f,%f,%f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%d,%d,%d,%d,%d,%d,%d\n",year,month,day,hour,minute,second,rov_time,att_euler_ang(0),att_euler_ang(1),att_euler_ang(2),att.bias.w_b(0),att.bias.w_b(1),att.bias.w_b(2),att.bias.w_E_north(0),att.bias.w_E_north(1),att.bias.w_E_north(2),att.bias.a_b(0),att.bias.a_b(1),att.bias.a_b(2),att.bias.acc_hat(0),att.bias.acc_hat(1),att.bias.acc_hat(2),acc(0),acc(1),acc(2),ang(0),ang(1),ang(2),gyro_data.mag(0),gyro_data.mag(1),gyro_data.mag(2),gyro_data.temp,gyro_data.seq_num,status(0),status(1),status(2),status(3),status(4),status(5));
+    fprintf(outfile,"ATT_PRO,%d,%02d,%02d,%02d,%02d,%02f,%f,%f,%f,%f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%d,%d,%d,%d,%d,%d,%d,%.10f,%.10f,%.10f\n",year,month,day,hour,minute,second,rov_time,att_euler_ang(0),att_euler_ang(1),att_euler_ang(2),att.bias.w_b(0),att.bias.w_b(1),att.bias.w_b(2),att.bias.w_E_north(0),att.bias.w_E_north(1),att.bias.w_E_north(2),att.bias.a_b(0),att.bias.a_b(1),att.bias.a_b(2),att.bias.acc_hat(0),att.bias.acc_hat(1),att.bias.acc_hat(2),acc(0),acc(1),acc(2),ang(0),ang(1),ang(2),gyro_data.mag(0),gyro_data.mag(1),gyro_data.mag(2),gyro_data.temp,gyro_data.seq_num,status(0),status(1),status(2),status(3),status(4),status(5),a_c(0),a_c(1),a_c(2));
 
     
     
 
-    if ((((int)time) % (30) == 0)) {
+    if ((((int)time) % (1800) < 10)) {
       
       hours   = ((int) time)/3600;
-      minutes = ((int) time - hours*3600)/60;
-      int seconds_ = ((int) time - hours*3600 - minutes*60);
-      if (seconds_ != seconds) {
-	seconds = seconds_;
+      int minutes_ = ((int) time - hours*3600)/60;
+      if (minutes_ != minutes) {
+	minutes = minutes_;
 	char buffer [256];
-	int n = sprintf(buffer,"%02d:%02d:%02d OF DATA PROCESSED",hours,minutes,seconds);
-	std::cout<<"\r"<<buffer<<"\n";//std::flush;
+	int n = sprintf(buffer,"%02d:%02d:00 OF DATA PROCESSED",hours,minutes);
+	std::cout<<"\r"<<buffer<<"\n";
       }
     }
 
