@@ -42,6 +42,7 @@ function err = tn_opt(p)
   k_E_n=      '[0.0001,0.0001,0.0001]';
   acc_bias=   '[0.01,0.0,0.0]';
   ang_bias=   '[0.0,0.0,0.0]';
+  ang_bias  =  sprintf('[%f,%f,%f]',p(1),p(2),p(3))
   ang_bias=   '[0.000003,0.0,0.00001]';
   LAT=        '32.71';
 
