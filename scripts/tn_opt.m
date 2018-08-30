@@ -1,3 +1,4 @@
+
 function err = tn_opt(p)
 % 
 % 2018-08-29 LLW For numerical optmization of KVH gyro bias with fminsearch
@@ -33,7 +34,7 @@ function err = tn_opt(p)
 
   % algorithm parameters NO SPACES BETWEEN NUMBERS OR COMMAS
   rpy_align=  '[-1.5798,0.0573,1.5712]';
-  rpy_ro=     '[0.0,0.0,1.0]';
+  rpy_ro=     '[0.0,0.0,4.01]';
   k_g=        '[0.1,0.1,0.1]';
   k_north=    '[0.01,0.01,0.01]';
   k_acc=      '[10.0,10.0,10.0]';
@@ -137,6 +138,6 @@ function err = tn_opt(p)
   fprintf(1,'tn_opt: cmd output= %s\n', cmdout);
 
   % compute rms error
-  err = tn_opt_compute_rms_error(CSV, PHINS, ang_bias);
+  err = tn_opt_compute_rms_error(CSV, PHINS, [ang_bias acc_bias]);
   
   return;

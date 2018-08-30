@@ -76,7 +76,13 @@ function rms_error = tn_opt_compute_rms_error(kvh_csv_fn, phins_log_fn, optional
   
   % compute overall rms error
   rms_error = sqrt(mean(sum((err_att(nt0:end,:).^2)')))
-    
+
+  %  compute weighted RMS error
+  err_att_sq_weighted(:,1) = err_att(:,1).^2 *(0.01);
+  err_att_sq_weighted(:,2) = err_att(:,2).^2 *(0.01);
+  err_att_sq_weighted(:,3) = err_att(:,3).^2 *(1.0);
+  rms_error = sqrt(mean(sum(err_att_sq_weighted')));
+  
 
   % ----------------------------------------------------------------------
   % plot unwrapped rph
