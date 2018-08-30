@@ -1,0 +1,139 @@
+
+LOG 2018/08/30 17:05:27:
+
+result = fminsearch('tn_opt',[0.000003 0.0 0.00001 0 0 0], options)
+
+for ang and acc bias, in that order, yielded after 275 iterations
+
+   0.000003162402515
+   0.000001710741483
+   0.000010563625520
+   0.009353641459384
+  -0.003051164595081
+  -0.005800709552088
+
+
+result = fminsearch('tn_opt',[0.000003 0.0 0.00001 0 0 0], options)
+
+yielded RMS of 0.185, 0.215,  0.886 total RMS 0.93027 with parameters
+
+***********************************
+    RUNNING ATTITUDE ESTIMATION
+***********************************
+
+tn_opt: cmd status=0
+tn_opt: cmd output= LOADING CONFIG FILE: /home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494/proc/kvh/configs/dive_bottom_expt01.m
+***********************************
+           LOADED PARAMS 
+***********************************
+  last_mod: 2018-08-30T17:01:08.626673
+        hz: 10 (s^-1)
+       lat: 0.570897 (radians)
+    o_file: /home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494/proc/kvh/processed/dive_bottom.CSV
+    i_file: /home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494/kvh/dive_bottom.KVH
+        r0: [0.000000,-0.000000,1.000000] (rpy)
+   r_align: [-1.579800,0.057300,1.571200] (rpy)
+     k_acc: [10.000000,10.000000,10.000000] (diag)
+     k_mag: [0.000000,0.000000,0.000000] (diag)
+k_ang_bias: [0.000000,0.000000,0.000000] (diag)
+k_acc_bias: [0.000000,0.000000,0.000000] (diag)
+k_mag_bias: [0.000000,0.000000,0.000000] (diag)
+     k_E_n: [0.000100,0.000100,0.000100] (diag)
+       k_g: [0.100000,0.100000,0.100000] (diag)
+   k_north: [0.010000,0.010000,0.010000] (diag)
+  acc_bias: [0.009354,-0.003051,-0.005801] (diag)
+  ang_bias: [0.000003,0.000002,0.000011] (diag)
+  mag_bias: [0.000000,0.000000,0.000000] (diag)
+*************************
+ATTITUDE ESTIMATOR USING GAINS:
+*************************
+        r0: [0.000000,-0.000000,1.000000] (rpy)
+   r_align: [-1.579800,0.057300,1.571200] (rpy)
+     k_acc: [10.000000,10.000000,10.000000] (diag)
+k_ang_bias: [0.000000,0.000000,0.000000] (diag)
+k_acc_bias: [0.000000,0.000000,0.000000] (diag)
+     k_E_n: [0.000100,0.000100,0.000100] (diag)
+       k_g: [0.100000,0.100000,0.100000] (diag)
+   k_north: [0.010000,0.010000,0.010000] (diag)
+       lat: 0.570897 (degrees)
+***********************************
+    RUNNING ATTITUDE ESTIMATION
+***********************************
+
+
+tn_opt: Phins data structure exists in Workspace
+tn_opt: Reading KVH data from /home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494/proc/kvh/processed/dive_bottom.CSV
+
+rms_error_dof =
+
+   0.185356444233110   0.214958356947493   0.885911102038559
+
+
+rms_error =
+
+   0.930270169012998
+
+
+----------------------------------------------------------------------
+
+
+LOG 2018/08/30 19:58:19:  Fminsearch of
+
+result = fminsearch('tn_opt',[  0.000003162402515   0.000001710741483   0.000010563625520   0.009353641459384  -0.003051164595081 -0.005800709552088], options)
+
+with weighted RMS 1.0x for heading and 0.01X for roll and pitch yielded 
+
+ans =
+
+   0.000003083163786
+   0.000001807260271
+   0.000012498206088
+   0.008583091534961
+  -0.001739827097389
+  -0.006883214529009
+
+
+Yiedled RMS errors of 0.189, 0.209, and 0.791 for R, P, and H
+
+with these parameters:
+
+***********************************
+    RUNNING ATTITUDE ESTIMATION
+***********************************
+
+tn_opt: cmd status=0
+tn_opt: cmd output= LOADING CONFIG FILE: /home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494/proc/kvh/configs/dive_bottom_expt01.m
+***********************************
+           LOADED PARAMS 
+***********************************
+  last_mod: 2018-08-30T18:07:20.220834
+        hz: 10 (s^-1)
+       lat: 0.570897 (radians)
+    o_file: /home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494/proc/kvh/processed/dive_bottom.CSV
+    i_file: /home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494/kvh/dive_bottom.KVH
+        r0: [0.000000,-0.000000,-2.273185] (rpy)
+   r_align: [-1.579800,0.057300,1.571200] (rpy)
+     k_acc: [10.000000,10.000000,10.000000] (diag)
+     k_mag: [0.000000,0.000000,0.000000] (diag)
+k_ang_bias: [0.000000,0.000000,0.000000] (diag)
+k_acc_bias: [0.000000,0.000000,0.000000] (diag)
+k_mag_bias: [0.000000,0.000000,0.000000] (diag)
+     k_E_n: [0.000100,0.000100,0.000100] (diag)
+       k_g: [0.100000,0.100000,0.100000] (diag)
+   k_north: [0.010000,0.010000,0.010000] (diag)
+  acc_bias: [0.008596,-0.001822,-0.006868] (diag)
+  ang_bias: [0.000003,0.000002,0.000012] (diag)
+  mag_bias: [0.000000,0.000000,0.000000] (diag)
+*************************
+ATTITUDE ESTIMATOR USING GAINS:
+*************************
+        r0: [0.000000,-0.000000,-2.273185] (rpy)
+   r_align: [-1.579800,0.057300,1.571200] (rpy)
+     k_acc: [10.000000,10.000000,10.000000] (diag)
+k_ang_bias: [0.000000,0.000000,0.000000] (diag)
+k_acc_bias: [0.000000,0.000000,0.000000] (diag)
+     k_E_n: [0.000100,0.000100,0.000100] (diag)
+       k_g: [0.100000,0.100000,0.100000] (diag)
+   k_north: [0.010000,0.010000,0.010000] (diag)
+       lat: 0.570897 (degrees)
+***********************************
