@@ -8,7 +8,7 @@ process_att(){
     mkdir -p $2/proc/kvh/processed
     mkdir -p $2/proc/kvh/pdfs
     
-    KVH=$2/kvh/acc$3avg500.KVH
+    KVH=$2/kvh/$3_dvl.KVH
     CSV=$2/proc/kvh/processed/$1.csv
     CONFIG=$2/proc/kvh/configs/$1.m
     PDF=$2/proc/kvh/pdfs/$1.pdf
@@ -24,25 +24,26 @@ process_att(){
 
 
 
-DIR=/home/lcsr/cruise_data/sentry491
-#LOG=2018_08_26_07_00
-LOG=2018_08_24_05-07
-EXP=${LOG}_exp5
+DIR=/home/lcsr/cruise_data/dives_10hz/sentry494
+LOG=dive_10hz_bottom
+EXP=${LOG}_exp11
+#7
 HZ=10
-#6
 rpy_align=[-1.5798,0.0573,1.5712]
-rpy_ro=[0,0,2.1]
+rpy_ro=[0,0,-2.2]
 k_g=[1,1,1]
-k_north=[1,1,1]
+k_north=[0.001,0.001,0.001]
 k_acc=[10,10,10]
-k_acc_bias=[5,0,5]
+k_acc_bias=[0.25,0,0.25]
 k_acc_bias=[0,0,0]
 k_ang_bias=[0.000001,0.000001,0.000001]
-k_ang_bias=[0,0,0]
-k_E_n=[0.0001,0.0001,0.0001]
+#k_ang_bias=[0,0,0]
+k_E_n=[0.0005,0.0005,0.0005]
 #k_E_n=[0,0,0]
+acc_bias=[0.07,0,-0.02]
 acc_bias=[0,0,0]
-ang_bias=[0,0,0]
+ang_bias=[0.000002,0,0.000013]
+#ang_bias=[0,0,0]
 LAT=32.71
 
 process_att $EXP $DIR $LOG $HZ $rpy_ro $rpy_align $k_acc $k_E_n $k_acc_bias $k_ang_bias $acc_bias $ang_bias $k_g $k_north $LAT

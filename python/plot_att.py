@@ -163,9 +163,10 @@ def main(argv):
     if phins_exists:
         plt.figure(1)
 
-        error = resampled_data-phins_data[:,12:15]*math.pi/180.0
-        rms =  math.sqrt(sum(np.sum(np.abs(np.unwrap(error)*180.0/math.pi)**2,axis=1))/np.size(error)/3)
-        plot_comp(plt,phins_t,np.unwrap(error)*180.0/math.pi,'Attitude Error -- RMS Error: %f degrees' % (rms),'degrees',1)
+        error = np.unwrap(np.unwrap(resampled_data)-np.unwrap(phins_data[:,12:15]*math.pi/180.0))
+
+        rms = math.sqrt(np.dot(error[:,2],error[:,2])/len(error[:,2]))*180.0/math.pi
+        plot_comp(plt,phins_t,error*180.0/math.pi,'Attitude Error -- Heading RMS Error: %f degrees' % (rms),'degrees',1)
         plt.subplot(311)
         plt.axis([taxis(t)[0],taxis(t)[-1], -1, 1])
         plt.ylabel('roll (degrees)')
