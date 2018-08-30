@@ -123,8 +123,13 @@ int main(int argc, char* argv[])
       if (minutes_ != minutes) {
 	minutes = minutes_;
 	char buffer [256];
+<<<<<<< HEAD
 	int n = sprintf(buffer,"%02d:%02d:00 OF DATA PROCESSED",hours,minutes);
 	std::cout<<"\r"<<buffer<<"\n";
+=======
+	//	int n = sprintf(buffer,"%02d:%02d:%02d OF DATA PROCESSED",hours,minutes,seconds);
+	//	std::cout<<"\r"<<buffer<<"\n";//std::flush;
+>>>>>>> 31b5ba9eba72604216077451f6b282f6c1eac263
       }
     }
 
