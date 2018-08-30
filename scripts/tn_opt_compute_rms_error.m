@@ -27,7 +27,7 @@ function rms_error = tn_opt_compute_rms_error(kvh_csv_fn, phins_log_fn, optional
   end
 
   % read the kvh csv file from the simulation
-  fprintf(1,'tnopt: Reading KVH data from %s\n', kvh_csv_fn);
+  fprintf(1,'tn_opt: Reading KVH data from %s\n', kvh_csv_fn);
 
   % read the CSV file from the numerical simulation
   % skip first row and, and first column of all records
@@ -57,6 +57,8 @@ function rms_error = tn_opt_compute_rms_error(kvh_csv_fn, phins_log_fn, optional
   % unwrap kvh heading
   kvh_att(:,3) = unwrap360(kvh_att(:,3));
 
+  % assign phins angles  
+  phins_att = phins.att;
   % unwrap phins heading
   phins_att(:,3) = unwrap360(phins.att(:,3));
 
@@ -74,7 +76,6 @@ function rms_error = tn_opt_compute_rms_error(kvh_csv_fn, phins_log_fn, optional
   
   % compute overall rms error
   rms_error = sqrt(mean(sum((err_att(nt0:end,:).^2)')))
-  
     
 
   % ----------------------------------------------------------------------

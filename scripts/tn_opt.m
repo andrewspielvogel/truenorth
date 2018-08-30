@@ -33,7 +33,7 @@ function err = tn_opt(p)
 
   % algorithm parameters NO SPACES BETWEEN NUMBERS OR COMMAS
   rpy_align=  '[-1.5798,0.0573,1.5712]';
-  rpy_ro=     '[0.0,0.0,1.57]';
+  rpy_ro=     '[0.0,0.0,1.0]';
   k_g=        '[0.1,0.1,0.1]';
   k_north=    '[0.01,0.01,0.01]';
   k_acc=      '[10.0,10.0,10.0]';
@@ -41,9 +41,13 @@ function err = tn_opt(p)
   k_ang_bias= '[0.0,0.0,0.0]';
   k_E_n=      '[0.0001,0.0001,0.0001]';
   acc_bias=   '[0.01,0.0,0.0]';
+  acc_bias=   '[0.0,0.0,0.0]';
+  acc_bias  =  sprintf('[%f,%f,%f]',p(4),p(5),p(6))
+
   ang_bias=   '[0.0,0.0,0.0]';
   ang_bias=   '[0.000003,0.0,0.00001]';
   ang_bias  =  sprintf('[%f,%f,%f]',p(1),p(2),p(3))
+  
   LAT=        '32.71';
 
   % construct input and putput file names
