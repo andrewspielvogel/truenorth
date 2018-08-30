@@ -1,15 +1,14 @@
-function p_min = tn_opt(p)
+function err = tn_opt(p)
 % 
 % 2018-08-29 LLW For numerical optmization of KVH gyro bias with fminsearch
 % this file is based upon att_process_script.sh by Andrew Spielvogel
 %
-% p is a Nx1 set of algorithm parameters, initially
+% p is a Nx1 set of algorithm parameters, initially just angular rate bia
 %
 % expects a global phins data structure named 'phins' is loaded in workspace
 %
-
-
-  p_min = p;
+% returns nonnegatve scalar err 
+%  
 
   % if global data structure phins has been loaded, then we will load it
   global phins;
@@ -19,6 +18,7 @@ function p_min = tn_opt(p)
   else 
     fprintf(1,'tn_opt: Phins data structure does not exist in Workspace\n');
   end 
+  
 
   % construct command line for gen_config_file.py
   TrueNorth_Package_dir = '/home/llw/kvh_catkin_ws/src/truenorth'
@@ -49,13 +49,13 @@ function p_min = tn_opt(p)
   % KVH inpu file name 
   KVH    =[EXP_dir '/kvh/' LOG_in_fn '.KVH'];
   % Phinps inpu file name 
-  PHINS  =[EXP_dir '/kvh/' LOG_in_fn '.KVH'];
+  PHINS  =[EXP_dir '/phins/' LOG_in_fn '.INS'];
   %  CSV output file name
   CSV    =[EXP_dir '/proc/kvh/processed/' LOG_in_fn '.CSV'];
   %  Config file name
   CONFIG    =[EXP_dir '/proc/kvh/configs/' LOG_out_fn '.m'];
   %  PDF file name
-  CSV    =[EXP_dir '/proc/kvh/pdfs/' LOG_out_fn '.pdf'];
+  PDF    =[EXP_dir '/proc/kvh/pdfs/' LOG_out_fn '.pdf'];
 
  
   % create output directories if they do not exist
@@ -86,10 +86,10 @@ function p_min = tn_opt(p)
 
   % construct and execute command line to generate config file
   config_cmd = ['python ' TrueNorth_Package_dir '/python/gen_config_file.py' ...
-		' -i '           KVH ...
+                ' -i '           KVH ...
                 ' -o '           CSV ...
                 ' -c '           CONFIG ...
-		' -z '           HZ ...
+                ' -z '           HZ ...
                 ' --rpy_ro '     rpy_ro ...
                 ' --rpy_align '  rpy_align ...
                 ' --k_acc '      k_acc ...
@@ -108,7 +108,7 @@ function p_min = tn_opt(p)
   fprintf(1,'tn_opt: executing command: %s\n', config_cmd);
   % execute the command
   [status cmdout] = unix(config_cmd, '-echo');
-  % newsy		
+  % newsy               
   fprintf(1,'tn_opt: cmd status=%d\n',  status);
   fprintf(1,'tn_opt: cmd output= %s\n', cmdout);
 
@@ -126,10 +126,12 @@ function p_min = tn_opt(p)
   sim_cmd = ['/home/llw/kvh_catkin_ws/devel/lib/truenorth/post_process ' CONFIG];
   fprintf(1,'tn_opt: executing command: %s\n', sim_cmd);
   % execute the command
-  [status cmdout] = unix(sim_cmd, '-echo');
-  % newsy		
-  fprintf(1,'tn_opt: cmd status=%d\n',  status);
-  fprintf(1,'tn_opt: cmd output= %s\n', cmdout);  
-  
+  % [status cmdout] = unix(sim_cmd, '-echo');
+  % newsy               
+  % fprintf(1,'tn_opt: cmd status=%d\n',  status);
+  % fprintf(1,'tn_opt: cmd output= %s\n', cmdout);
 
+  % compute rms error
+  err = tn_opt_compute_rms_error(CSV, PHINS);
+  
   return;
