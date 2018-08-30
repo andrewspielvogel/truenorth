@@ -51,7 +51,7 @@ function rms_error = tn_opt_compute_rms_error(kvh_csv_fn, phins_log_fn, optional
     xlabel(tlabel(kvh_t));
     ylabel('Degree');
     legend('KVH','Phins');
-    title(['RAW Attitide: KVH vs Phins ' dof_labels(i,:)]);
+    title(['RAW Attitide: KVH vs Phins ' dof_labels(i,:) ' p=' optional_title_string]);
   end
   
   % unwrap kvh heading
@@ -90,7 +90,7 @@ function rms_error = tn_opt_compute_rms_error(kvh_csv_fn, phins_log_fn, optional
     xlabel(tlabel(kvh_t));
     ylabel('Degree');
     legend('KVH','Phins');
-    title(['Unwrapped Attitide: KVH vs Phins ' dof_labels(i,:)]);
+    title(['Unwrapped Attitide: KVH vs Phins ' dof_labels(i,:) ' p=' optional_title_string]);
   end
 
   % ----------------------------------------------------------------------
@@ -103,11 +103,11 @@ function rms_error = tn_opt_compute_rms_error(kvh_csv_fn, phins_log_fn, optional
     grid on;
     xlabel(tlabel(kvh_t));
     ylabel('Degree');
-    legend('KVH - Phins',sprintf('RMS=%+.2f deg',rms_error_dof(i)));
-    title(['Attitide Error: KVH - Phins ' dof_labels(i,:)]);
+    legend('KVH - Phins',sprintf('RMS=%+.3f deg',rms_error_dof(i)));
+    title(['Attitide Error: KVH - Phins ' dof_labels(i,:) ' p=' optional_title_string]);
   end
 
-  cascade
+  % cascade
  
   
   

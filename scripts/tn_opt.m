@@ -42,8 +42,8 @@ function err = tn_opt(p)
   k_E_n=      '[0.0001,0.0001,0.0001]';
   acc_bias=   '[0.01,0.0,0.0]';
   ang_bias=   '[0.0,0.0,0.0]';
-  ang_bias  =  sprintf('[%f,%f,%f]',p(1),p(2),p(3))
   ang_bias=   '[0.000003,0.0,0.00001]';
+  ang_bias  =  sprintf('[%f,%f,%f]',p(1),p(2),p(3))
   LAT=        '32.71';
 
   % construct input and putput file names
@@ -127,12 +127,12 @@ function err = tn_opt(p)
   sim_cmd = ['/home/llw/kvh_catkin_ws/devel/lib/truenorth/post_process ' CONFIG];
   fprintf(1,'tn_opt: executing command: %s\n', sim_cmd);
   % execute the command
-  % [status cmdout] = unix(sim_cmd, '-echo');
+  [status cmdout] = unix(sim_cmd, '-echo');
   % newsy               
-  % fprintf(1,'tn_opt: cmd status=%d\n',  status);
-  % fprintf(1,'tn_opt: cmd output= %s\n', cmdout);
+  fprintf(1,'tn_opt: cmd status=%d\n',  status);
+  fprintf(1,'tn_opt: cmd output= %s\n', cmdout);
 
   % compute rms error
-  err = tn_opt_compute_rms_error(CSV, PHINS);
+  err = tn_opt_compute_rms_error(CSV, PHINS, ang_bias);
   
   return;
