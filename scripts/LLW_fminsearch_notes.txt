@@ -137,3 +137,60 @@ k_acc_bias: [0.000000,0.000000,0.000000] (diag)
    k_north: [0.010000,0.010000,0.010000] (diag)
        lat: 0.570897 (degrees)
 ***********************************
+
+
+----------------------------------------------------------------------
+
+LOG 2018/08/31  2:03:45: Third minimization of all 12 gains for attitude and bias signals, but zero boas gains:
+
+results = fminsearch('tn_opt_llw', [0.1 0.1 0.1 0.01 0.01 0.01 10 10 10 0.0001 0.0001 0.0001])
+
+
+----------------------------------------------------------------------
+
+LOG 2018/08/31  2:04:31: Trying fmincon in parallel
+
+this ran wonky, with graphics not correct, and did not converge to the same values as the immediate previous fminsearch.
+
+Command line, with ICs same as previous fminsearch, only change is using fmincon with two parallel processes :
+results = fmincon('tn_opt_parallel_llw', [0.1 0.1 0.1 0.01 0.01 0.01 10 10 10 0.0001 0.0001 0.0001], [], [], [], [], [], [], [], options)
+
+Converged to RMS error of roll=0.213, pitch=0.207, hdg=0.678
+
+tn_opt: Phins data structure exists in Workspace
+tn_opt: Reading KVH data from /home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494/proc/kvh/processed/dive_bottom_DbFihvOkc1oV.CSV
+
+rms_error_dof =
+
+    0.2132    0.2069    0.6783
+
+
+rms_error =
+
+    0.7405
+
+
+Local minimum possible. Constraints satisfied.
+
+fmincon stopped because the size of the current step is less than
+the default value of the step size tolerance and constraints are 
+satisfied to within the default value of the constraint tolerance.
+
+<stopping criteria details>
+
+
+results =
+
+  Columns 1 through 7
+
+    0.1488    0.1127    0.0150    0.0296    0.0016   -0.0803   10.1557
+
+  Columns 8 through 12
+
+   10.4107   10.0106    0.0002    0.0002    0.0002
+
+IdleTimeout has been reached.
+Parallel pool using the 'local' profile is shutting down.
+
+
+----------------------------------------------------------------------
