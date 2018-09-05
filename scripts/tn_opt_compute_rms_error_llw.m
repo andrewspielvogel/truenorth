@@ -1,4 +1,4 @@
-function rms_error = tn_opt_compute_rms_error(kvh_csv_fn, phins_log_fn, optional_title_string)
+function rms_error = tn_opt_compute_rms_error_llw(kvh_csv_fn, phins_log_fn, optional_title_string)
 % 
 % 2018-08-29 LLW For numerical optmization of KVH gyro bias with fminsearch
 % this file is based upon att_process_script.sh by Andrew Spielvogel
@@ -51,7 +51,7 @@ function rms_error = tn_opt_compute_rms_error(kvh_csv_fn, phins_log_fn, optional
     xlabel(tlabel(kvh_t));
     ylabel('Degree');
     legend('KVH','Phins');
-    title(['RAW Attitide: KVH vs Phins ' dof_labels(i,:) ' p=' optional_title_string]);
+    title(['RAW Attitide: KVH vs Phins ' dof_labels(i,:) ]);
   end
   
   % unwrap kvh heading
@@ -78,10 +78,10 @@ function rms_error = tn_opt_compute_rms_error(kvh_csv_fn, phins_log_fn, optional
   rms_error = sqrt(mean(sum((err_att(nt0:end,:).^2)')))
 
   %  compute weighted RMS error
-  err_att_sq_weighted(:,1) = err_att(:,1).^2 *(0.01);
-  err_att_sq_weighted(:,2) = err_att(:,2).^2 *(0.01);
-  err_att_sq_weighted(:,3) = err_att(:,3).^2 *(1.0);
-  rms_error = sqrt(mean(sum(err_att_sq_weighted')));
+  % err_att_sq_weighted(:,1) = err_att(:,1).^2 *(0.01);
+  %  err_att_sq_weighted(:,2) = err_att(:,2).^2 *(0.01);
+  % err_att_sq_weighted(:,3) = err_att(:,3).^2 *(1.0);
+  % rms_error = sqrt(mean(sum(err_att_sq_weighted')));
   
 
   % ----------------------------------------------------------------------
@@ -97,7 +97,7 @@ function rms_error = tn_opt_compute_rms_error(kvh_csv_fn, phins_log_fn, optional
     xlabel(tlabel(kvh_t));
     ylabel('Degree');
     legend('KVH','Phins');
-    title(['Unwrapped Attitide: KVH vs Phins ' dof_labels(i,:) ' p=' optional_title_string]);
+    title(['Unwrapped Attitide: KVH vs Phins ' dof_labels(i,:)]);
   end
 
   % ----------------------------------------------------------------------
@@ -111,9 +111,17 @@ function rms_error = tn_opt_compute_rms_error(kvh_csv_fn, phins_log_fn, optional
     xlabel(tlabel(kvh_t));
     ylabel('Degree');
     legend('KVH - Phins',sprintf('RMS=%+.3f deg',rms_error_dof(i)));
-    title(['Attitide Error: KVH - Phins ' dof_labels(i,:) ' p=' optional_title_string]);
+    title(['Attitide Error: KVH - Phins ' dof_labels(i,:)]);
   end
 
+  % ----------------------------------------------------------------------
+  % plot parameters
+  % ----------------------------------------------------------------------
+paramater_names = ['K_g    ',...
+		   'K_north',...
+		   'K_acc  ',...
+		   'K_E_n  ']; 
+  
   % cascade
  
   

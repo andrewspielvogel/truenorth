@@ -111,31 +111,40 @@ int main(int argc, char* argv[])
     att_euler_ang = rot2rph(att.att.R_ni*params.R_align.transpose());
 
 
-    fprintf(outfile,"ATT_PRO,%d,%02d,%02d,%02d,%02d,%02f,%f,%f,%f,%f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%d,%d,%d,%d,%d,%d,%d,%.10f,%.10f,%.10f\n",year,month,day,hour,minute,second,rov_time,att_euler_ang(0),att_euler_ang(1),att_euler_ang(2),att.bias.w_b(0),att.bias.w_b(1),att.bias.w_b(2),att.bias.w_E_north(0),att.bias.w_E_north(1),att.bias.w_E_north(2),att.bias.a_b(0),att.bias.a_b(1),att.bias.a_b(2),att.bias.acc_hat(0),att.bias.acc_hat(1),att.bias.acc_hat(2),acc(0),acc(1),acc(2),ang(0),ang(1),ang(2),gyro_data.mag(0),gyro_data.mag(1),gyro_data.mag(2),gyro_data.temp,gyro_data.seq_num,status(0),status(1),status(2),status(3),status(4),status(5),a_c(0),a_c(1),a_c(2));
+    fprintf(outfile,"ATT_PRO,%d,%02d,%02d,%02d,%02d,%02f,%f,%f,%f,%f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%d,%d,%d,%d,%d,%d,%d,%.10f,%.10f,%.10f\n",year,month,day,hour,minute,second,rov_time,
+	    att_euler_ang(0),att_euler_ang(1),att_euler_ang(2),                // CSV col 8, 9, 10
+	    att.bias.w_b(0),att.bias.w_b(1),att.bias.w_b(2),                   // CSV col 11, 12, 13
+	    att.bias.w_E_north(0),att.bias.w_E_north(1),att.bias.w_E_north(2), // CSV col 14, 15, 16
+	    att.bias.a_b(0),att.bias.a_b(1),att.bias.a_b(2),                   // CSV col 17, 18, 19 
+	    att.bias.acc_hat(0),att.bias.acc_hat(1),att.bias.acc_hat(2),       // CSV col 20, 21, 22
+	    acc(0),acc(1),acc(2),                                              // CSV col 23, 24, 25
+	    ang(0),ang(1),ang(2),                                              // CSV col 26, 27, 28
+	    gyro_data.mag(0),gyro_data.mag(1),gyro_data.mag(2),                // CSV col 29, 30, 31
+	    gyro_data.temp,                                                    // CSV col 31, 31, 33
+	    gyro_data.seq_num,                                                 
+	    status(0),status(1),status(2),status(3),status(4),status(5),
+	    a_c(0),a_c(1),a_c(2));
 
     
     
 
-    if ((((int)time) % (1800) < 10)) {
+    if ((((int)time) % (1800) < 10))
+      {
       
       hours   = ((int) time)/3600;
       int minutes_ = ((int) time - hours*3600)/60;
-      if (minutes_ != minutes) {
+      if (minutes_ != minutes)
+	{
 	minutes = minutes_;
 	char buffer [256];
-	int n = sprintf(buffer,"%02d:%02d:00 OF DATA PROCESSED",hours,minutes);
-	//std::cout<<"\r"<<buffer<<"\n";
+	// int n = sprintf(buffer,"%02d:%02d:00 OF DATA PROCESSED",hours,minutes);
+	// std::cout<<"\r"<<buffer<<"\n";
+	}
       }
-    }
-
-
   }
   printf("\n");
   infile.close();
   fclose(outfile);
 
   return 0;
-  
-  
-
 }

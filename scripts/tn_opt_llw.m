@@ -1,5 +1,4 @@
-
-function err = tn_opt(p)
+function err = tn_opt_llw(p)
 % 
 % 2018-08-29 LLW For numerical optmization of KVH gyro bias with fminsearch
 % this file is based upon att_process_script.sh by Andrew Spielvogel
@@ -35,19 +34,36 @@ function err = tn_opt(p)
   % algorithm parameters NO SPACES BETWEEN NUMBERS OR COMMAS
   rpy_align=  '[-1.5798,0.0573,1.5712]';
   rpy_ro=     '[0.0,0.0,4.01]';
-  k_g=        '[0.1,0.1,0.1]';
-  k_north=    '[0.01,0.01,0.01]';
-  k_acc=      '[10.0,10.0,10.0]';
+
+  % gains appearing in the attitude observer
+  % k_g=        '[0.1,0.1,0.1]';
+  k_g=           sprintf('[%.12f,%.12f,%.12f]',p(1),p(2),p(3));  
+  % k_north=    '[0.01,0.01,0.01]';
+  k_north=       sprintf('[%.12f,%.12f,%.12f]',p(4),p(5),p(6));  
+  
+
+  % gains appearing in the bias estimator
+  % k_acc=      '[10.0,10.0,10.0]';
+  k_acc=         sprintf('[%.12f,%.12f,%.12f]',p(7),p(8),p(9));  
+  % k_E_n=      '[0.0001,0.0001,0.0001]';
+  k_E_n=         sprintf('[%.12f,%.12f,%.12f]',p(10),p(11),p(12));  
+
   k_acc_bias= '[0.0,0.0,0.0]';
   k_ang_bias= '[0.0,0.0,0.0]';
-  k_E_n=      '[0.0001,0.0001,0.0001]';
-  acc_bias=   '[0.01,0.0,0.0]';
-  acc_bias=   '[0.0,0.0,0.0]';
-  acc_bias  =  sprintf('[%f,%f,%f]',p(4),p(5),p(6))
 
-  ang_bias=   '[0.0,0.0,0.0]';
+  % ang_bias=   '[0.0,0.0,0.0]';
   ang_bias=   '[0.000003,0.0,0.00001]';
-  ang_bias  =  sprintf('[%f,%f,%f]',p(1),p(2),p(3))
+  % ang_bias  =  sprintf('[%f,%f,%f]',p(1),p(2),p(3))
+  % converged values from LLW fminsearch #2  
+  ang_bias  = '[0.000003083163786,0.000001807260271,0.000012498206088]';
+  
+  % acc_bias=   '[0.0,0.0,0.0]';
+  acc_bias=   '[0.01,0.0,0.0]';
+  % acc_bias  =  sprintf('[%f,%f,%f]',p(4),p(5),p(6))
+  % converged values from LLW fminsearch #2
+  acc_bias=   '[0.008583091534961,-0.001739827097389,-0.006883214529009]';
+
+
   
   LAT=        '32.71';
 
@@ -138,6 +154,6 @@ function err = tn_opt(p)
   fprintf(1,'tn_opt: cmd output= %s\n', cmdout);
 
   % compute rms error
-  err = tn_opt_compute_rms_error(CSV, PHINS, [ang_bias acc_bias]);
+  err = tn_opt_compute_rms_error_llw(CSV, PHINS, p);
   
   return;
