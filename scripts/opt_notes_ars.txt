@@ -1,0 +1,457 @@
+2018-08-30 17:08: with dvl corrections, with w_E_n magnitude feedback
+
+k_acc =
+
+[9.958457,9.958457,9.958457]
+
+
+k_acc_bias =
+
+[-0.024272,-0.024272,-0.024272]
+
+
+k_ang_bias =
+
+[0.000006,0.000006,0.000006]
+
+
+k_E_n =
+
+[0.000119,0.000119,0.000119]
+
+
+rms_error_dof =
+
+    0.1869    0.2472    1.1557
+
+
+rms_error =
+
+    1.1965
+
+
+result = fminsearch('tn_opt',[10;0.1;0.00001;0.0001],options)
+
+
+
+
+2018-08-30 18:30: without dvl corrections, with w_E_n magnitude feedback
+
+k_acc =
+
+[12.479842,12.479842,12.479842]
+
+
+k_acc_bias =
+
+[0.143222,0.143222,0.143222]
+
+
+k_ang_bias =
+
+[0.000000,0.000000,0.000000]
+
+
+k_E_n =
+
+[0.000099,0.000099,0.000099]
+
+rms_error_dof =
+
+    0.1581    0.2270    1.3391
+
+
+rms_error =
+
+    1.3674
+
+
+
+2018-08-30 18:36: without dvl corrections, with w_E_n magnitude feedback, zero bias initial conditions
+
+
+k_north =
+
+[0.039482,0.039482,0.039482]
+
+
+k_acc =
+
+[16.829118,16.829118,16.829118]
+
+
+k_acc_bias =
+
+[0.088819,0.088819,0.088819]
+
+
+k_ang_bias =
+
+[0.000005,0.000005,0.000005]
+
+
+k_E_n =
+
+[0.000082,0.000082,0.000082]
+
+rms_error_dof =
+
+    0.2267    0.2334    3.1431
+
+
+rms_error =
+
+    3.1599
+
+
+
+2018-08-30 18:30: with dvl corrections, with w_E_n magnitude feedback, bias start at zero
+
+
+ang =approx [3e-6,1e-6. 1.3e-5]
+acc =approx [0.03,.01,-0.007
+
+ms_error_dof =
+
+    0.1673    0.2089    1.4613
+
+
+rms_error =
+
+    1.4856
+
+Optimization terminated prematurely by user.
+
+result =
+
+    7.9066
+    0.2153
+    0.0000
+    0.0001
+    0.0028
+
+
+
+k_north =
+
+[0.002802,0.002802,0.002802]
+
+
+k_acc =
+
+[7.906546,7.906546,7.906546]
+
+
+k_acc_bias =
+
+[0.215308,0.215308,0.215308]
+
+
+k_ang_bias =
+
+[0.000009,0.000009,0.000009]
+
+
+k_E_n =
+
+[0.000114,0.000114,0.000114]
+
+
+
+
+2018_8_30 23:02 - start with initial guesses for biases
+
+>> result = fminsearch('tn_opt',[10;0.1;0.00001;0.0001;0.1;.1],options)
+
+
+  % algorithm parameters NO SPACES BETWEEN NUMBERS OR COMMAS
+  rpy_align=  '[-1.5798,0.0573,1.5712]';
+  rpy_ro=     '[0.0,0.0,-2.3]';
+  k_g=        '[0.1,0.1,0.1]';
+  k_g= sprintf('[%f,%f,%f]',p(6),p(6),p(6))
+  k_north=    '[0.01,0.01,0.01]';
+  k_north= sprintf('[%f,%f,%f]',p(5),p(5),p(5))
+  k_acc=      '[10.0,10.0,10.0]';
+  k_acc= sprintf('[%f,%f,%f]',p(1),p(1),p(1))
+  k_acc_bias= '[0.0,0.0,0.0]';
+  k_acc_bias= sprintf('[%f,%f,%f]',p(2),p(2),p(2))
+  k_ang_bias= '[0.0,0.0,0.0]';
+  k_ang_bias= sprintf('[%f,%f,%f]',p(3),p(3),p(3))
+  k_E_n=      '[0.0001,0.0001,0.0001]';
+  k_E_n= sprintf('[%f,%f,%f]',p(4),p(4),p(4))
+  acc_bias=   '[0.03,0.01,-0.007]';
+  ang_bias=   '[0.0,0.0,0.0]';
+  ang_bias=   '[0.000003,0.000001,0.000013]';
+  %ang_bias  =  sprintf('[%f,%f,%f]',p(1),p(2),p(3))
+
+
+***********************************
+  last_mod: 2018-08-31T01:51:28.343048
+        hz: 10 (s^-1)
+       lat: 0.570897 (radians)
+    o_file: /home/lcsr/cruise_data/dives_10hz/sentry494/proc/kvh/processed/dive_10hz_bottom.CSV
+    i_file: /home/lcsr/cruise_data/dives_10hz/sentry494/kvh/dive_10hz_bottom_dvl.KVH
+        r0: [0.000000,-0.000000,-2.300000] (rpy)
+   r_align: [-1.579800,0.057300,1.571200] (rpy)
+     k_acc: [2.505198,2.505198,2.505198] (diag)
+     k_mag: [0.000000,0.000000,0.000000] (diag)
+k_ang_bias: [0.000021,0.000021,0.000021] (diag)
+k_acc_bias: [-0.067890,0.000000,-0.067890] (diag)
+k_mag_bias: [0.000000,0.000000,0.000000] (diag)
+     k_E_n: [0.000015,0.000015,0.000015] (diag)
+       k_g: [0.422694,0.422694,0.422694] (diag)
+   k_north: [0.006803,0.006803,0.006803] (diag)
+  acc_bias: [0.030000,0.010000,-0.007000] (diag)
+  ang_bias: [0.000003,0.000001,0.000013] (diag)
+  mag_bias: [0.000000,0.000000,0.000000] (diag)
+*************************
+ATTITUDE ESTIMATOR USING GAINS:
+*************************
+        r0: [0.000000,-0.000000,-2.300000] (rpy)
+   r_align: [-1.579800,0.057300,1.571200] (rpy)
+     k_acc: [2.505198,2.505198,2.505198] (diag)
+k_ang_bias: [0.000021,0.000021,0.000021] (diag)
+k_acc_bias: [-0.067890,0.000000,-0.067890] (diag)
+     k_E_n: [0.000015,0.000015,0.000015] (diag)
+       k_g: [0.422694,0.422694,0.422694] (diag)
+   k_north: [0.006803,0.006803,0.006803] (diag)
+       lat: 0.570897 (degrees)
+***********************************
+    RUNNING ATTITUDE ESTIMATION
+***********************************
+
+
+tn_opt: Phins data structure exists in Workspace
+tnopt: Reading KVH data from /home/lcsr/cruise_data/dives_10hz/sentry494/proc/kvh/processed/dive_10hz_bottom.CSV
+
+rms_error_dof =
+
+    0.1392    0.1897    0.8009
+
+
+rms_error =
+
+    0.8347
+
+
+result =
+
+    2.5051
+   -0.0679
+    0.0000
+    0.0000
+    0.0068
+    0.4227
+
+2018_8_31 2:17 - same as above but use account for phins time delay
+
+
+result = fminsearch('tn_opt',[2.505;0;0.000021;0.000015;0.0068;0.4227],options)
+
+
+  % algorithm parameters NO SPACES BETWEEN NUMBERS OR COMMAS
+  rpy_align=  '[-1.5798,0.0573,1.5712]';
+  rpy_ro=     '[0.0,0.0,-2.3]';
+  k_g=        '[0.1,0.1,0.1]';
+  k_g= sprintf('[%f,%f,%f]',p(6),p(6),p(6))
+  k_north=    '[0.01,0.01,0.01]';
+  k_north= sprintf('[%f,%f,%f]',p(5),p(5),p(5))
+  k_acc=      '[10.0,10.0,10.0]';
+  k_acc= sprintf('[%f,%f,%f]',p(1),p(1),p(1))
+  k_acc_bias= '[0.0,0.0,0.0]';
+  k_acc_bias= sprintf('[%f,0,%f]',p(2),p(2))
+  k_ang_bias= '[0.0,0.0,0.0]';
+  k_ang_bias= sprintf('[%f,%f,%f]',p(3),p(3),p(3))
+  k_E_n=      '[0.0001,0.0001,0.0001]';
+  k_E_n= sprintf('[%f,%f,%f]',p(4),p(4),p(4))
+  acc_bias=   '[0.03,0.01,-0.007]';
+  ang_bias=   '[0.0,0.0,0.0]';
+  ang_bias=   '[0.000003,0.000001,0.000013]';
+  %ang_bias  =  sprintf('[%f,%f,%f]',p(1),p(2),p(3))
+
+
+           LOADED PARAMS 
+***********************************
+  last_mod: 2018-08-31T04:19:01.797130
+        hz: 10 (s^-1)
+       lat: 0.570897 (radians)
+    o_file: /home/lcsr/cruise_data/dives_10hz/sentry494/proc/kvh/processed/dive_10hz_bottom.CSV
+    i_file: /home/lcsr/cruise_data/dives_10hz/sentry494/kvh/dive_10hz_bottom_dvl.KVH
+        r0: [0.000000,-0.000000,-2.300000] (rpy)
+   r_align: [-1.579800,0.057300,1.571200] (rpy)
+     k_acc: [5.856175,5.856175,5.856175] (diag)
+     k_mag: [0.000000,0.000000,0.000000] (diag)
+k_ang_bias: [0.000026,0.000026,0.000026] (diag)
+k_acc_bias: [-0.008094,0.000000,-0.008094] (diag)
+k_mag_bias: [0.000000,0.000000,0.000000] (diag)
+     k_E_n: [0.000027,0.000027,0.000027] (diag)
+       k_g: [0.030949,0.030949,0.030949] (diag)
+   k_north: [0.006078,0.006078,0.006078] (diag)
+  acc_bias: [0.030000,0.010000,-0.007000] (diag)
+  ang_bias: [0.000003,0.000001,0.000013] (diag)
+  mag_bias: [0.000000,0.000000,0.000000] (diag)
+*************************
+ATTITUDE ESTIMATOR USING GAINS:
+*************************
+        r0: [0.000000,-0.000000,-2.300000] (rpy)
+   r_align: [-1.579800,0.057300,1.571200] (rpy)
+     k_acc: [5.856175,5.856175,5.856175] (diag)
+k_ang_bias: [0.000026,0.000026,0.000026] (diag)
+k_acc_bias: [-0.008094,0.000000,-0.008094] (diag)
+     k_E_n: [0.000027,0.000027,0.000027] (diag)
+       k_g: [0.030949,0.030949,0.030949] (diag)
+   k_north: [0.006078,0.006078,0.006078] (diag)
+       lat: 0.570897 (degrees)
+***********************************
+    RUNNING ATTITUDE ESTIMATION
+***********************************
+
+
+tn_opt: Phins data structure exists in Workspace
+tnopt: Reading KVH data from /home/lcsr/cruise_data/dives_10hz/sentry494/proc/kvh/processed/dive_10hz_bottom.CSV
+RESAMPLE.M: original  data from t=1535325900.038908 to t=1535358599.999508 
+RESAMPLE.M: resampled data from t=1535325899.982911 to t=1535358599.897374 
+RESAMPLE.M: Padding missing X data points with adjacent values.
+RESAMPLE.M: Missing less than 1 second of X data, so no problem.
+RESAMPLE.M: original  data from t=1535325900.038908 to t=1535358599.999508 
+RESAMPLE.M: resampled data from t=1535325899.982911 to t=1535358599.897374 
+RESAMPLE.M: Padding missing X data points with adjacent values.
+RESAMPLE.M: Missing less than 1 second of X data, so no problem.
+RESAMPLE.M: original  data from t=1535325900.038908 to t=1535358599.999508 
+RESAMPLE.M: resampled data from t=1535325899.982911 to t=1535358599.897374 
+RESAMPLE.M: Padding missing X data points with adjacent values.
+RESAMPLE.M: Missing less than 1 second of X data, so no problem.
+
+rms_error_dof =
+
+    0.0909    0.2095    0.9189
+
+
+rms_error =
+
+    0.9468
+
+
+result =
+
+    5.8561
+   -0.0081
+    0.0000
+    0.0000
+    0.0061
+    0.0310
+
+
+2018_8_31 13:16 dive 494 - add more params
+
+  % algorithm parameters NO SPACES BETWEEN NUMBERS OR COMMAS
+  rpy_align=  '[-1.5798,0.0573,1.5712]';
+  rpy_ro=     '[0.0,0.0,-2.3]';
+  k_g=        '[0.1,0.1,0.1]';
+  k_g= sprintf('[%f,%f,%f]',p(11),p(11),p(11))
+  k_north=    '[0.01,0.01,0.01]';
+  k_north= sprintf('[%f,%f,%f]',p(10),p(10),p(10))
+  k_acc=      '[10.0,10.0,10.0]';
+  k_acc= sprintf('[%f,%f,%f]',p(1),p(2),p(3))
+  k_acc_bias= '[0.0,0.0,0.0]';
+  k_acc_bias= sprintf('[%f,0,%f]',p(4),p(5))
+  k_ang_bias= '[0.0,0.0,0.0]';
+  k_ang_bias= sprintf('[%f,%f,%f]',p(6),p(7),p(8))
+  k_E_n=      '[0.0001,0.0001,0.0001]';
+  k_E_n= sprintf('[%f,%f,%f]',p(9),p(9),p(9))
+  acc_bias=   '[0.03,0.01,-0.007]';
+  %acc_bias=   '[0,0,0]';
+  ang_bias=   '[0.0,0.0,0.0]';
+  ang_bias=   '[0.000003,0.000001,0.000013]';
+  %ang_bias  =  sprintf('[%f,%f,%f]',p(1),p(2),p(3))
+  LAT=        '32.71';
+
+Eesult = fminsearch('tn_opt',[2.5;2.5;2.5;0.1;0.1;0.00001;0.00001;0.00001;0.00001;0.1;0.1],options)
+
+***********************************
+           LOADED PARAMS 
+***********************************
+  last_mod: 2018-08-31T13:15:57.368238
+        hz: 10 (s^-1)
+       lat: 0.570897 (radians)
+    o_file: /home/lcsr/cruise_data/dives_10hz/sentry494/proc/kvh/processed/dive_10hz_bottom.CSV
+    i_file: /home/lcsr/cruise_data/dives_10hz/sentry494/kvh/dive_10hz_bottom_dvl.KVH
+        r0: [0.000000,-0.000000,-2.300000] (rpy)
+   r_align: [-1.579800,0.057300,1.571200] (rpy)
+     k_acc: [2.625000,2.500000,2.500000] (diag)
+     k_mag: [0.000000,0.000000,0.000000] (diag)
+k_ang_bias: [0.000010,0.000010,0.000010] (diag)
+k_acc_bias: [0.100000,0.000000,0.100000] (diag)
+k_mag_bias: [0.000000,0.000000,0.000000] (diag)
+     k_E_n: [0.000010,0.000010,0.000010] (diag)
+       k_g: [0.100000,0.100000,0.100000] (diag)
+   k_north: [0.100000,0.100000,0.100000] (diag)
+  acc_bias: [0.030000,0.010000,-0.007000] (diag)
+  ang_bias: [0.000003,0.000001,0.000013] (diag)
+  mag_bias: [0.000000,0.000000,0.000000] (diag)
+*************************
+ATTITUDE ESTIMATOR USING GAINS:
+*************************
+        r0: [0.000000,-0.000000,-2.300000] (rpy)
+   r_align: [-1.579800,0.057300,1.571200] (rpy)
+     k_acc: [2.625000,2.500000,2.500000] (diag)
+k_ang_bias: [0.000010,0.000010,0.000010] (diag)
+k_acc_bias: [0.100000,0.000000,0.100000] (diag)
+     k_E_n: [0.000010,0.000010,0.000010] (diag)
+       k_g: [0.100000,0.100000,0.100000] (diag)
+   k_north: [0.100000,0.100000,0.100000] (diag)
+       lat: 0.570897 (degrees)
+***********************************
+    RUNNING ATTITUDE ESTIMATION
+***********************************
+
+
+final
+           LOADED PARAMS 
+***********************************
+  last_mod: 2018-08-31T18:29:45.727161
+        hz: 10 (s^-1)
+       lat: 0.570897 (radians)
+    o_file: /home/lcsr/cruise_data/dives_10hz/sentry494/proc/kvh/processed/dive_10hz_bottom.CSV
+    i_file: /home/lcsr/cruise_data/dives_10hz/sentry494/kvh/dive_10hz_bottom_dvl.KVH
+        r0: [0.000000,-0.000000,-2.300000] (rpy)
+   r_align: [-1.579800,0.057300,1.571200] (rpy)
+     k_acc: [1.500374,11.445925,1.476286] (diag)
+     k_mag: [0.000000,0.000000,0.000000] (diag)
+k_ang_bias: [0.000014,0.000011,0.000011] (diag)
+k_acc_bias: [-0.092256,0.000000,0.043880] (diag)
+k_mag_bias: [0.000000,0.000000,0.000000] (diag)
+     k_E_n: [0.000008,0.000008,0.000008] (diag)
+       k_g: [0.190053,0.190053,0.190053] (diag)
+   k_north: [0.025990,0.025990,0.025990] (diag)
+  acc_bias: [0.030000,0.010000,-0.007000] (diag)
+  ang_bias: [0.000003,0.000001,0.000013] (diag)
+  mag_bias: [0.000000,0.000000,0.000000] (diag)
+*************************
+ATTITUDE ESTIMATOR USING GAINS:
+*************************
+        r0: [0.000000,-0.000000,-2.300000] (rpy)
+   r_align: [-1.579800,0.057300,1.571200] (rpy)
+     k_acc: [1.500374,11.445925,1.476286] (diag)
+k_ang_bias: [0.000014,0.000011,0.000011] (diag)
+k_acc_bias: [-0.092256,0.000000,0.043880] (diag)
+     k_E_n: [0.000008,0.000008,0.000008] (diag)
+       k_g: [0.190053,0.190053,0.190053] (diag)
+   k_north: [0.025990,0.025990,0.025990] (diag)
+       lat: 0.570897 (degrees)
+***********************************
+    RUNNING ATTITUDE ESTIMATION
+***********************************
+
+
+tn_opt: Phins data structure exists in Workspace
+tnopt: Reading KVH data from /home/lcsr/cruise_data/dives_10hz/sentry494/proc/kvh/processed/dive_10hz_bottom.CSV
+
+rms_error_dof =
+
+    0.1340    0.1902    0.6878
+
+
+rms_error =
+
+    0.7261
