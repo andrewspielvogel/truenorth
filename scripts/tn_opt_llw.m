@@ -33,7 +33,9 @@ function err = tn_opt_llw(p)
 
   % algorithm parameters NO SPACES BETWEEN NUMBERS OR COMMAS
   rpy_align=  '[-1.5798,0.0573,1.5712]';
-  rpy_ro=     '[0.0,0.0,4.01]';
+  % rpy_ro=     '[0.0,0.0,4.01]';
+  %  2018-09-06 LLW 0.5 radian initial heading error
+  rpy_ro=     '[0.0,0.0,3.5]'
 
   % gains appearing in the attitude observer
   % k_g=        '[0.1,0.1,0.1]';

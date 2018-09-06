@@ -115,12 +115,39 @@ function rms_error = tn_opt_compute_rms_error_llw(kvh_csv_fn, phins_log_fn, opti
   end
 
   % ----------------------------------------------------------------------
+  % plot angular bias
+  % ----------------------------------------------------------------------  
+  figure(4);  
+  for i=11:13
+    subplot(3,1,i-10);
+    plot(taxis(kvh_t), kvh(:,i));
+    grid on;
+    xlabel(tlabel(kvh_t));
+    ylabel('Deg/S');
+    title('Anugular Rate Bias');
+  end
+
+  % ----------------------------------------------------------------------
+  % plot accel bias
+  % ----------------------------------------------------------------------    
+  figure(5);  
+  for i=17:19
+    subplot(3,1,i-16);
+    plot(taxis(kvh_t), kvh(:,i));
+    grid on;
+    xlabel(tlabel(kvh_t));
+    ylabel('m/s^2');
+    title('Acceleration Bias');
+  end
+  
+
+  % ----------------------------------------------------------------------
   % plot parameters
   % ----------------------------------------------------------------------
-paramater_names = ['K_g    ',...
-		   'K_north',...
-		   'K_acc  ',...
-		   'K_E_n  ']; 
+     paramater_names = ['K_g    ',...
+  		      'K_north',...
+		      'K_acc  ',...
+		      'K_E_n  '];  
   
   % cascade
  
