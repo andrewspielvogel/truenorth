@@ -16,7 +16,7 @@ git clone git@github.com:andrewspielvogel/imu_3dm_gx4.git
 git clone git@github.com:andrewspielvogel/att_so3.git
 git clone git@github.com:andrewspielvogel/mems_bias.git
 git clone git@git.lcsr.jhu.edu:dscl/phins.git
-git clone git@llw.me.jhu.edu:DSCL/truenorth_live_docs.git
+git clone git@llw.me.jhu.edu:jhu_hrov/truenorth_live_docs.git
 ```
 - Alternatively, use wstool to install the source
 ```
