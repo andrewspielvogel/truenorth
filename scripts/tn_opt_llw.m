@@ -48,8 +48,11 @@ function err = tn_opt_llw(p)
   % k_E_n=      '[0.0001,0.0001,0.0001]';
   k_E_n=         sprintf('[%.12f,%.12f,%.12f]',p(10),p(11),p(12));  
 
-  k_acc_bias= '[0.0,0.0,0.0]';
-  k_ang_bias= '[0.0,0.0,0.0]';
+  % k_acc_bias= '[0.0,0.0,0.0]';
+  k_acc_bias=   sprintf('[%.12f,%.12f,%.12f]',p(13),p(14),p(15));  
+
+  % k_ang_bias= '[0.0,0.0,0.0]';
+  k_ang_bias=    sprintf('[%.12f,%.12f,%.12f]',p(16),p(17),p(18));  
 
   % ang_bias=   '[0.0,0.0,0.0]';
   ang_bias=   '[0.000003,0.0,0.00001]';
@@ -63,7 +66,6 @@ function err = tn_opt_llw(p)
   % converged values from LLW fminsearch #2
   acc_bias=   '[0.008583091534961,-0.001739827097389,-0.006883214529009]';
 
-
   
   LAT=        '32.71';
 
@@ -73,7 +75,7 @@ function err = tn_opt_llw(p)
   % Phinps inpu file name 
   PHINS  =[EXP_dir '/phins/' LOG_in_fn '.INS'];
   %  CSV output file name
-  CSV    =[EXP_dir '/proc/kvh/processed/' LOG_in_fn '.CSV'];
+  CSV    =[EXP_dir '/proc/kvh/processed/' LOG_out_fn '.CSV'];
   %  Config file name
   CONFIG    =[EXP_dir '/proc/kvh/configs/' LOG_out_fn '.m'];
   %  PDF file name
@@ -157,3 +159,6 @@ function err = tn_opt_llw(p)
   err = tn_opt_compute_rms_error_llw(CSV, PHINS, p);
   
   return;
+
+
+  

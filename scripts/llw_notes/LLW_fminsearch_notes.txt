@@ -291,3 +291,340 @@ Parallel pool using the 'local' profile is shutting down.
 
 
 ----------------------------------------------------------------------
+
+
+LOG 2018/08/31 16:20:12: sim #3: Running 18 param search using initial bias values from fminserch #2
+
+ang_bias
+   0.000003083163786
+   0.000001807260271
+   0.000012498206088
+
+acc_bias
+   0.008583091534961
+  -0.001739827097389
+  -0.006883214529009
+
+and searching 16 params beginning with these initial values from fminsearch #3:
+K_g
+   0.287873446676664  (lateral vehicle axis)
+  -0.136818795811220  (vertical)
+   0.001221899110323  (longitudinal)
+
+K_north
+   0.010294072672683
+   0.001985769357138
+   0.014000851680033
+
+K_acc
+  10.170365917455110
+  18.785688492644770
+  16.804620841277234
+
+K_E_n
+   0.000255702106230
+   0.000235077265141
+   0.000156879302587
+
+and zero initial values for k_omega_bias and k_acc_bias
+
+command line
+  
+results = fminsearch('tn_opt_llw', [0.287873446676664  -0.136818795811220    0.001221899110323   0.010294072672683   0.001985769357138   0.014000851680033  10.170365917455110  18.785688492644770  16.804620841277234   0.000255702106230   0.000235077265141   0.000156879302587 0 0 0 0 0 0], options)
+
+completed on max iteration
+
+  
+  
+  
+  
+tn_opt: Phins data structure exists in Workspace
+tn_opt: Reading KVH data from /home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494/proc/kvh/processed/dive_bottom_expt01.CSV
+
+rms_error_dof =
+
+    0.1465    0.2066    0.5131
+
+
+rms_error =
+
+    0.5723
+
+  2763         3601         0.572253         contract inside
+ 
+Exiting: Maximum number of function evaluations has been exceeded
+         - increase MaxFunEvals option.
+         Current function value: 0.572253 
+
+
+result =
+
+  Columns 1 through 8
+
+    0.1402   -0.1934    0.0035    0.0145    0.0014    0.0109    6.3976   12.8006
+
+  Columns 9 through 16
+
+    3.4961    0.0002    0.0003    0.0004   -0.0077   -0.0012   -0.0016    0.0000
+
+  Columns 17 through 18
+
+   -0.0000    0.0000
+
+>>
+tn_opt: Phins data structure exists in Workspace
+tn_opt: Reading KVH data from /home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494/proc/kvh/processed/dive_bottom_expt01.CSV
+
+rms_error_dof =
+
+    0.1465    0.2066    0.5131
+
+
+rms_error =
+
+    0.5723
+
+  2763         3601         0.572253         contract inside
+ 
+Exiting: Maximum number of function evaluations has been exceeded
+         - increase MaxFunEvals option.
+         Current function value: 0.572253 
+
+
+result =
+
+  Columns 1 through 8
+
+    0.1402   -0.1934    0.0035    0.0145    0.0014    0.0109    6.3976   12.8006
+
+  Columns 9 through 16
+
+    3.4961    0.0002    0.0003    0.0004   -0.0077   -0.0012   -0.0016    0.0000
+
+  Columns 17 through 18
+
+   -0.0000    0.0000
+
+>>
+
+>> result'
+
+ans =
+
+   0.140218479601076
+  -0.193366864797359
+   0.003486590444094
+   0.014512406890625
+   0.001447983444401
+   0.010856879598700
+   6.397550570287032
+  12.800581294729493
+   3.496097699095456
+   0.000195763388307
+   0.000331753715905
+   0.000357218976859
+  -0.007730234624244
+  -0.001236435631131
+  -0.001589614622578
+   0.000000140908246
+  -0.000002367939074
+   0.000005813131323
+
+>> 
+----------------------------------------------------------------------
+
+Sim #4: Restarted where the above left off with 
+
+result = fminsearch('tn_opt_llw', [   0.140218479601076   -0.193366864797359    0.003486590444094    0.014512406890625    0.001447983444401    0.010856879598700    6.397550570287032   12.800581294729493    3.496097699095456    0.000195763388307    0.000331753715905    0.000357218976859   -0.007730234624244   -0.001236435631131   -0.001589614622578    0.000000140908246   -0.000002367939074    0.000005813131323 ], options)
+
+
+
+
+
+tn_opt: Phins data structure exists in Workspace
+tn_opt: Reading KVH data from /home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494/proc/kvh/processed/dive_bottom_expt01.CSV
+
+rms_error_dof =
+
+   0.139022588056943   0.210307576099117   0.432521993965110
+
+
+rms_error =
+
+   0.500631433110514
+
+  2758         3600         0.500631         contract inside
+ 
+Exiting: Maximum number of function evaluations has been exceeded
+         - increase MaxFunEvals option.
+         Current function value: 0.500631 
+
+
+result =
+
+  Columns 1 through 4
+
+   0.110435484458720  -0.438971802889823   0.003825960518306   0.016169706392504
+
+  Columns 5 through 8
+
+   0.001376679406645   0.001989644944890   6.131240136739317  18.934068968631252
+
+  Columns 9 through 12
+
+   3.627347219081820   0.000214986868953   0.000406907691115   0.000361719929902
+
+  Columns 13 through 16
+
+   0.056674851121462  -0.001830518875046  -0.011995053820394   0.000000005385520
+
+  Columns 17 through 18
+
+  -0.000004097841146  -0.000022698928977
+
+>> 
+>>
+
+
+> result'
+
+ans =
+
+   0.110435484458720
+  -0.438971802889823
+   0.003825960518306
+   0.016169706392504
+   0.001376679406645
+   0.001989644944890
+   6.131240136739317
+  18.934068968631252
+   3.627347219081820
+   0.000214986868953
+   0.000406907691115
+   0.000361719929902
+   0.056674851121462
+  -0.001830518875046
+  -0.011995053820394
+   0.000000005385520
+  -0.000004097841146
+  -0.000022698928977
+
+
+----------------------------------------------------------------------
+
+LOG 2018/09/05 15:08:34: Sim #5  restarted where sim #4 left off with commands:
+
+options = optimset('Display','iter','PlotFcns',@optimplotfval);
+
+result = fminsearch('tn_opt_llw', [   0.110435484458720  -0.438971802889823   0.003825960518306   0.016169706392504   0.001376679406645   0.001989644944890   6.131240136739317  18.934068968631252   3.627347219081820   0.000214986868953   0.000406907691115   0.000361719929902   0.056674851121462  -0.001830518875046  -0.011995053820394   0.000000005385520  -0.000004097841146  -0.000022698928977 ],options)
+
+
+
+RESULT:
+
+tn_opt: cmd status=0
+tn_opt: cmd output= LOADING CONFIG FILE: /home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494/proc/kvh/configs/dive_bottom_expt01.m
+***********************************
+           LOADED PARAMS 
+***********************************
+  last_mod: 2018-09-06T07:20:58.413198
+        hz: 10 (s^-1)
+       lat: 0.570897 (radians)
+    o_file: /home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494/proc/kvh/processed/dive_bottom_expt01.CSV
+    i_file: /home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494/kvh/dive_bottom.KVH
+        r0: [0.000000,-0.000000,-2.273185] (rpy)
+   r_align: [-1.579800,0.057300,1.571200] (rpy)
+     k_acc: [6.352665,15.502558,3.640348] (diag)
+     k_mag: [0.000000,0.000000,0.000000] (diag)
+k_ang_bias: [-0.000000,-0.000027,-0.000019] (diag)
+k_acc_bias: [0.051039,-0.004041,0.315328] (diag)
+k_mag_bias: [0.000000,0.000000,0.000000] (diag)
+     k_E_n: [0.000211,0.000800,0.000361] (diag)
+       k_g: [0.066403,-0.847473,0.008036] (diag)
+   k_north: [0.005002,0.001847,0.001360] (diag)
+  acc_bias: [0.008583,-0.001740,-0.006883] (diag)
+  ang_bias: [0.000003,0.000002,0.000012] (diag)
+  mag_bias: [0.000000,0.000000,0.000000] (diag)
+*************************
+ATTITUDE ESTIMATOR USING GAINS:
+*************************
+        r0: [   +0.000000000000,   -0.000000000000,   -2.273185307180] (rpy)
+   r_align: [   -1.579800000000,   +0.057300000000,   +1.571200000000] (rpy)
+     k_acc: [   +6.352665279107,  +15.502558435960,   +3.640347746680] (diag)
+k_ang_bias: [   -0.000000008498,   -0.000026746841,   -0.000018785506] (diag)
+k_acc_bias: [   +0.051038542041,   -0.004040971736,   +0.315328051704] (diag)
+     k_E_n: [   +0.000210604326,   +0.000800019102,   +0.000360945520] (diag)
+       k_g: [   +0.066403156080,   -0.847473066722,   +0.008036433169] (diag)
+   k_north: [   +0.005002291204,   +0.001847432675,   +0.001359740769] (diag)
+       lat:   +32.709997916339 (deg)     +0.570897161961 (rad)
+***********************************
+    RUNNING ATTITUDE ESTIMATION
+***********************************
+
+
+tn_opt: Phins data structure exists in Workspace
+tn_opt: Reading KVH data from /home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494/proc/kvh/processed/dive_bottom_expt01.CSV
+
+rms_error_dof =
+
+   0.162239800826187   0.163325618389224   0.367103015445069
+
+
+rms_error =
+
+   0.433314706123860
+
+  2800         3600         0.433313         reflect
+ 
+Exiting: Maximum number of function evaluations has been exceeded
+         - increase MaxFunEvals option.
+         Current function value: 0.433313 
+
+
+result =
+
+  Columns 1 through 4
+
+   0.065874627203867  -0.847373382794273   0.008035846976937   0.005182830351628
+
+  Columns 5 through 8
+
+   0.001858801032375   0.001386945204980   6.353709720101332  15.478934688732465
+
+  Columns 9 through 12
+
+   3.640450952750834   0.000210561466065   0.000800108017239   0.000360903813676
+
+  Columns 13 through 16
+
+   0.050965324099903  -0.004063353134347   0.317101923475872  -0.000000008475814
+
+  Columns 17 through 18
+
+  -0.000026746071633  -0.000018759870888
+
+>> result'
+
+ans =
+
+   0.065874627203867
+  -0.847373382794273
+   0.008035846976937
+   0.005182830351628
+   0.001858801032375
+   0.001386945204980
+   6.353709720101332
+  15.478934688732465
+   3.640450952750834
+   0.000210561466065
+   0.000800108017239
+   0.000360903813676
+   0.050965324099903
+  -0.004063353134347
+   0.317101923475872
+  -0.000000008475814
+  -0.000026746071633
+  -0.000018759870888
+
+>> 
+----------------------------------------------------------------------
