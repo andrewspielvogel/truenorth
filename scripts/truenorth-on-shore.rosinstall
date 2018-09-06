@@ -36,7 +36,7 @@
 
 - git:
     local-name: truenorth_live_docs
-    uri: git@llw.me.jhu.edu:DSCL/truenorth_live_docs.git
+    uri: git@llw.me.jhu.edu:jhu_hrov/truenorth_live_docs.git
 
 
 
