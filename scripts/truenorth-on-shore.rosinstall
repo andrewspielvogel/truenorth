@@ -36,7 +36,12 @@
 
 - git:
     local-name: truenorth_live_docs
-    uri: git@llw.me.jhu.edu:jhu_hrov/truenorth_live_docs.git
+    uri: git@git.lcsr.jhu.edu:jhu_hrov/truenorth_live_docs.git
+
+- git:
+    local-name: jhu_sentry_monitor
+    uri: git@git.lcsr.jhu.edu:jhu_hrov/jhu_sentry_monitor.git
+
 
 
 
