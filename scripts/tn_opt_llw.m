@@ -8,7 +8,8 @@ function err = tn_opt_llw(p)
 % expects a global phins data structure named 'phins' is loaded in workspace
 %
 % returns nonnegatve scalar err 
-%  
+%
+% 2018/09/08 13:21:10: LLW revised to include 6 bias terms as params, 24 total params
 
   % if global data structure phins has been loaded, then we will load it
   global phins;
@@ -57,16 +58,16 @@ function err = tn_opt_llw(p)
   k_ang_bias=    sprintf('[%.12f,%.12f,%.12f]',p(16),p(17),p(18));  
 
   % ang_bias=   '[0.0,0.0,0.0]';
-  ang_bias=   '[0.000003,0.0,0.00001]';
-  % ang_bias  =  sprintf('[%f,%f,%f]',p(1),p(2),p(3))
+  % ang_bias=   '[0.000003,0.0,0.00001]';  
   % converged values from LLW fminsearch #2  
-  ang_bias  = '[0.000003083163786,0.000001807260271,0.000012498206088]';
+  %  ang_bias  = '[0.000003083163786,0.000001807260271,0.000012498206088]';
+  ang_bias=      sprintf('[%.12f,%.12f,%.12f]',p(19),p(20),p(21));  
   
   % acc_bias=   '[0.0,0.0,0.0]';
-  acc_bias=   '[0.01,0.0,0.0]';
-  % acc_bias  =  sprintf('[%f,%f,%f]',p(4),p(5),p(6))
+  % acc_bias=   '[0.01,0.0,0.0]';
   % converged values from LLW fminsearch #2
-  acc_bias=   '[0.008583091534961,-0.001739827097389,-0.006883214529009]';
+  % acc_bias=   '[0.008583091534961,-0.001739827097389,-0.006883214529009]';
+  acc_bias=      sprintf('[%.12f,%.12f,%.12f]',p(22),p(23),p(24));  
 
   
   LAT=        '32.71';
