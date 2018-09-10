@@ -1,13 +1,17 @@
 % 2018-09-06 LLW use fmincon to specify lower bound on all gains is zero
-% LLW Sim #9 - fmincon start with gain params where #8 concluded, set bias gains to zero
+% LLW Sim #9 - fmincon start with gain params where #8 concluded, but set bias gains to zero
 
 options = optimset('PlotFcns',@optimplotfval);
 
-Parameter_IC = [ 1.822104189331579  0.420549511242625 0.002328617829202 0.788859606226511 0.000005892125440 0.000035254589027 4.84728949157051611.997485104915679 4.349747374315634 0.000020797687328 0.000062954099449 0.000023368256065 0.000002704263508 0.000023786745511 -0.0000851134387180.021961154445260 0.016497893316138 -0.013948629059267]
+Parameter_IC = [ 1.822104189331579  0.420549511242625 0.002328617829202 0.788859606226511 0.000005892125440 0.000035254589027 4.847289491570516 11.997485104915679 4.349747374315634 0.000020797687328 0.000062954099449 0.000023368256065 0.000002704263508 0.000023786745511 -0.000085113438718 0.021961154445260 0.016497893316138 -0.013948629059267];
+
+Parameter_IC'
 
 
 % keep all gains nonnegative, but no constraint on boas terms
-Lower_Bound = [-1e-12 -1e-12 -1e-12 -1e-12 -1e-12 -1e-12 -1e-12 -1e-12 -1e-12 -1e-12 -1e-12 -1e-12 -1 -1 -1 -1 -1 -1]
+Lower_Bound = [-1e-12 -1e-12 -1e-12 -1e-12 -1e-12 -1e-12 -1e-12 -1e-12 -1e-12 -1e-12 -1e-12 -1e-12 -1 -1 -1 -1 -1 -1];
+
+Lower_Bound'
 
 result = fmincon('tn_opt_llw_sim009', Parameter_IC, [], [], [], [], Lower_Bound, [], [], options)
 
@@ -19,14 +23,14 @@ figs_random_string = random_string(10)
 
 for fignum = 1:6
   % select figure
-  figure(fignum)
+  figure(fignum);
 
   % add grid lines to optimplotfval
   if fignum == 6
     grid on;
   end 
   % construct filename
-  filename = sprintf('%02d_%s_%s.pdf',fignum,figsname,figs_random_string)
+  filename = sprintf('%02d_%s_%s.pdf',fignum,figsname,figs_random_string);
   % create pdf
   orient landscape
   print('-dpdf', filename,'-fillpage');

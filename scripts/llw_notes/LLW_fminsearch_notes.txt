@@ -965,12 +965,14 @@ ans =
    0.000020797687328
    0.000062954099449
    0.000023368256065
+
    0.185405364353440
    1.925763844110393
    0.019586252609804
    0.000000122737953
    0.000008372554092
    0.000096566681871
+
    0.000002704263508
    0.000023786745511
   -0.000085113438718
@@ -1000,9 +1002,141 @@ k_north = [0.788859606227,0.000005892125,0.000035254589]
 ----------------------------------------------------------------------
 ----------------------------------------------------------------------
 
-LOG 2018/09/09 16:07:18: Sim 09:  pick up where sim008 left off, but changed:
+LOG 2018/09/09 16:07:18: Re-run of som008:
+
+Tried to run Sim 09:  pick up where sim008 left off, but changed:
 
 set  values for k_acc_bias and k_ang_bias to zero
 
 see llw_sim_009.m and tn_opt_llw_sim009.m
 
+Got stange results unclear whcih parameters were actual conclusion of sim008, rerunning sim008 again.
+
+The results below are a re-run of sim008, same as original sim008.
+
+tn_opt: Phins data structure exists in Workspace
+tn_opt: Reading KVH data from /home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494/proc/kvh/processed/dive_bottom_expt01.CSV
+
+rms_error_dof =
+
+   0.131922108616321   0.228879326582286   0.305945981841839
+
+
+rms_error =
+
+   0.404217927217118
+
+
+Local minimum possible. Constraints satisfied.
+
+fmincon stopped because the size of the current step is less than
+the default value of the step size tolerance and constraints are 
+satisfied to within the default value of the constraint tolerance.
+
+<stopping criteria details>
+
+
+result =
+
+  Columns 1 through 4
+
+   1.822104189331579   0.420549511242625   0.002328617829202   0.788859606226511
+
+  Columns 5 through 8
+
+   0.000005892125440   0.000035254589027   4.847289491570516  11.997485104915679
+
+  Columns 9 through 12
+
+   4.349747374315634   0.000020797687328   0.000062954099449   0.000023368256065
+
+  Columns 13 through 16
+
+   0.185405364353440   1.925763844110393   0.019586252609804   0.000000122737953
+
+  Columns 17 through 20
+
+   0.000008372554092   0.000096566681871   0.000002704263508   0.000023786745511
+
+  Columns 21 through 24
+
+  -0.000085113438718   0.021961154445260   0.016497893316138  -0.013948629059267
+
+
+figsname = 
+
+    "llw_sim_008"
+
+
+figs_random_string =
+
+    'y4H4nGRh77'
+
+
+filename =
+
+    '01_llw_sim_008_y4H4nGRh77.pdf'
+
+
+filename =
+
+    '02_llw_sim_008_y4H4nGRh77.pdf'
+
+
+filename =
+
+    '03_llw_sim_008_y4H4nGRh77.pdf'
+
+
+filename =
+
+    '04_llw_sim_008_y4H4nGRh77.pdf'
+
+
+filename =
+
+    '05_llw_sim_008_y4H4nGRh77.pdf'
+
+
+filename =
+
+    '06_llw_sim_008_y4H4nGRh77.pdf'
+
+
+combined_pdf_filename =
+
+    'llw_sim_008_2018-09-10_03-36-12.pdf'
+
+>> result'
+
+ans =
+
+   1.822104189331579
+   0.420549511242625
+   0.002328617829202
+   0.788859606226511
+   0.000005892125440
+   0.000035254589027
+   4.847289491570516
+  11.997485104915679
+   4.349747374315634
+   0.000020797687328
+   0.000062954099449
+   0.000023368256065
+   0.185405364353440
+   1.925763844110393
+   0.019586252609804
+   0.000000122737953
+   0.000008372554092
+   0.000096566681871
+   0.000002704263508
+   0.000023786745511
+  -0.000085113438718
+   0.021961154445260
+   0.016497893316138
+  -0.013948629059267
+
+>> 
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
