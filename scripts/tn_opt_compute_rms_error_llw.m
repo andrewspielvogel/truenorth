@@ -22,7 +22,7 @@ function rms_error = tn_opt_compute_rms_error_llw(kvh_csv_fn, phins_log_fn, opti
     fprintf(1,'tn_opt: Phins data structure exists in Workspace\n');
   else 
     fprintf(1,'tn_opt: Phins data structure does not exist in Workspace\n');
-    fprintf(1,'tn_opt: Readding %s\n',phins_log_fn);    
+    fprintf(1,'tn_opt: Reading %s\n',phins_log_fn);    
     phins = read_phins_imbat(phins_log_fn);
   end
 
