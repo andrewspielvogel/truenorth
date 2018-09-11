@@ -1,15 +1,10 @@
-% 2018-09-11 LLW sentry494, use fmincon to specify lower bound on all gains is zero
-% LLW Sim #11 - restarted where LLW Sim #9 was interrupted
+% 2018-09-11 LLW Sim #012: Use final parameters from sim 011 (sentry494) for sentry492 instead
 
 options = optimset('PlotFcns',@optimplotfval);
 
-Parameter_IC = [  +1.417247755813,   +0.297761068581,   +0.001759845346 ...  % k_g
-                  +0.954331509909,   +0.000016807223,   +0.000101301835 ...  % k_north
-                  +5.042689230923,  +12.132402611122,   +5.390553149311 ...  % k_acc
-                  +0.000057558063,   +0.000186782528,   +0.000047219658 ...  % k_E_n
-                  +0.000004455125,   +0.000000886481,   +0.000010108353 ...  % ang_bias
-                  +0.054166628608,   -0.150795608218,   -0.006101756988 ];   % acc_boas
-							   
+% final parameters from sim011
+Parameter_IC = [ 1.417247849895906   0.297770022613385   0.001759860266845   0.954348429894986   0.000016807341118   0.000101346851076   5.042693045579729  12.132403050150018   5.390552282852902   0.000057560147294   0.000186784163716   0.000047219356980   0.000003843563861  -0.000002145874963   0.000009456012032   0.054113457421914  -0.150790256806892  -0.006122443132332];
+
 Parameter_IC'
 
 % keep all gains nonnegative, but no constraint on boas terms
@@ -20,7 +15,7 @@ Lower_Bound'
 result = fmincon('tn_opt_llw_sim011', Parameter_IC, [], [], [], [], Lower_Bound, [], [], options)
 
 % name for figures
-figsname = "llw_sim_011_18_param_const_bias"
+figsname = "llw_sim_012_18_param_const_bias_sentry492"
 
 % random string for figures
 figs_random_string = random_string(10)
@@ -39,7 +34,6 @@ for fignum = 1:6
   orient landscape
   print('-dpdf', filename,'-fillpage');
 end
-
 
 % construct filename for combined pdfs
 combined_pdf_filename = sprintf('%s_%s.pdf',figsname,datestr(now,'yyyy-mm-dd_HH-MM-SS')) 
