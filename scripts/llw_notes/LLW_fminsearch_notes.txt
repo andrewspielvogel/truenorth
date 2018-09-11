@@ -1896,4 +1896,15 @@ ans =
 ----------------------------------------------------------------------
 SIM 12
 ----------------------------------------------------------------------
+// 2018-09-11 LLW
 Use final parameters from sim 011 (sentry494) for sentry492 instead
+
+
+----------------------------------------------------------------------
+SIM 10
+----------------------------------------------------------------------
+
+// 2018-09-11 LLW
+rediong sim010 for period after midnight only, after descent weight is
+dropped, use dive_bottom_10Hz instead of dive_10Hz
+Initialize with 24 params from Sim 008 on sentry494

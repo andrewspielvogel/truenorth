@@ -33,7 +33,7 @@ Lower_Bound'
 result = fmincon('tn_opt_llw_sim010', Parameter_IC, [], [], [], [], Lower_Bound, [], [], options)
 
 % name for figures
-figsname = 'llw_sim_010_24_params_sentry492'
+figsname = 'llw_sim_010_24_params_sentry492_redux'
 
 % random string for figures
 figs_random_string = random_string(10)
