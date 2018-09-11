@@ -12,7 +12,7 @@ Lower_Bound = [-1e-12 -1e-12 -1e-12 -1e-12 -1e-12 -1e-12 -1e-12 -1e-12 -1e-12 -1
 
 Lower_Bound'
 
-result = fmincon('tn_opt_llw_sim011', Parameter_IC, [], [], [], [], Lower_Bound, [], [], options)
+result = fmincon('tn_opt_llw_sim012', Parameter_IC, [], [], [], [], Lower_Bound, [], [], options)
 
 % name for figures
 figsname = "llw_sim_012_18_param_const_bias_sentry492"
