@@ -56,25 +56,25 @@ function err = tn_opt_llw_sim012(p)
   % k_acc_bias= '[0.0,0.0,0.0]';
   % k_acc_bias=   sprintf('[%.12f,%.12f,%.12f]',p(13),p(14),p(15));
   % ser k_acc_bias for Y axis to zero
-  % k_acc_bias= '[0.0,0.0,0.0]';
-  k_acc_bias=   sprintf('[%.12f,%.12f,%.12f]',p(13),p(14),p(15));
+  %  k_acc_bias=   sprintf('[%.12f,%.12f,%.12f]',p(13),p(14),p(15));
+  k_acc_bias= '[0.0,0.0,0.0]';
 
-  % k_ang_bias= '[0.0,0.0,0.0]';
-  k_ang_bias=    sprintf('[%.12f,%.12f,%.12f]',p(16),p(17),p(18));
+  %  k_ang_bias=    sprintf('[%.12f,%.12f,%.12f]',p(16),p(17),p(18));
+  k_ang_bias= '[0.0,0.0,0.0]';
 
   % ang_bias=   '[0.0,0.0,0.0]';
   % ang_bias=   '[0.000003,0.0,0.00001]';  
   % converged values from LLW fminsearch #2  
   % ang_bias  = '[0.000003083163786,0.000001807260271,0.000012498206088]';
-  % ang_bias=      sprintf('[%.12f,%.12f,%.12f]',p(13),p(14),p(15));  
-  ang_bias=      sprintf('[%.12f,%.12f,%.12f]',p(19),p(20),p(21));
+  % ang_bias=      sprintf('[%.12f,%.12f,%.12f]',p(19),p(20),p(21));
+  ang_bias=      sprintf('[%.12f,%.12f,%.12f]',p(13),p(14),p(15));  
   
   % acc_bias=   '[0.0,0.0,0.0]';
   % acc_bias=   '[0.01,0.0,0.0]';
   % converged values from LLW fminsearch #2
   % acc_bias=   '[0.008583091534961,-0.001739827097389,-0.006883214529009]';
-  % acc_bias=      sprintf('[%.12f,%.12f,%.12f]',p(16),p(17),p(18));  
-  acc_bias=      sprintf('[%.12f,%.12f,%.12f]',p(22),p(23),p(24));
+  % acc_bias=      sprintf('[%.12f,%.12f,%.12f]',p(22),p(23),p(24));
+  acc_bias=      sprintf('[%.12f,%.12f,%.12f]',p(16),p(17),p(18));  
   
   LAT=        '32.71';
 
