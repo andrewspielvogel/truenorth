@@ -29,8 +29,8 @@ function err = tn_opt_llw_sim012(p)
   EXP_dir = '/home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry492'
 
   % name of expt file with no suffix such as 2018_08_21_12_45'
-  LOG_in_fn  = 'dive_10hz'
-  LOG_out_fn = 'dive_10hz_492'
+  LOG_in_fn  = 'dive_bottom'
+  LOG_out_fn = 'dive_bottom_492'
   HZ = '10'
 
   % algorithm parameters NO SPACES BETWEEN NUMBERS OR COMMAS
