@@ -1896,15 +1896,121 @@ ans =
 ----------------------------------------------------------------------
 SIM 12
 ----------------------------------------------------------------------
-// 2018-09-11 LLW
+// 2018-09-11 LLW  18 parameter simulation, no bias adaptation, like sim 011
 Use final parameters from sim 011 (sentry494) for sentry492 instead
+
+
 
 
 ----------------------------------------------------------------------
 SIM 10
 ----------------------------------------------------------------------
 
-// 2018-09-11 LLW
-rediong sim010 for period after midnight only, after descent weight is
+// 2018-09-11 LLW full 24 parameter sim
+redoing sim010 of sentry 492 for period after midnight only, after descent weight is
 dropped, use dive_bottom_10Hz instead of dive_10Hz
 Initialize with 24 params from Sim 008 on sentry494
+Initialized accel bias adaptation gain to zero IC and, curiouusly, the final
+optimized values for accel bias adaptation gain was zero.
+This is suspicious but I cannot find a programming error that would account for this.
+Performance is poor with 20 deg heading rms error
+
+
+rms_error_dof =
+
+   0.244872377621672   0.136725756631004  20.942988275125952
+
+
+rms_error =
+
+  20.944866060825298
+
+
+Local minimum possible. Constraints satisfied.
+
+fmincon stopped because the size of the current step is less than
+the default value of the step size tolerance and constraints are 
+satisfied to within the default value of the constraint tolerance.
+
+<stopping criteria details>
+
+
+result =
+
+  Columns 1 through 3
+
+   1.822104186340783   0.420549513241675   0.002328617816545
+
+  Columns 4 through 6
+
+   0.788859610106467   0.000005892125441   0.000035254589054
+
+  Columns 7 through 9
+
+   4.847289490824894  11.997485104915571   4.349747373831570
+
+  Columns 10 through 12
+
+   0.000020797687393   0.000062954099500   0.000023368256215
+
+  Columns 13 through 15
+
+   0.000000000000000   0.000000000000000   0.000000000000000
+
+  Columns 16 through 18
+
+   0.000000122737953   0.000008372554094   0.000096566681559
+
+  Columns 19 through 21
+
+   0.000002704263508  -0.000043649152162  -0.000138287438577
+
+  Columns 22 through 24
+
+   0.021961144702878   0.016497893797823  -0.013948638132639
+
+
+figsname =
+
+    'llw_sim_010_24_params_sentry492_redux'
+
+
+figs_random_string =
+
+    'oC05quuYoK'
+
+
+combined_pdf_filename =
+
+    'llw_sim_010_24_params_sentry492_redux_2018-09-11_19-50-06.pdf'
+
+>> result'
+
+ans =
+
+   1.822104186340783
+   0.420549513241675
+   0.002328617816545
+   0.788859610106467
+   0.000005892125441
+   0.000035254589054
+   4.847289490824894
+  11.997485104915571
+   4.349747373831570
+   0.000020797687393
+   0.000062954099500
+   0.000023368256215
+   0.000000000000000
+   0.000000000000000
+   0.000000000000000
+   0.000000122737953
+   0.000008372554094
+   0.000096566681559
+   0.000002704263508
+  -0.000043649152162
+  -0.000138287438577
+   0.021961144702878
+   0.016497893797823
+  -0.013948638132639
+
+----------------------------------------------------------------------
