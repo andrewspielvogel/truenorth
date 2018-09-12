@@ -83,10 +83,11 @@ function rms_error = tn_opt_compute_rms_error_llw(kvh_csv_fn, phins_log_fn, opti
   % err_att_sq_weighted(:,3) = err_att(:,3).^2 *(1.0);
   % rms_error = sqrt(mean(sum(err_att_sq_weighted')));
   
-
+  
   % ----------------------------------------------------------------------
   % plot unwrapped rph
   % ----------------------------------------------------------------------  
+  pause(0.5);
   figure(2);
   dof_labels = ['ROLL '; 'PITCH'; 'HDG  '];
 		 
@@ -103,6 +104,7 @@ function rms_error = tn_opt_compute_rms_error_llw(kvh_csv_fn, phins_log_fn, opti
   % ----------------------------------------------------------------------
   % plot rph error
   % ----------------------------------------------------------------------
+  pause(0.5);
   figure(3);  
   for i=1:3
     subplot(3,1,i);
@@ -117,6 +119,7 @@ function rms_error = tn_opt_compute_rms_error_llw(kvh_csv_fn, phins_log_fn, opti
   % ----------------------------------------------------------------------
   % plot angular bias
   % ----------------------------------------------------------------------  
+  pause(0.5);
   figure(4);  
   for i=11:13
     subplot(3,1,i-10);
@@ -130,6 +133,7 @@ function rms_error = tn_opt_compute_rms_error_llw(kvh_csv_fn, phins_log_fn, opti
   % ----------------------------------------------------------------------
   % plot accel bias
   % ----------------------------------------------------------------------    
+  pause(0.5);
   figure(5);  
   for i=17:19
     subplot(3,1,i-16);
