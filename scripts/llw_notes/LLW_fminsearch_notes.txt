@@ -2339,6 +2339,216 @@ ans =
    0.000048947572261   0.001273222247219   0.000043934905607   0.000010575733905   0.000025706148526   0.000005241694846   0.041914958322302  -0.012877318762107   0.004120792504163
 
 
+Result workspace saved as llw_sim_013_results.m
+
+
+rms_error_dof =
+
+   0.173074331917870   0.271103276064411   0.967945732239356
+
+
+rms_error =
+
+   1.019985613242690
+
+tn_opt: Phins data structure exists in Workspace
+
+TrueNorth_Package_dir =
+
+    '/home/llw/kvh_catkin_ws/src/truenorth'
+
+
+EXP_dir =
+
+    '/home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494'
+
+
+LOG_in_fn =
+
+    'dive_bottom'
+
+
+LOG_out_fn =
+
+    'dive_bottom_expt01'
+
+
+HZ =
+
+    '10'
+
+
+rpy_ro =
+
+    '[0.0,0.0,3.5]'
+
+tn_opt: ---------------------------------------------------------------
+tn_opt: executing command: python /home/llw/kvh_catkin_ws/src/truenorth/python/gen_config_file.py -i /home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494/kvh/dive_bottom.KVH -o /home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494/proc/kvh/processed/dive_bottom_expt01.CSV -c /home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494/proc/kvh/configs/dive_bottom_expt01.m -z 10 --rpy_ro [0.0,0.0,3.5] --rpy_align [-1.5798,0.0573,1.5712] --k_acc [4.472204981869,6.585838465053,5.929574086728] --k_E_n [0.000077950504,0.000693420866,0.000066485731] --k_acc_bias [0.0,0.0,0.0] --k_ang_bias [0.0,0.0,0.0] --acc_bias [0.038829818397,0.570664841298,-0.026598229056] --ang_bias [0.000006834431,0.000132470999,0.000006191069] --k_g [2.109863844471,0.463715523995,0.111067013286] --k_north [0.899102608875,0.001982661667,0.039527123629] -l 32.71
+GENERATING CONFIG FILE: /home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494/proc/kvh/configs/dive_bottom_expt01.m
+tn_opt: cmd status=0
+tn_opt: cmd output= GENERATING CONFIG FILE: /home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494/proc/kvh/configs/dive_bottom_expt01.m
+
+tn_opt: ---------------------------------------------------------------
+tn_opt: executing command: /home/llw/kvh_catkin_ws/devel/lib/truenorth/post_process /home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494/proc/kvh/configs/dive_bottom_expt01.m
+LOADING CONFIG FILE: /home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494/proc/kvh/configs/dive_bottom_expt01.m
+***********************************
+           LOADED PARAMS 
+***********************************
+  last_mod: 2018-09-13T09:55:19.497383
+        hz: 10 (s^-1)
+       lat:   +32.709997916339 (deg)      +0.570897161961 (rad)
+    o_file: /home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494/proc/kvh/processed/dive_bottom_expt01.CSV
+    i_file: /home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494/kvh/dive_bottom.KVH
+        r0: [   +0.000000000000,   -0.000000000000,   -2.783185307180] (rpy)
+   r_align: [   -1.579800000000,   +0.057300000000,   +1.571200000000] (rpy)
+     k_acc: [   +4.472204981869,   +6.585838465053,   +5.929574086728] (diag)
+     k_mag: [   +0.000000000000,   +0.000000000000,   +0.000000000000] (diag)
+k_ang_bias: [   +0.000000000000,   +0.000000000000,   +0.000000000000] (diag)
+k_acc_bias: [   +0.000000000000,   +0.000000000000,   +0.000000000000] (diag)
+k_mag_bias: [   +0.000000000000,   +0.000000000000,   +0.000000000000] (diag)
+     k_E_n: [   +0.000077950504,   +0.000693420866,   +0.000066485731] (diag)
+       k_g: [   +2.109863844471,   +0.463715523995,   +0.111067013286] (diag)
+   k_north: [   +0.899102608875,   +0.001982661667,   +0.039527123629] (diag)
+  acc_bias: [   +0.038829818397,   +0.570664841298,   -0.026598229056] (diag)
+  ang_bias: [   +0.000006834431,   +0.000132470999,   +0.000006191069] (diag)
+  mag_bias: [   +0.000000000000,   +0.000000000000,   +0.000000000000] (diag)
+*************************
+ATTITUDE ESTIMATOR USING GAINS:
+*************************
+        r0: [   +0.000000000000,   -0.000000000000,   -2.783185307180] (rpy)
+   r_align: [   -1.579800000000,   +0.057300000000,   +1.571200000000] (rpy)
+     k_acc: [   +4.472204981869,   +6.585838465053,   +5.929574086728] (diag)
+k_ang_bias: [   +0.000000000000,   +0.000000000000,   +0.000000000000] (diag)
+k_acc_bias: [   +0.000000000000,   +0.000000000000,   +0.000000000000] (diag)
+     k_E_n: [   +0.000077950504,   +0.000693420866,   +0.000066485731] (diag)
+       k_g: [   +2.109863844471,   +0.463715523995,   +0.111067013286] (diag)
+   k_north: [   +0.899102608875,   +0.001982661667,   +0.039527123629] (diag)
+       lat:   +32.709997916339 (deg)     +0.570897161961 (rad)
+***********************************
+    RUNNING ATTITUDE ESTIMATION
+***********************************
+
+tn_opt: cmd status=0
+tn_opt: cmd output= LOADING CONFIG FILE: /home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494/proc/kvh/configs/dive_bottom_expt01.m
+***********************************
+           LOADED PARAMS 
+***********************************
+  last_mod: 2018-09-13T09:55:19.497383
+        hz: 10 (s^-1)
+       lat:   +32.709997916339 (deg)      +0.570897161961 (rad)
+    o_file: /home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494/proc/kvh/processed/dive_bottom_expt01.CSV
+    i_file: /home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494/kvh/dive_bottom.KVH
+        r0: [   +0.000000000000,   -0.000000000000,   -2.783185307180] (rpy)
+   r_align: [   -1.579800000000,   +0.057300000000,   +1.571200000000] (rpy)
+     k_acc: [   +4.472204981869,   +6.585838465053,   +5.929574086728] (diag)
+     k_mag: [   +0.000000000000,   +0.000000000000,   +0.000000000000] (diag)
+k_ang_bias: [   +0.000000000000,   +0.000000000000,   +0.000000000000] (diag)
+k_acc_bias: [   +0.000000000000,   +0.000000000000,   +0.000000000000] (diag)
+k_mag_bias: [   +0.000000000000,   +0.000000000000,   +0.000000000000] (diag)
+     k_E_n: [   +0.000077950504,   +0.000693420866,   +0.000066485731] (diag)
+       k_g: [   +2.109863844471,   +0.463715523995,   +0.111067013286] (diag)
+   k_north: [   +0.899102608875,   +0.001982661667,   +0.039527123629] (diag)
+  acc_bias: [   +0.038829818397,   +0.570664841298,   -0.026598229056] (diag)
+  ang_bias: [   +0.000006834431,   +0.000132470999,   +0.000006191069] (diag)
+  mag_bias: [   +0.000000000000,   +0.000000000000,   +0.000000000000] (diag)
+*************************
+ATTITUDE ESTIMATOR USING GAINS:
+*************************
+        r0: [   +0.000000000000,   -0.000000000000,   -2.783185307180] (rpy)
+   r_align: [   -1.579800000000,   +0.057300000000,   +1.571200000000] (rpy)
+     k_acc: [   +4.472204981869,   +6.585838465053,   +5.929574086728] (diag)
+k_ang_bias: [   +0.000000000000,   +0.000000000000,   +0.000000000000] (diag)
+k_acc_bias: [   +0.000000000000,   +0.000000000000,   +0.000000000000] (diag)
+     k_E_n: [   +0.000077950504,   +0.000693420866,   +0.000066485731] (diag)
+       k_g: [   +2.109863844471,   +0.463715523995,   +0.111067013286] (diag)
+   k_north: [   +0.899102608875,   +0.001982661667,   +0.039527123629] (diag)
+       lat:   +32.709997916339 (deg)     +0.570897161961 (rad)
+***********************************
+    RUNNING ATTITUDE ESTIMATION
+***********************************
+
+
+tn_opt: Phins data structure exists in Workspace
+tn_opt: Reading KVH data from /home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494/proc/kvh/processed/dive_bottom_expt01.CSV
+
+rms_error_dof =
+
+   0.173074332062752   0.271103188500767   0.967945744558117
+
+
+rms_error =
+
+   1.019985601683882
+
+
+Solver stopped prematurely.
+
+fmincon stopped because it exceeded the function evaluation limit,
+options.MaxFunctionEvaluations = 3000 (the default value).
+
+
+result =
+
+  Columns 1 through 4
+
+   2.109863844471290   0.463715523994944   0.111067013285918   0.899102608874919
+
+  Columns 5 through 8
+
+   0.001982661666695   0.039527123628854   4.472204981869051   6.585838465052916
+
+  Columns 9 through 12
+
+   5.929574086728122   0.000077950504107   0.000693420866297   0.000066485731003
+
+  Columns 13 through 16
+
+   0.000006834430619   0.000132470998682   0.000006191068627   0.038829818396668
+
+  Columns 17 through 18
+
+   0.570664841298183  -0.026598214155149
+
+
+figsname = 
+
+    "llw_sim_013_sentry494_18_param_const_bias"
+
+
+figs_random_string =
+
+    'bXvxLeboru'
+
+
+combined_pdf_filename =
+
+    'llw_sim_013_sentry494_18_param_const_bias_2018-09-13_09-55-40.pdf'
+
+>> result'
+
+ans =
+
+   2.109863844471290
+   0.463715523994944
+   0.111067013285918
+   0.899102608874919
+   0.001982661666695
+   0.039527123628854
+   4.472204981869051
+   6.585838465052916
+   5.929574086728122
+   0.000077950504107
+   0.000693420866297
+   0.000066485731003
+   0.000006834430619
+   0.000132470998682
+   0.000006191068627
+   0.038829818396668
+   0.570664841298183
+  -0.026598214155149
+
+
+
 
 
 
@@ -2347,6 +2557,8 @@ SIM 014
 ----------------------------------------------------------------------
 492 with initial params mean of sim 11 (first row below) and sim 12,
 see sim013 notes (above) for params and details
+
+Resul workspace saved as llw_sim_014_results.m
 
 
 rms_error_dof =
@@ -2433,3 +2645,8 @@ ans =
   -0.008397191025680
 
 >> 
+
+
+----------------------------------------------------------------------
+Discussion
+----------------------------------------------------------------------
