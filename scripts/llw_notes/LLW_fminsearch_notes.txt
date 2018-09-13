@@ -2340,8 +2340,96 @@ ans =
 
 
 
+
+
 ----------------------------------------------------------------------
 SIM 014
 ----------------------------------------------------------------------
 492 with initial params mean of sim 11 (first row below) and sim 12,
-see sim013 notes for params
+see sim013 notes (above) for params and details
+
+
+rms_error_dof =
+
+   0.209197018895294   0.227030190888670   1.145624025540267
+
+
+rms_error =
+
+   1.186490837800576
+
+
+Local minimum possible. Constraints satisfied.
+
+fmincon stopped because the size of the current step is less than
+the default value of the step size tolerance and constraints are 
+satisfied to within the default value of the constraint tolerance.
+
+<stopping criteria details>
+
+
+result =
+
+  Columns 1 through 3
+
+   1.380652837746997   0.347963733907383   0.003919055966846
+
+  Columns 4 through 6
+
+   0.890206902296098   0.000026202845260   0.000170907157384
+
+  Columns 7 through 9
+
+   4.881989142851892  12.081061391754407   5.511298694389958
+
+  Columns 10 through 12
+
+   0.000060376732873   0.000091606987264   0.000039745794239
+
+  Columns 13 through 15
+
+   0.000009228707961   0.000033856518434   0.000010994226174
+
+  Columns 16 through 18
+
+   0.024896646677126  -0.135650547605661  -0.008397191025680
+
+
+figsname = 
+
+    "llw_sim_014_sentry492_18_param_const_bias"
+
+
+figs_random_string =
+
+    'rBRCGzrT6C'
+
+
+combined_pdf_filename =
+
+    'llw_sim_014_sentry492_18_param_const_bias_2018-09-13_00-06-27.pdf'
+
+>> result'
+
+ans =
+
+   1.380652837746997
+   0.347963733907383
+   0.003919055966846
+   0.890206902296098
+   0.000026202845260
+   0.000170907157384
+   4.881989142851892
+  12.081061391754407
+   5.511298694389958
+   0.000060376732873
+   0.000091606987264
+   0.000039745794239
+   0.000009228707961
+   0.000033856518434
+   0.000010994226174
+   0.024896646677126
+  -0.135650547605661
+  -0.008397191025680
+
+>> 
