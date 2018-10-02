@@ -3053,3 +3053,9 @@ Created these files to run sim pnce with an 18 parameter set, no adaptation on b
 These do OK with the parameters from their run, errors under 10 deg
 
 ----------------------------------------------------------------------
+// 2018-10-02 LLW
+
+Created llw_sim_017 to sim survey portion of 494 with param IC from sim 013
+Created llw_sim_018 to sim survey portion of 492 with param IC from sim 014
+
+----------------------------------------------------------------------
