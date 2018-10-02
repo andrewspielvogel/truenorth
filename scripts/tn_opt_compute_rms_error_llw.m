@@ -128,6 +128,7 @@ function rms_error = tn_opt_compute_rms_error_llw(kvh_csv_fn, phins_log_fn, opti
     xlabel(tlabel(kvh_t));
     ylabel('Deg/S');
     title('Anugular Rate Bias');
+    legend(sprintf('mean= %+.10f',mean(kvh(:,i))));
   end
 
   % ----------------------------------------------------------------------
@@ -142,6 +143,7 @@ function rms_error = tn_opt_compute_rms_error_llw(kvh_csv_fn, phins_log_fn, opti
     xlabel(tlabel(kvh_t));
     ylabel('m/s^2');
     title('Acceleration Bias');
+    legend(sprintf('mean= %+.10f m/s^2',mean(kvh(:,i))));    
   end
   
 
