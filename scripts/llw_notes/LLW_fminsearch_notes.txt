@@ -2989,3 +2989,67 @@ ans =
 >> 
 
 ----------------------------------------------------------------------
+
+// 2018-10-02 LLW
+
+Created these files to run sim pnce with an 18 parameter set, no adaptation on bias terms.
+
+	new file:   llw_sim_dive_bottom_492_once.m
+	new file:   llw_sim_dive_bottom_494_once.m
+
+Recall that sim 013 is 18 parameter optimization of 494
+Recall that sim 014 is 18 parameter optimization of 492
+
+When you re-run the 494 and 492 dives with parameters from sim 013 and
+014, respectively, you get the same results as the final run of the
+optimization
+
+When you re-run the 494 and 492 dives with parameters from,
+respectively, sim 013 and 014 dives but with zero accelerometer bias,
+the errors are small.  So things are repeatable. 
+
+When you re-run the 494 and 492 dives with parameters from,
+respectively, sim 014 and 013 dives but with zero accelerometer bias,
+the errors are ~3 deg heading, so the parameters ontained on one dive
+are not terrible for another dive.
+
+When you re-run the 494 and 492 dives with parameters from
+respectively, sim 013 and 014 dives but with zero accelerometer bias
+AND zero angular rate sensor bias, the errors in heading are large -
+10-20 deg.  So bias terms, especially the angular rate sensor bias
+terms, matter.
+
+
+----------------------------------------------------------------------
+
+LOG 2018/10/02 15:04:53:
+
+// 2018-10-02 LLW
+
+Parsed sentry 492 survey portion of dive:
+492 survey begins
+LOG 2018/08/25  4:30:33: Rounded corner for southeast transit line to start of patch lines
+492 survey ends
+LOG 2018/08/25  8:04:31: End of line 8, end of survey, going to parking donuts 
+
+dive_survey.KVH and
+dive_survey.INS
+
+Parsed sentry 494 survey portion of dive:
+494 survey begins
+LOG 2018/08/27  2:06:22: Begin line 1 to NE
+494 survey ends
+LOG 2018/08/27  8:32:04: weights droped
+
+dive_survey.KVH and
+dive_survey.INS
+
+
+Created these files to run sim pnce with an 18 parameter set, no adaptation on bias terms.
+
+	new file:   llw_sim_dive_survey_492_once.m
+	new file:   llw_sim_dive_survey_494_once.m
+
+These do OK with the parameters from their run, errors under 10 deg
+
+----------------------------------------------------------------------
