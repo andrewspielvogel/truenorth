@@ -3576,3 +3576,14 @@ ans =
   -0.130785794578031
 
 >> 
+
+----------------------------------------------------------------------
+
+ 2018-10-03 LLW created these files to optimize the first 30 min of 494:
+
+	llw_sim_019.m
+	tn_opt_compute_rms_error_llw_all.m
+	tn_opt_llw_494_survey_first_30.m
+
+
+----------------------------------------------------------------------
