@@ -53,3 +53,5 @@ delete(['*' figs_random_string '*pdf']);
 % open pdf viewer on combined file
 unix(['evince '     combined_pdf_filename '&']);
 
+% save the workspace
+save([figsname '.mat'])
