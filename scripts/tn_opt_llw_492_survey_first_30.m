@@ -1,4 +1,4 @@
-function err = tn_opt_llw_494_survey_first_30(p)
+function err = tn_opt_llw_492_survey_first_30(p) 
 % 
 % 2018-08-29 LLW For numerical optmization of KVH gyro bias with fminsearch
 % this file is based upon att_process_script.sh by Andrew Spielvogel
@@ -12,9 +12,6 @@ function err = tn_opt_llw_494_survey_first_30(p)
 % 2018/09/08 13:21:10: LLW revised to include 6 bias terms as params, 24 total params
 
 % 2018/09/11 18:07:09:  Sentry 492, and initial heading 1.5 rad
-
-% 2018-10-03 LLW modified to compute rms error for entire data set
-  
 
   % if global data structure phins has been loaded, then we will load it
   global phins;
@@ -33,7 +30,7 @@ function err = tn_opt_llw_494_survey_first_30(p)
 
   % name of expt file with no suffix such as 2018_08_21_12_45'
   LOG_in_fn  = 'dive_survey_first_30'
-  LOG_out_fn = 'dive_survey_494'
+  LOG_out_fn = 'dive_survey_492'
   HZ = '10'
 
   % algorithm parameters NO SPACES BETWEEN NUMBERS OR COMMAS
@@ -168,7 +165,7 @@ function err = tn_opt_llw_494_survey_first_30(p)
   fprintf(1,'tn_opt: cmd output= %s\n', cmdout);
 
   % compute rms error
-  err = tn_opt_compute_rms_error_llw_all(CSV, PHINS, p);
+  err = tn_opt_compute_rms_error_llw(CSV, PHINS, p);
   
   return;
 
