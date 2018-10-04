@@ -1,4 +1,6 @@
-% 2018-10-04 LLW picking up where the first SIM 019 timed out on 'MaxFunctionEvaluations' default value of 3000, now set to 30000
+% 2018-10-03 LLW sentry494 first 30 min of survey portion only, params from llw_sim_013
+
+% 2018-10-04 LLW picking up where the first SIM 019 timed out on 'MaxFunEvals' default value of 3000, now set to 30000
 
 options = optimset('PlotFcns',@optimplotfval,'MaxFunEvals',30000);
 

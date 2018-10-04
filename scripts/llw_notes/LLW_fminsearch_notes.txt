@@ -3590,7 +3590,7 @@ ans =
 SIM 019
 ----------------------------------------------------------------------
 
-first sim 019 stopped on  on 'MaxFunctionEvaluations' default value of 3000 with this param and 6.14 deg RMS:
+first sim 019 stopped on  on 'MaxFunEvals' default value of 3000 with this param and 6.14 deg RMS:
 
 >> result'
 
@@ -3622,6 +3622,47 @@ Solver stopped prematurely.
 fmincon stopped because it exceeded the function evaluation limit,
 options.MaxFunctionEvaluations = 3000 (the default value).
 
+I set 'MaxFunEvals' to 30000 and restarted som 019 with theabove params.
 
-I set 'MaxFunctionEvaluations' to 30000 and restarted som 019 with theabove params.
+options = optimset('PlotFcns',@optimplotfval,'MaxFunEvals',30000);
+
+
+----------------------------------------------------------------------
+SIM 020
+----------------------------------------------------------------------
+
+first sim 020 stopped on  on 'MaxFunEvals' default value of 3000 with this param and 9.2 deg RMS:
+
+>> result'
+
+ans =
+
+   2.093023229290583
+   1.928072973323687
+   0.005777488727626
+   2.108101194270751
+   0.035034589728558
+   0.016794064184742
+  19.995012822301323
+  18.766938449137307
+   6.146276748099416
+   0.004957457943431
+   0.046074942265731
+   0.000475207734746
+   0.009916578663670
+   0.001951865310192
+   0.001726950344670
+  -0.729765455185357
+   4.556081220106417
+   0.293071402733983
+
+
+Solver stopped prematurely.
+
+fmincon stopped because it exceeded the function evaluation limit,
+options.MaxFunctionEvaluations = 3000 (the default value).
+
+I set 'MaxFunEvals' to 30000 and restarted som 019 with theabove params.
+
+options = optimset('PlotFcns',@optimplotfval,'MaxFunEvals',30000);
 
