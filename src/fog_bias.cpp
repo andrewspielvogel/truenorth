@@ -23,7 +23,6 @@ FOGBias::FOGBias(config_params parameters)
 {
   
   params = parameters;
-  
 
   Eigen::Vector3d g_e(cos(params.lat),0,sin(params.lat));
   Eigen::Vector3d w_E(0,0,7.292150/100000.0);
@@ -38,10 +37,37 @@ FOGBias::FOGBias(config_params parameters)
 
   w_E_n(2) = 0.0;
 
-  w_E_north = params.R_align.transpose()*params.R0.transpose()*w_E_n;
+  // 2018-10-04 LLW added optional parameters to set ICs for acc_hat and w_E_north
+  // set these to sentinel values in case the user does not provide these parameters
+  // on the command line
+  Eigen::Vector3d sentinel(-100.0,-100.0,-100.0);
   
+  if (params.w_E_north == sentinel)
+    {
+      w_E_north = params.R_align.transpose()*params.R0.transpose()*w_E_n;
+      parameters.w_E_north = w_E_north;
+      printf("Using default computed values to initialize w_E_north.\n");      
+    }
+  else
+    {
+      w_E_north = params.w_E_north;
+      printf("Using command line values to initialize w_E_north.\n");
+      
+    }
 
-  acc_hat = params.R0.transpose()*get_R_en(params.lat)*a_e;
+  if (params.acc_hat == sentinel)
+    {
+      acc_hat = params.R0.transpose()*get_R_en(params.lat)*a_e;
+      parameters.acc_hat = acc_hat;
+      printf("Using default computed values to initialize acc_hat.\n");            
+    }
+  else
+    {
+      acc_hat = params.acc_hat;
+      printf("Using command line values to initialize acc_hat.\n");      
+    }
+  
+      
   start_ = 0;
 
   t_ = 0;
