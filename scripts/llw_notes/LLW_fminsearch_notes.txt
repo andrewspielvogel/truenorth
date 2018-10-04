@@ -3590,7 +3590,7 @@ ans =
 SIM 019
 ----------------------------------------------------------------------
 
-18 param fmincon of first 30 min of 494, rms error 
+first sim 019 stopped on  on 'MaxFunctionEvaluations' default value of 3000 with this param and 6.14 deg RMS:
 
 >> result'
 
@@ -3623,29 +3623,5 @@ fmincon stopped because it exceeded the function evaluation limit,
 options.MaxFunctionEvaluations = 3000 (the default value).
 
 
-result =
+I set 'MaxFunctionEvaluations' to 30000 and restarted som 019 with theabove params.
 
-  Columns 1 through 4
-
-   1.208381523574572   1.103108281299558   0.388817244380786   2.343497024930285
-
-  Columns 5 through 8
-
-   0.170708351807067   0.171886136306531   6.788565619990310  19.975027210096204
-
-  Columns 9 through 12
-
-   3.117615296185519   0.006381508118805   0.194440852713081   0.006532618582973
-
-  Columns 13 through 16
-
-   0.119428707814936   0.111317663845153   0.028165229297016  -0.163186551390648
-
-  Columns 17 through 18
-
-   3.655647384003520   0.967574663835923
-
-
-figsname = 
-
-    "llw_sim_019_sentry494_survey_only_first_30_min_18_param_const_bias"
