@@ -165,7 +165,7 @@ function err = tn_opt_llw_492_survey(p)
   fprintf(1,'tn_opt: cmd output= %s\n', cmdout);
 
   % compute rms error
-  err = tn_opt_compute_rms_error_llw(CSV, PHINS, p);
+  err = tn_opt_compute_rms_error_llw_all(CSV, PHINS, p);
   
   return;
 

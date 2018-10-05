@@ -29,7 +29,7 @@ function err = tn_opt_llw_494_survey_first_30(p)
   TrueNorth_Package_dir = '/home/llw/kvh_catkin_ws/src/truenorth'
 
   % exp dir with subdirectories /kvh, /phine, and /proc
-  EXP_dir = '/home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry492'
+  EXP_dir = '/home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494'
 
   % name of expt file with no suffix such as 2018_08_21_12_45'
   LOG_in_fn  = 'dive_survey_first_30'
