@@ -41,7 +41,8 @@ function err = tn_opt_llw_494_survey_first_30(p)
   % rpy_ro=     '[0.0,0.0,4.01]';
   %  2018-09-06 LLW 0.5 radian initial heading error
   %  rpy_ro=     '[0.0,0.0,3.5]'
-  rpy_ro=     '[0.0,0.0,-1.5]'
+  % rpy_ro=     '[0.0,0.0,-1.0]'
+  rpy_ro=     '[0.0,0.0,-1.5]'  
 
   % gains appearing in the attitude observer
   % k_g=        '[0.1,0.1,0.1]';
