@@ -1,6 +1,6 @@
 % 2018-10-03 LLW sentry492 first 30 min of survey portion only, params from llw_sim_014
 
-% 2018-10-04 LLW picking up where the first SIM 019 timed out on 'MaxFunEvals' default value of 3000, now set to 30000
+% 2018-10-04 LLW picking up where the first SIM 020 timed out on 'MaxFunEvals' default value of 3000, now set to 30000
 
 options = optimset('PlotFcns',@optimplotfval,'MaxFunEvals',30000);
 
@@ -20,7 +20,7 @@ Lower_Bound'
 result = fmincon('tn_opt_llw_494_survey_first_30', Parameter_IC, [], [], [], [], Lower_Bound, [], [], options)
 
 % name for figures
-figsname = "llw_sim_019_sentry492_survey_only_first_30_min_18_param_const_bias"
+figsname = "llw_sim_020_sentry492_survey_only_first_30_min_18_param_const_bias"
 
 % random string for figures
 figs_random_string = random_string(10)
