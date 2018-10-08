@@ -108,8 +108,8 @@ def main(argv):
     file.write("k_g = " + k_g + "\n")
     file.write("k_north = " + k_north + "\n")
     # 2018-10-04 LLW added w_E_north and acc_est
-    file.write("w_E_north = " + w_E_north + "\n")    
-    file.write("acc_est = " + acc_est + "\n")    
+    # file.write("w_E_north = " + w_E_north + "\n")    
+    # file.write("acc_est = " + acc_est + "\n")    
     file.close()
 
 
