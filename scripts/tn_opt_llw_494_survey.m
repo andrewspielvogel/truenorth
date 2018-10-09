@@ -47,6 +47,7 @@ function err = tn_opt_llw_494_survey(p)
   % 494 survey initial rpy in radians is  '[0.004120198765183,0.021559179585260,-0.088425186690116]'
   rpy_ro  = '[0.004120198765183,0.021559179585260,-0.088425186690116]'
 
+  
   % gains appearing in the attitude observer
   % k_g=        '[0.1,0.1,0.1]';
   k_g=           sprintf('[%.12f,%.12f,%.12f]',p(1),p(2),p(3));  

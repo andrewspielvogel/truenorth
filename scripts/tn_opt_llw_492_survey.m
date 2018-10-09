@@ -36,9 +36,15 @@ function err = tn_opt_llw_492_survey(p)
   % algorithm parameters NO SPACES BETWEEN NUMBERS OR COMMAS
   rpy_align=  '[-1.5798,0.0573,1.5712]';
   % rpy_ro=     '[0.0,0.0,4.01]';
-  %  2018-09-06 LLW 0.5 radian initial heading error
-  %  rpy_ro=     '[0.0,0.0,3.5]'
-  rpy_ro=     '[0.0,0.0,1.5]'
+  % 2018-09-06 LLW 0.5 radian initial heading error
+  % rpy_ro=     '[0.0,0.0,3.5]'
+  % rpy_ro=     '[0.0,0.0,1.5]'
+
+% 2018-10-09 LLW First line of ~/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry492/phins/dive_survey.INS
+% INS 2018/08/25 04:30:00.061454319 1535171400.061437 1535171400.061351 1535171400.061351,0.046387,-1.241455,0.126953,0.000092,-0.001114,-0.004379,3.222630,-4.523760,147.584710,0.000000,255
+%  rpy_ro in degrees is  3.222630,-4.523760,147.584710
+%  rpy_ro in radians is  0.056245504073545  -0.078954506570019   2.575839115101000
+rpy_ro  = '[0.056245504,-0.078954506,2.575839115]'
 
   % gains appearing in the attitude observer
   % k_g=        '[0.1,0.1,0.1]';
