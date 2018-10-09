@@ -4328,3 +4328,10 @@ ans =
 
 
 ----------------------------------------------------------------------
+SIM 021
+----------------------------------------------------------------------
+% 2018-10-09 LLW sentry494 survey portion only, 18 params w/constant
+% bias, param ICs from llw_sim_017, with RMS computed for entire
+% interval and estimator initialized to Phins attitude.
+
+

@@ -39,7 +39,11 @@ function err = tn_opt_llw_494_survey(p)
   % rpy_ro=     '[0.0,0.0,4.01]';
   %  2018-09-06 LLW 0.5 radian initial heading error
   %  rpy_ro=     '[0.0,0.0,3.5]'
-  rpy_ro=     '[0.0,0.0,3.2]'
+  % rpy_ro=     '[0.0,0.0,3.2]'
+
+  % First line of dives_10hz/sentry494/phins/dive_survey.INS gives phins attitude
+  % INS 2018/08/27 02:00:00.017915241 1535335200.017854 1535335200.017736 1535335200.017736,0.294189,0.196533,-0.161133,-0.000305,0.000000,0.000000,0.236070,1.235250,-5.066390,-1.804570,255
+  rpy_ro=     '[0.236070,1.235250,-5.066390]'
 
   % gains appearing in the attitude observer
   % k_g=        '[0.1,0.1,0.1]';
