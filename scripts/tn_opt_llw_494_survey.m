@@ -43,7 +43,9 @@ function err = tn_opt_llw_494_survey(p)
 
   % First line of dives_10hz/sentry494/phins/dive_survey.INS gives phins attitude
   % INS 2018/08/27 02:00:00.017915241 1535335200.017854 1535335200.017736 1535335200.017736,0.294189,0.196533,-0.161133,-0.000305,0.000000,0.000000,0.236070,1.235250,-5.066390,-1.804570,255
-  rpy_ro=     '[0.236070,1.235250,-5.066390]'
+  % 494 survey initial rpy in degrees is  '[0.236070,1.235250,-5.066390]'
+  % 494 survey initial rpy in radians is  '[0.004120198765183,0.021559179585260,-0.088425186690116]'
+  rpy_ro  = '[0.004120198765183,0.021559179585260,-0.088425186690116]'
 
   % gains appearing in the attitude observer
   % k_g=        '[0.1,0.1,0.1]';
