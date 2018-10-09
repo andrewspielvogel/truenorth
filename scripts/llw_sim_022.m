@@ -1,8 +1,11 @@
-% 2018-10-01 LLW sentry492 survey portion only, params from llw_sim_014
+% 2018-10-09 LLW sentry492 survey portion only, 18 params w/constant
+% bias, param ICs from llw_sim_018, with RMS computed for entire
+% interval and estimator initialized to Phins attitude.
+
 
 options = optimset('PlotFcns',@optimplotfval);
 
-Parameter_IC = [    1.380652837746997   0.347963733907383   0.003919055966846   0.890206902296098   0.000026202845260   0.000170907157384   4.881989142851892  12.081061391754407   5.511298694389958   0.000060376732873   0.000091606987264   0.000039745794239   0.000009228707961   0.000033856518434   0.000010994226174   0.024896646677126  -0.135650547605661  -0.008397191025680];
+Parameter_IC = [ 
 
 Parameter_IC'
 
@@ -14,7 +17,7 @@ Lower_Bound'
 result = fmincon('tn_opt_llw_492_survey', Parameter_IC, [], [], [], [], Lower_Bound, [], [], options)
 
 % name for figures
-figsname = "llw_sim_018_sentry492_survey_only_18_param_const_bias"
+figsname = "llw_sim_022_sentry492_survey_only_18_param_const_bias"
 
 % random string for figures
 figs_random_string = random_string(10)
@@ -54,4 +57,5 @@ delete(['*' figs_random_string '*pdf']);
 unix(['evince '     combined_pdf_filename '&']);
 
 % save the workspace
-save([figsname '.mat'])
+
+save(sprintf('%s.mat',figsname))

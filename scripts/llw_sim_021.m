@@ -57,4 +57,4 @@ delete(['*' figs_random_string '*pdf']);
 unix(['evince '     combined_pdf_filename '&']);
 
 % save the workspace
-save([figsname '.mat'])
+save(sprintf('%s.mat',figsname))
