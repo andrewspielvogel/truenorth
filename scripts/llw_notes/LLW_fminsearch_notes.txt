@@ -4494,10 +4494,14 @@ as noted above in SIM 021 and SIM 022 notes.
 clear all; close all;
 load llw_sim_021_022_results.mat
 llw_sim_dive_survey_494_once(sim_021_params)
+result:
+llw_sim_021_sentry494_survey_only_18_param_const_bias_2018-10-10_06-50-10.pdf
 
 clear all; close all;
 load llw_sim_021_022_results.mat
 llw_sim_dive_survey_492_once(sim_022_params)
+result:
+llw_sim_022_sentry492_survey_only_18_param_const_bias_2018-10-10_00-19-51.pdf
 
 When you rerun dives 494 and 492 survey with the parameters fitted on
 the OTHER dive, the errors are 5-10 deg rms heading errors

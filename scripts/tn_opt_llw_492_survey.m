@@ -1,4 +1,4 @@
-function err = tn_opt_llw_492_survey(p) 
+function [err KVH PHINS CSV CONFIG PDF EXP_dir TrueNorth_Package_dir] = tn_opt_llw_492_survey(p) 
 % 
 % 2018-08-29 LLW For numerical optmization of KVH gyro bias with fminsearch
 % this file is based upon att_process_script.sh by Andrew Spielvogel
