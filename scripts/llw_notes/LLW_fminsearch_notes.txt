@@ -4334,4 +4334,49 @@ SIM 021
 % bias, param ICs from llw_sim_017, with RMS computed for entire
 % interval and estimator initialized to Phins attitude.
 
+Completed prematurely at 0.283 deg RMS error at max 300 function evals
+becasue I forgot to increase the default max function evals
 
+The spikes in the attitude error plot are probably due at least in
+part doe to latency in the phins data, need to work on this.
+
+In future sims need to remember to set
+
+options = optimset('PlotFcns',@optimplotfval,'MaxFunEvals',30000);
+
+not just 
+
+options = optimset('PlotFcns',@optimplotfval);
+
+Here are the parameters:
+
+> result'
+
+ans =
+
+   1.904426041177399
+   0.057781585094893
+   1.524023354736478
+   1.663193345286955
+   0.000000309636396
+   0.379194367292823
+   2.606742584751609
+   9.448084961624119
+   4.522984551980716
+   0.000034985032630
+   0.000164312211015
+   0.000007614118697
+   0.000006829408264
+  -0.000007551305176
+   0.000029253236559
+   0.086033985617688
+   0.894606218238319
+  -0.061061170920345
+
+
+----------------------------------------------------------------------
+SIM 022
+----------------------------------------------------------------------
+% 2018-10-09 LLW sentry492 survey portion only, 18 params w/constant
+% bias, param ICs from llw_sim_018, with RMS computed for entire
+% interval and estimator initialized to Phins attitude.
