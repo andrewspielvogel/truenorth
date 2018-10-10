@@ -4337,6 +4337,12 @@ SIM 021
 Completed prematurely at 0.283 deg RMS error at max 300 function evals
 becasue I forgot to increase the default max function evals
 
+Solver stopped prematurely.
+
+fmincon stopped because it exceeded the function evaluation limit,
+options.MaxFunctionEvaluations = 3000 (the default value).
+
+
 The spikes in the attitude error plot are probably due at least in
 part doe to latency in the phins data, need to work on this.
 
@@ -4347,6 +4353,8 @@ options = optimset('PlotFcns',@optimplotfval,'MaxFunEvals',30000);
 not just 
 
 options = optimset('PlotFcns',@optimplotfval);
+
+
 
 Here are the parameters:
 
