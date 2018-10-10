@@ -38,7 +38,9 @@
     local-name: truenorth_live_docs
     uri: git@llw.me.jhu.edu:DSCL/truenorth_live_docs.git
 
-
+- git:
+    local-name: truenorth_sims
+    uri: git@git.lcsr.jhu.edu:dscl/truenorth_sims.git
 
 
 

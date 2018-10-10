@@ -42,6 +42,9 @@
     local-name: jhu_sentry_monitor
     uri: git@git.lcsr.jhu.edu:jhu_hrov/jhu_sentry_monitor.git
 
+- git:
+    local-name: truenorth_sims
+    uri: git@git.lcsr.jhu.edu:dscl/truenorth_sims.git
 
 
 
