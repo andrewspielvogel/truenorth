@@ -4342,7 +4342,6 @@ Solver stopped prematurely.
 fmincon stopped because it exceeded the function evaluation limit,
 options.MaxFunctionEvaluations = 3000 (the default value).
 
-
 The spikes in the attitude error plot are probably due at least in
 part doe to latency in the phins data, need to work on this.
 
@@ -4388,3 +4387,61 @@ SIM 022
 % 2018-10-09 LLW sentry492 survey portion only, 18 params w/constant
 % bias, param ICs from llw_sim_018, with RMS computed for entire
 % interval and estimator initialized to Phins attitude.
+
+rms werro of 0.232 deg!
+
+The spikes in the attitude error plot are probably due at least in
+part doe to latency in the phins data, need to work on this.
+
+In future sims need to remember to set
+
+options = optimset('PlotFcns',@optimplotfval,'MaxFunEvals',30000);
+
+not just 
+
+options = optimset('PlotFcns',@optimplotfval);
+
+
+
+rms_error_dof =
+
+   0.096949513974063   0.145094803209859   0.153652016903406
+
+
+rms_error =
+
+   0.232509467499282
+
+
+Local minimum possible. Constraints satisfied.
+
+fmincon stopped because the size of the current step is less than
+the default value of the step size tolerance and constraints are 
+satisfied to within the default value of the constraint tolerance.
+
+<stopping criteria details>
+
+>> result'
+
+ans =
+
+   3.560624521077898
+   0.092507975702565
+   0.023246879326821
+   5.593486037020004
+   0.000003686797170
+   0.001995414509245
+   3.162457509010298
+   6.411789991968939
+  10.937252031942084
+   0.000000000579040
+   0.000077099494498
+   0.000004159458587
+   0.001158104273825
+   0.000008860089701
+  -0.000000062542007
+   0.056179504566377
+   0.836640046613290
+   0.063237598986925
+
+----------------------------------------------------------------------
