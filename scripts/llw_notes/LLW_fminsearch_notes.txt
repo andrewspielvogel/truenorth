@@ -4445,3 +4445,71 @@ ans =
    0.063237598986925
 
 ----------------------------------------------------------------------
+SIM 021 022 discussion
+----------------------------------------------------------------------
+
+// 2018-10-10 LLW
+
+
+   sim 021              sim 022             sim 021 - sim 022
+
+k_g
+   1.904426041177399   3.560624521077898  -1.656198479900498
+   0.057781585094893   0.092507975702565  -0.034726390607673
+   1.524023354736478   0.023246879326821   1.500776475409657
+
+k_north
+   1.663193345286955   5.593486037020004  -3.930292691733050
+   0.000000309636396   0.000003686797170  -0.000003377160774
+   0.379194367292823   0.001995414509245   0.377198952783578
+
+k_acc
+   2.606742584751609   3.162457509010298  -0.555714924258689
+   9.448084961624119   6.411789991968939   3.036294969655180
+   4.522984551980716  10.937252031942084  -6.414267479961367
+
+k_E_n
+   0.000034985032630   0.000000000579040   0.000034984453591
+   0.000164312211015   0.000077099494498   0.000087212716517
+   0.000007614118697   0.000004159458587   0.000003454660111
+
+ang_bias
+   0.000006829408264   0.001158104273825  -0.001151274865561
+  -0.000007551305176   0.000008860089701  -0.000016411394877
+   0.000029253236559  -0.000000062542007   0.000029315778566
+
+acc_bias
+   0.086033985617688   0.056179504566377   0.029854481051311
+   0.894606218238319   0.836640046613290   0.057966171625029
+  -0.061061170920345   0.063237598986925  -0.124298769907270
+
+Note that the bias terms are not the same, suggesting that bias is not
+in fact very repeatable, or at least that the bias term acts as a
+general integral error catch-all term.
+
+When you rerun dives 494 and 492 survey with the parameters fitted on
+the same dive, the errors are eleatable and tiny (less than ~0.3 deg)
+as noted above in SIM 021 and SIM 022 notes.
+
+clear all; close all;
+load llw_sim_021_022_results.mat
+llw_sim_dive_survey_494_once(sim_021_params)
+
+clear all; close all;
+load llw_sim_021_022_results.mat
+llw_sim_dive_survey_492_once(sim_022_params)
+
+When you rerun dives 494 and 492 survey with the parameters fitted on
+the OTHER dive, the errors are 5-10 deg rms heading errors
+
+clear all; close all;
+load llw_sim_021_022_results.mat
+llw_sim_dive_survey_494_once(sim_022_params)
+Result is 9 deg rms heading error, always positive, monotinically increasing from zero
+
+clear all; close all;
+load llw_sim_021_022_results.mat
+llw_sim_dive_survey_492_once(sim_021_params)
+Result is 5 deg rms heading error, always negative, begins at zero, but not monotonic 
+
+----------------------------------------------------------------------
