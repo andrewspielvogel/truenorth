@@ -44,6 +44,7 @@ public:
 
   config_params params;
   SO3Att att; /**< Attitude estimation object. */
+  SO3Att* acc_g; /**< acc estimation object. */
   FOGBias bias; /**< Bias estimation object. */
   
 

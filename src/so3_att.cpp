@@ -59,7 +59,7 @@ void SO3Att::step(Eigen::Vector3d w_i,Eigen::Vector3d g_i, Eigen::Vector3d north
   /**************************************************************
    * Attitude Estimator
    **************************************************************/
-  Eigen::Vector3d north_n(1,0,0);
+  Eigen::Vector3d north_n(0,1,0);
 
   P_ = R_ni.transpose()*a_n_.normalized()*a_n_.normalized().transpose()*R_ni;
 
