@@ -21,72 +21,86 @@ function err = tn_opt_fmincon_llw(p)
   
 
   % construct command line for gen_config_file.py
-  TrueNorth_Package_dir = '/home/llw/kvh_catkin_ws/src/truenorth'
+  TrueNorth_Package_dir = '/home/spiels/catkin_ws/src/truenorth'
 
   % exp dir with subdirectories /kvh, /phine, and /proc
-  EXP_dir = '/home/llw/llw/sentry_2018/data/2018-sentry-gyro/dives_10hz/sentry494'
+  EXP_dir = '/home/spiels/log/JHUROV/dives_10hz/JHUROV/'
+  %EXP_dir = '/home/spiels/log/sim/'
+  %EXP_dir = '/home/spiels/2018-Sentry/cruise_data/dives_10hz/sentry494/'
+  %EXP_dir = '/home/spiels/exp/dive2/'
 
   % name of expt file with no suffix such as 2018_08_21_12_45'
-  LOG_in_fn  = 'dive_bottom'
-  LOG_out_fn = 'dive_bottom_expt01'
-  HZ = '10'
+  LOG_in_fn  = 'dive10-11'
+  LOG_in_fn  = 'dive10-08'
+  %LOG_in_fn  = '2018_12_05_18_17'
+  %LOG_in_fn  = '2018_08_07'
+  %LOG_in_fn  = 'exp6'
+  %LOG_in_fn  = 'dive_10hz_bottom'
 
+
+
+  LOG_out_fn = ['dive_10hz_expt06']
+  %LOG_out_fn = ['exp4_exp1']
+  %LOG_out_fn = ['sentry_exp1']
+
+  HZ = '10'
+  
   % algorithm parameters NO SPACES BETWEEN NUMBERS OR COMMAS
   rpy_align=  '[-1.5798,0.0573,1.5712]';
+  rpy_align=  '[-1.5708,0,1.5708]';
+  %rpy_align= '[0,0,0]';
+
   % rpy_ro=     '[0.0,0.0,4.01]';
   %  2018-09-06 LLW 0.5 radian initial heading error
-  rpy_ro=     '[0.0,0.0,3.5]'
+  rpy_ro=     '[0.0,0.0,-0.15]'
+  rpy_ro=     '[0.0,0.0,0.6]'
+  rpy_ro=     '[0.0,0.0,0.2]'
 
   % gains appearing in the attitude observer
-  % k_g=        '[0.1,0.1,0.1]';
-  k_g=           sprintf('[%.12f,%.12f,%.12f]',p(1),p(2),p(3));  
-  % k_north=    '[0.01,0.01,0.01]';
-  k_north=       sprintf('[%.12f,%.12f,%.12f]',p(4),p(5),p(6));  
+  k_g=        '[1,1,1]';
+  %k_g=           sprintf('[%.12f,%.12f,%.12f]',p(5),p(5),p(5));  
+  k_north=    '[1,1,1]';
+  %k_north=       sprintf('[%.12f,%.12f,%.12f]',p(6),p(6),p(6));  
   
 
   % gains appearing in the bias estimator
-  % k_acc=      '[10.0,10.0,10.0]';
-  k_acc=         sprintf('[%.12f,%.12f,%.12f]',p(7),p(8),p(9));  
+  %k_acc=      '[10.0,10.0,10.0]';
+  k_acc=         sprintf('[%.12f,%.12f,%.12f]',p(1),p(1),p(1));  
   % k_E_n=      '[0.0001,0.0001,0.0001]';
-  k_E_n=         sprintf('[%.12f,%.12f,%.12f]',p(10),p(11),p(12));  
+  k_E_n=         sprintf('[%.12f,%.12f,%.12f]',p(2),p(2),p(2)); 
 
-  % k_acc_bias= '[0.0,0.0,0.0]';
-  k_acc_bias=   sprintf('[%.12f,%.12f,%.12f]',p(13),p(14),p(15));  
+   k_acc_bias= '[0.0,0.0,0.0]';
+  k_acc_bias=   sprintf('[%.12f,%.12f,%.12f]',p(4),p(4),p(4));
 
-  % k_ang_bias= '[0.0,0.0,0.0]';
-  k_ang_bias=    sprintf('[%.12f,%.12f,%.12f]',p(16),p(17),p(18));  
+  k_ang_bias= '[0.0,0.0,0.0]';
+  k_ang_bias=    sprintf('[%.12f,%.12f,%.12f]',p(3),p(3),p(3));  
 
-  % ang_bias=   '[0.0,0.0,0.0]';
-  ang_bias=   '[0.000003,0.0,0.00001]';
-  % ang_bias  =  sprintf('[%f,%f,%f]',p(1),p(2),p(3))
-  % converged values from LLW fminsearch #2  
-  ang_bias  = '[0.000003083163786,0.000001807260271,0.000012498206088]';
-  
-  % acc_bias=   '[0.0,0.0,0.0]';
-  acc_bias=   '[0.01,0.0,0.0]';
-  % acc_bias  =  sprintf('[%f,%f,%f]',p(4),p(5),p(6))
-  % converged values from LLW fminsearch #2
-  acc_bias=   '[0.008583091534961,-0.001739827097389,-0.006883214529009]';
+  ang_bias  = '[0.0,0.0,0.0]';
+  ang_bias=   '[-0.000005,0,-0.000015]';
 
   
-  LAT=        '32.71';
+  acc_bias=   '[0.0,0.0,0.0]';
+  acc_bias=   '[-0.015,0,-0.005]';
+
+  
+  LAT=        '39.32';
 
   % construct input and putput file names
   % KVH inpu file name 
-  KVH    =[EXP_dir '/kvh/' LOG_in_fn '.KVH'];
+  KVH    =[EXP_dir 'kvh/' LOG_in_fn '.KVH'];
   % Phinps inpu file name 
-  PHINS  =[EXP_dir '/phins/' LOG_in_fn '.INS'];
+  PHINS  =[EXP_dir 'phins/' LOG_in_fn '.INS'];
   %  CSV output file name
-  CSV    =[EXP_dir '/proc/kvh/processed/' LOG_out_fn '.CSV'];
+  CSV    =[EXP_dir 'proc/kvh/processed/' LOG_out_fn '.CSV'];
   %  Config file name
-  CONFIG    =[EXP_dir '/proc/kvh/configs/' LOG_out_fn '.m'];
+  CONFIG    =[EXP_dir 'proc/kvh/configs/' LOG_out_fn '.m'];
   %  PDF file name
   PDF    =[EXP_dir '/proc/kvh/pdfs/' LOG_out_fn '.pdf'];
 
  
   % create output directories if they do not exist
   if (7 ~= exist([EXP_dir '/proc']))
-    fprintf(1,'tn_opt: Creating %s\n',[EXP_dir '/proc']);;
+    fprintf(1,'tn_opt: Creating %s\n',[EXP_dir '/proc']);
     mkdir(EXP_dir, 'proc');
   end
 
@@ -149,7 +163,7 @@ function err = tn_opt_fmincon_llw(p)
   % 2018-08-29 LLW for some reason rosrun would find the package but
   % would not find the executable, even when called within a shell, so
   % call the executable directly
-  sim_cmd = ['/home/llw/kvh_catkin_ws/devel/lib/truenorth/post_process ' CONFIG];
+  sim_cmd = ['/home/spiels/catkin_ws/devel/lib/truenorth/post_process ' CONFIG];
   fprintf(1,'tn_opt: executing command: %s\n', sim_cmd);
   % execute the command
   [status cmdout] = unix(sim_cmd, '-echo');
@@ -159,6 +173,8 @@ function err = tn_opt_fmincon_llw(p)
 
   % compute rms error
   err = tn_opt_compute_rms_error_llw(CSV, PHINS, p);
+  
+  %pause(60);
   
   return;
 

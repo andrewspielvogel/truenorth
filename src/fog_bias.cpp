@@ -9,6 +9,7 @@
 #include <math.h>
 #include <Eigen/Core>
 #include <helper_funcs/helper_funcs.h>
+#include <unsupported/Eigen/MatrixFunctions>
 #include <truenorth/fog_bias.h>
 #include <iostream>
 
@@ -30,6 +31,8 @@ FOGBias::FOGBias(config_params parameters)
   w_E_n = get_R_en(params.lat).transpose()*w_E;
 
   Eigen::Vector3d a_e = g_e + skew(w_E)*skew(w_E)*g_e*6371.0*1000.0/9.81;
+  a_e = a_e*9.81;
+  std::cout<<a_e.norm()<<"\n";
 
   gamma_ = fabs(w_E_n(2))/a_e.norm();
 
@@ -38,8 +41,9 @@ FOGBias::FOGBias(config_params parameters)
 
   w_E_n(2) = 0.0;
 
-  w_E_north = params.R_align.transpose()*params.R0.transpose()*w_E_n;
-  
+  w_E_north =  params.R_align.transpose()*params.R0.transpose()*get_R_en(params.lat)*skew(w_E)*a_e;
+
+  gamma_ = w_E_north.norm();
 
   acc_hat = params.R0.transpose()*get_R_en(params.lat)*a_e;
   start_ = 0;
@@ -80,12 +84,12 @@ void FOGBias::step(Eigen::Vector3d ang,Eigen::Vector3d acc,float dt)
 
   Eigen::Vector3d da = acc_hat - acc;
   
-  Eigen::Vector3d dacc_hat   = -skew(ang - w_b - w_E_north)*acc_hat + skew(ang)*a_b - params.K_acc*da;
+  Eigen::Vector3d dacc_hat   = -skew(ang - w_b)*acc_hat + w_E_north+ skew(ang)*a_b - params.K_acc*da;
 
-  float min = 15.0;  
+  float min = 1.0;  
 
   
-  Eigen::Vector3d dw_E_north = -skew(ang - gamma_*acc.normalized())*w_E_north - params.K_E_n*skew(acc)*da - (w_E_north.norm()-w_E_n(0))*w_E_north.normalized();
+  Eigen::Vector3d dw_E_north = -params.K_E_n*da - skew(ang)*w_E_north;
 
 
   Eigen::Vector3d dw_b       = -params.K_ang_bias*skew(acc)*da;
@@ -93,14 +97,23 @@ void FOGBias::step(Eigen::Vector3d ang,Eigen::Vector3d acc,float dt)
 
 
   acc_hat   = acc_hat   + dt*dacc_hat;
-  w_E_north = w_E_north + dt*dw_E_north;
+  //w_E_north = w_E_north + dt*dw_E_north;
+  w_E_north = (-skew(ang)*dt).exp()*w_E_north - dt*params.K_E_n*da;
 
-  //w_E_north = w_E_north.normalized()*w_E_n(0);
-  
+
   if (t_ > min*60.0){
     w_b       = w_b       + dt*dw_b;
     a_b       = a_b       + dt*da_b;
   }
+
+  // if (t_ > 20.0*60.0){
+
+  //   params.K_acc << 1.69,0.0,0.0,0.0,1.69,0.0,0.0,0.0,1.69;
+  //   params.K_E_n << 0.0011,0.0,0.0,0.0,0.0011,0.0,0.0,0.0,0.0011;
+  //   params.K_ang_bias << 0.00018,0.0,0.0,0.0,0.00019,0.0,0.0,0.0,0.00018;
+  //   params.K_acc_bias << 2.48,0.0,0.0,0.0,2.48,0.0,0.0,0.0,2.48;
+
+  // }
     
   
 }

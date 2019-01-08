@@ -18,7 +18,7 @@ function rms_error = tn_opt_compute_rms_error_llw(kvh_csv_fn, phins_log_fn, opti
   end
 
   % load phins data structure if not already loaded
-  if(1==isstruct(phins))
+  if(0)%1==isstruct(phins))
     fprintf(1,'tn_opt: Phins data structure exists in Workspace\n');
   else 
     fprintf(1,'tn_opt: Phins data structure does not exist in Workspace\n');
@@ -41,7 +41,10 @@ function rms_error = tn_opt_compute_rms_error_llw(kvh_csv_fn, phins_log_fn, opti
   % ----------------------------------------------------------------------
   % plot rph in its original RAW wrapped to +/= pi format
   % ----------------------------------------------------------------------  
+ 
+  
   figure(1);
+  pause(0.5);
   dof_labels = ['ROLL '; 'PITCH'; 'HDG  '];
 		 
   for i=1:3
@@ -67,16 +70,23 @@ function rms_error = tn_opt_compute_rms_error_llw(kvh_csv_fn, phins_log_fn, opti
     kvh_att_resamp(:,i) = my_resample(kvh_t, kvh_att(:,i), phins.t);
   end 
  
-  nt0 = 30*60*10;
+  nt0 = 20*60*10;
   % compute error
   err_att = kvh_att_resamp - phins_att;
-  
+  err_att = wrapToPi(err_att*pi/180)*180/pi;
   % compute rms error for each dof
   rms_error_dof = sqrt(mean(err_att(nt0:end,:).^2))
   
   % compute overall rms error
   rms_error = sqrt(mean(sum((err_att(nt0:end,:).^2)')))
-
+  
+%   bias_ang = [-1,.3,.4]/100000;
+%   bias_acc = [-1.-.5,0]/1000;
+%   bias_ang_err = kvh(nt0:end,11:13) - repmat(bias_ang,size(kvh(nt0:end,:),1),1);
+%   bias_rms = sqrt(mean(sum((bias_ang_err.^2)')));
+  
+  %rms_error = rms_error + bias_rms*200000
+  
   %  compute weighted RMS error
   % err_att_sq_weighted(:,1) = err_att(:,1).^2 *(0.01);
   %  err_att_sq_weighted(:,2) = err_att(:,2).^2 *(0.01);
@@ -87,19 +97,19 @@ function rms_error = tn_opt_compute_rms_error_llw(kvh_csv_fn, phins_log_fn, opti
   % ----------------------------------------------------------------------
   % plot unwrapped rph
   % ----------------------------------------------------------------------  
-  pause(0.5);
-  figure(2);
-  dof_labels = ['ROLL '; 'PITCH'; 'HDG  '];
-		 
-  for i=1:3
-    subplot(3,1,i);
-    plot(taxis(kvh_t), kvh_att(:,i), taxis(phins.t), phins_att(:,i));
-    grid on;
-    xlabel(tlabel(kvh_t));
-    ylabel('Degree');
-    legend('KVH','Phins');
-    title(['Unwrapped Attitide: KVH vs Phins ' dof_labels(i,:)]);
-  end
+%   pause(0.5);
+%   figure(2);
+   dof_labels = ['ROLL '; 'PITCH'; 'HDG  '];
+% 		 
+%   for i=1:3
+%     subplot(3,1,i);
+%     plot(taxis(kvh_t), kvh_att(:,i), taxis(phins.t), phins_att(:,i));
+%     grid on;
+%     xlabel(tlabel(kvh_t));
+%     ylabel('Degree');
+%     legend('KVH','Phins');
+%     title(['Unwrapped Attitide: KVH vs Phins ' dof_labels(i,:)]);
+%   end
 
   % ----------------------------------------------------------------------
   % plot rph error
@@ -108,31 +118,34 @@ function rms_error = tn_opt_compute_rms_error_llw(kvh_csv_fn, phins_log_fn, opti
   figure(3);  
   for i=1:3
     subplot(3,1,i);
-    plot(taxis(phins.t), err_att(:,i), taxis([phins.t(nt0);phins.t(end)]),[rms_error_dof(i);rms_error_dof(i)] );
+    %plot(taxis(phins.t), err_att(:,i), taxis([phins.t(nt0);phins.t(end)]),[rms_error_dof(i);rms_error_dof(i)], taxis([phins.t(nt0);phins.t(end)]),-[rms_error_dof(i);rms_error_dof(i)] );
+    plot(taxis(phins.t), err_att(:,i));
     grid on;
     xlabel(tlabel(kvh_t));
     ylabel('Degree');
-    legend('KVH - Phins',sprintf('RMS=%+.3f deg',rms_error_dof(i)));
+    %legend('KVH - Phins',sprintf('RMS=%+.3f deg',rms_error_dof(i)));
+    legend(sprintf('RMS=%+.3f deg',rms_error_dof(i)));
     title(['Attitide Error: KVH - Phins ' dof_labels(i,:)]);
   end
-
-  % ----------------------------------------------------------------------
-  % plot angular bias
-  % ----------------------------------------------------------------------  
+% % 
+% %   % ----------------------------------------------------------------------
+% %   % plot angular bias
+%   % ----------------------------------------------------------------------  
   pause(0.5);
   figure(4);  
+  com = ['X';'Y';'Z'];
   for i=11:13
     subplot(3,1,i-10);
     plot(taxis(kvh_t), kvh(:,i));
     grid on;
     xlabel(tlabel(kvh_t));
     ylabel('Deg/S');
-    title('Anugular Rate Bias');
+    title(sprintf('%s Component - Angular Rate Bias',com(i-10)));
   end
-
-  % ----------------------------------------------------------------------
-  % plot accel bias
-  % ----------------------------------------------------------------------    
+% 
+%   % ----------------------------------------------------------------------
+%   % plot accel bias
+%   % ----------------------------------------------------------------------    
   pause(0.5);
   figure(5);  
   for i=17:19
@@ -140,11 +153,11 @@ function rms_error = tn_opt_compute_rms_error_llw(kvh_csv_fn, phins_log_fn, opti
     plot(taxis(kvh_t), kvh(:,i));
     grid on;
     xlabel(tlabel(kvh_t));
-    ylabel('m/s^2');
-    title('Acceleration Bias');
+    ylabel('m/s^2');%     title('Acceleration Bias');
+    title(sprintf('%s Component - Linear Acceleration Bias',com(i-16)));
   end
   
-
+  pause(0.5);
   % ----------------------------------------------------------------------
   % plot parameters
   % ----------------------------------------------------------------------
