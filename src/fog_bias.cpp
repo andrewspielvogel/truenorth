@@ -24,7 +24,6 @@ FOGBias::FOGBias(config_params parameters)
 {
   
   params = parameters;
-  
 
   Eigen::Vector3d g_e(cos(params.lat),0,sin(params.lat));
   Eigen::Vector3d w_E(0,0,7.292150/100000.0);
@@ -41,11 +40,45 @@ FOGBias::FOGBias(config_params parameters)
 
   w_E_n(2) = 0.0;
 
+<<<<<<< HEAD
   w_E_north =  params.R_align.transpose()*params.R0.transpose()*get_R_en(params.lat)*skew(w_E)*a_e;
 
   gamma_ = w_E_north.norm();
 
   acc_hat = params.R0.transpose()*get_R_en(params.lat)*a_e;
+=======
+  // 2018-10-04 LLW added optional parameters to set ICs for acc_hat and w_E_north
+  // set these to sentinel values in case the user does not provide these parameters
+  // on the command line
+  Eigen::Vector3d sentinel(-100.0,-100.0,-100.0);
+  
+  if (params.w_E_north == sentinel)
+    {
+      w_E_north = params.R_align.transpose()*params.R0.transpose()*w_E_n;
+      parameters.w_E_north = w_E_north;
+      printf("Using default computed values to initialize w_E_north.\n");      
+    }
+  else
+    {
+      w_E_north = params.w_E_north;
+      printf("Using command line values to initialize w_E_north.\n");
+      
+    }
+
+  if (params.acc_hat == sentinel)
+    {
+      acc_hat = params.R0.transpose()*get_R_en(params.lat)*a_e;
+      parameters.acc_hat = acc_hat;
+      printf("Using default computed values to initialize acc_hat.\n");            
+    }
+  else
+    {
+      acc_hat = params.acc_hat;
+      printf("Using command line values to initialize acc_hat.\n");      
+    }
+  
+      
+>>>>>>> be9c481c8a59c4425c867b48f468a1ecc00fc7ac
   start_ = 0;
 
   t_ = 0;
@@ -86,7 +119,13 @@ void FOGBias::step(Eigen::Vector3d ang,Eigen::Vector3d acc,float dt)
   
   Eigen::Vector3d dacc_hat   = -skew(ang - w_b)*acc_hat + w_E_north+ skew(ang)*a_b - params.K_acc*da;
 
+<<<<<<< HEAD
   float min = 1.0;  
+=======
+  
+  // 2018-10-04 LLW  commented out bias adaptation supression for first 15 min of operatino
+  // float min = 15.0;  
+>>>>>>> be9c481c8a59c4425c867b48f468a1ecc00fc7ac
 
   
   Eigen::Vector3d dw_E_north = -params.K_E_n*da - skew(ang)*w_E_north;
@@ -101,6 +140,7 @@ void FOGBias::step(Eigen::Vector3d ang,Eigen::Vector3d acc,float dt)
   w_E_north = (-skew(ang)*dt).exp()*w_E_north - dt*params.K_E_n*da;
 
 
+<<<<<<< HEAD
   if (t_ > min*60.0){
     w_b       = w_b       + dt*dw_b;
     a_b       = a_b       + dt*da_b;
@@ -114,6 +154,14 @@ void FOGBias::step(Eigen::Vector3d ang,Eigen::Vector3d acc,float dt)
   //   params.K_acc_bias << 2.48,0.0,0.0,0.0,2.48,0.0,0.0,0.0,2.48;
 
   // }
+=======
+  //w_E_north = w_E_north.normalized()*w_E_n(0);
+  
+  //  if (t_ > min*60.0){
+    w_b       = w_b       + dt*dw_b;
+    a_b       = a_b       + dt*da_b;
+  //  }
+>>>>>>> be9c481c8a59c4425c867b48f468a1ecc00fc7ac
     
   
 }

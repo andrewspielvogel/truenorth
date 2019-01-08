@@ -105,8 +105,8 @@ int main(int argc, char* argv[])
     acc = gyro_data.acc*9.81;
     ang = gyro_data.ang;
 
-    att.step(ang,acc-skew(ang)*a_c,1.0/(float)params.hz);
-    //att.step(ang,acc,1.0/(float)params.hz);
+    //att.step(ang,acc-skew(ang)*a_c,1.0/(float)params.hz);
+    att.step(ang,acc,1.0/(float)params.hz);
 
     att_euler_ang = rot2rph(att.att.R_ni*params.R_align.transpose());
 

@@ -20,7 +20,9 @@ def main(argv):
     ang_bias = '[0,0,0]'
     
     try:
-        opts,args = getopt.getopt(argv,"hi:o:c:l:z:",["ifile=","help","ofile=","hz=","lat=","cfile=","rpy_align=","rpy_ro=","k_acc=","k_acc_bias=","k_ang_bias=","k_g=","k_north=","k_E_n=","acc_bias=","ang_bias="])
+        
+# 2018-10-04 LLW added w_E_north and acc_est
+        opts,args = getopt.getopt(argv,"hi:o:c:l:z:",["ifile=","help","ofile=","hz=","lat=","cfile=","rpy_align=","rpy_ro=","k_acc=","k_acc_bias=","k_ang_bias=","k_g=","k_north=","k_E_n=","acc_bias=","ang_bias=","w_E_north=","acc_est="])
     except getopt.GetoptError:
         print "USAGE:"
         print 'gen_config_file.py -i <KVHfile> -o <estimatoroutputfile> -c <configfile_generated>'
@@ -44,6 +46,9 @@ def main(argv):
             print "--k_north (diag)."
             print "--acc_bias : Initial condition."
             print "--ang_bias : Initial condition."
+            # 2018-10-04 LLW added w_E_north and acc_est
+            print "--w_E_north : Initial condition."            
+            print "--acc_est : Initial condition."            
             sys.exit()
         elif opt in ("-i","--ifile"):
             i_file = "\"" + arg + "\""
@@ -75,6 +80,12 @@ def main(argv):
             k_g = arg
         elif opt in ("--k_north"):
             k_north = arg
+        # 2018-10-04 LLW added w_E_north and acc_est
+        elif opt in ("--w_E_north"):
+            w_E_north = arg
+        elif opt in ("--acc_est"):
+            acc_est = arg
+            
 
     now = datetime.datetime.now()
 
@@ -96,6 +107,9 @@ def main(argv):
     file.write("ang_bias = " + ang_bias + "\n")
     file.write("k_g = " + k_g + "\n")
     file.write("k_north = " + k_north + "\n")
+    # 2018-10-04 LLW added w_E_north and acc_est
+    # file.write("w_E_north = " + w_E_north + "\n")    
+    # file.write("acc_est = " + acc_est + "\n")    
     file.close()
 
 
