@@ -28,29 +28,28 @@ process_att(){
 
 
 DIR=/home/spiels/log/JHUROV/dives_10hz/JHUROV
-DIR=/home/spiels/log/dives_10hz/JHUROV_DVL
+#DIR=/home/spiels/log/dives_10hz/JHUROV_DVL
 #DIR=/home/spiels/log/JHUROV/
 
 LOG=dive10-08
-LOG=2018_12_05_18_17
-LOG=2018_12_14_16_37
+#LOG=2018_12_05_18_17
+#LOG=2018_12_14_16_37
 #DIR=/home/spiels/exp/dive2
 #LOG=2018_08_07
 #DIR=/home/spiels/2018-Sentry/cruise_data/dives_10hz/sentry494
 #LOG=dive_10hz_bottom
-#DIR=/home/spiels/log/sim
-#LOG=exp5
-EXP=${LOG}_exp4
+DIR=/home/spiels/log/sim ## comment this
+LOG=sim2 ## comment this
+EXP=${LOG}_exp6
 HZ=1000
-HZ=5000
+#HZ=5000
 HZ=10
 rpy_align=[-1.5708,0,1.5708]
 rpy_align=[-1.5676,0.0021,1.577]
 
 #rpy_align=[-1.5798,0.0573,1.5712]
-#rpy_align=[0,0,0]
-rpy_ro=[0,0,0.4]
-rpy_ro=[0,0,0.2]
+rpy_align=[0,0,0] ## comment this
+rpy_ro=[0,0,0.24]
 k_g=[1,1,1]
 k_north=[1,1,1]
 k_acc=[0.2,0.2,0.2]
@@ -85,27 +84,26 @@ acc=0.27
 east=0.00096
 bang=0.000018
 bacc=0.80
-rpy_ro=[0,0,0]
+#rpy_ro=[0,0,0]
 
 
-acc=1
-east=0.005
-#east=0
-bang=0.00005
-bacc=0.5
+acc=0.55
+east=0.0015
+bang=0.000016
+bacc=0.74
 #bacc=0
 #bang=0
-rpy_ro=[0,0,1.3]
+#rpy_ro=[0,0,1.3]
 
 g=1
-north=1
+north=.1
 
 
 
 k_acc=[$acc,$acc,$acc]
 k_E_n=[$east,$east,$east]
 k_ang_bias=[$bang,$bang,$bang]
-k_acc_bias=[$bacc,0,$bacc]
+k_acc_bias=[$bacc,$bacc,$bacc]
 k_g=[$g,$g,$g]
 k_north=[$north,$north,$north]
 

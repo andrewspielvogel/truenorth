@@ -71,11 +71,12 @@ int main(int argc, char* argv[])
   fprintf(outfile,"PARAMS,%s,%d,%.10f,%s,%s,%f,%f,%f,%f,%f,%f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%f,%f,%f,%f,%f,%f\n",params.last_mod.c_str(),params.hz,params.lat,params.o_file.c_str(),params.i_file.c_str(),rpy_align(0),rpy_align(1),rpy_align(2),rpy_Ro(0),rpy_Ro(1),rpy_Ro(2),params.K_acc(0,0),params.K_acc(1,1),params.K_acc(2,2),params.K_ang_bias(0,0),params.K_ang_bias(1,1),params.K_ang_bias(2,2),params.K_acc_bias(0,0),params.K_acc_bias(1,1),params.K_acc_bias(2,2),params.K_E_n(0,0),params.K_E_n(1,1),params.K_E_n(2,2),params.K_g(0,0),params.K_g(1,1),params.K_g(2,2),params.K_north(0,0),params.K_north(1,1),params.K_north(2,2));
 
 
-  int samp_cnt = 1;
+  int samp_cnt = 0;
   
   while (std::getline(infile, line))
   {
 
+    samp_cnt += 1;
     char msg_type[32];
     int year;
     int month;
@@ -111,7 +112,8 @@ int main(int argc, char* argv[])
     att_euler_ang = rot2rph(att.att.R_ni*params.R_align.transpose());
 
 
-    fprintf(outfile,"ATT_PRO,%d,%02d,%02d,%02d,%02d,%02f,%f,%f,%f,%f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%d,%d,%d,%d,%d,%d,%d,%.10f,%.10f,%.10f\n",year,month,day,hour,minute,second,rov_time,
+    if ((samp_cnt % 50) == 0) {
+      fprintf(outfile,"ATT_PRO,%d,%02d,%02d,%02d,%02d,%02f,%f,%f,%f,%f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%d,%d,%d,%d,%d,%d,%d,%.10f,%.10f,%.10f\n",year,month,day,hour,minute,second,rov_time,
 	    att_euler_ang(0),att_euler_ang(1),att_euler_ang(2),                // CSV col 8, 9, 10
 	    att.bias.w_b(0),att.bias.w_b(1),att.bias.w_b(2),                   // CSV col 11, 12, 13
 	    att.bias.w_E_north(0),att.bias.w_E_north(1),att.bias.w_E_north(2), // CSV col 14, 15, 16
@@ -125,7 +127,7 @@ int main(int argc, char* argv[])
 	    status(0),status(1),status(2),status(3),status(4),status(5),
 	    a_c(0),a_c(1),a_c(2));
 
-    
+    }
     
 
     if ((((int)time) % (1800) < 10))

@@ -63,9 +63,13 @@ void SO3Att::step(Eigen::Vector3d w_i,Eigen::Vector3d g_i, Eigen::Vector3d north
 
   P_ = R_ni.transpose()*a_n_.normalized()*a_n_.normalized().transpose()*R_ni;
 
+  Eigen::Matrix3d I;
+  I << 1,0,0,0,1,0,0,0,1;
+  
   // Define local level (g_error_) and heading (h_error_) error terms
   g_error_ = skew(g_i.normalized())*R_ni.transpose()*a_n_.normalized();
-  h_error_ = P_*(skew(north_i.normalized())*R_ni.transpose()*north_n);
+  //h_error_ = P_*(skew(north_i.normalized())*R_ni.transpose()*north_n);
+  h_error_ = (skew((I-g_i.normalized()*g_i.normalized().transpose())*north_i.normalized())*R_ni.transpose()*north_n);
 
   
   R_ni     =  R_ni*((skew(params.K_g*g_error_ + params.K_north*h_error_ + w_i - R_ni.transpose()*w_E_n_)*dt).exp());

@@ -3,9 +3,9 @@
 <node pkg="truenorth" type="gyro_publisher" name="gyro_publisher" output="screen" respawn="true">
 
       	       <param name="rate" value="10" type="int" />
-	       <param name="hz" value="5000" type="int" />
+	       <param name="hz" value="1000" type="int" />
 	       <param name="port" value="/dev/ttyUSB1" type="str" />
-	       <param name="baud" value="4147200" type="int" />
+	       <param name="baud" value="921600" type="int" />
 	       <param name="lat" value="32.4" type="double" />
 	       <param name="r_align" value="[-1.5798,0.0573,1.5712]" type="string" />
 	       <param name="r0" value="[0,0,0]" type="string" />
