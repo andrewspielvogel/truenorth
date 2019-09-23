@@ -175,7 +175,7 @@ def main(argv):
         plt.axis([taxis(t)[0],taxis(t)[-1], -1, 1])
         plt.ylabel('pitch (degrees)')
         plt.subplot(313)
-        plt.axis([taxis(t)[0],taxis(t)[-1], -35,35])
+        plt.axis([taxis(t)[0],taxis(t)[-1], -10,10])
         plt.ylabel('heading (degrees)')
         pp.savefig(plt.figure(1))
         plt.close("all")

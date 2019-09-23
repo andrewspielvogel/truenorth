@@ -65,7 +65,7 @@ void AttEst::step(Eigen::Vector3d ang, Eigen::Vector3d acc, float dt)
    * Step Sensor Bias and North Vector Estimator
    **************************************************************/
 
-  acc_g->step(ang, acc, ang, dt);
+  //acc_g->step(ang, acc-bias.a_b, ang, dt);
 
   //acc = acc_g->R_ni.transpose()*a_n;
 

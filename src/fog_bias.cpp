@@ -107,6 +107,14 @@ void FOGBias::step(Eigen::Vector3d ang,Eigen::Vector3d acc,float dt)
     a_b       = a_b       + dt*da_b;
   }
 
+  if ((t_ > 30.0*60.0)&&(start_<2)){
+    //params.K_ang_bias = params.K_ang_bias/2.0;
+    //params.K_acc_bias = params.K_acc_bias/2.0;
+    //params.K_E_n = params.K_E_n/2.0;
+
+    start_ += 1;
+  }
+
     
   
 }
