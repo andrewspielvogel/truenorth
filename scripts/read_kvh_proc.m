@@ -1,6 +1,24 @@
-function out = read_kvh_proc(input,phins)
+function out = read_kvh_proc(dir,log,appendix)
+%%
+%  
+% load truenorth output and plot signals
+% 
+% dir - is the log directory where the phins/ kvh/ proc/ directories are
+% located
+% 
+% log - name of the log file
+%
+% appendix - appendix of truenorth postprocessing output
+%%
 
+input = [dir 'proc/kvh/processed/' log '_' appendix '.csv'];
+
+p_input = [dir 'phins/' log '.INS'];
+
+fprintf(1,['Reading truenorth file: ' input '\n']);
 csv = csvread(input,1,1);
+
+phins = read_phins_imbat(p_input);
 
 out.t = csv(:,7);
 out.att = csv(:,8:10);
