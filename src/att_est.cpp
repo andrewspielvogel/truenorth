@@ -75,7 +75,7 @@ void AttEst::step(Eigen::Vector3d ang, Eigen::Vector3d acc, float dt)
    * Step Attitude Estimator
    **************************************************************/
 
-  att.step(ang-bias.w_b, acc-bias.a_b, bias.w_E_north, dt);
-  //att.step(ang-bias.w_b, acc, bias.w_E_north, dt);
+  att.step(ang-bias.w_b, acc-bias.a_b, bias.east, dt);
+  //att.step(ang-bias.w_b, acc, bias.east, dt);
   
 }

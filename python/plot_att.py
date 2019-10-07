@@ -186,13 +186,13 @@ def main(argv):
     plt.close("all")
 
     lat = params.as_matrix()[0][3];
-    earth_rate_norm_true = (2.0* math.pi)/(24.0 * 3600.0) * math.cos(lat);
+    east_norm_true = 9.81 * 15.0 * (math.pi/180.0) * (1.0/3600.0) * math.cos(lat);
     ones = (t*0) + 1;
     
     plt.figure(1)
-    plt.suptitle('Earth Rate North Norm (Actual=%.10f rad/sec)' % (earth_rate_norm_true), y=0.99)
+    plt.suptitle('East Norm (Actual=%.10f rad/sec)' % (east_norm_true), y=0.99)
     plt.plot(taxis(t),np.sum(np.abs(data[:,14:17])**2,axis=1)**(1./2))
-    plt.plot(taxis(t), ones * earth_rate_norm_true)
+    plt.plot(taxis(t), ones * east_norm_true)
     
     plt.ylabel('Norm')
     plt.xlabel(tlabel(t))

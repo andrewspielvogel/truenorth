@@ -9,7 +9,7 @@ process_att(){
     mkdir -p $2/proc/kvh/pdfs
 
     #file locations
-    KVH=$2/kvh/$3.KVH
+    KVH=$2/kvh_10hz/$3-10hz.KVH
     CSV=$2/proc/kvh/processed/$1.csv
     CONFIG=$2/proc/kvh/configs/$1.m
     PDF=$2/proc/kvh/pdfs/$1.pdf
@@ -38,22 +38,24 @@ DIR=/home/spiels/log/KVH_DVL
 LOG=2019_09_12_16_00
 
 # output file appendix
-EXP=${LOG}_exp4
+EXP=${LOG}_exp1
 
 # kvh sample rate
 HZ=1000
+HZ=10
 
 # kvh to phins alignment [r,p,h]
 rpy_align=[-1.5708,0,1.5708]
 #rpy_align=[-1.5727,0,1.5224]
 
 # attitude initial condition
-rpy_ro=[0,0,0.8]
+rpy_ro=[0,0,0.7]
 
 # sensor bias initial conditions
 ang_bias=[0,0,0]
 acc_bias=[0,0,0]
-#ang_bias=[0.000055,0,0.000015]
+ang_bias=[0.000056,0,0.000017]
+acc_bias=[-0.023,0,-0.026]
 
 
 # sensor bias observer gains
@@ -61,6 +63,13 @@ acc=0.55
 east=0.0015
 bang=0.000016
 bacc=0.74
+
+
+acc=.1
+east=0.001
+east=0.0005
+bang=0.0000025
+bacc=0.1
 
 # attitude observer gains
 g=1

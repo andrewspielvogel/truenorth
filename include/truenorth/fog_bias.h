@@ -41,7 +41,7 @@ public:
   void step(Eigen::Vector3d ang,Eigen::Vector3d acc, float dt);
   
   Eigen::Vector3d acc_hat; /**< Estimated linear acceleration vector. */
-  Eigen::Vector3d w_E_north; /**< Estimated North vector. */
+  Eigen::Vector3d east; /**< Estimated East vector. */
   Eigen::Vector3d w_b; /**< Estimated angular rate bias. */
   Eigen::Vector3d a_b; /**< Estimated linear acceleration bias. */
   config_params params;

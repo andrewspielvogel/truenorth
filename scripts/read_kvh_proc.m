@@ -64,7 +64,7 @@ figure;plot(taxis(out.t),out.bias.ang);grid on;xlabel(tlabel(out.t));ylabel('rad
 figure;plot(taxis(out.t),out.roll*180/pi,taxis(phins.t),phins.att(:,1));grid on;xlabel(tlabel(out.t));ylabel('degrees');title('Roll');
 figure;plot(taxis(out.t),out.pitch*180/pi,taxis(phins.t),phins.att(:,2));grid on;xlabel(tlabel(out.t));ylabel('degrees');title('Pitch');
 figure;plot(taxis(out.t),out.acc_hat-out.acc);grid on;xlabel(tlabel(out.t));ylabel('m/s^2');title('Delta a');
-figure;plot(taxis(out.t),out.east);xlabel(tlabel(out.t));title('e(t)');
+figure;plot(taxis(out.t),out.east);xlabel(tlabel(out.t));title('e(t)');grid on;
 figure;plot(taxis(out.t),out.acc);grid on;xlabel(tlabel(out.t));ylabel('m/s^2');title('acc');
 figure;plot(taxis(out.t),out.acc,taxis(out.t),out.acc_hat);grid on;xlabel(tlabel(out.t));ylabel('m/s^2');title('acc vs acchat');legend('acc','acchat');
 figure;plot(taxis(out.t),out.ang);grid on;xlabel(tlabel(out.t));ylabel('rad/s');title('ang');legend('x','y','z');
